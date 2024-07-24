@@ -1,3 +1,5 @@
+// ultra-vehicle-card.js
+
 import { html, LitElement } from 'https://unpkg.com/lit-element@2.4.0/lit-element.js?module';
 import { styles } from './styles.js';
 
@@ -66,6 +68,7 @@ class UltraVehicleCard extends LitElement {
 
   static getStubConfig() {
     return {
+      type: "custom:ultra-vehicle-card",
       title: "My Vehicle",
       image_url: "/local/images/default-car.png",
       vehicle_type: "EV",
@@ -75,3 +78,13 @@ class UltraVehicleCard extends LitElement {
 }
 
 customElements.define('ultra-vehicle-card', UltraVehicleCard);
+
+// Add this section at the end of the file
+window.customCards = window.customCards || [];
+window.customCards.push({
+  type: "ultra-vehicle-card",
+  name: "Ultra Vehicle Card",
+  description: "A card that displays vehicle information with fuel/charge level.",
+  preview: true,
+  documentationURL: "https://github.com/yourusername/ultra-vehicle-card"
+});
