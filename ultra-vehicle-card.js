@@ -256,20 +256,21 @@ class UltraVehicleCardEditor extends LitElement {
     }
     const target = ev.target;
     if (target.configValue) {
+      let newValue;
       if (target.type === 'checkbox') {
-        this.config = {
-          ...this.config,
-          [target.configValue]: target.checked
-        };
+        newValue = target.checked;
+      } else if (target.value === undefined) {
+        newValue = ev.detail.value;
       } else {
-        this.config = {
-          ...this.config,
-          [target.configValue]: target.value
-        };
+        newValue = target.value;
       }
+      this.config = {
+        ...this.config,
+        [target.configValue]: newValue
+      };
+      console.log("Config changed:", this.config);
+      this.configChanged(this.config);
     }
-    console.log("Config changed:", this.config);
-    this.configChanged(this.config);
   }
 }
 
