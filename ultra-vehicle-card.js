@@ -58,9 +58,11 @@ class UltraVehicleCard extends LitElement {
       show_range: true,
       ...config
     };
+    console.log("Card config set:", this.config);
   }
 
   render() {
+    console.log("Rendering card with config:", this.config);
     if (!this.hass || !this.config) {
       return html``;
     }
@@ -152,6 +154,7 @@ class UltraVehicleCardEditor extends LitElement {
       show_level: config.show_level !== false,
       show_range: config.show_range !== false
     };
+    console.log("Editor config set:", this.config);
   }
 
   configChanged(newConfig) {
@@ -164,6 +167,7 @@ class UltraVehicleCardEditor extends LitElement {
   }
 
   render() {
+    console.log("Rendering editor with config:", this.config);
     if (!this.hass) {
       return html``;
     }
@@ -264,6 +268,7 @@ class UltraVehicleCardEditor extends LitElement {
         };
       }
     }
+    console.log("Config changed:", this.config);
     this.configChanged(this.config);
   }
 }
