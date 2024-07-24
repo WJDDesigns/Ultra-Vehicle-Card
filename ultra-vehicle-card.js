@@ -50,14 +50,11 @@ class UltraVehicleCard extends LitElement {
   }
 
   setConfig(config) {
-    if (!config.level_entity) {
-      throw new Error("You need to define a level entity");
-    }
     this.config = {
       title: "My Vehicle",
       image_url: "https://pngimg.com/d/tesla_car_PNG56.png",
       vehicle_type: "EV",
-      show_battery_percentage: true,
+      show_level: true,
       show_range: true,
       ...config
     };
@@ -68,8 +65,8 @@ class UltraVehicleCard extends LitElement {
       return html``;
     }
 
-    const levelEntity = this.hass.states[this.config.level_entity];
-    const level = levelEntity ? parseFloat(levelEntity.state) : 0;
+    const levelEntity = this.config.level_entity ? this.hass.states[this.config.level_entity] : null;
+    const level = levelEntity ? parseFloat(levelEntity.state) : null;
     const levelUnit = this.config.vehicle_type === "EV" ? "Battery" : "Fuel";
     
     const rangeEntity = this.config.range_entity ? this.hass.states[this.config.range_entity] : null;
@@ -87,10 +84,10 @@ class UltraVehicleCard extends LitElement {
             <div class="level-info">
               <span class="level-label">${levelUnit} Level</span>
               <div class="level-meter">
-                <div class="level-meter-fill" style="width: ${level}%"></div>
+                <div class="level-meter-fill" style="width: ${level !== null ? level : 0}%"></div>
               </div>
               <div class="level-details">
-                ${this.config.show_battery_percentage ? html`<span class="level-percentage">${level}%</span>` : ''}
+                ${this.config.show_level && level !== null ? html`<span class="level-percentage">${level}%</span>` : ''}
                 ${this.config.show_range && range !== null ? html`<span class="range">${range} ${rangeUnit}</span>` : ''}
               </div>
             </div>
@@ -109,9 +106,7 @@ class UltraVehicleCard extends LitElement {
       title: "My Vehicle",
       image_url: "https://pngimg.com/d/tesla_car_PNG56.png",
       vehicle_type: "EV",
-      level_entity: "",
-      range_entity: "",
-      show_battery_percentage: true,
+      show_level: true,
       show_range: true
     };
   }
@@ -141,6 +136,13 @@ class UltraVehicleCardEditor extends LitElement {
         font-weight: 500;
         color: var(--primary-text-color);
       }
+      .switch-with-entity {
+        display: flex;
+        flex-direction: column;
+      }
+      .switch-with-entity ha-entity-picker {
+        margin-top: 8px;
+      }
     `;
   }
 
@@ -161,6 +163,8 @@ class UltraVehicleCardEditor extends LitElement {
     if (!this.hass) {
       return html``;
     }
+
+    const levelLabel = this.config.vehicle_type === "EV" ? "Battery" : "Fuel";
 
     return html`
       <div class="form">
@@ -197,41 +201,26 @@ class UltraVehicleCardEditor extends LitElement {
           </ha-select>
         </div>
         
-        <div class="input-group">
-          <label for="level_entity">Fuel/Charge Level Sensor</label>
-          <ha-entity-picker
-            id="level_entity"
-            .hass="${this.hass}"
-            .value="${this.config.level_entity || ''}"
-            @value-changed="${this._valueChanged}"
-            .configValue="${'level_entity'}"
-            allow-custom-entity
-          ></ha-entity-picker>
-        </div>
-
-        <div class="input-group">
-          <label for="range_entity">Range Sensor</label>
-          <ha-entity-picker
-            id="range_entity"
-            .hass="${this.hass}"
-            .value="${this.config.range_entity || ''}"
-            @value-changed="${this._valueChanged}"
-            .configValue="${'range_entity'}"
-            allow-custom-entity
-          ></ha-entity-picker>
-        </div>
-
-        <div class="input-group">
-          <ha-formfield label="Show Battery Percentage">
+        <div class="switch-with-entity">
+          <ha-formfield .label="${`Show ${levelLabel} Level`}">
             <ha-switch
-              .checked="${this.config.show_battery_percentage !== false}"
-              .configValue="${'show_battery_percentage'}"
+              .checked="${this.config.show_level !== false}"
+              .configValue="${'show_level'}"
               @change="${this._valueChanged}"
             ></ha-switch>
           </ha-formfield>
+          ${this.config.show_level !== false ? html`
+            <ha-entity-picker
+              .hass="${this.hass}"
+              .value="${this.config.level_entity || ''}"
+              @value-changed="${this._valueChanged}"
+              .configValue="${'level_entity'}"
+              allow-custom-entity
+            ></ha-entity-picker>
+          ` : ''}
         </div>
 
-        <div class="input-group">
+        <div class="switch-with-entity">
           <ha-formfield label="Show Range">
             <ha-switch
               .checked="${this.config.show_range !== false}"
@@ -239,6 +228,15 @@ class UltraVehicleCardEditor extends LitElement {
               @change="${this._valueChanged}"
             ></ha-switch>
           </ha-formfield>
+          ${this.config.show_range !== false ? html`
+            <ha-entity-picker
+              .hass="${this.hass}"
+              .value="${this.config.range_entity || ''}"
+              @value-changed="${this._valueChanged}"
+              .configValue="${'range_entity'}"
+              allow-custom-entity
+            ></ha-entity-picker>
+          ` : ''}
         </div>
       </div>
     `;
