@@ -147,7 +147,11 @@ class UltraVehicleCardEditor extends LitElement {
   }
 
   setConfig(config) {
-    this.config = config;
+    this.config = {
+      ...config,
+      show_level: config.show_level !== false,
+      show_range: config.show_range !== false
+    };
   }
 
   configChanged(newConfig) {
@@ -204,12 +208,12 @@ class UltraVehicleCardEditor extends LitElement {
         <div class="switch-with-entity">
           <ha-formfield .label="${`Show ${levelLabel} Level`}">
             <ha-switch
-              .checked="${this.config.show_level !== false}"
+              .checked="${this.config.show_level}"
               .configValue="${'show_level'}"
               @change="${this._valueChanged}"
             ></ha-switch>
           </ha-formfield>
-          ${this.config.show_level !== false ? html`
+          ${this.config.show_level ? html`
             <ha-entity-picker
               .hass="${this.hass}"
               .value="${this.config.level_entity || ''}"
@@ -223,12 +227,12 @@ class UltraVehicleCardEditor extends LitElement {
         <div class="switch-with-entity">
           <ha-formfield label="Show Range">
             <ha-switch
-              .checked="${this.config.show_range !== false}"
+              .checked="${this.config.show_range}"
               .configValue="${'show_range'}"
               @change="${this._valueChanged}"
             ></ha-switch>
           </ha-formfield>
-          ${this.config.show_range !== false ? html`
+          ${this.config.show_range ? html`
             <ha-entity-picker
               .hass="${this.hass}"
               .value="${this.config.range_entity || ''}"
