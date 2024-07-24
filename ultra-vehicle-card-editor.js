@@ -1,6 +1,7 @@
 import { html, LitElement } from 'https://unpkg.com/lit-element@2.4.0/lit-element.js?module';
+import { styles } from './styles.js';
 
-class UltraVehicleCardEditor extends LitElement {
+class UltraVehicleCard extends LitElement {
   static get properties() {
     return {
       hass: { type: Object },
@@ -8,17 +9,20 @@ class UltraVehicleCardEditor extends LitElement {
     };
   }
 
-  setConfig(config) {
-    this.config = config;
+  static get styles() {
+    return styles;
   }
 
-  configChanged(newConfig) {
-    const event = new Event('config-changed', {
-      bubbles: true,
-      composed: true,
-    });
-    event.detail = { config: newConfig };
-    this.dispatchEvent(event);
+  setConfig(config) {
+    if (!config.level_entity) {
+      throw new Error('You need to define a level entity');
+    }
+    this.config = {
+      title: 'My Vehicle',
+      image_url: 'https://pngimg.com/d/tesla_car_PNG56.png',
+      vehicle_type: 'EV',
+      ...config
+    };
   }
 
   render() {
@@ -26,60 +30,52 @@ class UltraVehicleCardEditor extends LitElement {
       return html``;
     }
 
+    const levelEntity = this.hass.states[this.config.level_entity];
+    const level = levelEntity ? parseFloat(levelEntity.state) : 0;
+    const levelUnit = this.config.vehicle_type === 'EV' ? 'Battery' : 'Fuel';
+
     return html`
-      <div class="card-config">
-        <paper-input
-          label="Card Title"
-          .value="${this.config.title || ''}"
-          .configValue="${'title'}"
-          @value-changed="${this._valueChanged}"
-        ></paper-input>
-        <ha-entity-picker
-          label="Title Entity (optional)"
-          .hass="${this.hass}"
-          .value="${this.config.title_entity || ''}"
-          .configValue="${'title_entity'}"
-          @value-changed="${this._valueChanged}"
-        ></ha-entity-picker>
-        <paper-input
-          label="Image URL"
-          .value="${this.config.image_url || ''}"
-          .configValue="${'image_url'}"
-          @value-changed="${this._valueChanged}"
-        ></paper-input>
-        <ha-select
-          label="Vehicle Type"
-          .value="${this.config.vehicle_type || 'EV'}"
-          .configValue="${'vehicle_type'}"
-          @selected="${this._valueChanged}"
-        >
-          <ha-list-item value="EV">Electric Vehicle</ha-list-item>
-          <ha-list-item value="Fuel">Fuel Vehicle</ha-list-item>
-        </ha-select>
-        <ha-entity-picker
-          label="Level Entity"
-          .hass="${this.hass}"
-          .value="${this.config.level_entity || ''}"
-          .configValue="${'level_entity'}"
-          @value-changed="${this._valueChanged}"
-        ></ha-entity-picker>
-      </div>
+      <ha-card>
+        <div class="vehicle-card-content">
+          <h2 class="vehicle-name">${this.config.title}</h2>
+          <div class="vehicle-image">
+            <img src="${this.config.image_url}" alt="Vehicle Image">
+          </div>
+          <div class="vehicle-info">
+            <div class="level-info">
+              <span class="level-label">${levelUnit} Level</span>
+              <span class="level-percentage">${level}%</span>
+            </div>
+            <div class="level-meter">
+              <div class="level-meter-fill" style="width: ${level}%"></div>
+            </div>
+          </div>
+        </div>
+      </ha-card>
     `;
   }
 
-  _valueChanged(ev) {
-    if (!this.config || !this.hass) {
-      return;
-    }
-    const target = ev.target;
-    if (target.configValue) {
-      this.config = {
-        ...this.config,
-        [target.configValue]: target.value,
-      };
-    }
-    this.configChanged(this.config);
+  static getConfigElement() {
+    return document.createElement("ultra-vehicle-card-editor");
+  }
+
+  static getStubConfig() {
+    return {
+      title: "My Vehicle",
+      image_url: "https://pngimg.com/d/tesla_car_PNG56.png",
+      vehicle_type: "EV",
+      level_entity: ""
+    };
   }
 }
 
-customElements.define('ultra-vehicle-card-editor', UltraVehicleCardEditor);
+customElements.define('ultra-vehicle-card', UltraVehicleCard);
+
+window.customCards = window.customCards || [];
+window.customCards.push({
+  type: "ultra-vehicle-card",
+  name: "Ultra Vehicle Card",
+  description: "A card that displays vehicle information with fuel/charge level.",
+  preview: true,
+  documentationURL: "https://github.com/wjddesigns/ultra-vehicle-card"
+});
