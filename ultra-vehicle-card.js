@@ -25,18 +25,26 @@ class UltraVehicleCard extends LitElement {
       .level-info {
         display: flex;
         justify-content: space-between;
+        align-items: center;
+        margin-top: 8px;
       }
       .level-meter {
-        width: 100%;
+        flex-grow: 1;
         height: 8px;
-        background-color: #e0e0e0;
+        background-color: var(--secondary-background-color);
         border-radius: 4px;
         overflow: hidden;
+        margin: 0 8px;
       }
       .level-meter-fill {
         height: 100%;
         background-color: var(--primary-color);
         transition: width 0.5s ease-in-out;
+      }
+      .level-details {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
       }
     `;
   }
@@ -49,6 +57,8 @@ class UltraVehicleCard extends LitElement {
       title: "My Vehicle",
       image_url: "https://pngimg.com/d/tesla_car_PNG56.png",
       vehicle_type: "EV",
+      show_battery_percentage: true,
+      show_range: true,
       ...config
     };
   }
@@ -61,6 +71,10 @@ class UltraVehicleCard extends LitElement {
     const levelEntity = this.hass.states[this.config.level_entity];
     const level = levelEntity ? parseFloat(levelEntity.state) : 0;
     const levelUnit = this.config.vehicle_type === "EV" ? "Battery" : "Fuel";
+    
+    const rangeEntity = this.config.range_entity ? this.hass.states[this.config.range_entity] : null;
+    const range = rangeEntity ? parseFloat(rangeEntity.state) : null;
+    const rangeUnit = this.config.vehicle_type === "EV" ? "mi" : "miles";
 
     return html`
       <ha-card>
@@ -72,10 +86,13 @@ class UltraVehicleCard extends LitElement {
           <div class="vehicle-info">
             <div class="level-info">
               <span class="level-label">${levelUnit} Level</span>
-              <span class="level-percentage">${level}%</span>
-            </div>
-            <div class="level-meter">
-              <div class="level-meter-fill" style="width: ${level}%"></div>
+              <div class="level-meter">
+                <div class="level-meter-fill" style="width: ${level}%"></div>
+              </div>
+              <div class="level-details">
+                ${this.config.show_battery_percentage ? html`<span class="level-percentage">${level}%</span>` : ''}
+                ${this.config.show_range && range !== null ? html`<span class="range">${range} ${rangeUnit}</span>` : ''}
+              </div>
             </div>
           </div>
         </div>
@@ -92,7 +109,10 @@ class UltraVehicleCard extends LitElement {
       title: "My Vehicle",
       image_url: "https://pngimg.com/d/tesla_car_PNG56.png",
       vehicle_type: "EV",
-      level_entity: ""
+      level_entity: "",
+      range_entity: "",
+      show_battery_percentage: true,
+      show_range: true
     };
   }
 }
@@ -188,6 +208,38 @@ class UltraVehicleCardEditor extends LitElement {
             allow-custom-entity
           ></ha-entity-picker>
         </div>
+
+        <div class="input-group">
+          <label for="range_entity">Range Sensor</label>
+          <ha-entity-picker
+            id="range_entity"
+            .hass="${this.hass}"
+            .value="${this.config.range_entity || ''}"
+            @value-changed="${this._valueChanged}"
+            .configValue="${'range_entity'}"
+            allow-custom-entity
+          ></ha-entity-picker>
+        </div>
+
+        <div class="input-group">
+          <ha-formfield label="Show Battery Percentage">
+            <ha-switch
+              .checked="${this.config.show_battery_percentage !== false}"
+              .configValue="${'show_battery_percentage'}"
+              @change="${this._valueChanged}"
+            ></ha-switch>
+          </ha-formfield>
+        </div>
+
+        <div class="input-group">
+          <ha-formfield label="Show Range">
+            <ha-switch
+              .checked="${this.config.show_range !== false}"
+              .configValue="${'show_range'}"
+              @change="${this._valueChanged}"
+            ></ha-switch>
+          </ha-formfield>
+        </div>
       </div>
     `;
   }
@@ -198,10 +250,17 @@ class UltraVehicleCardEditor extends LitElement {
     }
     const target = ev.target;
     if (target.configValue) {
-      this.config = {
-        ...this.config,
-        [target.configValue]: target.value
-      };
+      if (target.type === 'checkbox') {
+        this.config = {
+          ...this.config,
+          [target.configValue]: target.checked
+        };
+      } else {
+        this.config = {
+          ...this.config,
+          [target.configValue]: target.value
+        };
+      }
     }
     this.configChanged(this.config);
   }
@@ -214,6 +273,6 @@ window.customCards = window.customCards || [];
 window.customCards.push({
   type: "ultra-vehicle-card",
   name: "Ultra Vehicle Card",
-  description: "A card that displays vehicle information with fuel/charge level.",
+  description: "A card that displays vehicle information with fuel/charge level and range.",
   preview: true
 });
