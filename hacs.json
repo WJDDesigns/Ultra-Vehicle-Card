@@ -2,7 +2,7 @@
   "name": "Ultra Vehicle Card",
   "render_readme": true,
   "filename": "ultra-vehicle-card.js",
-  "content_in_root": false,
+  "content_in_root": true,
   "homeassistant": "2023.3.0",
   "hacs": "1.6.0"
 }
