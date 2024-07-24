@@ -119,43 +119,51 @@ class UltraVehicleCardEditor extends LitElement {
   }
 
   render() {
+    console.log("Editor rendering", this.hass, this.config);
     if (!this.hass) {
-      return html``;
+      return html`<div>No hass object available</div>`;
     }
 
     return html`
       <div class="card-config">
-        <paper-input
-          label="Title"
-          .value="${this.config.title || 'My Vehicle'}"
-          .configValue="${'title'}"
-          @value-changed="${this._valueChanged}"
-        ></paper-input>
+        <div>
+          <label for="title">Title:</label>
+          <input id="title" 
+                 .value="${this.config.title || 'My Vehicle'}"
+                 @input="${this._valueChanged}"
+                 data-config-field="title">
+        </div>
         
-        <paper-input
-          label="Image URL"
-          .value="${this.config.image_url || 'https://pngimg.com/d/tesla_car_PNG56.png'}"
-          .configValue="${'image_url'}"
-          @value-changed="${this._valueChanged}"
-        ></paper-input>
+        <div>
+          <label for="image_url">Image URL:</label>
+          <input id="image_url" 
+                 .value="${this.config.image_url || 'https://pngimg.com/d/tesla_car_PNG56.png'}"
+                 @input="${this._valueChanged}"
+                 data-config-field="image_url">
+        </div>
         
-        <ha-select
-          label="Vehicle Type"
-          .value="${this.config.vehicle_type || 'EV'}"
-          .configValue="${'vehicle_type'}"
-          @selected="${this._valueChanged}"
-        >
-          <mwc-list-item value="EV">Electric Vehicle</mwc-list-item>
-          <mwc-list-item value="Fuel">Fuel Vehicle</mwc-list-item>
-        </ha-select>
+        <div>
+          <label for="vehicle_type">Vehicle Type:</label>
+          <select id="vehicle_type" 
+                  .value="${this.config.vehicle_type || 'EV'}"
+                  @change="${this._valueChanged}"
+                  data-config-field="vehicle_type">
+            <option value="EV">Electric Vehicle</option>
+            <option value="Fuel">Fuel Vehicle</option>
+          </select>
+        </div>
         
-        <ha-entity-picker
-          label="Fuel/Charge Level Sensor"
-          .hass="${this.hass}"
-          .value="${this.config.level_entity || ''}"
-          .configValue="${'level_entity'}"
-          @value-changed="${this._valueChanged}"
-        ></ha-entity-picker>
+        <div>
+          <label for="level_entity">Fuel/Charge Level Sensor:</label>
+          <select id="level_entity"
+                  .value="${this.config.level_entity || ''}"
+                  @change="${this._valueChanged}"
+                  data-config-field="level_entity">
+            ${Object.keys(this.hass.states).map(entity => html`
+              <option value="${entity}">${entity}</option>
+            `)}
+          </select>
+        </div>
       </div>
     `;
   }
@@ -165,12 +173,14 @@ class UltraVehicleCardEditor extends LitElement {
       return;
     }
     const target = ev.target;
-    if (target.configValue) {
+    const field = target.dataset.configField;
+    if (field) {
       this.config = {
         ...this.config,
-        [target.configValue]: target.value
+        [field]: target.value
       };
     }
+    console.log("Config changed", this.config);
     this.configChanged(this.config);
   }
 }
