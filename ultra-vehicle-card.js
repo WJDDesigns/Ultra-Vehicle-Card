@@ -13,15 +13,16 @@ class UltraVehicleCard extends LitElement {
       .vehicle-card-content {
         padding: 16px;
       }
-      .vehicle-image {
+      .vehicle-image-container {
         position: relative;
         width: 100%;
         height: 200px;
         overflow: hidden;
       }
-      .vehicle-image img {
+      .vehicle-image {
+        position: absolute;
         width: 100%;
-        height: 100%;
+        height: auto;
         object-fit: cover;
       }
       .vehicle-name {
@@ -67,7 +68,7 @@ class UltraVehicleCard extends LitElement {
       vehicle_type: "EV",
       show_level: true,
       show_range: true,
-      padding: { top: '0px', right: '0px', bottom: '0px', left: '0px' },
+      image_crop: { top: 0, bottom: 0 },
       ...config
     };
   }
@@ -85,11 +86,9 @@ class UltraVehicleCard extends LitElement {
     const range = rangeEntity ? Math.round(parseFloat(rangeEntity.state)) : null;
     const rangeUnit = this.config.vehicle_type === "EV" ? "mi" : "miles";
 
-    const paddingStyle = `
-      padding-top: ${this.config.padding.top};
-      padding-right: ${this.config.padding.right};
-      padding-bottom: ${this.config.padding.bottom};
-      padding-left: ${this.config.padding.left};
+    const imageStyle = `
+      top: ${this.config.image_crop.top}px;
+      bottom: ${this.config.image_crop.bottom}px;
     `;
 
     return html`
@@ -97,8 +96,8 @@ class UltraVehicleCard extends LitElement {
         <div class="vehicle-card-content">
           <h2 class="vehicle-name">${this.config.title}</h2>
           ${this.config.image_url ? html`
-            <div class="vehicle-image" style="${paddingStyle}">
-              <img src="${this.config.image_url}" alt="Vehicle Image">
+            <div class="vehicle-image-container">
+              <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image" style="${imageStyle}">
             </div>
           ` : ''}
           ${this.config.show_level && level !== null ? html`
@@ -133,7 +132,7 @@ class UltraVehicleCard extends LitElement {
       vehicle_type: "EV",
       show_level: true,
       show_range: true,
-      padding: { top: '0px', right: '0px', bottom: '0px', left: '0px' }
+      image_crop: { top: 0, bottom: 0 }
     };
   }
 }
@@ -169,7 +168,7 @@ class UltraVehicleCardEditor extends LitElement {
       .switch-with-entity ha-entity-picker {
         margin-top: 8px;
       }
-      .padding-inputs {
+      .crop-inputs {
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-gap: 8px;
@@ -190,7 +189,7 @@ class UltraVehicleCardEditor extends LitElement {
       ...config,
       show_level: config.show_level !== false,
       show_range: config.show_range !== false,
-      padding: { ...config.padding } || { top: '0px', right: '0px', bottom: '0px', left: '0px' }
+      image_crop: { ...config.image_crop } || { top: 0, bottom: 0 }
     };
   }
 
@@ -238,31 +237,19 @@ class UltraVehicleCardEditor extends LitElement {
         </div>
 
         <div class="input-group">
-          <label>Image Padding (px)</label>
-          <div class="padding-inputs">
+          <label>Image Crop (px)</label>
+          <div class="crop-inputs">
             <ha-textfield
               label="Top"
-              .value="${this.config.padding.top}"
-              @input="${this._paddingChanged}"
+              .value="${this.config.image_crop.top}"
+              @input="${this._cropChanged}"
               .configValue="${'top'}"
             ></ha-textfield>
             <ha-textfield
-              label="Right"
-              .value="${this.config.padding.right}"
-              @input="${this._paddingChanged}"
-              .configValue="${'right'}"
-            ></ha-textfield>
-            <ha-textfield
               label="Bottom"
-              .value="${this.config.padding.bottom}"
-              @input="${this._paddingChanged}"
+              .value="${this.config.image_crop.bottom}"
+              @input="${this._cropChanged}"
               .configValue="${'bottom'}"
-            ></ha-textfield>
-            <ha-textfield
-              label="Left"
-              .value="${this.config.padding.left}"
-              @input="${this._paddingChanged}"
-              .configValue="${'left'}"
             ></ha-textfield>
           </div>
         </div>
@@ -353,7 +340,7 @@ class UltraVehicleCardEditor extends LitElement {
     this.requestUpdate();
   }
 
-  _paddingChanged(ev) {
+  _cropChanged(ev) {
     if (!this.config) {
       return;
     }
@@ -361,9 +348,9 @@ class UltraVehicleCardEditor extends LitElement {
     if (target.configValue) {
       this.config = {
         ...this.config,
-        padding: {
-          ...this.config.padding,
-          [target.configValue]: target.value
+        image_crop: {
+          ...this.config.image_crop,
+          [target.configValue]: parseInt(target.value) || 0
         }
       };
       this.configChanged(this.config);
