@@ -1,26 +1,73 @@
-import { html, LitElement } from 'https://unpkg.com/lit-element@2.4.0/lit-element.js?module';
-import { styles } from './styles.js';
+import { LitElement, html, css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 
 class UltraVehicleCard extends LitElement {
   static get properties() {
     return {
-      hass: { type: Object },
-      config: { type: Object },
+      hass: {},
+      config: {},
     };
   }
 
   static get styles() {
-    return styles;
+    return css`
+      .vehicle-card-content {
+        padding: 16px;
+      }
+      .vehicle-image {
+        position: relative;
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+      }
+      .vehicle-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .vehicle-name {
+        font-size: 1.5em;
+        margin-bottom: 8px;
+      }
+      .level-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 8px;
+      }
+      .level-meter {
+        flex-grow: 1;
+        height: 8px;
+        background-color: var(--secondary-background-color);
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 0 8px;
+      }
+      .level-meter-fill {
+        height: 100%;
+        background-color: var(--primary-color);
+        transition: width 0.5s ease-in-out;
+      }
+      .level-details {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+      .range {
+        text-align: center;
+        margin-top: 8px;
+        font-size: 1.2em;
+      }
+    `;
   }
 
   setConfig(config) {
-    if (!config.level_entity) {
-      throw new Error('You need to define a level entity');
-    }
     this.config = {
-      title: 'My Vehicle',
-      image_url: 'https://pngimg.com/d/tesla_car_PNG56.png',
-      vehicle_type: 'EV',
+      title: "My Vehicle",
+      image_url: "https://pngimg.com/d/tesla_car_PNG56.png",
+      vehicle_type: "EV",
+      show_level: true,
+      show_range: true,
+      crop: { top: '0px', right: '0px', bottom: '0px', left: '0px' },
       ...config
     };
   }
@@ -30,26 +77,44 @@ class UltraVehicleCard extends LitElement {
       return html``;
     }
 
-    const levelEntity = this.hass.states[this.config.level_entity];
-    const level = levelEntity ? parseFloat(levelEntity.state) : 0;
-    const levelUnit = this.config.vehicle_type === 'EV' ? 'Battery' : 'Fuel';
+    const levelEntity = this.config.level_entity ? this.hass.states[this.config.level_entity] : null;
+    const level = levelEntity ? parseFloat(levelEntity.state) : null;
+    const levelUnit = this.config.vehicle_type === "EV" ? "Battery" : "Fuel";
+    
+    const rangeEntity = this.config.range_entity ? this.hass.states[this.config.range_entity] : null;
+    const range = rangeEntity ? Math.round(parseFloat(rangeEntity.state)) : null;
+    const rangeUnit = this.config.vehicle_type === "EV" ? "mi" : "miles";
+
+    const cropStyle = `
+      top: ${this.config.crop.top};
+      right: ${this.config.crop.right};
+      bottom: ${this.config.crop.bottom};
+      left: ${this.config.crop.left};
+    `;
 
     return html`
       <ha-card>
         <div class="vehicle-card-content">
           <h2 class="vehicle-name">${this.config.title}</h2>
-          <div class="vehicle-image">
+          <div class="vehicle-image" style="${cropStyle}">
             <img src="${this.config.image_url}" alt="Vehicle Image">
           </div>
-          <div class="vehicle-info">
-            <div class="level-info">
-              <span class="level-label">${levelUnit} Level</span>
-              <span class="level-percentage">${level}%</span>
+          ${this.config.show_level && level !== null ? html`
+            <div class="vehicle-info">
+              <div class="level-info">
+                <span class="level-label">${levelUnit} Level</span>
+                <div class="level-meter">
+                  <div class="level-meter-fill" style="width: ${level}%"></div>
+                </div>
+                <div class="level-details">
+                  <span class="level-percentage">${level}%</span>
+                </div>
+              </div>
             </div>
-            <div class="level-meter">
-              <div class="level-meter-fill" style="width: ${level}%"></div>
-            </div>
-          </div>
+          ` : ''}
+          ${this.config.show_range && range !== null ? html`
+            <div class="range">${range} ${rangeUnit}</div>
+          ` : ''}
         </div>
       </ha-card>
     `;
@@ -64,18 +129,245 @@ class UltraVehicleCard extends LitElement {
       title: "My Vehicle",
       image_url: "https://pngimg.com/d/tesla_car_PNG56.png",
       vehicle_type: "EV",
-      level_entity: ""
+      show_level: true,
+      show_range: true,
+      crop: { top: '0px', right: '0px', bottom: '0px', left: '0px' }
     };
   }
 }
 
-customElements.define('ultra-vehicle-card', UltraVehicleCard);
+class UltraVehicleCardEditor extends LitElement {
+  static get properties() {
+    return {
+      hass: {},
+      config: {}
+    };
+  }
+
+  static get styles() {
+    return css`
+      .form {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: 8px;
+      }
+      .input-group {
+        display: flex;
+        flex-direction: column;
+      }
+      .input-group label {
+        margin-bottom: 4px;
+        font-weight: 500;
+        color: var(--primary-text-color);
+      }
+      .switch-with-entity {
+        display: flex;
+        flex-direction: column;
+      }
+      .switch-with-entity ha-entity-picker {
+        margin-top: 8px;
+      }
+      .crop-inputs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 8px;
+      }
+    `;
+  }
+
+  setConfig(config) {
+    this.config = {
+      ...config,
+      show_level: config.show_level !== false,
+      show_range: config.show_range !== false,
+      crop: { ...config.crop } || { top: '0px', right: '0px', bottom: '0px', left: '0px' }
+    };
+  }
+
+  configChanged(newConfig) {
+    const event = new Event("config-changed", {
+      bubbles: true,
+      composed: true
+    });
+    event.detail = { config: newConfig };
+    this.dispatchEvent(event);
+  }
+
+  render() {
+    if (!this.hass) {
+      return html``;
+    }
+
+    const levelLabel = this.config.vehicle_type === "EV" ? "Battery" : "Fuel";
+
+    return html`
+      <div class="form">
+        <div class="input-group">
+          <label for="title">Title</label>
+          <ha-textfield
+            id="title"
+            .value="${this.config.title || ''}"
+            @input="${this._valueChanged}"
+            .configValue="${'title'}"
+          ></ha-textfield>
+        </div>
+        
+        <div class="input-group">
+          <label for="image_url">Image URL</label>
+          <ha-textfield
+            id="image_url"
+            .value="${this.config.image_url || ''}"
+            @input="${this._valueChanged}"
+            .configValue="${'image_url'}"
+          ></ha-textfield>
+        </div>
+        
+        <div class="input-group">
+          <label for="vehicle_type">Vehicle Type</label>
+          <ha-select
+            id="vehicle_type"
+            .value="${this.config.vehicle_type || 'EV'}"
+            @selected="${this._vehicleTypeChanged}"
+            .configValue="${'vehicle_type'}"
+          >
+            <mwc-list-item value="EV">Electric Vehicle</mwc-list-item>
+            <mwc-list-item value="Fuel">Fuel Vehicle</mwc-list-item>
+          </ha-select>
+        </div>
+        
+        <div class="switch-with-entity">
+          <ha-formfield .label="${`Show ${levelLabel} Level`}">
+            <ha-switch
+              .checked="${this.config.show_level}"
+              .configValue="${'show_level'}"
+              @change="${this._valueChanged}"
+            ></ha-switch>
+          </ha-formfield>
+          ${this.config.show_level ? html`
+            <ha-entity-picker
+              .hass="${this.hass}"
+              .value="${this.config.level_entity || ''}"
+              @value-changed="${this._valueChanged}"
+              .configValue="${'level_entity'}"
+              allow-custom-entity
+            ></ha-entity-picker>
+          ` : ''}
+        </div>
+
+        <div class="switch-with-entity">
+          <ha-formfield label="Show Range">
+            <ha-switch
+              .checked="${this.config.show_range}"
+              .configValue="${'show_range'}"
+              @change="${this._valueChanged}"
+            ></ha-switch>
+          </ha-formfield>
+          ${this.config.show_range ? html`
+            <ha-entity-picker
+              .hass="${this.hass}"
+              .value="${this.config.range_entity || ''}"
+              @value-changed="${this._valueChanged}"
+              .configValue="${'range_entity'}"
+              allow-custom-entity
+            ></ha-entity-picker>
+          ` : ''}
+        </div>
+
+        <div class="input-group">
+          <label>Image Crop (px)</label>
+          <div class="crop-inputs">
+            <ha-textfield
+              label="Top"
+              .value="${this.config.crop.top}"
+              @input="${this._cropChanged}"
+              .configValue="${'top'}"
+            ></ha-textfield>
+            <ha-textfield
+              label="Right"
+              .value="${this.config.crop.right}"
+              @input="${this._cropChanged}"
+              .configValue="${'right'}"
+            ></ha-textfield>
+            <ha-textfield
+              label="Bottom"
+              .value="${this.config.crop.bottom}"
+              @input="${this._cropChanged}"
+              .configValue="${'bottom'}"
+            ></ha-textfield>
+            <ha-textfield
+              label="Left"
+              .value="${this.config.crop.left}"
+              @input="${this._cropChanged}"
+              .configValue="${'left'}"
+            ></ha-textfield>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  _valueChanged(ev) {
+    if (!this.config) {
+      return;
+    }
+    const target = ev.target;
+    if (target.configValue) {
+      let newValue;
+      if (target.type === 'checkbox') {
+        newValue = target.checked;
+      } else if (target.value === undefined) {
+        newValue = ev.detail.value;
+      } else {
+        newValue = target.value;
+      }
+      this.config = {
+        ...this.config,
+        [target.configValue]: newValue
+      };
+      this.configChanged(this.config);
+    }
+  }
+
+  _vehicleTypeChanged(ev) {
+    if (!this.config) {
+      return;
+    }
+    const newVehicleType = ev.target.value;
+    this.config = {
+      ...this.config,
+      vehicle_type: newVehicleType,
+      level_entity: '',  // Reset level entity when changing vehicle type
+      range_entity: ''   // Reset range entity when changing vehicle type
+    };
+    this.configChanged(this.config);
+    this.requestUpdate();
+  }
+
+  _cropChanged(ev) {
+    if (!this.config) {
+      return;
+    }
+    const target = ev.target;
+    if (target.configValue) {
+      this.config = {
+        ...this.config,
+        crop: {
+          ...this.config.crop,
+          [target.configValue]: target.value
+        }
+      };
+      this.configChanged(this.config);
+    }
+  }
+}
+
+customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);
+customElements.define("ultra-vehicle-card", UltraVehicleCard);
 
 window.customCards = window.customCards || [];
 window.customCards.push({
   type: "ultra-vehicle-card",
   name: "Ultra Vehicle Card",
-  description: "A card that displays vehicle information with fuel/charge level.",
-  preview: true,
-  documentationURL: "https://github.com/wjddesigns/ultra-vehicle-card"
+  description: "A card that displays vehicle information with fuel/charge level and range.",
+  preview: true
 });
