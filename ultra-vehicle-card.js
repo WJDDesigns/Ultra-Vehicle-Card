@@ -63,11 +63,11 @@ class UltraVehicleCard extends LitElement {
   setConfig(config) {
     this.config = {
       title: "My Vehicle",
-      image_url: "https://pngimg.com/d/tesla_car_PNG56.png",
+      image_url: "",
       vehicle_type: "EV",
       show_level: true,
       show_range: true,
-      crop: { top: '0px', right: '0px', bottom: '0px', left: '0px' },
+      padding: { top: '0px', right: '0px', bottom: '0px', left: '0px' },
       ...config
     };
   }
@@ -85,20 +85,22 @@ class UltraVehicleCard extends LitElement {
     const range = rangeEntity ? Math.round(parseFloat(rangeEntity.state)) : null;
     const rangeUnit = this.config.vehicle_type === "EV" ? "mi" : "miles";
 
-    const cropStyle = `
-      top: ${this.config.crop.top};
-      right: ${this.config.crop.right};
-      bottom: ${this.config.crop.bottom};
-      left: ${this.config.crop.left};
+    const paddingStyle = `
+      padding-top: ${this.config.padding.top};
+      padding-right: ${this.config.padding.right};
+      padding-bottom: ${this.config.padding.bottom};
+      padding-left: ${this.config.padding.left};
     `;
 
     return html`
       <ha-card>
         <div class="vehicle-card-content">
           <h2 class="vehicle-name">${this.config.title}</h2>
-          <div class="vehicle-image" style="${cropStyle}">
-            <img src="${this.config.image_url}" alt="Vehicle Image">
-          </div>
+          ${this.config.image_url ? html`
+            <div class="vehicle-image" style="${paddingStyle}">
+              <img src="${this.config.image_url}" alt="Vehicle Image">
+            </div>
+          ` : ''}
           ${this.config.show_level && level !== null ? html`
             <div class="vehicle-info">
               <div class="level-info">
@@ -127,11 +129,11 @@ class UltraVehicleCard extends LitElement {
   static getStubConfig() {
     return {
       title: "My Vehicle",
-      image_url: "https://pngimg.com/d/tesla_car_PNG56.png",
+      image_url: "",
       vehicle_type: "EV",
       show_level: true,
       show_range: true,
-      crop: { top: '0px', right: '0px', bottom: '0px', left: '0px' }
+      padding: { top: '0px', right: '0px', bottom: '0px', left: '0px' }
     };
   }
 }
@@ -167,10 +169,18 @@ class UltraVehicleCardEditor extends LitElement {
       .switch-with-entity ha-entity-picker {
         margin-top: 8px;
       }
-      .crop-inputs {
+      .padding-inputs {
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-gap: 8px;
+      }
+      .radio-group {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+      .radio-group label {
+        margin-right: 8px;
       }
     `;
   }
@@ -180,7 +190,7 @@ class UltraVehicleCardEditor extends LitElement {
       ...config,
       show_level: config.show_level !== false,
       show_range: config.show_range !== false,
-      crop: { ...config.crop } || { top: '0px', right: '0px', bottom: '0px', left: '0px' }
+      padding: { ...config.padding } || { top: '0px', right: '0px', bottom: '0px', left: '0px' }
     };
   }
 
@@ -223,16 +233,52 @@ class UltraVehicleCardEditor extends LitElement {
         </div>
         
         <div class="input-group">
-          <label for="vehicle_type">Vehicle Type</label>
-          <ha-select
-            id="vehicle_type"
-            .value="${this.config.vehicle_type || 'EV'}"
-            @selected="${this._vehicleTypeChanged}"
-            .configValue="${'vehicle_type'}"
-          >
-            <mwc-list-item value="EV">Electric Vehicle</mwc-list-item>
-            <mwc-list-item value="Fuel">Fuel Vehicle</mwc-list-item>
-          </ha-select>
+          <label for="image_upload">Upload Image</label>
+          <input type="file" id="image_upload" @change="${this._handleImageUpload}" accept="image/*">
+        </div>
+
+        <div class="input-group">
+          <label>Image Padding (px)</label>
+          <div class="padding-inputs">
+            <ha-textfield
+              label="Top"
+              .value="${this.config.padding.top}"
+              @input="${this._paddingChanged}"
+              .configValue="${'top'}"
+            ></ha-textfield>
+            <ha-textfield
+              label="Right"
+              .value="${this.config.padding.right}"
+              @input="${this._paddingChanged}"
+              .configValue="${'right'}"
+            ></ha-textfield>
+            <ha-textfield
+              label="Bottom"
+              .value="${this.config.padding.bottom}"
+              @input="${this._paddingChanged}"
+              .configValue="${'bottom'}"
+            ></ha-textfield>
+            <ha-textfield
+              label="Left"
+              .value="${this.config.padding.left}"
+              @input="${this._paddingChanged}"
+              .configValue="${'left'}"
+            ></ha-textfield>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label>Vehicle Type</label>
+          <div class="radio-group">
+            <label>
+              <input type="radio" name="vehicle_type" value="EV" ?checked="${this.config.vehicle_type === 'EV'}" @change="${this._vehicleTypeChanged}">
+              Electric Vehicle
+            </label>
+            <label>
+              <input type="radio" name="vehicle_type" value="Fuel" ?checked="${this.config.vehicle_type === 'Fuel'}" @change="${this._vehicleTypeChanged}">
+              Fuel Vehicle
+            </label>
+          </div>
         </div>
         
         <div class="switch-with-entity">
@@ -272,36 +318,6 @@ class UltraVehicleCardEditor extends LitElement {
             ></ha-entity-picker>
           ` : ''}
         </div>
-
-        <div class="input-group">
-          <label>Image Crop (px)</label>
-          <div class="crop-inputs">
-            <ha-textfield
-              label="Top"
-              .value="${this.config.crop.top}"
-              @input="${this._cropChanged}"
-              .configValue="${'top'}"
-            ></ha-textfield>
-            <ha-textfield
-              label="Right"
-              .value="${this.config.crop.right}"
-              @input="${this._cropChanged}"
-              .configValue="${'right'}"
-            ></ha-textfield>
-            <ha-textfield
-              label="Bottom"
-              .value="${this.config.crop.bottom}"
-              @input="${this._cropChanged}"
-              .configValue="${'bottom'}"
-            ></ha-textfield>
-            <ha-textfield
-              label="Left"
-              .value="${this.config.crop.left}"
-              @input="${this._cropChanged}"
-              .configValue="${'left'}"
-            ></ha-textfield>
-          </div>
-        </div>
       </div>
     `;
   }
@@ -329,21 +345,15 @@ class UltraVehicleCardEditor extends LitElement {
   }
 
   _vehicleTypeChanged(ev) {
-    if (!this.config) {
-      return;
-    }
-    const newVehicleType = ev.target.value;
     this.config = {
       ...this.config,
-      vehicle_type: newVehicleType,
-      level_entity: '',  // Reset level entity when changing vehicle type
-      range_entity: ''   // Reset range entity when changing vehicle type
+      vehicle_type: ev.target.value
     };
     this.configChanged(this.config);
     this.requestUpdate();
   }
 
-  _cropChanged(ev) {
+  _paddingChanged(ev) {
     if (!this.config) {
       return;
     }
@@ -351,12 +361,27 @@ class UltraVehicleCardEditor extends LitElement {
     if (target.configValue) {
       this.config = {
         ...this.config,
-        crop: {
-          ...this.config.crop,
+        padding: {
+          ...this.config.padding,
           [target.configValue]: target.value
         }
       };
       this.configChanged(this.config);
+    }
+  }
+
+  _handleImageUpload(ev) {
+    const file = ev.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.config = {
+          ...this.config,
+          image_url: e.target.result
+        };
+        this.configChanged(this.config);
+      };
+      reader.readAsDataURL(file);
     }
   }
 }
