@@ -22,7 +22,7 @@ class UltraVehicleCard extends LitElement {
       .vehicle-image {
         position: absolute;
         width: 100%;
-        height: auto;
+        height: 100%;
         object-fit: cover;
       }
       .vehicle-name {
@@ -225,7 +225,7 @@ class UltraVehicleCardEditor extends LitElement {
           <label for="image_url">Image URL</label>
           <ha-textfield
             id="image_url"
-            .value="${this.config.image_url || ''}"
+            .value="${this._getShortImageUrl(this.config.image_url) || ''}"
             @input="${this._valueChanged}"
             .configValue="${'image_url'}"
           ></ha-textfield>
@@ -276,7 +276,10 @@ class UltraVehicleCardEditor extends LitElement {
               @change="${this._valueChanged}"
             ></ha-switch>
           </ha-formfield>
-          ${this.config.show_level ? html`
+        </div>
+        ${this.config.show_level ? html`
+          <div class="input-group">
+            <label>${levelLabel} Level Entity</label>
             <ha-entity-picker
               .hass="${this.hass}"
               .value="${this.config.level_entity || ''}"
@@ -284,8 +287,8 @@ class UltraVehicleCardEditor extends LitElement {
               .configValue="${'level_entity'}"
               allow-custom-entity
             ></ha-entity-picker>
-          ` : ''}
-        </div>
+          </div>
+        ` : ''}
 
         <div class="switch-with-entity">
           <ha-formfield label="Show Range">
@@ -295,7 +298,10 @@ class UltraVehicleCardEditor extends LitElement {
               @change="${this._valueChanged}"
             ></ha-switch>
           </ha-formfield>
-          ${this.config.show_range ? html`
+        </div>
+        ${this.config.show_range ? html`
+          <div class="input-group">
+            <label>Range Entity</label>
             <ha-entity-picker
               .hass="${this.hass}"
               .value="${this.config.range_entity || ''}"
@@ -303,10 +309,17 @@ class UltraVehicleCardEditor extends LitElement {
               .configValue="${'range_entity'}"
               allow-custom-entity
             ></ha-entity-picker>
-          ` : ''}
-        </div>
+          </div>
+        ` : ''}
       </div>
     `;
+  }
+
+  _getShortImageUrl(url) {
+    if (url && url.startsWith('data:image')) {
+      return 'Uploaded image';
+    }
+    return url;
   }
 
   _valueChanged(ev) {
