@@ -14,13 +14,12 @@ class UltraVehicleCard extends LitElement {
         padding: 16px;
       }
       .vehicle-image-container {
-        position: relative;
         width: 100%;
         height: 200px;
         overflow: hidden;
+        margin-bottom: 16px;
       }
       .vehicle-image {
-        position: absolute;
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -66,9 +65,6 @@ class UltraVehicleCard extends LitElement {
       title: "My Vehicle",
       image_url: "",
       vehicle_type: "EV",
-      show_level: true,
-      show_range: true,
-      image_crop: { top: 0, bottom: 0 },
       ...config
     };
   }
@@ -86,21 +82,16 @@ class UltraVehicleCard extends LitElement {
     const range = rangeEntity ? Math.round(parseFloat(rangeEntity.state)) : null;
     const rangeUnit = this.config.vehicle_type === "EV" ? "mi" : "miles";
 
-    const imageStyle = `
-      top: ${this.config.image_crop.top}px;
-      bottom: ${this.config.image_crop.bottom}px;
-    `;
-
     return html`
       <ha-card>
         <div class="vehicle-card-content">
           <h2 class="vehicle-name">${this.config.title}</h2>
           ${this.config.image_url ? html`
             <div class="vehicle-image-container">
-              <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image" style="${imageStyle}">
+              <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
             </div>
           ` : ''}
-          ${this.config.show_level && level !== null ? html`
+          ${level !== null ? html`
             <div class="vehicle-info">
               <div class="level-info">
                 <span class="level-label">${levelUnit} Level</span>
@@ -113,7 +104,7 @@ class UltraVehicleCard extends LitElement {
               </div>
             </div>
           ` : ''}
-          ${this.config.show_range && range !== null ? html`
+          ${range !== null ? html`
             <div class="range">${range} ${rangeUnit}</div>
           ` : ''}
         </div>
@@ -129,10 +120,7 @@ class UltraVehicleCard extends LitElement {
     return {
       title: "My Vehicle",
       image_url: "",
-      vehicle_type: "EV",
-      show_level: true,
-      show_range: true,
-      image_crop: { top: 0, bottom: 0 }
+      vehicle_type: "EV"
     };
   }
 }
@@ -161,18 +149,6 @@ class UltraVehicleCardEditor extends LitElement {
         font-weight: 500;
         color: var(--primary-text-color);
       }
-      .switch-with-entity {
-        display: flex;
-        flex-direction: column;
-      }
-      .switch-with-entity ha-entity-picker {
-        margin-top: 8px;
-      }
-      .crop-inputs {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-gap: 8px;
-      }
       .radio-group {
         display: flex;
         flex-direction: row;
@@ -186,10 +162,7 @@ class UltraVehicleCardEditor extends LitElement {
 
   setConfig(config) {
     this.config = {
-      ...config,
-      show_level: config.show_level !== false,
-      show_range: config.show_range !== false,
-      image_crop: { ...config.image_crop } || { top: 0, bottom: 0 }
+      ...config
     };
   }
 
@@ -235,24 +208,6 @@ class UltraVehicleCardEditor extends LitElement {
           <label for="image_upload">Upload Image</label>
           <input type="file" id="image_upload" @change="${this._handleImageUpload}" accept="image/*">
         </div>
-
-        <div class="input-group">
-          <label>Image Crop (px)</label>
-          <div class="crop-inputs">
-            <ha-textfield
-              label="Top"
-              .value="${this.config.image_crop.top}"
-              @input="${this._cropChanged}"
-              .configValue="${'top'}"
-            ></ha-textfield>
-            <ha-textfield
-              label="Bottom"
-              .value="${this.config.image_crop.bottom}"
-              @input="${this._cropChanged}"
-              .configValue="${'bottom'}"
-            ></ha-textfield>
-          </div>
-        </div>
         
         <div class="input-group">
           <label>Vehicle Type</label>
@@ -268,49 +223,27 @@ class UltraVehicleCardEditor extends LitElement {
           </div>
         </div>
         
-        <div class="switch-with-entity">
-          <ha-formfield .label="${`Show ${levelLabel} Level`}">
-            <ha-switch
-              .checked="${this.config.show_level}"
-              .configValue="${'show_level'}"
-              @change="${this._valueChanged}"
-            ></ha-switch>
-          </ha-formfield>
+        <div class="input-group">
+          <label>${levelLabel} Level Entity</label>
+          <ha-entity-picker
+            .hass="${this.hass}"
+            .value="${this.config.level_entity || ''}"
+            @value-changed="${this._valueChanged}"
+            .configValue="${'level_entity'}"
+            allow-custom-entity
+          ></ha-entity-picker>
         </div>
-        ${this.config.show_level ? html`
-          <div class="input-group">
-            <label>${levelLabel} Level Entity</label>
-            <ha-entity-picker
-              .hass="${this.hass}"
-              .value="${this.config.level_entity || ''}"
-              @value-changed="${this._valueChanged}"
-              .configValue="${'level_entity'}"
-              allow-custom-entity
-            ></ha-entity-picker>
-          </div>
-        ` : ''}
 
-        <div class="switch-with-entity">
-          <ha-formfield label="Show Range">
-            <ha-switch
-              .checked="${this.config.show_range}"
-              .configValue="${'show_range'}"
-              @change="${this._valueChanged}"
-            ></ha-switch>
-          </ha-formfield>
+        <div class="input-group">
+          <label>Range Entity</label>
+          <ha-entity-picker
+            .hass="${this.hass}"
+            .value="${this.config.range_entity || ''}"
+            @value-changed="${this._valueChanged}"
+            .configValue="${'range_entity'}"
+            allow-custom-entity
+          ></ha-entity-picker>
         </div>
-        ${this.config.show_range ? html`
-          <div class="input-group">
-            <label>Range Entity</label>
-            <ha-entity-picker
-              .hass="${this.hass}"
-              .value="${this.config.range_entity || ''}"
-              @value-changed="${this._valueChanged}"
-              .configValue="${'range_entity'}"
-              allow-custom-entity
-            ></ha-entity-picker>
-          </div>
-        ` : ''}
       </div>
     `;
   }
@@ -351,23 +284,6 @@ class UltraVehicleCardEditor extends LitElement {
     };
     this.configChanged(this.config);
     this.requestUpdate();
-  }
-
-  _cropChanged(ev) {
-    if (!this.config) {
-      return;
-    }
-    const target = ev.target;
-    if (target.configValue) {
-      this.config = {
-        ...this.config,
-        image_crop: {
-          ...this.config.image_crop,
-          [target.configValue]: parseInt(target.value) || 0
-        }
-      };
-      this.configChanged(this.config);
-    }
   }
 
   _handleImageUpload(ev) {
