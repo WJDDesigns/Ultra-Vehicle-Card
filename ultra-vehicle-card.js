@@ -227,7 +227,7 @@ class UltraVehicleCardEditor extends LitElement {
           <ha-select
             id="vehicle_type"
             .value="${this.config.vehicle_type || 'EV'}"
-            @selected="${this._valueChanged}"
+            @selected="${this._vehicleTypeChanged}"
             .configValue="${'vehicle_type'}"
           >
             <mwc-list-item value="EV">Electric Vehicle</mwc-list-item>
@@ -326,6 +326,21 @@ class UltraVehicleCardEditor extends LitElement {
       };
       this.configChanged(this.config);
     }
+  }
+
+  _vehicleTypeChanged(ev) {
+    if (!this.config) {
+      return;
+    }
+    const newVehicleType = ev.target.value;
+    this.config = {
+      ...this.config,
+      vehicle_type: newVehicleType,
+      level_entity: '',  // Reset level entity when changing vehicle type
+      range_entity: ''   // Reset range entity when changing vehicle type
+    };
+    this.configChanged(this.config);
+    this.requestUpdate();
   }
 
   _cropChanged(ev) {
