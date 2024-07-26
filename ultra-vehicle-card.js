@@ -10,15 +10,20 @@ class UltraVehicleCard extends LitElement {
 
   static get styles() {
     return css`
+      :host {
+        --primary-color: #4CAF50;
+        --background-color: #f5f5f5;
+      }
       .vehicle-card-content {
         padding: 16px;
       }
       .vehicle-image-container {
         width: 100%;
-        padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        padding-top: 56.25%;
         position: relative;
         overflow: hidden;
         margin-bottom: 16px;
+        border-radius: 12px;
       }
       .vehicle-image {
         position: absolute;
@@ -26,40 +31,84 @@ class UltraVehicleCard extends LitElement {
         left: 0;
         width: 100%;
         height: 100%;
-        object-fit: contain;
+        object-fit: cover;
       }
       .vehicle-name {
         font-size: 1.5em;
-        margin-bottom: 8px;
+        margin-bottom: 16px;
+        color: var(--primary-text-color);
       }
       .level-info {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-top: 8px;
+        margin-top: 16px;
       }
-      .level-meter {
-        flex-grow: 1;
-        height: 8px;
-        background-color: var(--secondary-background-color);
-        border-radius: 4px;
-        overflow: hidden;
-        margin: 0 8px;
+      .battery {
+        width: 100px;
+        height: 50px;
+        border: 3px solid #333;
+        border-radius: 5px;
+        position: relative;
+        margin-right: 12px;
       }
-      .level-meter-fill {
+      .battery::after {
+        content: '';
+        position: absolute;
+        width: 8px;
+        height: 20px;
+        background: #333;
+        top: 50%;
+        right: -11px;
+        transform: translateY(-50%);
+        border-radius: 0 3px 3px 0;
+      }
+      .battery-level {
+        position: absolute;
+        left: 0;
+        bottom: 0;
         height: 100%;
         background-color: var(--primary-color);
         transition: width 0.5s ease-in-out;
       }
-      .level-details {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
+      .battery-level::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: 
+          linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.3) 1px,
+            transparent 1px
+          );
+        background-size: 10px 100%;
+      }
+      .battery-bolt {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 25px;
+        height: 35px;
+        background: #fff;
+        clip-path: polygon(45% 0, 100% 45%, 60% 45%, 60% 100%, 0 55%, 40% 55%, 40% 0);
+      }
+      .level-text {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: var(--primary-text-color);
       }
       .range {
-        text-align: center;
-        margin-top: 8px;
+        margin-top: 16px;
         font-size: 1.2em;
+        color: var(--primary-text-color);
+      }
+      @keyframes charge {
+        0% { opacity: 1; }
+        50% { opacity: 0; }
+        100% { opacity: 1; }
       }
     `;
   }
@@ -99,16 +148,13 @@ class UltraVehicleCard extends LitElement {
             </div>
           ` : ''}
           ${level !== null ? html`
-            <div class="vehicle-info">
-              <div class="level-info">
-                <span class="level-label">${levelUnit} Level</span>
-                <div class="level-meter">
-                  <div class="level-meter-fill" style="width: ${level}%"></div>
-                </div>
-                <div class="level-details">
-                  <span class="level-percentage">${level}%</span>
+            <div class="level-info">
+              <div class="battery">
+                <div class="battery-level" style="width: ${level}%;">
+                  <div class="battery-bolt" style="animation: charge 2s infinite;"></div>
                 </div>
               </div>
+              <span class="level-text">${level}% ${levelUnit}</span>
             </div>
           ` : ''}
           ${range !== null ? html`
@@ -147,16 +193,28 @@ class UltraVehicleCardEditor extends LitElement {
       .form {
         display: grid;
         grid-template-columns: 1fr;
-        grid-gap: 8px;
+        grid-gap: 16px;
       }
       .input-group {
         display: flex;
         flex-direction: column;
       }
       .input-group label {
-        margin-bottom: 4px;
+        margin-bottom: 8px;
         font-weight: 500;
         color: var(--primary-text-color);
+      }
+      input[type="text"], select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+      }
+      input[type="text"]:focus, select:focus {
+        border-color: var(--primary-color);
+        outline: none;
       }
       .radio-group {
         display: flex;
@@ -164,7 +222,15 @@ class UltraVehicleCardEditor extends LitElement {
         align-items: center;
       }
       .radio-group label {
+        margin-right: 16px;
+        display: flex;
+        align-items: center;
+      }
+      input[type="radio"] {
         margin-right: 8px;
+      }
+      input[type="file"] {
+        margin-top: 8px;
       }
     `;
   }
