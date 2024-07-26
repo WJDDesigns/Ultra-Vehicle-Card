@@ -15,14 +15,18 @@ class UltraVehicleCard extends LitElement {
       }
       .vehicle-image-container {
         width: 100%;
-        height: 200px;
+        padding-top: 56.25%; /* 16:9 Aspect Ratio */
+        position: relative;
         overflow: hidden;
         margin-bottom: 16px;
       }
       .vehicle-image {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
       }
       .vehicle-name {
         font-size: 1.5em;
@@ -128,8 +132,8 @@ class UltraVehicleCard extends LitElement {
 class UltraVehicleCardEditor extends LitElement {
   static get properties() {
     return {
-      hass: {},
-      config: {}
+      hass: { type: Object },
+      config: { type: Object }
     };
   }
 
