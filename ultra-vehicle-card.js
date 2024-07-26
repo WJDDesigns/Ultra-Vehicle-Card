@@ -31,7 +31,7 @@ class UltraVehicleCard extends LitElement {
         left: 0;
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
       }
       .vehicle-name {
         font-size: 1.5em;
@@ -39,76 +39,38 @@ class UltraVehicleCard extends LitElement {
         color: var(--primary-text-color);
       }
       .level-info {
-        display: flex;
-        align-items: center;
         margin-top: 16px;
       }
-      .battery {
-        width: 100px;
-        height: 50px;
-        border: 3px solid #333;
-        border-radius: 5px;
+      .item_bar {
         position: relative;
-        margin-right: 12px;
+        height: 1.5rem;
+        width: 100%;
+        background-color: #000;
+        border-radius: 4px;
+        overflow: hidden;
       }
-      .battery::after {
-        content: '';
-        position: absolute;
-        width: 8px;
-        height: 20px;
-        background: #333;
-        top: 50%;
-        right: -11px;
-        transform: translateY(-50%);
-        border-radius: 0 3px 3px 0;
-      }
-      .battery-level {
+      .progress {
         position: absolute;
         left: 0;
-        bottom: 0;
-        height: 100%;
-        background-color: var(--primary-color);
-        transition: width 0.5s ease-in-out;
-      }
-      .battery-level::before {
-        content: '';
-        position: absolute;
         top: 0;
-        left: 0;
-        right: 0;
         bottom: 0;
-        background-image: 
-          linear-gradient(
-            to right,
-            rgba(255, 255, 255, 0.3) 1px,
-            transparent 1px
-          );
-        background-size: 10px 100%;
-      }
-      .battery-bolt {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 25px;
-        height: 35px;
-        background: #fff;
-        clip-path: polygon(45% 0, 100% 45%, 60% 45%, 60% 100%, 0 55%, 40% 55%, 40% 0);
+        width: 0;
+        height: 1.5rem;
+        margin: 0;
+        background-color: var(--primary-color);
+        border-radius: 4px;
+        transition: width 1s ease;
       }
       .level-text {
         font-size: 1.2em;
         font-weight: bold;
         color: var(--primary-text-color);
+        margin-top: 8px;
       }
       .range {
         margin-top: 16px;
         font-size: 1.2em;
         color: var(--primary-text-color);
-      }
-      @keyframes charge {
-        0% { opacity: 1; }
-        50% { opacity: 0; }
-        100% { opacity: 1; }
       }
     `;
   }
@@ -149,12 +111,10 @@ class UltraVehicleCard extends LitElement {
           ` : ''}
           ${level !== null ? html`
             <div class="level-info">
-              <div class="battery">
-                <div class="battery-level" style="width: ${level}%;">
-                  <div class="battery-bolt" style="animation: charge 2s infinite;"></div>
-                </div>
+              <div class="item_bar">
+                <div class="progress" style="width: ${level}%;"></div>
               </div>
-              <span class="level-text">${level}% ${levelUnit}</span>
+              <div class="level-text">${level}% ${levelUnit}</div>
             </div>
           ` : ''}
           ${range !== null ? html`
@@ -163,6 +123,24 @@ class UltraVehicleCard extends LitElement {
         </div>
       </ha-card>
     `;
+  }
+
+  updated(changedProps) {
+    super.updated(changedProps);
+    if (changedProps.has('hass')) {
+      this.animateProgress();
+    }
+  }
+
+  animateProgress() {
+    const progressBar = this.shadowRoot.querySelector('.progress');
+    if (progressBar) {
+      const level = this.hass.states[this.config.level_entity].state;
+      progressBar.style.width = '0%';
+      setTimeout(() => {
+        progressBar.style.width = `${level}%`;
+      }, 50);
+    }
   }
 
   static getConfigElement() {
