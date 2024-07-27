@@ -82,6 +82,8 @@ class UltraVehicleCard extends LitElement {
       title: "My Vehicle",
       image_url: "",
       vehicle_type: "EV",
+      show_level: true,
+      show_range: true,
       ...config
     };
   }
@@ -108,18 +110,18 @@ class UltraVehicleCard extends LitElement {
               <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
             </div>
           ` : ''}
-          ${this.config.level_entity && level !== null ? html`
+          ${this.config.show_level && this.config.level_entity && level !== null ? html`
             <div class="level-info">
               <div class="item_bar">
                 <div class="progress" style="width: ${level}%;"></div>
               </div>
               <div class="level-text">
                 <span>${level}% ${levelUnit}</span>
-                ${this.config.range_entity && range !== null ? html`<span class="range">${range} ${rangeUnit}</span>` : ''}
+                ${this.config.show_range && this.config.range_entity && range !== null ? html`<span class="range">${range} ${rangeUnit}</span>` : ''}
               </div>
             </div>
           ` : ''}
-          ${!this.config.level_entity && this.config.range_entity && range !== null ? html`
+          ${!this.config.show_level && this.config.show_range && this.config.range_entity && range !== null ? html`
             <div class="level-text">
               <span class="range">${range} ${rangeUnit}</span>
             </div>
@@ -145,7 +147,9 @@ class UltraVehicleCard extends LitElement {
       image_url: "",
       vehicle_type: "EV",
       level_entity: "",
-      range_entity: ""
+      range_entity: "",
+      show_level: true,
+      show_range: true
     };
   }
 }
@@ -209,6 +213,8 @@ class UltraVehicleCardEditor extends LitElement {
       }
       .entity-picker-container {
         position: relative;
+        display: flex;
+        align-items: center;
       }
       .entity-picker-results {
         position: absolute;
@@ -231,6 +237,9 @@ class UltraVehicleCardEditor extends LitElement {
       .entity-picker-result:hover {
         background-color: var(--secondary-background-color);
       }
+      .toggle-switch {
+        margin-left: 8px;
+      }
     `;
   }
 
@@ -247,6 +256,8 @@ class UltraVehicleCardEditor extends LitElement {
       vehicle_type: "EV",
       level_entity: "",
       range_entity: "",
+      show_level: true,
+      show_range: true,
       ...config
     };
   }
@@ -303,12 +314,28 @@ class UltraVehicleCardEditor extends LitElement {
         
         <div class="input-group">
           <label for="level_entity">${levelLabel} Level Entity</label>
-          ${this._renderEntityPicker('level_entity', this._levelEntityFilter)}
+          <div class="entity-picker-container">
+            ${this._renderEntityPicker('level_entity', this._levelEntityFilter)}
+            <ha-switch
+              class="toggle-switch"
+              .checked="${this.config.show_level}"
+              @change="${this._toggleChanged}"
+              .configValue="${'show_level'}"
+            ></ha-switch>
+          </div>
         </div>
 
         <div class="input-group">
           <label for="range_entity">Range Entity</label>
-          ${this._renderEntityPicker('range_entity', this._rangeEntityFilter)}
+          <div class="entity-picker-container">
+            ${this._renderEntityPicker('range_entity', this._rangeEntityFilter)}
+            <ha-switch
+              class="toggle-switch"
+              .checked="${this.config.show_range}"
+              @change="${this._toggleChanged}"
+              .configValue="${'show_range'}"
+            ></ha-switch>
+          </div>
         </div>
       </div>
     `;
@@ -376,6 +403,17 @@ class UltraVehicleCardEditor extends LitElement {
       this.config = {
         ...this.config,
         [target.configValue]: target.value
+      };
+      this.configChanged(this.config);
+    }
+  }
+
+  _toggleChanged(ev) {
+    const target = ev.target;
+    if (target.configValue) {
+      this.config = {
+        ...this.config,
+        [target.configValue]: target.checked
       };
       this.configChanged(this.config);
     }
