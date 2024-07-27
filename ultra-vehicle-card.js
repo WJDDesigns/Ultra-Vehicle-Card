@@ -186,14 +186,16 @@ class UltraVehicleCardEditor extends LitElement {
         width: 100%;
         max-width: 300px;
         padding: 10px;
-        border: 1px solid #ccc;
+        border: 1px solid var(--divider-color, #e0e0e0);
         border-radius: 4px;
         font-size: 16px;
-        transition: border-color 0.3s ease;
+        background-color: var(--card-background-color, #fff);
+        color: var(--primary-text-color);
       }
       input[type="text"]:focus, .entity-picker-input:focus {
-        border-color: var(--primary-color);
         outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 1px var(--primary-color);
       }
       .radio-group {
         display: flex;
@@ -222,13 +224,15 @@ class UltraVehicleCardEditor extends LitElement {
         max-height: 200px;
         overflow-y: auto;
         background: var(--card-background-color, #fff);
-        border: 1px solid #ccc;
+        border: 1px solid var(--divider-color, #e0e0e0);
         border-top: none;
         z-index: 1;
+        border-radius: 0 0 4px 4px;
       }
       .entity-picker-result {
         padding: 8px;
         cursor: pointer;
+        color: var(--primary-text-color);
       }
       .entity-picker-result:hover {
         background-color: var(--secondary-background-color);
