@@ -38,8 +38,14 @@ class UltraVehicleCard extends LitElement {
         margin-bottom: 16px;
         color: var(--primary-text-color);
       }
-      .level-info {
+      .info-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         margin-top: 16px;
+      }
+      .level-info {
+        flex: 1;
       }
       .item_bar {
         position: relative;
@@ -68,9 +74,9 @@ class UltraVehicleCard extends LitElement {
         margin-top: 8px;
       }
       .range {
-        margin-top: 16px;
         font-size: 1.2em;
         color: var(--primary-text-color);
+        text-align: right;
       }
     `;
   }
@@ -109,17 +115,19 @@ class UltraVehicleCard extends LitElement {
               <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
             </div>
           ` : ''}
-          ${level !== null ? html`
-            <div class="level-info">
-              <div class="item_bar">
-                <div class="progress" style="width: ${level}%;"></div>
+          <div class="info-container">
+            ${level !== null ? html`
+              <div class="level-info">
+                <div class="item_bar">
+                  <div class="progress" style="width: ${level}%;"></div>
+                </div>
+                <div class="level-text">${level}% ${levelUnit}</div>
               </div>
-              <div class="level-text">${level}% ${levelUnit}</div>
-            </div>
-          ` : ''}
-          ${range !== null ? html`
-            <div class="range">${range} ${rangeUnit}</div>
-          ` : ''}
+            ` : ''}
+            ${range !== null ? html`
+              <div class="range">${range} ${rangeUnit}</div>
+            ` : ''}
+          </div>
         </div>
       </ha-card>
     `;
@@ -162,7 +170,9 @@ class UltraVehicleCardEditor extends LitElement {
   static get properties() {
     return {
       hass: { type: Object },
-      config: { type: Object }
+      config: { type: Object },
+      _levelEntityFilter: { type: String },
+      _rangeEntityFilter: { type: String }
     };
   }
 
@@ -213,6 +223,12 @@ class UltraVehicleCardEditor extends LitElement {
     `;
   }
 
+  constructor() {
+    super();
+    this._levelEntityFilter = '';
+    this._rangeEntityFilter = '';
+  }
+
   setConfig(config) {
     this.config = {
       title: "My Vehicle",
@@ -239,6 +255,14 @@ class UltraVehicleCardEditor extends LitElement {
     }
 
     const levelLabel = this.config.vehicle_type === "EV" ? "Battery" : "Fuel";
+
+    const filteredLevelEntities = Object.keys(this.hass.states).filter(entity => 
+      entity.toLowerCase().includes(this._levelEntityFilter.toLowerCase())
+    );
+
+    const filteredRangeEntities = Object.keys(this.hass.states).filter(entity => 
+      entity.toLowerCase().includes(this._rangeEntityFilter.toLowerCase())
+    );
 
     return html`
       <div class="form">
@@ -285,6 +309,12 @@ class UltraVehicleCardEditor extends LitElement {
         
         <div class="input-group">
           <label for="level_entity">${levelLabel} Level Entity</label>
+          <input
+            type="text"
+            .value="${this._levelEntityFilter}"
+            @input="${(e) => this._levelEntityFilter = e.target.value}"
+            placeholder="Search entities"
+          />
           <select
             id="level_entity"
             .value="${this.config.level_entity}"
@@ -292,7 +322,7 @@ class UltraVehicleCardEditor extends LitElement {
             .configValue="${'level_entity'}"
           >
             <option value="">Select an entity</option>
-            ${Object.keys(this.hass.states).map(entity => html`
+            ${filteredLevelEntities.map(entity => html`
               <option value="${entity}" ?selected="${entity === this.config.level_entity}">${entity}</option>
             `)}
           </select>
@@ -300,6 +330,12 @@ class UltraVehicleCardEditor extends LitElement {
 
         <div class="input-group">
           <label for="range_entity">Range Entity</label>
+          <input
+            type="text"
+            .value="${this._rangeEntityFilter}"
+            @input="${(e) => this._rangeEntityFilter = e.target.value}"
+            placeholder="Search entities"
+          />
           <select
             id="range_entity"
             .value="${this.config.range_entity}"
@@ -307,7 +343,7 @@ class UltraVehicleCardEditor extends LitElement {
             .configValue="${'range_entity'}"
           >
             <option value="">Select an entity</option>
-            ${Object.keys(this.hass.states).map(entity => html`
+            ${filteredRangeEntities.map(entity => html`
               <option value="${entity}" ?selected="${entity === this.config.range_entity}">${entity}</option>
             `)}
           </select>
