@@ -38,12 +38,6 @@ class UltraVehicleCard extends LitElement {
         margin-bottom: 16px;
         color: var(--primary-text-color);
       }
-      .info-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 16px;
-      }
       .level-info {
         flex: 1;
       }
@@ -114,7 +108,7 @@ class UltraVehicleCard extends LitElement {
               <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
             </div>
           ` : ''}
-          ${level !== null ? html`
+          ${this.config.level_entity && level !== null ? html`
             <div class="level-info">
               <div class="item_bar">
                 <div class="progress" style="width: ${level}%;"></div>
@@ -125,7 +119,7 @@ class UltraVehicleCard extends LitElement {
               </div>
             </div>
           ` : ''}
-          ${level === null && this.config.range_entity && range !== null ? html`
+          ${!this.config.level_entity && this.config.range_entity && range !== null ? html`
             <div class="level-text">
               <span class="range">${range} ${rangeUnit}</span>
             </div>
@@ -317,8 +311,6 @@ class UltraVehicleCardEditor extends LitElement {
           ${this._renderEntityPicker('range_entity', this._rangeEntityFilter)}
         </div>
       </div>
-      <h3>Preview:</h3>
-      ${this._generatePreview()}
     `;
   }
 
@@ -411,19 +403,6 @@ class UltraVehicleCardEditor extends LitElement {
       };
       reader.readAsDataURL(file);
     }
-  }
-
-  _generatePreview() {
-    const previewCard = document.createElement('ultra-vehicle-card');
-    previewCard.hass = {
-      states: {
-        [this.config.level_entity || 'sensor.mock_level']: { state: '89' },
-        [this.config.range_entity || 'sensor.mock_range']: { state: '300' },
-      },
-      language: 'en'
-    };
-    previewCard.setConfig(this.config);
-    return previewCard;
   }
 
   configChanged(newConfig) {
