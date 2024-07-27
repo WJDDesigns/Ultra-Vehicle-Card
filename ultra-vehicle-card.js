@@ -160,7 +160,9 @@ class UltraVehicleCardEditor extends LitElement {
   static get properties() {
     return {
       hass: { type: Object },
-      config: { type: Object }
+      config: { type: Object },
+      _levelEntityFilter: { type: String },
+      _rangeEntityFilter: { type: String }
     };
   }
 
@@ -180,15 +182,16 @@ class UltraVehicleCardEditor extends LitElement {
         font-weight: 500;
         color: var(--primary-text-color);
       }
-      input[type="text"], ha-entity-picker {
+      input[type="text"], .entity-picker-input {
         width: 100%;
+        max-width: 300px;
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 4px;
         font-size: 16px;
         transition: border-color 0.3s ease;
       }
-      input[type="text"]:focus, ha-entity-picker:focus {
+      input[type="text"]:focus, .entity-picker-input:focus {
         border-color: var(--primary-color);
         outline: none;
       }
@@ -208,7 +211,35 @@ class UltraVehicleCardEditor extends LitElement {
       input[type="file"] {
         margin-top: 8px;
       }
+      .entity-picker-container {
+        position: relative;
+      }
+      .entity-picker-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        max-height: 200px;
+        overflow-y: auto;
+        background: var(--card-background-color, #fff);
+        border: 1px solid #ccc;
+        border-top: none;
+        z-index: 1;
+      }
+      .entity-picker-result {
+        padding: 8px;
+        cursor: pointer;
+      }
+      .entity-picker-result:hover {
+        background-color: var(--secondary-background-color);
+      }
     `;
+  }
+
+  constructor() {
+    super();
+    this._levelEntityFilter = '';
+    this._rangeEntityFilter = '';
   }
 
   setConfig(config) {
@@ -220,15 +251,6 @@ class UltraVehicleCardEditor extends LitElement {
       range_entity: "",
       ...config
     };
-  }
-
-  configChanged(newConfig) {
-    const event = new Event("config-changed", {
-      bubbles: true,
-      composed: true
-    });
-    event.detail = { config: newConfig };
-    this.dispatchEvent(event);
   }
 
   render() {
@@ -283,27 +305,65 @@ class UltraVehicleCardEditor extends LitElement {
         
         <div class="input-group">
           <label for="level_entity">${levelLabel} Level Entity</label>
-          <ha-entity-picker
-            .hass=${this.hass}
-            .value="${this.config.level_entity}"
-            .configValue=${'level_entity'}
-            @value-changed=${this._valueChanged}
-            allow-custom-entity
-          ></ha-entity-picker>
+          ${this._renderEntityPicker('level_entity', this._levelEntityFilter)}
         </div>
 
         <div class="input-group">
           <label for="range_entity">Range Entity</label>
-          <ha-entity-picker
-            .hass=${this.hass}
-            .value="${this.config.range_entity}"
-            .configValue=${'range_entity'}
-            @value-changed=${this._valueChanged}
-            allow-custom-entity
-          ></ha-entity-picker>
+          ${this._renderEntityPicker('range_entity', this._rangeEntityFilter)}
         </div>
       </div>
     `;
+  }
+
+  _renderEntityPicker(configValue, filter) {
+    const entities = Object.keys(this.hass.states)
+      .filter(eid => eid.toLowerCase().includes(filter.toLowerCase()))
+      .slice(0, 5);  // Limit to 5 results for performance
+
+    return html`
+      <div class="entity-picker-container">
+        <input
+          type="text"
+          class="entity-picker-input"
+          .value="${this.config[configValue] || ''}"
+          @input="${e => this._entityFilterChanged(e, configValue)}"
+          placeholder="Search entities"
+        >
+        ${filter && entities.length ? html`
+          <div class="entity-picker-results">
+            ${entities.map(eid => html`
+              <div class="entity-picker-result" @click="${() => this._selectEntity(configValue, eid)}">
+                ${eid}
+              </div>
+            `)}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  _entityFilterChanged(e, configValue) {
+    const filter = e.target.value;
+    if (configValue === 'level_entity') {
+      this._levelEntityFilter = filter;
+    } else if (configValue === 'range_entity') {
+      this._rangeEntityFilter = filter;
+    }
+    this.requestUpdate();
+  }
+
+  _selectEntity(configValue, entityId) {
+    this.config = {
+      ...this.config,
+      [configValue]: entityId
+    };
+    if (configValue === 'level_entity') {
+      this._levelEntityFilter = '';
+    } else if (configValue === 'range_entity') {
+      this._rangeEntityFilter = '';
+    }
+    this.configChanged(this.config);
   }
 
   _valueChanged(ev) {
@@ -342,6 +402,15 @@ class UltraVehicleCardEditor extends LitElement {
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  configChanged(newConfig) {
+    const event = new Event("config-changed", {
+      bubbles: true,
+      composed: true
+    });
+    event.detail = { config: newConfig };
+    this.dispatchEvent(event);
   }
 }
 
