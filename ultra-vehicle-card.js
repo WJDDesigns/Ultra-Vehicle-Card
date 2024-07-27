@@ -195,17 +195,17 @@ class UltraVehicleCardEditor extends LitElement {
         border-color: var(--primary-color);
         box-shadow: 0 0 0 1px var(--primary-color);
       }
-      .radio-group {
+      .radio-group, .checkbox-group {
         display: flex;
         flex-direction: row;
         align-items: center;
       }
-      .radio-group label {
+      .radio-group label, .checkbox-group label {
         margin-right: 16px;
         display: flex;
         align-items: center;
       }
-      input[type="radio"] {
+      input[type="radio"], input[type="checkbox"] {
         margin-right: 8px;
       }
       input[type="file"] {
@@ -213,8 +213,6 @@ class UltraVehicleCardEditor extends LitElement {
       }
       .entity-picker-container {
         position: relative;
-        display: flex;
-        align-items: center;
       }
       .entity-picker-results {
         position: absolute;
@@ -237,8 +235,10 @@ class UltraVehicleCardEditor extends LitElement {
       .entity-picker-result:hover {
         background-color: var(--secondary-background-color);
       }
-      .toggle-switch {
-        margin-left: 8px;
+      .entity-toggle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
     `;
   }
@@ -313,29 +313,33 @@ class UltraVehicleCardEditor extends LitElement {
         </div>
         
         <div class="input-group">
-          <label for="level_entity">${levelLabel} Level Entity</label>
-          <div class="entity-picker-container">
-            ${this._renderEntityPicker('level_entity', this._levelEntityFilter)}
-            <ha-switch
-              class="toggle-switch"
-              .checked="${this.config.show_level}"
-              @change="${this._toggleChanged}"
-              .configValue="${'show_level'}"
-            ></ha-switch>
+          <div class="entity-toggle">
+            <label for="level_entity">${levelLabel} Level Entity</label>
+            <label class="checkbox-group">
+              <input type="checkbox" 
+                ?checked="${this.config.show_level}"
+                @change="${this._toggleChanged}"
+                .configValue="${'show_level'}"
+              />
+              Show
+            </label>
           </div>
+          ${this._renderEntityPicker('level_entity', this._levelEntityFilter)}
         </div>
 
         <div class="input-group">
-          <label for="range_entity">Range Entity</label>
-          <div class="entity-picker-container">
-            ${this._renderEntityPicker('range_entity', this._rangeEntityFilter)}
-            <ha-switch
-              class="toggle-switch"
-              .checked="${this.config.show_range}"
-              @change="${this._toggleChanged}"
-              .configValue="${'show_range'}"
-            ></ha-switch>
+          <div class="entity-toggle">
+            <label for="range_entity">Range Entity</label>
+            <label class="checkbox-group">
+              <input type="checkbox" 
+                ?checked="${this.config.show_range}"
+                @change="${this._toggleChanged}"
+                .configValue="${'show_range'}"
+              />
+              Show
+            </label>
           </div>
+          ${this._renderEntityPicker('range_entity', this._rangeEntityFilter)}
         </div>
       </div>
     `;
