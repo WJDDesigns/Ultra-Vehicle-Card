@@ -278,7 +278,7 @@ class UltraVehicleCardEditor extends LitElement {
           <input
             id="image_url"
             type="text"
-            .value="${this.config.image_url}"
+            .value="${this._getDisplayImageUrl(this.config.image_url)}"
             @input="${this._valueChanged}"
             .configValue="${'image_url'}"
           />
@@ -316,10 +316,13 @@ class UltraVehicleCardEditor extends LitElement {
     `;
   }
 
+  _getDisplayImageUrl(url) {
+    return url && url.startsWith('data:image') ? 'Uploaded Image' : url;
+  }
+
   _renderEntityPicker(configValue, filter) {
     const entities = Object.keys(this.hass.states)
-      .filter(eid => eid.toLowerCase().includes(filter.toLowerCase()))
-      .slice(0, 5);  // Limit to 5 results for performance
+      .filter(eid => eid.toLowerCase().includes(filter.toLowerCase()));
 
     return html`
       <div class="entity-picker-container">
@@ -330,7 +333,7 @@ class UltraVehicleCardEditor extends LitElement {
           @input="${e => this._entityFilterChanged(e, configValue)}"
           placeholder="Search entities"
         >
-        ${filter && entities.length ? html`
+        ${filter ? html`
           <div class="entity-picker-results">
             ${entities.map(eid => html`
               <div class="entity-picker-result" @click="${() => this._selectEntity(configValue, eid)}">
