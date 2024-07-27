@@ -99,11 +99,11 @@ class UltraVehicleCard extends LitElement {
 
     const levelEntity = this.config.level_entity ? this.hass.states[this.config.level_entity] : null;
     const level = levelEntity ? parseFloat(levelEntity.state) : null;
-    const levelUnit = this.config.vehicle_type === "EV" ? "Battery" : "Fuel";
+    const levelUnit = this.config.vehicle_type === "EV" ? "Charge" : "Fuel";
     
     const rangeEntity = this.config.range_entity ? this.hass.states[this.config.range_entity] : null;
     const range = rangeEntity ? Math.round(parseFloat(rangeEntity.state)) : null;
-    const rangeUnit = this.config.vehicle_type === "EV" ? "mi" : "miles";
+    const rangeUnit = this._getRangeUnit();
 
     return html`
       <ha-card>
@@ -125,9 +125,20 @@ class UltraVehicleCard extends LitElement {
               </div>
             </div>
           ` : ''}
+          ${level === null && range !== null ? html`
+            <div class="level-text">
+              <span class="range">${range} ${rangeUnit}</span>
+            </div>
+          ` : ''}
         </div>
       </ha-card>
     `;
+  }
+
+  _getRangeUnit() {
+    const locale = this.hass.language || 'en';
+    const useMetric = ['en-GB', 'en-AU', 'en-NZ'].includes(locale) || !locale.startsWith('en');
+    return useMetric ? 'kilometers' : 'miles';
   }
 
   static getConfigElement() {
@@ -169,7 +180,7 @@ class UltraVehicleCardEditor extends LitElement {
         font-weight: 500;
         color: var(--primary-text-color);
       }
-      input[type="text"], select {
+      input[type="text"], ha-entity-picker {
         width: 100%;
         padding: 10px;
         border: 1px solid #ccc;
@@ -177,7 +188,7 @@ class UltraVehicleCardEditor extends LitElement {
         font-size: 16px;
         transition: border-color 0.3s ease;
       }
-      input[type="text"]:focus, select:focus {
+      input[type="text"]:focus, ha-entity-picker:focus {
         border-color: var(--primary-color);
         outline: none;
       }
@@ -225,7 +236,7 @@ class UltraVehicleCardEditor extends LitElement {
       return html``;
     }
 
-    const levelLabel = this.config.vehicle_type === "EV" ? "Battery" : "Fuel";
+    const levelLabel = this.config.vehicle_type === "EV" ? "Charge" : "Fuel";
 
     return html`
       <div class="form">
@@ -272,32 +283,24 @@ class UltraVehicleCardEditor extends LitElement {
         
         <div class="input-group">
           <label for="level_entity">${levelLabel} Level Entity</label>
-          <select
-            id="level_entity"
+          <ha-entity-picker
+            .hass=${this.hass}
             .value="${this.config.level_entity}"
-            @change="${this._valueChanged}"
-            .configValue="${'level_entity'}"
-          >
-            <option value="">Select an entity</option>
-            ${Object.keys(this.hass.states).map(entity => html`
-              <option value="${entity}" ?selected="${entity === this.config.level_entity}">${entity}</option>
-            `)}
-          </select>
+            .configValue=${'level_entity'}
+            @value-changed=${this._valueChanged}
+            allow-custom-entity
+          ></ha-entity-picker>
         </div>
 
         <div class="input-group">
           <label for="range_entity">Range Entity</label>
-          <select
-            id="range_entity"
+          <ha-entity-picker
+            .hass=${this.hass}
             .value="${this.config.range_entity}"
-            @change="${this._valueChanged}"
-            .configValue="${'range_entity'}"
-          >
-            <option value="">Select an entity</option>
-            ${Object.keys(this.hass.states).map(entity => html`
-              <option value="${entity}" ?selected="${entity === this.config.range_entity}">${entity}</option>
-            `)}
-          </select>
+            .configValue=${'range_entity'}
+            @value-changed=${this._valueChanged}
+            allow-custom-entity
+          ></ha-entity-picker>
         </div>
       </div>
     `;
