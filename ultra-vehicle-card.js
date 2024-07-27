@@ -121,11 +121,11 @@ class UltraVehicleCard extends LitElement {
               </div>
               <div class="level-text">
                 <span>${level}% ${levelUnit}</span>
-                ${range !== null ? html`<span class="range">${range} ${rangeUnit}</span>` : ''}
+                ${this.config.range_entity && range !== null ? html`<span class="range">${range} ${rangeUnit}</span>` : ''}
               </div>
             </div>
           ` : ''}
-          ${level === null && range !== null ? html`
+          ${level === null && this.config.range_entity && range !== null ? html`
             <div class="level-text">
               <span class="range">${range} ${rangeUnit}</span>
             </div>
@@ -317,6 +317,8 @@ class UltraVehicleCardEditor extends LitElement {
           ${this._renderEntityPicker('range_entity', this._rangeEntityFilter)}
         </div>
       </div>
+      <h3>Preview:</h3>
+      ${this._generatePreview()}
     `;
   }
 
@@ -409,6 +411,19 @@ class UltraVehicleCardEditor extends LitElement {
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  _generatePreview() {
+    const previewCard = document.createElement('ultra-vehicle-card');
+    previewCard.hass = {
+      states: {
+        [this.config.level_entity || 'sensor.mock_level']: { state: '89' },
+        [this.config.range_entity || 'sensor.mock_range']: { state: '300' },
+      },
+      language: 'en'
+    };
+    previewCard.setConfig(this.config);
+    return previewCard;
   }
 
   configChanged(newConfig) {
