@@ -2,5 +2,10 @@
   "name": "Ultra Vehicle Card",
   "render_readme": true,
   "filename": "ultra-vehicle-card.js",
-  "content_in_root": true
+  "content_in_root": true,
+  "homeassistant": "0.118.0",
+  "additional_files": [
+    "ultra-vehicle-card-editor.js",
+    "styles.js"
+  ]
 }
