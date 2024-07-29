@@ -24,6 +24,7 @@ class UltraVehicleCard extends LitElement {
       vehicle_type: "EV",
       show_level: true,
       show_range: true,
+      charging_status_entity: "",
       ...config
     };
   }
@@ -35,11 +36,19 @@ class UltraVehicleCard extends LitElement {
 
     const levelEntity = this.config.level_entity ? this.hass.states[this.config.level_entity] : null;
     const level = levelEntity ? parseFloat(levelEntity.state) : null;
-    const levelUnit = this.config.vehicle_type === "EV" ? "Charge" : "Fuel";
     
     const rangeEntity = this.config.range_entity ? this.hass.states[this.config.range_entity] : null;
     const range = rangeEntity ? Math.round(parseFloat(rangeEntity.state)) : null;
     const rangeUnit = this._getRangeUnit();
+
+    const chargingStatusEntity = this.config.vehicle_type === "EV" && this.config.charging_status_entity 
+      ? this.hass.states[this.config.charging_status_entity] 
+      : null;
+    const isCharging = chargingStatusEntity && chargingStatusEntity.state === "charging";
+
+    const levelLabel = this.config.vehicle_type === "EV" 
+      ? (isCharging ? "Charging" : "Charged")
+      : "Fuel";
 
     return html`
       <ha-card>
@@ -52,11 +61,11 @@ class UltraVehicleCard extends LitElement {
           ` : ''}
           ${this.config.show_level && this.config.level_entity && level !== null ? html`
             <div class="level-info">
-              <div class="item_bar">
+              <div class="item_bar ${isCharging ? 'charging' : ''}">
                 <div class="progress" style="width: ${level}%;"></div>
               </div>
               <div class="level-text">
-                <span>${level}% ${levelUnit}</span>
+                <span>${level}% ${levelLabel}</span>
                 ${this.config.show_range && this.config.range_entity && range !== null ? html`<span class="range">${range} ${rangeUnit}</span>` : ''}
               </div>
             </div>
@@ -89,7 +98,8 @@ class UltraVehicleCard extends LitElement {
       level_entity: "",
       range_entity: "",
       show_level: true,
-      show_range: true
+      show_range: true,
+      charging_status_entity: ""
     };
   }
 }
