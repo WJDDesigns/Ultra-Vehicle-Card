@@ -23,3 +23,16 @@ lovelace:
   resources:
     - url: /local/ultra-vehicle-card.js
       type: module
+      
+      
+### Cool Tip
+
+Hey there, fellow Home Assistant enthusiast! 🏠✨ 
+
+Did you know that the Ultra Vehicle Card was inspired by a midnight coding session fueled by an unhealthy amount of coffee and a sudden realization that cars deserve cool cards too? It's true! (Okay, maybe not, but it sounds fun, right?)
+
+If this card has made your dashboard a little more awesome or saved you from the treacherous "low fuel surprise," consider buying the developer a virtual coffee. It helps keep the creativity flowing and the code bug-free!
+
+[![Donate with PayPal](https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png)](https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=4JVCZ46FZPUTG)
+
+Remember, every donation brings us one step closer to developing the "Ultra Coffee Maker Card" – because who doesn't want their Home Assistant to remind them it's espresso o'clock? ☕️⏰
