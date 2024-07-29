@@ -77,7 +77,7 @@ export const styles = css`
     color: var(--primary-text-color);
   }
   input[type="text"], .entity-picker-input {
-    width: 100%;
+    width: 90%;
     padding: 10px;
     border: 1px solid var(--divider-color, #e0e0e0);
     border-radius: 4px;
