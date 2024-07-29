@@ -23,7 +23,7 @@ lovelace:
   resources:
     - url: /local/ultra-vehicle-card.js
       type: module
-      
+       ```     
       
 ### Cool Tip
 
