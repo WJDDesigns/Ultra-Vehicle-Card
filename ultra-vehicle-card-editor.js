@@ -7,7 +7,8 @@ export class UltraVehicleCardEditor extends LitElement {
       hass: { type: Object },
       config: { type: Object },
       _levelEntityFilter: { type: String },
-      _rangeEntityFilter: { type: String }
+      _rangeEntityFilter: { type: String },
+      _chargingStatusEntityFilter: { type: String }
     };
   }
 
@@ -19,6 +20,7 @@ export class UltraVehicleCardEditor extends LitElement {
     super();
     this._levelEntityFilter = '';
     this._rangeEntityFilter = '';
+    this._chargingStatusEntityFilter = '';
   }
 
   setConfig(config) {
@@ -30,6 +32,7 @@ export class UltraVehicleCardEditor extends LitElement {
       range_entity: "",
       show_level: true,
       show_range: true,
+      charging_status_entity: "",
       ...config
     };
   }
@@ -117,6 +120,17 @@ export class UltraVehicleCardEditor extends LitElement {
             </label>
           </div>
         </div>
+
+        ${this.config.vehicle_type === "EV" ? html`
+          <div class="input-group">
+            <label for="charging_status_entity">Charging Status Entity</label>
+            <div class="entity-row">
+              <div class="entity-picker-wrapper">
+                ${this._renderEntityPicker('charging_status_entity', this._chargingStatusEntityFilter)}
+              </div>
+            </div>
+          </div>
+        ` : ''}
       </div>
     `;
   }
@@ -157,6 +171,8 @@ export class UltraVehicleCardEditor extends LitElement {
       this._levelEntityFilter = filter;
     } else if (configValue === 'range_entity') {
       this._rangeEntityFilter = filter;
+    } else if (configValue === 'charging_status_entity') {
+      this._chargingStatusEntityFilter = filter;
     }
     this.requestUpdate();
   }
@@ -170,6 +186,8 @@ export class UltraVehicleCardEditor extends LitElement {
       this._levelEntityFilter = '';
     } else if (configValue === 'range_entity') {
       this._rangeEntityFilter = '';
+    } else if (configValue === 'charging_status_entity') {
+      this._chargingStatusEntityFilter = '';
     }
     this.configChanged(this.config);
   }
