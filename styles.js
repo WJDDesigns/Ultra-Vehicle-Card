@@ -65,7 +65,7 @@ export const styles = css`
   .form {
     display: grid;
     grid-template-columns: 1fr;
-    grid-gap: 16px;
+    grid-gap: 24px;
   }
   .input-group {
     display: flex;
@@ -144,6 +144,7 @@ export const styles = css`
     display: inline-block;
     width: 40px;
     height: 24px;
+    flex-shrink: 0;
   }
   .switch input {
     opacity: 0;
