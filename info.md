@@ -1,5 +1,7 @@
 # Ultra Vehicle Card for Home Assistant
 
+<img width="390" alt="Screenshot 2024-07-29 at 2 08 08 PM" src="https://github.com/user-attachments/assets/e071779a-2d50-4bfe-b37a-24924e84dddb">
+
 This custom card allows you to display vehicle information in your Home Assistant dashboard, including the vehicle name, image, and fuel or charge level.
 
 ## Installation
@@ -23,3 +25,17 @@ lovelace:
   resources:
     - url: /local/ultra-vehicle-card.js
       type: module
+```     
+      
+### Cool Tip
+
+Hey there, fellow Home Assistant enthusiast! 🏠✨ 
+
+Did you know that the Ultra Vehicle Card was inspired by a midnight coding session fueled by an unhealthy amount of caffeine and a sudden realization that cars deserve cool cards too? It's true!
+
+If this card has made your dashboard a little more awesome or saved you from the treacherous "low fuel surprise," consider buying the developer a virtual Dr Pepper. It helps keep the creativity flowing and the code bug-free!
+
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4JVCZ46FZPUTG">
+  <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" style="width: 150px; height: auto;" />
+</a>
+
