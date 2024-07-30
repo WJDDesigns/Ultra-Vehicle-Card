@@ -2,6 +2,13 @@ import { LitElement, html } from "https://unpkg.com/lit-element@2.4.0/lit-elemen
 import { UltraVehicleCardEditor } from "./ultra-vehicle-card-editor.js";
 import { styles } from "./styles.js";
 
+// Console title
+console.log(
+  '%c Ultra Vehicle Card %c v1.0.0 ',
+  'color: #4CAF50; font-weight: bold; font-size: 14px;',
+  'color: #fff; background: #4CAF50; font-weight: bold; font-size: 14px;'
+);
+
 class UltraVehicleCard extends LitElement {
   static get properties() {
     return {
