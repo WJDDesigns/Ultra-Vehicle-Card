@@ -2,6 +2,5 @@
   "name": "Ultra Vehicle Card",
   "render_readme": true,
   "filename": "ultra-vehicle-card.js",
-  "zip_release": true,
-  "hacs": "1.6.0"
+  "zip_release": true
 }
