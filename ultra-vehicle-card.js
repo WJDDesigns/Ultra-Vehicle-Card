@@ -10,6 +10,13 @@ console.log(
 );
 
 class UltraVehicleCard extends LitElement {
+  constructor() {
+    super();
+    console.log('UltraVehicleCard constructor called');
+    this.hass = null;
+    this.config = null;
+  }
+
   static get properties() {
     return {
       hass: { type: Object },
@@ -18,10 +25,12 @@ class UltraVehicleCard extends LitElement {
   }
 
   static get styles() {
+    console.log('Styles getter called');
     return styles;
   }
 
   setConfig(config) {
+    console.log('setConfig called with:', config);
     if (!config.title) {
       throw new Error("You need to define a title");
     }
@@ -33,49 +42,69 @@ class UltraVehicleCard extends LitElement {
       show_range: true,
       ...config
     };
+    console.log('Config set:', this.config);
+  }
+
+  updated(changedProperties) {
+    console.log('Updated called, changed properties:', changedProperties);
+    super.updated(changedProperties);
   }
 
   render() {
+    console.log('Render method called');
     if (!this.hass || !this.config) {
+      console.log('Hass or config not set, returning empty template');
       return html``;
     }
-
-    const levelEntity = this.config.level_entity ? this.hass.states[this.config.level_entity] : null;
-    const level = levelEntity ? parseFloat(levelEntity.state) : null;
-    const levelUnit = this.config.vehicle_type === "EV" ? "Charge" : "Fuel";
     
-    const rangeEntity = this.config.range_entity ? this.hass.states[this.config.range_entity] : null;
-    const range = rangeEntity ? Math.round(parseFloat(rangeEntity.state)) : null;
-    const rangeUnit = this._getRangeUnit();
+    try {
+      const levelEntity = this.config.level_entity ? this.hass.states[this.config.level_entity] : null;
+      const level = levelEntity ? parseFloat(levelEntity.state) : null;
+      const levelUnit = this.config.vehicle_type === "EV" ? "Charge" : "Fuel";
+      
+      const rangeEntity = this.config.range_entity ? this.hass.states[this.config.range_entity] : null;
+      const range = rangeEntity ? Math.round(parseFloat(rangeEntity.state)) : null;
+      const rangeUnit = this._getRangeUnit();
 
-    return html`
-      <ha-card>
-        <div class="vehicle-card-content">
-          <h2 class="vehicle-name">${this.config.title}</h2>
-          ${this.config.image_url ? html`
-            <div class="vehicle-image-container">
-              <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
-            </div>
-          ` : ''}
-          ${this.config.show_level && this.config.level_entity && level !== null ? html`
-            <div class="level-info">
-              <div class="item_bar">
-                <div class="progress" style="width: ${level}%;"></div>
+      return html`
+        <ha-card>
+          <div class="vehicle-card-content">
+            <h2 class="vehicle-name">${this.config.title}</h2>
+            ${this.config.image_url ? html`
+              <div class="vehicle-image-container">
+                <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
               </div>
+            ` : ''}
+            ${this.config.show_level && this.config.level_entity && level !== null ? html`
+              <div class="level-info">
+                <div class="item_bar">
+                  <div class="progress" style="width: ${level}%;"></div>
+                </div>
+                <div class="level-text">
+                  <span>${level}% ${levelUnit}</span>
+                  ${this.config.show_range && this.config.range_entity && range !== null ? html`<span class="range">${range} ${rangeUnit}</span>` : ''}
+                </div>
+              </div>
+            ` : ''}
+            ${!this.config.show_level && this.config.show_range && this.config.range_entity && range !== null ? html`
               <div class="level-text">
-                <span>${level}% ${levelUnit}</span>
-                ${this.config.show_range && this.config.range_entity && range !== null ? html`<span class="range">${range} ${rangeUnit}</span>` : ''}
+                <span class="range">${range} ${rangeUnit}</span>
               </div>
-            </div>
-          ` : ''}
-          ${!this.config.show_level && this.config.show_range && this.config.range_entity && range !== null ? html`
-            <div class="level-text">
-              <span class="range">${range} ${rangeUnit}</span>
-            </div>
-          ` : ''}
-        </div>
-      </ha-card>
-    `;
+            ` : ''}
+          </div>
+        </ha-card>
+      `;
+    } catch (error) {
+      console.error('Error in render method:', error);
+      return html`
+        <ha-card>
+          <div class="vehicle-card-content">
+            <h2>Error rendering Ultra Vehicle Card</h2>
+            <p>${error.message}</p>
+          </div>
+        </ha-card>
+      `;
+    }
   }
 
   _getRangeUnit() {
@@ -102,6 +131,7 @@ class UltraVehicleCard extends LitElement {
 }
 
 customElements.define("ultra-vehicle-card", UltraVehicleCard);
+customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);
 
 window.customCards = window.customCards || [];
 window.customCards.push({
