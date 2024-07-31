@@ -44,7 +44,7 @@ class UltraVehicleCard extends LitElement {
     return html`
       <ha-card>
         <div class="vehicle-card-content">
-          <h2 class="vehicle-name">${this.config.title}</h2>
+          <h2 class="vehicle-name" style="text-align: center;">${this.config.title}</h2>
           ${this.config.image_url ? html`
             <div class="vehicle-image-container">
               <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
