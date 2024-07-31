@@ -1,8 +1,5 @@
 {
   "name": "Ultra Vehicle Card",
-  "zip_release": true,
-  "hide_default_branch": true,
-  "homeassistant": "2024.4.1",
-  "hacs": "0.19.0",
+  "render_readme": true,
   "filename": "ultra-vehicle-card.js"
 }
