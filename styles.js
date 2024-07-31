@@ -28,6 +28,7 @@ export const styles = css`
     font-size: 1.5em;
     margin-bottom: 16px;
     color: var(--primary-text-color);
+    text-align: center;
   }
   .level-info {
     flex: 1;
@@ -36,9 +37,10 @@ export const styles = css`
     position: relative;
     height: 1.5rem;
     width: 100%;
-    background-color: #000;
-    border-radius: 4px;
+    background-color: rgb(9 8 8);
+    border-radius: 6px;
     overflow: hidden;
+    border: 2px solid rgb(9 8 8);
   }
   .progress {
     position: absolute;
@@ -107,8 +109,16 @@ export const styles = css`
   input[type="file"] {
     margin-top: 8px;
   }
+  .entity-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
   .entity-picker-container {
     position: relative;
+    flex-grow: 1;
+    margin-right: 16px;
   }
   .entity-picker-results {
     position: absolute;
@@ -131,9 +141,45 @@ export const styles = css`
   .entity-picker-result:hover {
     background-color: var(--secondary-background-color);
   }
-  .entity-toggle {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  
+  /* Modern toggle switch */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  input:checked + .slider {
+    background-color: var(--primary-color);
+  }
+  input:checked + .slider:before {
+    transform: translateX(26px);
   }
 `;
