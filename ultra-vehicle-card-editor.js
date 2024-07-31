@@ -85,37 +85,33 @@ export class UltraVehicleCardEditor extends LitElement {
         </div>
         
         <div class="input-group">
-          <label for="level_entity">${levelLabel} Level Entity</label>
-          <div class="entity-row">
-            <div class="entity-picker-wrapper">
-              ${this._renderEntityPicker('level_entity', this._levelEntityFilter)}
-            </div>
-            <label class="switch">
+          <div class="entity-toggle">
+            <label for="level_entity">${levelLabel} Level Entity</label>
+            <label class="checkbox-group">
               <input type="checkbox" 
                 ?checked="${this.config.show_level}"
                 @change="${this._toggleChanged}"
                 .configValue="${'show_level'}"
               />
-              <span class="slider"></span>
+              Show
             </label>
           </div>
+          ${this._renderEntityPicker('level_entity', this._levelEntityFilter)}
         </div>
 
         <div class="input-group">
-          <label for="range_entity">Range Entity</label>
-          <div class="entity-row">
-            <div class="entity-picker-wrapper">
-              ${this._renderEntityPicker('range_entity', this._rangeEntityFilter)}
-            </div>
-            <label class="switch">
+          <div class="entity-toggle">
+            <label for="range_entity">Range Entity</label>
+            <label class="checkbox-group">
               <input type="checkbox" 
                 ?checked="${this.config.show_range}"
                 @change="${this._toggleChanged}"
                 .configValue="${'show_range'}"
               />
-              <span class="slider"></span>
+              Show
             </label>
           </div>
+          ${this._renderEntityPicker('range_entity', this._rangeEntityFilter)}
         </div>
       </div>
     `;
@@ -232,7 +228,5 @@ export class UltraVehicleCardEditor extends LitElement {
     this.dispatchEvent(event);
   }
 }
-
-customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);
 
 customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);
