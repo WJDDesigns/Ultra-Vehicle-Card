@@ -1,3 +1,5 @@
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
+
 # Ultra Vehicle Card for Home Assistant
 
 <img width="390" alt="Screenshot 2024-07-29 at 2 08 08 PM" src="https://github.com/user-attachments/assets/e071779a-2d50-4bfe-b37a-24924e84dddb">
