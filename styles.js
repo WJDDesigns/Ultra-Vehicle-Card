@@ -65,7 +65,7 @@ export const styles = css`
   .form {
     display: grid;
     grid-template-columns: 1fr;
-    grid-gap: 24px;
+    grid-gap: 16px;
   }
   .input-group {
     display: flex;
@@ -78,6 +78,7 @@ export const styles = css`
   }
   input[type="text"], .entity-picker-input {
     width: 100%;
+    max-width: 300px;
     padding: 10px;
     border: 1px solid var(--divider-color, #e0e0e0);
     border-radius: 4px;
@@ -90,17 +91,17 @@ export const styles = css`
     border-color: var(--primary-color);
     box-shadow: 0 0 0 1px var(--primary-color);
   }
-  .radio-group {
+  .radio-group, .checkbox-group {
     display: flex;
     flex-direction: row;
     align-items: center;
   }
-  .radio-group label {
+  .radio-group label, .checkbox-group label {
     margin-right: 16px;
     display: flex;
     align-items: center;
   }
-  input[type="radio"] {
+  input[type="radio"], input[type="checkbox"] {
     margin-right: 8px;
   }
   input[type="file"] {
@@ -130,53 +131,9 @@ export const styles = css`
   .entity-picker-result:hover {
     background-color: var(--secondary-background-color);
   }
-  .entity-row {
+  .entity-toggle {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-  }
-  .entity-picker-wrapper {
-    flex-grow: 1;
-    margin-right: 16px;
-  }
-  .switch {
-    position: relative;
-    display: inline-block;
-    width: 40px;
-    height: 24px;
-    flex-shrink: 0;
-  }
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 24px;
-  }
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 16px;
-    width: 16px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
-  }
-  input:checked + .slider {
-    background-color: var(--primary-color);
-  }
-  input:checked + .slider:before {
-    transform: translateX(16px);
+    align-items: center;
   }
 `;
