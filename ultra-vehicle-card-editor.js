@@ -85,33 +85,33 @@ export class UltraVehicleCardEditor extends LitElement {
         </div>
         
         <div class="input-group">
-          <div class="entity-toggle">
+          <div class="entity-row">
             <label for="level_entity">${levelLabel} Level Entity</label>
-            <label class="checkbox-group">
+            ${this._renderEntityPicker('level_entity', this._levelEntityFilter)}
+            <label class="switch">
               <input type="checkbox" 
                 ?checked="${this.config.show_level}"
                 @change="${this._toggleChanged}"
                 .configValue="${'show_level'}"
               />
-              Show
+              <span class="slider round"></span>
             </label>
           </div>
-          ${this._renderEntityPicker('level_entity', this._levelEntityFilter)}
         </div>
 
         <div class="input-group">
-          <div class="entity-toggle">
+          <div class="entity-row">
             <label for="range_entity">Range Entity</label>
-            <label class="checkbox-group">
+            ${this._renderEntityPicker('range_entity', this._rangeEntityFilter)}
+            <label class="switch">
               <input type="checkbox" 
                 ?checked="${this.config.show_range}"
                 @change="${this._toggleChanged}"
                 .configValue="${'show_range'}"
               />
-              Show
+              <span class="slider round"></span>
             </label>
           </div>
-          ${this._renderEntityPicker('range_entity', this._rangeEntityFilter)}
         </div>
       </div>
     `;
