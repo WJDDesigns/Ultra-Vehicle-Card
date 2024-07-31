@@ -1,4 +1,8 @@
 {
   "name": "Ultra Vehicle Card",
-  "render_readme": true
+  "zip_release": true,
+  "hide_default_branch": true,
+  "homeassistant": "2024.4.1",
+  "hacs": "0.19.0",
+  "content_in_root": true
 }
