@@ -135,7 +135,7 @@ customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);
 
 window.customCards = window.customCards || [];
 window.customCards.push({
-  type: "ultra-vehicle-card",
+  type: "custom:ultra-vehicle-card",
   name: "Ultra Vehicle Card",
   description: "A card that displays vehicle information with fuel/charge level and range.",
   preview: true
