@@ -133,65 +133,79 @@ export class UltraVehicleCardEditor extends LitElement {
       <div class="entity-picker-container">
         <input
           type="text"
-          placeholder="Filter entities"
-          .value="${filter}"
-          @input="${(e) => this._entityFilterChanged(e, configValue)}"
-        />
-        <select @change="${this._valueChanged}" .configValue="${configValue}">
-          <option value="">Select an entity</option>
-          ${entities.map(entityId => html`
-            <option value="${entityId}" ?selected="${entityId === this.config[configValue]}">${entityId}</option>
-          `)}
-        </select>
+          class="entity-picker-input"
+          .value="${this.config[configValue] || ''}"
+          @input="${e => this._entityFilterChanged(e, configValue)}"
+          placeholder="Search entities"
+        >
+        ${filter ? html`
+          <div class="entity-picker-results">
+            ${entities.map(eid => html`
+              <div class="entity-picker-result" @click="${() => this._selectEntity(configValue, eid)}">
+                ${eid}
+              </div>
+            `)}
+          </div>
+        ` : ''}
       </div>
     `;
   }
 
-  _entityFilterChanged(event, configValue) {
+  _entityFilterChanged(e, configValue) {
+    const filter = e.target.value;
     if (configValue === 'level_entity') {
-      this._levelEntityFilter = event.target.value;
+      this._levelEntityFilter = filter;
     } else if (configValue === 'range_entity') {
-      this._rangeEntityFilter = event.target.value;
+      this._rangeEntityFilter = filter;
     }
+    this.requestUpdate();
   }
 
-  _valueChanged(event) {
+  _selectEntity(configValue, entityId) {
+    this.config = {
+      ...this.config,
+      [configValue]: entityId
+    };
+    if (configValue === 'level_entity') {
+      this._levelEntityFilter = '';
+    } else if (configValue === 'range_entity') {
+      this._rangeEntityFilter = '';
+    }
+    this.configChanged(this.config);
+  }
+
+  _valueChanged(ev) {
     if (!this.config || !this.hass) {
       return;
     }
-
-    const target = event.target;
-    const value = target.value;
-    const configValue = target.configValue;
-
-    if (this.config[configValue] !== value) {
-      this.config = { ...this.config, [configValue]: value };
+    const target = ev.target;
+    if (target.configValue) {
+      this.config = {
+        ...this.config,
+        [target.configValue]: target.value
+      };
       this.configChanged(this.config);
     }
   }
 
-  _toggleChanged(event) {
-    if (!this.config || !this.hass) {
-      return;
+  _toggleChanged(ev) {
+    const target = ev.target;
+    if (target.configValue) {
+      this.config = {
+        ...this.config,
+        [target.configValue]: target.checked
+      };
+      this.configChanged(this.config);
     }
-
-    const target = event.target;
-    const configValue = target.configValue;
-
-    this.config = { ...this.config, [configValue]: target.checked };
-    this.configChanged(this.config);
   }
 
-  _vehicleTypeChanged(event) {
-    if (!this.config || !this.hass) {
-      return;
-    }
-
-    const target = event.target;
-    const value = target.value;
-
-    this.config = { ...this.config, vehicle_type: value };
+  _vehicleTypeChanged(ev) {
+    this.config = {
+      ...this.config,
+      vehicle_type: ev.target.value
+    };
     this.configChanged(this.config);
+    this.requestUpdate();
   }
 
   _handleImageUpload(ev) {
@@ -209,12 +223,16 @@ export class UltraVehicleCardEditor extends LitElement {
     }
   }
 
-  configChanged(config) {
-    const event = new CustomEvent("config-changed", {
-      detail: { config }
+  configChanged(newConfig) {
+    const event = new Event("config-changed", {
+      bubbles: true,
+      composed: true
     });
+    event.detail = { config: newConfig };
     this.dispatchEvent(event);
   }
 }
+
+customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);
 
 customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);
