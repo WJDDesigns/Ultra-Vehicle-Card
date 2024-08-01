@@ -2,7 +2,8 @@
 
 # Ultra Vehicle Card for Home Assistant
 
-<img width="390" alt="Screenshot 2024-07-29 at 2 08 08 PM" src="https://github.com/user-attachments/assets/5b112462-23c2-4a90-a576-3f97967ca947">
+<img width="480" alt="Light Screenshot" src="https://github.com/user-attachments/assets/5fba8b7a-eae4-4e70-9c6b-b9b5be4e0feb">
+<img width="480" alt="Dark Screenshot" src="https://github.com/user-attachments/assets/5b112462-23c2-4a90-a576-3f97967ca947">
 
 This custom card allows you to display vehicle information in your Home Assistant dashboard, including the vehicle name, image, and fuel or charge level.
 
