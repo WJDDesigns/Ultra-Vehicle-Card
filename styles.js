@@ -50,7 +50,7 @@ export const styles = css`
     width: 0;
     height: 1.5rem;
     margin: 0;
-    background-color: var(--primary-color);
+    background-color: var(--accent-color, var(--primary-color));
     border-radius: 4px;
   }
   .level-text {
@@ -74,13 +74,17 @@ export const styles = css`
     flex-direction: column;
   }
   .input-group label {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     font-weight: 500;
     color: var(--primary-text-color);
   }
+  .entity-description {
+    font-size: 0.8em;
+    color: var(--secondary-text-color);
+    margin-bottom: 4px;
+  }
   input[type="text"], .entity-picker-input {
     width: 100%;
-    max-width: 300px;
     padding: 10px;
     border: 1px solid var(--divider-color, #e0e0e0);
     border-radius: 4px;
@@ -118,7 +122,7 @@ export const styles = css`
   .entity-picker-container {
     position: relative;
     flex-grow: 1;
-    margin-right: 16px;
+    margin-right: 8px;
   }
   .entity-picker-results {
     position: absolute;
@@ -146,8 +150,9 @@ export const styles = css`
   .switch {
     position: relative;
     display: inline-block;
-    width: 60px;
-    height: 34px;
+    width: 40px;
+    height: 22px;
+    margin-left: 28px;
   }
   .switch input {
     opacity: 0;
@@ -168,40 +173,22 @@ export const styles = css`
   .slider:before {
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
-    left: 4px;
-    bottom: 4px;
+    height: 18px;
+    width: 18px;
+    left: 2px;
+    bottom: 2px;
     background-color: white;
     transition: .4s;
     border-radius: 50%;
   }
   input:checked + .slider {
-    background-color: var(--primary-color);
+    background-color: var(--accent-color, var(--primary-color));
   }
   input:checked + .slider:before {
-    transform: translateX(26px);
+    transform: translateX(18px);
   }
-
-  /* Charging animation */
-  .charging {
-    animation: pulse-blue 2s infinite;
-  }
-
-  @keyframes pulse-blue {
-    0% {
-      transform: scale(0.95);
-      box-shadow: 0 0 0 0 rgba(52, 172, 224, 0.7);
-    }
-    
-    70% {
-      transform: scale(1);
-      box-shadow: 0 0 0 10px rgba(52, 172, 224, 0);
-    }
-    
-    100% {
-      transform: scale(0.95);
-      box-shadow: 0 0 0 0 rgba(52, 172, 224, 0);
-    }
-  }
+  .info-line {
+    justify-content: center !important;
+    gap: 8px !important;
+}
 `;

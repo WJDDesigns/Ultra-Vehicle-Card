@@ -14,25 +14,44 @@ class UltraVehicleCard extends LitElement {
     return [
       styles,
       css`
-        @keyframes pulse-blue {
+        @keyframes move-stripes {
           0% {
-            transform: scale(0.95);
-            box-shadow: 0 0 0 0 rgba(52, 172, 224, 0.7);
+            background-position: 0 0;
           }
-          
-          70% {
-            transform: scale(1);
-            box-shadow: 0 0 0 10px rgba(52, 172, 224, 0);
-          }
-          
           100% {
-            transform: scale(0.95);
-            box-shadow: 0 0 0 0 rgba(52, 172, 224, 0);
+            background-position: 50px 0;
           }
         }
 
-        .charging {
-          animation: pulse-blue 2s infinite;
+        .progress.charging {
+          background-image: linear-gradient(
+            45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent
+          );
+          background-size: 50px 50px;
+          animation: move-stripes 2s linear infinite;
+        }
+
+        .info-line {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 8px;
+        }
+
+        .location, .mileage {
+          font-size: 0.9em;
+          color: var(--secondary-text-color);
+        }
+
+        .location ha-icon, .mileage ha-icon {
+          margin-right: 4px;
         }
       `
     ];
@@ -49,11 +68,15 @@ class UltraVehicleCard extends LitElement {
       show_level: true,
       show_range: true,
       charging_status_entity: "",
+      location_entity: "",
+      show_location: true,
+      mileage_entity: "",
+      show_mileage: true,
       ...config
     };
   }
 
-  render() {
+ render() {
     if (!this.hass || !this.config) {
       return html``;
     }
@@ -67,12 +90,20 @@ class UltraVehicleCard extends LitElement {
     const rangeUnit = this._getRangeUnit();
 
     const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
-    const isCharging = chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'charging';
+    const isCharging = chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'on';
+
+    const locationEntity = this.config.location_entity ? this.hass.states[this.config.location_entity] : null;
+    const location = locationEntity ? locationEntity.state : null;
+
+    const mileageEntity = this.config.mileage_entity ? this.hass.states[this.config.mileage_entity] : null;
+    let mileage = mileageEntity ? parseFloat(mileageEntity.state) : null;
+    mileage = mileage !== null ? Math.round(mileage).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null;
 
     return html`
-      <ha-card class="${isCharging ? 'charging' : ''}">
+      <ha-card>
         <div class="vehicle-card-content">
           <h2 class="vehicle-name">${this.config.title}</h2>
+          ${this._renderInfoLine(location, mileage)}
           ${this.config.image_url ? html`
             <div class="vehicle-image-container">
               <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
@@ -81,10 +112,10 @@ class UltraVehicleCard extends LitElement {
           ${this.config.show_level && this.config.level_entity && level !== null ? html`
             <div class="level-info">
               <div class="item_bar">
-                <div class="progress" style="width: ${level}%;"></div>
+                <div class="progress ${isCharging ? 'charging' : ''}" style="width: ${level}%;"></div>
               </div>
               <div class="level-text">
-                <span>${isCharging ? 'Charging' : `${level}% ${levelUnit}`}</span>
+                <span>${level}% ${isCharging ? 'Charging' : levelUnit}</span>
                 ${this.config.show_range && this.config.range_entity && range !== null ? html`<span class="range">${range} ${rangeUnit}</span>` : ''}
               </div>
             </div>
@@ -96,6 +127,27 @@ class UltraVehicleCard extends LitElement {
           ` : ''}
         </div>
       </ha-card>
+    `;
+  }
+
+  _renderInfoLine(location, mileage) {
+    if (!this.config.show_location && !this.config.show_mileage) return '';
+
+    return html`
+      <div class="info-line">
+        ${this.config.show_location && location ? html`
+          <span class="location">
+            <ha-icon icon="mdi:map-marker"></ha-icon>
+            ${location}
+          </span>
+        ` : ''}
+        ${this.config.show_mileage && mileage ? html`
+          <span class="mileage">
+            <ha-icon icon="mdi:speedometer"></ha-icon>
+            ${mileage}
+          </span>
+        ` : ''}
+      </div>
     `;
   }
 
@@ -117,8 +169,12 @@ class UltraVehicleCard extends LitElement {
       level_entity: "",
       range_entity: "",
       charging_status_entity: "",
+      location_entity: "",
+      mileage_entity: "",
       show_level: true,
-      show_range: true
+      show_range: true,
+      show_location: true,
+      show_mileage: true
     };
   }
 }
@@ -129,6 +185,6 @@ window.customCards = window.customCards || [];
 window.customCards.push({
   type: "ultra-vehicle-card",
   name: "Ultra Vehicle Card",
-  description: "A card that displays vehicle information with fuel/charge level and range.",
+  description: "A card that displays vehicle information with fuel/charge level, range, location, and mileage.",
   preview: true
 });

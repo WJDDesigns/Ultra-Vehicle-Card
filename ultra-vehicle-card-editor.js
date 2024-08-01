@@ -8,7 +8,9 @@ export class UltraVehicleCardEditor extends LitElement {
       config: { type: Object },
       _levelEntityFilter: { type: String },
       _rangeEntityFilter: { type: String },
-      _chargingStatusEntityFilter: { type: String }
+      _chargingStatusEntityFilter: { type: String },
+      _locationEntityFilter: { type: String },
+      _mileageEntityFilter: { type: String }
     };
   }
 
@@ -21,6 +23,8 @@ export class UltraVehicleCardEditor extends LitElement {
     this._levelEntityFilter = '';
     this._rangeEntityFilter = '';
     this._chargingStatusEntityFilter = '';
+    this._locationEntityFilter = '';
+    this._mileageEntityFilter = '';
   }
 
   setConfig(config) {
@@ -31,8 +35,12 @@ export class UltraVehicleCardEditor extends LitElement {
       level_entity: "",
       range_entity: "",
       charging_status_entity: "",
+      location_entity: "",
+      mileage_entity: "",
       show_level: true,
       show_range: true,
+      show_location: true,
+      show_mileage: true,
       ...config
     };
   }
@@ -87,44 +95,52 @@ export class UltraVehicleCardEditor extends LitElement {
           </div>
         </div>
         
-        <div class="input-group">
-          <div class="entity-row">
-            <label for="level_entity">${levelLabel} Level Entity</label>
-            ${this._renderEntityPicker('level_entity', this._levelEntityFilter)}
+        ${this._renderEntityPicker('level_entity', `${levelLabel} Level Entity`, 'This is used for percent and bar length.')}
+        ${this._renderEntityPicker('range_entity', 'Range Entity', 'This is used for the range left.')}
+        ${this.config.vehicle_type === 'EV' ? this._renderEntityPicker('charging_status_entity', 'Charging Status Entity', 'This is used for charging wording and bar animation.') : ''}
+        ${this._renderEntityPicker('location_entity', 'Location Entity', 'This is used to display the vehicle location.')}
+        ${this._renderEntityPicker('mileage_entity', 'Mileage Entity', 'This is used to display the vehicle mileage.')}
+      </div>
+    `;
+  }
+
+  _renderEntityPicker(configValue, labelText, description) {
+    return html`
+      <div class="input-group">
+        <label for="${configValue}">${labelText}</label>
+        <div class="entity-description">${description}</div>
+        <div class="entity-row">
+          <div class="entity-picker-container">
+            <input
+              type="text"
+              class="entity-picker-input"
+              .value="${this.config[configValue] || ''}"
+              @input="${e => this._entityFilterChanged(e, configValue)}"
+              placeholder="Search entities"
+            >
+            ${this[`_${configValue}Filter`] ? html`
+              <div class="entity-picker-results">
+                ${Object.keys(this.hass.states)
+                  .filter(eid => eid.toLowerCase().includes(this[`_${configValue}Filter`].toLowerCase()))
+                  .map(eid => html`
+                    <div class="entity-picker-result" @click="${() => this._selectEntity(configValue, eid)}">
+                      ${eid}
+                    </div>
+                  `)}
+              </div>
+            ` : ''}
+          </div>
+          ${['level_entity', 'range_entity', 'location_entity', 'mileage_entity'].includes(configValue) ? html`
             <label class="switch">
               <input type="checkbox" 
-                ?checked="${this.config.show_level}"
+                ?checked="${this.config[`show_${configValue.split('_')[0]}`]}"
                 @change="${this._toggleChanged}"
-                .configValue="${'show_level'}"
+                .configValue="${`show_${configValue.split('_')[0]}`}"
               />
               <span class="slider round"></span>
             </label>
-          </div>
+          ` : ''}
         </div>
-
-        <div class="input-group">
-          <div class="entity-row">
-            <label for="range_entity">Range Entity</label>
-            ${this._renderEntityPicker('range_entity', this._rangeEntityFilter)}
-            <label class="switch">
-              <input type="checkbox" 
-                ?checked="${this.config.show_range}"
-                @change="${this._toggleChanged}"
-                .configValue="${'show_range'}"
-              />
-              <span class="slider round"></span>
-            </label>
-          </div>
-        </div>
-
-        ${this.config.vehicle_type === 'EV' ? html`
-          <div class="input-group">
-            <div class="entity-row">
-              <label for="charging_status_entity">Charging Status Entity</label>
-              ${this._renderEntityPicker('charging_status_entity', this._chargingStatusEntityFilter)}
-            </div>
-          </div>
-        ` : ''}
       </div>
     `;
   }
@@ -133,41 +149,9 @@ export class UltraVehicleCardEditor extends LitElement {
     return url && url.startsWith('data:image') ? 'Uploaded Image' : url;
   }
 
-  _renderEntityPicker(configValue, filter) {
-    const entities = Object.keys(this.hass.states)
-      .filter(eid => eid.toLowerCase().includes(filter.toLowerCase()));
-
-    return html`
-      <div class="entity-picker-container">
-        <input
-          type="text"
-          class="entity-picker-input"
-          .value="${this.config[configValue] || ''}"
-          @input="${e => this._entityFilterChanged(e, configValue)}"
-          placeholder="Search entities"
-        >
-        ${filter ? html`
-          <div class="entity-picker-results">
-            ${entities.map(eid => html`
-              <div class="entity-picker-result" @click="${() => this._selectEntity(configValue, eid)}">
-                ${eid}
-              </div>
-            `)}
-          </div>
-        ` : ''}
-      </div>
-    `;
-  }
-
   _entityFilterChanged(e, configValue) {
     const filter = e.target.value;
-    if (configValue === 'level_entity') {
-      this._levelEntityFilter = filter;
-    } else if (configValue === 'range_entity') {
-      this._rangeEntityFilter = filter;
-    } else if (configValue === 'charging_status_entity') {
-      this._chargingStatusEntityFilter = filter;
-    }
+    this[`_${configValue}Filter`] = filter;
     this.requestUpdate();
   }
 
@@ -176,13 +160,7 @@ export class UltraVehicleCardEditor extends LitElement {
       ...this.config,
       [configValue]: entityId
     };
-    if (configValue === 'level_entity') {
-      this._levelEntityFilter = '';
-    } else if (configValue === 'range_entity') {
-      this._rangeEntityFilter = '';
-    } else if (configValue === 'charging_status_entity') {
-      this._chargingStatusEntityFilter = '';
-    }
+    this[`_${configValue}Filter`] = '';
     this.configChanged(this.config);
   }
 
