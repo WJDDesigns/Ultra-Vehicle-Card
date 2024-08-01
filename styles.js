@@ -182,4 +182,26 @@ export const styles = css`
   input:checked + .slider:before {
     transform: translateX(26px);
   }
+
+  /* Charging animation */
+  .charging {
+    animation: pulse-blue 2s infinite;
+  }
+
+  @keyframes pulse-blue {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(52, 172, 224, 0.7);
+    }
+    
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 10px rgba(52, 172, 224, 0);
+    }
+    
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(52, 172, 224, 0);
+    }
+  }
 `;
