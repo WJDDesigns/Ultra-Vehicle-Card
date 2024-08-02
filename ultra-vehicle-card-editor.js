@@ -32,6 +32,7 @@ export class UltraVehicleCardEditor extends LitElement {
       title: "My Vehicle",
       image_url: "",
       vehicle_type: "EV",
+      unit_type: "mi",
       level_entity: "",
       range_entity: "",
       charging_status_entity: "",
@@ -91,6 +92,20 @@ export class UltraVehicleCardEditor extends LitElement {
             <label>
               <input type="radio" name="vehicle_type" value="Fuel" ?checked="${this.config.vehicle_type === 'Fuel'}" @change="${this._vehicleTypeChanged}">
               Fuel Vehicle
+            </label>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label>Unit Type</label>
+          <div class="radio-group">
+            <label>
+              <input type="radio" name="unit_type" value="mi" ?checked="${this.config.unit_type === 'mi'}" @change="${this._unitTypeChanged}">
+              Miles (mi)
+            </label>
+            <label>
+              <input type="radio" name="unit_type" value="km" ?checked="${this.config.unit_type === 'km'}" @change="${this._unitTypeChanged}">
+              Kilometers (km)
             </label>
           </div>
         </div>
@@ -193,6 +208,15 @@ export class UltraVehicleCardEditor extends LitElement {
     this.config = {
       ...this.config,
       vehicle_type: ev.target.value
+    };
+    this.configChanged(this.config);
+    this.requestUpdate();
+  }
+
+  _unitTypeChanged(ev) {
+    this.config = {
+      ...this.config,
+      unit_type: ev.target.value
     };
     this.configChanged(this.config);
     this.requestUpdate();

@@ -65,6 +65,7 @@ class UltraVehicleCard extends LitElement {
       title: "My Vehicle",
       image_url: "",
       vehicle_type: "EV",
+      unit_type: "mi",
       show_level: true,
       show_range: true,
       charging_status_entity: "",
@@ -76,7 +77,7 @@ class UltraVehicleCard extends LitElement {
     };
   }
 
- render() {
+  render() {
     if (!this.hass || !this.config) {
       return html``;
     }
@@ -87,7 +88,7 @@ class UltraVehicleCard extends LitElement {
     
     const rangeEntity = this.config.range_entity ? this.hass.states[this.config.range_entity] : null;
     const range = rangeEntity ? Math.round(parseFloat(rangeEntity.state)) : null;
-    const rangeUnit = this._getRangeUnit();
+    const rangeUnit = this.config.unit_type;
 
     const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
     const isCharging = chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'on';
@@ -144,17 +145,11 @@ class UltraVehicleCard extends LitElement {
         ${this.config.show_mileage && mileage ? html`
           <span class="mileage">
             <ha-icon icon="mdi:speedometer"></ha-icon>
-            ${mileage}
+            ${mileage} ${this.config.unit_type}
           </span>
         ` : ''}
       </div>
     `;
-  }
-
-  _getRangeUnit() {
-    const locale = this.hass.language || 'en';
-    const useMetric = ['en-GB', 'en-AU', 'en-NZ'].includes(locale) || !locale.startsWith('en');
-    return useMetric ? 'kilometers' : 'miles';
   }
 
   static getConfigElement() {
@@ -166,6 +161,7 @@ class UltraVehicleCard extends LitElement {
       title: "My Vehicle",
       image_url: "",
       vehicle_type: "EV",
+      unit_type: "mi",
       level_entity: "",
       range_entity: "",
       charging_status_entity: "",
