@@ -33,7 +33,7 @@ lovelace:
       type: module
 ```     
 
-![Add Repo](https://camo.githubusercontent.com/0ab6126849ccb8c77891afcd6d5b01f76ed99518f52387df274c41c8e3d15c64/68747470733a2f2f6d792e686f6d652d617373697374616e742e696f2f6261646765732f686163735f7265706f7369746f72792e737667)[](https://my.home-assistant.io/redirect/hacs_repository/?owner=ngocjohn&repository=vehicle-info-card&category=plugin)
+[![Repo](https://camo.githubusercontent.com/0ab6126849ccb8c77891afcd6d5b01f76ed99518f52387df274c41c8e3d15c64/68747470733a2f2f6d792e686f6d652d617373697374616e742e696f2f6261646765732f686163735f7265706f7369746f72792e737667)](https://my.home-assistant.io/redirect/hacs_repository/?owner=wjddesigns&repository=ultra-vehicle-card&category=plugin)
 
     
 ### Cool Tip
