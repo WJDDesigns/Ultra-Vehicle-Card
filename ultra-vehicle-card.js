@@ -14,44 +14,20 @@ class UltraVehicleCard extends LitElement {
     return [
       styles,
       css`
-        @keyframes move-stripes {
-          0% {
-            background-position: 0 0;
-          }
-          100% {
-            background-position: 50px 0;
-          }
-        }
-
-        .progress.charging {
-          background-image: linear-gradient(
-            45deg,
-            rgba(255, 255, 255, 0.15) 25%,
-            transparent 25%,
-            transparent 50%,
-            rgba(255, 255, 255, 0.15) 50%,
-            rgba(255, 255, 255, 0.15) 75%,
-            transparent 75%,
-            transparent
-          );
-          background-size: 50px 50px;
-          animation: move-stripes 2s linear infinite;
-        }
-
-        .info-line {
+        .icon-grid {
           display: flex;
-          justify-content: space-between;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 16px;
+          margin: 16px 0;
+        }
+        .icon-item {
+          display: flex;
           align-items: center;
-          margin-bottom: 8px;
         }
-
-        .location, .mileage {
-          font-size: 0.9em;
-          color: var(--secondary-text-color);
-        }
-
-        .location ha-icon, .mileage ha-icon {
-          margin-right: 4px;
+        .icon-item ha-icon {
+          width: 24px;
+          height: 24px;
         }
       `
     ];
@@ -73,6 +49,8 @@ class UltraVehicleCard extends LitElement {
       show_location: true,
       mileage_entity: "",
       show_mileage: true,
+      icon_grid_entities: [],
+      custom_icons: {},
       ...config
     };
   }
@@ -82,17 +60,19 @@ class UltraVehicleCard extends LitElement {
       return html``;
     }
 
-    const levelEntity = this.config.level_entity ? this.hass.states[this.config.level_entity] : null;
-    const level = levelEntity ? parseFloat(levelEntity.state) : null;
-    const levelUnit = this.config.vehicle_type === "EV" ? "Charge" : "Fuel";
-    
-    const rangeEntity = this.config.range_entity ? this.hass.states[this.config.range_entity] : null;
-    const range = rangeEntity ? Math.round(parseFloat(rangeEntity.state)) : null;
-    const rangeUnit = this.config.unit_type;
+    return html`
+      <ha-card>
+        <div class="vehicle-card-content">
+          ${this._renderHeader()}
+          ${this._renderVehicleImage()}
+          ${this._renderIconGrid()}
+          ${this._renderLevelAndRange()}
+        </div>
+      </ha-card>
+    `;
+  }
 
-    const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
-    const isCharging = chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'on';
-
+  _renderHeader() {
     const locationEntity = this.config.location_entity ? this.hass.states[this.config.location_entity] : null;
     const location = locationEntity ? locationEntity.state : null;
 
@@ -101,33 +81,8 @@ class UltraVehicleCard extends LitElement {
     mileage = mileage !== null ? Math.round(mileage).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null;
 
     return html`
-      <ha-card>
-        <div class="vehicle-card-content">
-          <h2 class="vehicle-name">${this.config.title}</h2>
-          ${this._renderInfoLine(location, mileage)}
-          ${this.config.image_url ? html`
-            <div class="vehicle-image-container">
-              <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
-            </div>
-          ` : ''}
-          ${this.config.show_level && this.config.level_entity && level !== null ? html`
-            <div class="level-info">
-              <div class="item_bar">
-                <div class="progress ${isCharging ? 'charging' : ''}" style="width: ${level}%;"></div>
-              </div>
-              <div class="level-text">
-                <span>${level}% ${isCharging ? 'Charging' : levelUnit}</span>
-                ${this.config.show_range && this.config.range_entity && range !== null ? html`<span class="range">${range} ${rangeUnit}</span>` : ''}
-              </div>
-            </div>
-          ` : ''}
-          ${!this.config.show_level && this.config.show_range && this.config.range_entity && range !== null ? html`
-            <div class="level-text">
-              <span class="range">${range} ${rangeUnit}</span>
-            </div>
-          ` : ''}
-        </div>
-      </ha-card>
+      <h2 class="vehicle-name">${this.config.title}</h2>
+      ${this._renderInfoLine(location, mileage)}
     `;
   }
 
@@ -152,6 +107,81 @@ class UltraVehicleCard extends LitElement {
     `;
   }
 
+  _renderVehicleImage() {
+    if (!this.config.image_url) return '';
+
+    return html`
+      <div class="vehicle-image-container">
+        <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
+      </div>
+    `;
+  }
+
+  _renderLevelAndRange() {
+    const levelEntity = this.config.level_entity ? this.hass.states[this.config.level_entity] : null;
+    const level = levelEntity ? parseFloat(levelEntity.state) : null;
+    const levelUnit = this.config.vehicle_type === "EV" ? "Charge" : "Fuel";
+    
+    const rangeEntity = this.config.range_entity ? this.hass.states[this.config.range_entity] : null;
+    const range = rangeEntity ? Math.round(parseFloat(rangeEntity.state)) : null;
+    const rangeUnit = this.config.unit_type;
+
+    const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
+    const isCharging = chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'on';
+
+    if (!this.config.show_level && !this.config.show_range) return '';
+
+    return html`
+      <div class="level-info">
+        ${this.config.show_level && level !== null ? html`
+          <div class="item_bar">
+            <div class="progress ${isCharging ? 'charging' : ''}" style="width: ${level}%;"></div>
+          </div>
+          <div class="level-text">
+            <span>${level}% ${isCharging ? 'Charging' : levelUnit}</span>
+            ${this.config.show_range && range !== null ? html`<span class="range">${range} ${rangeUnit}</span>` : ''}
+          </div>
+        ` : ''}
+        ${!this.config.show_level && this.config.show_range && range !== null ? html`
+          <div class="level-text">
+            <span class="range">${range} ${rangeUnit}</span>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  _renderIconGrid() {
+    const { icon_grid_entities } = this.config;
+    
+    if (!icon_grid_entities || icon_grid_entities.length === 0) {
+      return '';
+    }
+
+    return html`
+      <div class="icon-grid">
+        ${icon_grid_entities.map(entityId => this._renderIconItem(entityId))}
+      </div>
+    `;
+  }
+
+  _renderIconItem(entityId) {
+    const entity = this.hass.states[entityId];
+    if (!entity) return '';
+
+    const icon = this.config.custom_icons[entityId] || 'mdi:help-circle';
+    const state = entity.state;
+
+    const isActive = ['on', 'open', 'true', 'unlocked'].includes(state.toLowerCase());
+    const iconColor = isActive ? 'var(--accent-color)' : 'var(--secondary-text-color)';
+
+    return html`
+      <div class="icon-item">
+        <ha-icon .icon="${icon}" style="color: ${iconColor};"></ha-icon>
+      </div>
+    `;
+  }
+
   static getConfigElement() {
     return document.createElement("ultra-vehicle-card-editor");
   }
@@ -170,7 +200,9 @@ class UltraVehicleCard extends LitElement {
       show_level: true,
       show_range: true,
       show_location: true,
-      show_mileage: true
+      show_mileage: true,
+      icon_grid_entities: [],
+      custom_icons: {}
     };
   }
 }
@@ -181,6 +213,6 @@ window.customCards = window.customCards || [];
 window.customCards.push({
   type: "ultra-vehicle-card",
   name: "Ultra Vehicle Card",
-  description: "A card that displays vehicle information with fuel/charge level, range, location, and mileage.",
+  description: "A card that displays vehicle information with fuel/charge level, range, location, mileage, and a customizable icon grid.",
   preview: true
 });
