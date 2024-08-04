@@ -120,14 +120,14 @@ export class UltraVehicleCardEditor extends LitElement {
       charging_status_entity: "",
       location_entity: "",
       mileage_entity: "",
-      car_state_entity: "",
-      charge_limit_entity: "",
+      state_entity: "",
+      chargelimit_entity: "",
       show_level: true,
       show_range: true,
       show_location: true,
       show_mileage: true,
-      show_car_state: true,
-      show_charge_limit: true,
+      show_state: true,
+      show_chargelimit: true,
       icon_grid_entities: [],
       custom_icons: {},
       ...config
@@ -216,8 +216,8 @@ export class UltraVehicleCardEditor extends LitElement {
       ${this.config.vehicle_type === 'EV' ? this._renderEntityPicker('charging_status_entity', 'Charging Status Entity', 'This is used for charging wording and bar animation.') : ''}
       ${this._renderEntityPicker('location_entity', 'Location Entity', 'This is used to display the vehicle location.')}
       ${this._renderEntityPicker('mileage_entity', 'Mileage Entity', 'This is used to display the vehicle mileage.')}
-      ${this._renderEntityPicker('car_state_entity', 'Car State Entity', 'This is used to display the car state.')}
-      ${this.config.vehicle_type === 'EV' ? this._renderEntityPicker('charge_limit_entity', 'Charge Limit Entity', 'This is used to display the charge limit.') : ''}
+      ${this._renderEntityPicker('state_entity', 'Car State Entity', 'This is used to display the car state.')}
+      ${this.config.vehicle_type === 'EV' ? this._renderEntityPicker('chargelimit_entity', 'Charge Limit Entity', 'This is used to display the charge limit.') : ''}
     `;
   }
 
@@ -247,7 +247,7 @@ export class UltraVehicleCardEditor extends LitElement {
               </div>
             ` : ''}
           </div>
-          ${['level_entity', 'range_entity', 'location_entity', 'mileage_entity', 'car_state_entity', 'charge_limit_entity'].includes(configValue) ? html`
+          ${['level_entity', 'range_entity', 'location_entity', 'mileage_entity', 'state_entity', 'chargelimit_entity'].includes(configValue) ? html`
             <label class="switch">
               <input type="checkbox" 
                 ?checked="${this.config[`show_${configValue.split('_')[0]}`]}"
