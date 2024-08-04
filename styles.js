@@ -31,6 +31,10 @@ export const styles = css`
     color: var(--primary-text-color);
     text-align: center;
   }
+  .car-state{
+    color: var(--primary-text-color);
+    text-align: center;    
+  }
   .info-line {
     display: flex;
     justify-content: center;
