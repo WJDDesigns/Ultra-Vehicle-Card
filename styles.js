@@ -1,10 +1,6 @@
 import { css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 
 export const styles = css`
-  :host {
-    --primary-color: #4CAF50;
-    --background-color: #f5f5f5;
-  }
   .vehicle-card-content {
     padding: 16px;
   }
@@ -67,7 +63,7 @@ export const styles = css`
     width: 0;
     height: 1.5rem;
     margin: 0;
-    background-color: var(--accent-color, var(--primary-color));
+    background-color: var(--primary-color);
     border-radius: 4px;
   }
   .level-text {
@@ -221,7 +217,7 @@ export const styles = css`
     margin-top: 8px;
   }
   .selected-entity {
-    background-color: var(--accent-color);
+    background-color: var(--primary-color);
     color: var(--text-primary-color, white);
     padding: 8px;
     border-radius: 4px;
