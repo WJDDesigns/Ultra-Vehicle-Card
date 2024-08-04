@@ -172,7 +172,7 @@ _renderVehicleImage() {
     const state = entity.state;
 
     const isActive = ['on', 'open', 'true', 'unlocked'].includes(state.toLowerCase());
-    const iconColor = isActive ? 'var(--accent-color)' : 'var(--secondary-text-color)';
+    const iconColor = isActive ? 'var(--primary-color)' : 'var(--secondary-text-color)';
 
     return html`
       <div class="icon-item">

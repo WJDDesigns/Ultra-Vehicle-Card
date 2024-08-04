@@ -89,7 +89,7 @@ export class UltraVehicleCardEditor extends LitElement {
           align-items: center;
           justify-content: space-between;
           padding: 4px 8px;
-          background-color: var(--accent-color);
+          background-color: var(--primary-color);
           color: var(--text-primary-color);
           border-radius: 4px;
         }
