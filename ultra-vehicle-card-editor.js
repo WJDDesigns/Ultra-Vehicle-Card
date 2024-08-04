@@ -58,8 +58,10 @@ export class UltraVehicleCardEditor extends LitElement {
     return {
       hass: { type: Object },
       config: { type: Object },
-      _levelEntityFilter: { type: String },
-      _rangeEntityFilter: { type: String },
+      _batteryLevelEntityFilter: { type: String },
+      _batteryRangeEntityFilter: { type: String },
+      _fuelLevelEntityFilter: { type: String },
+      _fuelRangeEntityFilter: { type: String },
       _chargingStatusEntityFilter: { type: String },
       _locationEntityFilter: { type: String },
       _mileageEntityFilter: { type: String },
@@ -143,10 +145,12 @@ export class UltraVehicleCardEditor extends LitElement {
     ];
   }
 
-  constructor() {
+ constructor() {
     super();
-    this._levelEntityFilter = '';
-    this._rangeEntityFilter = '';
+    this._batteryLevelEntityFilter = '';
+    this._batteryRangeEntityFilter = '';
+    this._fuelLevelEntityFilter = '';
+    this._fuelRangeEntityFilter = '';
     this._chargingStatusEntityFilter = '';
     this._locationEntityFilter = '';
     this._mileageEntityFilter = '';
@@ -163,13 +167,17 @@ export class UltraVehicleCardEditor extends LitElement {
       image_url: "",
       vehicle_type: "EV",
       unit_type: "mi",
-      level_entity: "",
-      range_entity: "",
+      battery_level_entity: "",
+      battery_range_entity: "",
+      fuel_level_entity: "",
+      fuel_range_entity: "",
       charging_status_entity: "",
       location_entity: "",
       mileage_entity: "",
-      show_level: true,
-      show_range: true,
+      show_battery_level: true,
+      show_battery_range: true,
+      show_fuel_level: true,
+      show_fuel_range: true,
       show_location: true,
       show_mileage: true,
       icon_grid_entities: [],
@@ -233,6 +241,10 @@ export class UltraVehicleCardEditor extends LitElement {
             <input type="radio" name="vehicle_type" value="Fuel" ?checked="${this.config.vehicle_type === 'Fuel'}" @change="${this._vehicleTypeChanged}">
             Fuel Vehicle
           </label>
+          <label>
+            <input type="radio" name="vehicle_type" value="Hybrid" ?checked="${this.config.vehicle_type === 'Hybrid'}" @change="${this._vehicleTypeChanged}">
+            PHEV (Hybrid)
+          </label>
         </div>
       </div>
       
@@ -253,11 +265,13 @@ export class UltraVehicleCardEditor extends LitElement {
   }
 
   _renderEntityPickers() {
-    const levelLabel = this.config.vehicle_type === "EV" ? "Charge" : "Fuel";
+    const { vehicle_type } = this.config;
     return html`
-      ${this._renderEntityPicker('level_entity', `${levelLabel} Level Entity`, 'This is used for percent and bar length.')}
-      ${this._renderEntityPicker('range_entity', 'Range Entity', 'This is used for the range left.')}
-      ${this.config.vehicle_type === 'EV' ? this._renderEntityPicker('charging_status_entity', 'Charging Status Entity', 'This is used for charging wording and bar animation.') : ''}
+      ${(vehicle_type === 'EV' || vehicle_type === 'Hybrid') ? this._renderEntityPicker('battery_level_entity', 'Battery Level Entity', 'This is used for battery percent and bar length.') : ''}
+      ${(vehicle_type === 'EV' || vehicle_type === 'Hybrid') ? this._renderEntityPicker('battery_range_entity', 'Battery Range Entity', 'This is used for the battery range left.') : ''}
+      ${(vehicle_type === 'Fuel' || vehicle_type === 'Hybrid') ? this._renderEntityPicker('fuel_level_entity', 'Fuel Level Entity', 'This is used for fuel percent and bar length.') : ''}
+      ${(vehicle_type === 'Fuel' || vehicle_type === 'Hybrid') ? this._renderEntityPicker('fuel_range_entity', 'Fuel Range Entity', 'This is used for the fuel range left.') : ''}
+      ${(vehicle_type === 'EV' || vehicle_type === 'Hybrid') ? this._renderEntityPicker('charging_status_entity', 'Charging Status Entity', 'This is used for charging wording and bar animation.') : ''}
       ${this._renderEntityPicker('location_entity', 'Location Entity', 'This is used to display the vehicle location.')}
       ${this._renderEntityPicker('mileage_entity', 'Mileage Entity', 'This is used to display the vehicle mileage.')}
     `;
@@ -291,7 +305,7 @@ _renderEntityPicker(configValue, labelText, description) {
             ` : ''}
           </div>
         </div>
-        ${['level_entity', 'range_entity', 'location_entity', 'mileage_entity'].includes(configValue) ? html`
+        ${['battery_level_entity', 'battery_range_entity', 'fuel_level_entity', 'fuel_range_entity', 'location_entity', 'mileage_entity'].includes(configValue) ? html`
           <label class="switch">
             <input type="checkbox" 
               ?checked="${this.config[`show_${configValue.split('_')[0]}`]}"
@@ -305,6 +319,7 @@ _renderEntityPicker(configValue, labelText, description) {
     </div>
   `;
 }
+
 _renderIconGridConfig() {
   return html`
     <div class="icon-grid-container">
@@ -419,7 +434,7 @@ _renderIconPicker() {
     }
   }
 
-  _vehicleTypeChanged(ev) {
+ _vehicleTypeChanged(ev) {
     this.config = {
       ...this.config,
       vehicle_type: ev.target.value

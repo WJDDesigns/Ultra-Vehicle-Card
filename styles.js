@@ -294,10 +294,25 @@ export const styles = css`
     font-size: 14px;
   }
   .icon-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-  }
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+        margin: 16px 0;
+      }
+      .icon-item {
+        display: flex;
+        align-items: center;
+      }
+      .icon-item ha-icon {
+        width: 24px;
+        height: 24px;
+      }
+      .level-info.hybrid {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
   .icon-option {
     cursor: pointer;
     padding: 8px;

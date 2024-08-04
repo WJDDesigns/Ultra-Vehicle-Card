@@ -29,6 +29,11 @@ class UltraVehicleCard extends LitElement {
           width: 24px;
           height: 24px;
         }
+        .level-info.hybrid {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
       `
     ];
   }
@@ -42,12 +47,18 @@ class UltraVehicleCard extends LitElement {
       image_url: "",
       vehicle_type: "EV",
       unit_type: "mi",
-      show_level: true,
-      show_range: true,
+      battery_level_entity: "",
+      battery_range_entity: "",
+      fuel_level_entity: "",
+      fuel_range_entity: "",
       charging_status_entity: "",
       location_entity: "",
-      show_location: true,
       mileage_entity: "",
+      show_battery: true,
+      show_battery_range: true,
+      show_fuel: true,
+      show_fuel_range: true,
+      show_location: true,
       show_mileage: true,
       icon_grid_entities: [],
       custom_icons: {},
@@ -107,43 +118,88 @@ class UltraVehicleCard extends LitElement {
     `;
   }
 
-_renderVehicleImage() {
-  if (!this.config.image_url) return '';
+  _renderVehicleImage() {
+    if (!this.config.image_url) return '';
 
-  return html`
-    <div class="vehicle-image-container">
-      <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
-    </div>
-  `;
-}
+    return html`
+      <div class="vehicle-image-container">
+        <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
+      </div>
+    `;
+  }
+
   _renderLevelAndRange() {
-    const levelEntity = this.config.level_entity ? this.hass.states[this.config.level_entity] : null;
-    const level = levelEntity ? parseFloat(levelEntity.state) : null;
-    const levelUnit = this.config.vehicle_type === "EV" ? "Charge" : "Fuel";
-    
-    const rangeEntity = this.config.range_entity ? this.hass.states[this.config.range_entity] : null;
-    const range = rangeEntity ? Math.round(parseFloat(rangeEntity.state)) : null;
-    const rangeUnit = this.config.unit_type;
+    const { vehicle_type } = this.config;
 
+    if (vehicle_type === 'Hybrid') {
+      return html`
+        <div class="level-info hybrid">
+          ${this._renderFuelLevelAndRange()}
+          ${this._renderBatteryLevelAndRange()}
+        </div>
+      `;
+    } else if (vehicle_type === 'EV') {
+      return this._renderBatteryLevelAndRange();
+    } else if (vehicle_type === 'Fuel') {
+      return this._renderFuelLevelAndRange();
+    }
+  }
+
+  _renderBatteryLevelAndRange() {
+    const batteryLevelEntity = this.config.battery_level_entity ? this.hass.states[this.config.battery_level_entity] : null;
+    const batteryLevel = batteryLevelEntity ? parseFloat(batteryLevelEntity.state) : null;
+    
+    const batteryRangeEntity = this.config.battery_range_entity ? this.hass.states[this.config.battery_range_entity] : null;
+    const batteryRange = batteryRangeEntity ? Math.round(parseFloat(batteryRangeEntity.state)) : null;
+    
     const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
     const isCharging = chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'on';
 
-    if (!this.config.show_level && !this.config.show_range) return '';
+    if (!this.config.show_battery && !this.config.show_battery_range) return '';
 
     return html`
       <div class="level-info">
-        ${this.config.show_level && level !== null ? html`
+        ${this.config.show_battery && batteryLevel !== null ? html`
           <div class="item_bar">
-            <div class="progress ${isCharging ? 'charging' : ''}" style="width: ${level}%;"></div>
+            <div class="progress ${isCharging ? 'charging' : ''}" style="width: ${batteryLevel}%;"></div>
           </div>
           <div class="level-text">
-            <span>${level}% ${isCharging ? 'Charging' : levelUnit}</span>
-            ${this.config.show_range && range !== null ? html`<span class="range">${range} ${rangeUnit}</span>` : ''}
+            <span>${batteryLevel}% ${isCharging ? 'Charging' : 'Battery'}</span>
+            ${this.config.show_battery_range && batteryRange !== null ? html`<span class="range">${batteryRange} ${this.config.unit_type}</span>` : ''}
           </div>
         ` : ''}
-        ${!this.config.show_level && this.config.show_range && range !== null ? html`
+        ${!this.config.show_battery && this.config.show_battery_range && batteryRange !== null ? html`
           <div class="level-text">
-            <span class="range">${range} ${rangeUnit}</span>
+            <span class="range">${batteryRange} ${this.config.unit_type}</span>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  _renderFuelLevelAndRange() {
+    const fuelLevelEntity = this.config.fuel_level_entity ? this.hass.states[this.config.fuel_level_entity] : null;
+    const fuelLevel = fuelLevelEntity ? parseFloat(fuelLevelEntity.state) : null;
+    
+    const fuelRangeEntity = this.config.fuel_range_entity ? this.hass.states[this.config.fuel_range_entity] : null;
+    const fuelRange = fuelRangeEntity ? Math.round(parseFloat(fuelRangeEntity.state)) : null;
+
+    if (!this.config.show_fuel && !this.config.show_fuel_range) return '';
+
+    return html`
+      <div class="level-info">
+        ${this.config.show_fuel && fuelLevel !== null ? html`
+          <div class="item_bar">
+            <div class="progress" style="width: ${fuelLevel}%;"></div>
+          </div>
+          <div class="level-text">
+            <span>${fuelLevel}% Fuel</span>
+            ${this.config.show_fuel_range && fuelRange !== null ? html`<span class="range">${fuelRange} ${this.config.unit_type}</span>` : ''}
+          </div>
+        ` : ''}
+        ${!this.config.show_fuel && this.config.show_fuel_range && fuelRange !== null ? html`
+          <div class="level-text">
+            <span class="range">${fuelRange} ${this.config.unit_type}</span>
           </div>
         ` : ''}
       </div>
@@ -191,13 +247,17 @@ _renderVehicleImage() {
       image_url: "",
       vehicle_type: "EV",
       unit_type: "mi",
-      level_entity: "",
-      range_entity: "",
+      battery_level_entity: "",
+      battery_range_entity: "",
+      fuel_level_entity: "",
+      fuel_range_entity: "",
       charging_status_entity: "",
       location_entity: "",
       mileage_entity: "",
-      show_level: true,
-      show_range: true,
+      show_battery: true,
+      show_battery_range: true,
+      show_fuel: true,
+      show_fuel_range: true,
       show_location: true,
       show_mileage: true,
       icon_grid_entities: [],
