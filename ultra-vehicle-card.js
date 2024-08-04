@@ -29,6 +29,17 @@ class UltraVehicleCard extends LitElement {
           width: 24px;
           height: 24px;
         }
+        .level-info .item_bar {
+          position: relative;
+        }
+        .level-info .charge-limit {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 100%;
+          width: 2px;
+          background-color: red;
+        }
       `
     ];
   }
@@ -44,8 +55,12 @@ class UltraVehicleCard extends LitElement {
       unit_type: "mi",
       show_level: true,
       show_range: true,
+      level_entity: "",
+      range_entity: "",
       charging_status_entity: "",
+      charge_limit_entity: "",  // New charge limit entity
       location_entity: "",
+      car_state_entity: "",  // New car state entity
       show_location: true,
       mileage_entity: "",
       show_mileage: true,
@@ -80,8 +95,12 @@ class UltraVehicleCard extends LitElement {
     let mileage = mileageEntity ? parseFloat(mileageEntity.state) : null;
     mileage = mileage !== null ? Math.round(mileage).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null;
 
+    const carStateEntity = this.config.car_state_entity ? this.hass.states[this.config.car_state_entity] : null;
+    const carState = carStateEntity ? carStateEntity.state : null;
+
     return html`
       <h2 class="vehicle-name">${this.config.title}</h2>
+      ${carState ? html`<div class="car-state">${carState}</div>` : ''}
       ${this._renderInfoLine(location, mileage)}
     `;
   }
@@ -107,15 +126,16 @@ class UltraVehicleCard extends LitElement {
     `;
   }
 
-_renderVehicleImage() {
-  if (!this.config.image_url) return '';
+  _renderVehicleImage() {
+    if (!this.config.image_url) return '';
 
-  return html`
-    <div class="vehicle-image-container">
-      <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
-    </div>
-  `;
-}
+    return html`
+      <div class="vehicle-image-container">
+        <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
+      </div>
+    `;
+  }
+
   _renderLevelAndRange() {
     const levelEntity = this.config.level_entity ? this.hass.states[this.config.level_entity] : null;
     const level = levelEntity ? parseFloat(levelEntity.state) : null;
@@ -128,6 +148,9 @@ _renderVehicleImage() {
     const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
     const isCharging = chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'on';
 
+    const chargeLimitEntity = this.config.charge_limit_entity ? this.hass.states[this.config.charge_limit_entity] : null;
+    const chargeLimit = chargeLimitEntity ? parseFloat(chargeLimitEntity.state) : null;
+
     if (!this.config.show_level && !this.config.show_range) return '';
 
     return html`
@@ -135,6 +158,9 @@ _renderVehicleImage() {
         ${this.config.show_level && level !== null ? html`
           <div class="item_bar">
             <div class="progress ${isCharging ? 'charging' : ''}" style="width: ${level}%;"></div>
+            ${this.config.vehicle_type === "EV" && chargeLimit !== null ? html`
+              <div class="charge-limit" style="left: ${chargeLimit}%;"></div>
+            ` : ''}
           </div>
           <div class="level-text">
             <span>${level}% ${isCharging ? 'Charging' : levelUnit}</span>
@@ -194,7 +220,9 @@ _renderVehicleImage() {
       level_entity: "",
       range_entity: "",
       charging_status_entity: "",
+      charge_limit_entity: "",  // New charge limit entity
       location_entity: "",
+      car_state_entity: "",  // New car state entity
       mileage_entity: "",
       show_level: true,
       show_range: true,
