@@ -23,12 +23,29 @@ export const styles = css`
     width: 100%;
     height: 100%;
     object-fit: contain;
+    max-width: 100%;
   }
   .vehicle-name {
     font-size: 1.5em;
     margin-bottom: 16px;
     color: var(--primary-text-color);
     text-align: center;
+  }
+  .info-line {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .location, .mileage {
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+    color: var(--secondary-text-color);
+  }
+  .location ha-icon, .mileage ha-icon {
+    margin-right: 4px;
   }
   .level-info {
     flex: 1;
@@ -91,6 +108,7 @@ export const styles = css`
     font-size: 16px;
     background-color: var(--card-background-color, #fff);
     color: var(--primary-text-color);
+    box-sizing: border-box;
   }
   input[type="text"]:focus, .entity-picker-input:focus {
     outline: none;
@@ -113,16 +131,9 @@ export const styles = css`
   input[type="file"] {
     margin-top: 8px;
   }
-  .entity-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-  }
   .entity-picker-container {
     position: relative;
-    flex-grow: 1;
-    margin-right: 8px;
+    width: 100%;
   }
   .entity-picker-results {
     position: absolute;
@@ -134,25 +145,38 @@ export const styles = css`
     background: var(--card-background-color, #fff);
     border: 1px solid var(--divider-color, #e0e0e0);
     border-top: none;
-    z-index: 1;
+    z-index: 1000;
     border-radius: 0 0 4px 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-top: -1px;
+    width: calc(100% + 2px);
+    left: -1px;
+    padding: 4px 0;
   }
   .entity-picker-result {
-    padding: 8px;
+    padding: 8px 12px;
     cursor: pointer;
     color: var(--primary-text-color);
   }
   .entity-picker-result:hover {
     background-color: var(--secondary-background-color);
   }
-  
-  /* Modern toggle switch */
+  .entity-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .entity-picker-wrapper {
+    flex-grow: 1;
+    margin-right: 16px;
+  }
   .switch {
     position: relative;
     display: inline-block;
     width: 40px;
-    height: 22px;
-    margin-left: 28px;
+    height: 24px;
+    flex-shrink: 0;
   }
   .switch input {
     opacity: 0;
@@ -168,42 +192,25 @@ export const styles = css`
     bottom: 0;
     background-color: #ccc;
     transition: .4s;
-    border-radius: 34px;
+    border-radius: 24px;
   }
   .slider:before {
     position: absolute;
     content: "";
     height: 18px;
     width: 18px;
-    left: 2px;
-    bottom: 2px;
+    left: 4px;
+    bottom: 3px;
     background-color: white;
     transition: .4s;
     border-radius: 50%;
   }
   input:checked + .slider {
-    background-color: var(--accent-color, var(--primary-color));
+    background-color: var(--primary-color);
   }
   input:checked + .slider:before {
-    transform: translateX(18px);
+    transform: translateX(16px);
   }
-  .info-line {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 8px;
-  }
-  .location, .mileage {
-    display: flex;
-    align-items: center;
-    font-size: 0.9em;
-    color: var(--secondary-text-color);
-  }
-  .location ha-icon, .mileage ha-icon {
-    margin-right: 4px;
-  }
-
-  /* Icon Grid Styles */
   .icon-grid-container {
     margin-top: 16px;
   }
@@ -214,29 +221,29 @@ export const styles = css`
     margin-top: 8px;
   }
   .selected-entity {
-  background-color: var(--accent-color);
-  color: var(--text-primary-color, white);
-  padding: 8px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  cursor: move;
-}
-.handle {
-  cursor: move;
-  padding-right: 16px; /* Increased from 8px to 16px */
-  color: var(--text-primary-color);
-}
-.entity-content {
-  display: flex;
-  align-items: center;
-  flex-grow: 1;
-  margin-left: 8px; /* Added margin to increase gap */
-}
-.custom-icon {
-  margin-right: 8px;
-  cursor: pointer;
-}
+    background-color: var(--accent-color);
+    color: var(--text-primary-color, white);
+    padding: 8px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    cursor: move;
+  }
+  .handle {
+    cursor: move;
+    padding-right: 16px;
+    color: var(--text-primary-color);
+  }
+  .entity-content {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    margin-left: 8px;
+  }
+  .custom-icon {
+    margin-right: 8px;
+    cursor: pointer;
+  }
   .entity-name {
     flex-grow: 1;
   }
@@ -327,7 +334,19 @@ export const styles = css`
     background-size: 50px 50px;
     animation: move-stripes 2s linear infinite;
   }
-  .icon-grid-container .entity-description {
-  margin-bottom: 8px;
-}
+
+  /* Improve scrollbar appearance */
+  .entity-picker-results::-webkit-scrollbar {
+    width: 8px;
+  }
+  .entity-picker-results::-webkit-scrollbar-track {
+    background: var(--card-background-color, #f1f1f1);
+  }
+  .entity-picker-results::-webkit-scrollbar-thumb {
+    background: var(--secondary-text-color);
+    border-radius: 4px;
+  }
+  .entity-picker-results::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-text-color);
+  }
 `;

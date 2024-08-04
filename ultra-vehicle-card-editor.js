@@ -1,6 +1,58 @@
 import { LitElement, html, css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 import { styles } from "./styles.js";
 
+function compressImage(file, maxWidth, maxHeight, quality) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const elem = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width *= maxHeight / height;
+            height = maxHeight;
+          }
+        }
+        elem.width = width;
+        elem.height = height;
+        const ctx = elem.getContext('2d');
+        
+        // Clear the canvas to ensure transparency
+        ctx.clearRect(0, 0, width, height);
+        
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Determine the file type
+        const fileType = file.type || 'image/jpeg';
+        let data;
+        
+        if (fileType === 'image/png') {
+          // For PNGs, use lossless compression
+          data = elem.toDataURL('image/png');
+        } else {
+          // For other formats, use JPEG compression
+          data = elem.toDataURL('image/jpeg', quality);
+        }
+        
+        resolve(data);
+      };
+      img.onerror = error => reject(error);
+    };
+    reader.onerror = error => reject(error);
+  });
+}
+
 export class UltraVehicleCardEditor extends LitElement {
   static get properties() {
     return {
@@ -211,12 +263,13 @@ export class UltraVehicleCardEditor extends LitElement {
     `;
   }
 
-  _renderEntityPicker(configValue, labelText, description) {
-    return html`
-      <div class="input-group">
-        <label for="${configValue}">${labelText}</label>
-        <div class="entity-description">${description}</div>
-        <div class="entity-row">
+_renderEntityPicker(configValue, labelText, description) {
+  return html`
+    <div class="input-group">
+      <label for="${configValue}">${labelText}</label>
+      <div class="entity-description">${description}</div>
+      <div class="entity-row">
+        <div class="entity-picker-wrapper">
           <div class="entity-picker-container">
             <input
               type="text"
@@ -237,21 +290,22 @@ export class UltraVehicleCardEditor extends LitElement {
               </div>
             ` : ''}
           </div>
-          ${['level_entity', 'range_entity', 'location_entity', 'mileage_entity'].includes(configValue) ? html`
-            <label class="switch">
-              <input type="checkbox" 
-                ?checked="${this.config[`show_${configValue.split('_')[0]}`]}"
-                @change="${this._toggleChanged}"
-                .configValue="${`show_${configValue.split('_')[0]}`}"
-              />
-              <span class="slider round"></span>
-            </label>
-          ` : ''}
         </div>
+        ${['level_entity', 'range_entity', 'location_entity', 'mileage_entity'].includes(configValue) ? html`
+          <label class="switch">
+            <input type="checkbox" 
+              ?checked="${this.config[`show_${configValue.split('_')[0]}`]}"
+              @change="${this._toggleChanged}"
+              .configValue="${`show_${configValue.split('_')[0]}`}"
+            />
+            <span class="slider round"></span>
+          </label>
+        ` : ''}
       </div>
-    `;
-  }
-  _renderIconGridConfig() {
+    </div>
+  `;
+}
+_renderIconGridConfig() {
   return html`
     <div class="icon-grid-container">
       <h3>Icon Grid</h3>
@@ -261,14 +315,17 @@ export class UltraVehicleCardEditor extends LitElement {
           Search and select entities to add to the icon grid. Use the drag handle (≡) to reorder entities.
           Click on the icon to change it, and use the (×) to remove an entity from the grid.
         </div>
-        <input
-          id="icon_grid_search"
-          type="text"
-          placeholder="Search entities"
-          .value="${this._iconGridFilter}"
-          @input="${this._iconGridFilterChanged}"
-        >
-        ${this._renderIconGridResults()}
+        <div class="entity-picker-container">
+          <input
+            id="icon_grid_search"
+            type="text"
+            class="entity-picker-input"
+            placeholder="Search entities"
+            .value="${this._iconGridFilter}"
+            @input="${this._iconGridFilterChanged}"
+          >
+          ${this._renderIconGridResults()}
+        </div>
       </div>
       <div class="selected-entities" @dragover="${this._onDragOver}" @drop="${this._onDrop}">
         ${this._selectedIconGridEntities.map((entityId, index) => this._renderSelectedEntity(entityId, index))}
@@ -277,24 +334,23 @@ export class UltraVehicleCardEditor extends LitElement {
   `;
 }
 
-  _renderIconGridResults() {
-    if (!this._iconGridFilter) return '';
+_renderIconGridResults() {
+  if (!this._iconGridFilter) return '';
 
-    const filteredEntities = Object.keys(this.hass.states)
-      .filter(eid => eid.toLowerCase().includes(this._iconGridFilter.toLowerCase()))
-      .filter(eid => !this._selectedIconGridEntities.includes(eid));
+  const filteredEntities = Object.keys(this.hass.states)
+    .filter(eid => eid.toLowerCase().includes(this._iconGridFilter.toLowerCase()))
+    .filter(eid => !this._selectedIconGridEntities.includes(eid));
 
-    return html`
-      <div class="entity-picker-results">
-        ${filteredEntities.map(eid => html`
-          <div class="entity-picker-result" @click="${() => this._addIconGridEntity(eid)}">
-            ${eid}
-          </div>
-        `)}
-      </div>
-    `;
-  }
-
+  return html`
+    <div class="entity-picker-results">
+      ${filteredEntities.map(eid => html`
+        <div class="entity-picker-result" @click="${() => this._addIconGridEntity(eid)}">
+          ${eid}
+        </div>
+      `)}
+    </div>
+  `;
+}
 _renderSelectedEntity(entityId, index) {
   const entity = this.hass.states[entityId];
   const friendlyName = entity.attributes.friendly_name || entityId;
@@ -381,20 +437,37 @@ _renderIconPicker() {
     this.requestUpdate();
   }
 
-  _handleImageUpload(ev) {
-    const file = ev.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.config = {
-          ...this.config,
-          image_url: e.target.result
-        };
-        this.configChanged(this.config);
+async _handleImageUpload(ev) {
+  const file = ev.target.files[0];
+  if (file) {
+    try {
+      let quality = 0.7;
+      let compressedImage = await compressImage(file, 800, 600, quality);
+      
+      // For PNGs, we don't reduce quality further as it's lossless
+      if (file.type !== 'image/png') {
+        // Check the length of the base64 string
+        while (compressedImage.length > 500000 && quality > 0.1) {
+          quality -= 0.1;
+          compressedImage = await compressImage(file, 800, 600, quality);
+        }
+      }
+
+      if (compressedImage.length > 500000) {
+        throw new Error("Image is too large even after compression");
+      }
+
+      this.config = {
+        ...this.config,
+        image_url: compressedImage
       };
-      reader.readAsDataURL(file);
+      this.configChanged(this.config);
+    } catch (error) {
+      console.error('Error processing image:', error);
+      alert("Failed to process image. Please try a smaller or less complex image.");
     }
   }
+}
   
 _handleIconChange(e) {
   const newIcon = e.detail.value;
@@ -415,10 +488,10 @@ _handleIconChange(e) {
     this.configChanged(this.config);
   }
 
-  _iconGridFilterChanged(e) {
-    this._iconGridFilter = e.target.value;
-    this.requestUpdate();
-  }
+ _iconGridFilterChanged(e) {
+  this._iconGridFilter = e.target.value;
+  this.requestUpdate();
+}
 
   _addIconGridEntity(entityId) {
     if (!this._selectedIconGridEntities.includes(entityId)) {

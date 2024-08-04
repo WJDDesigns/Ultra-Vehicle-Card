@@ -107,16 +107,15 @@ class UltraVehicleCard extends LitElement {
     `;
   }
 
-  _renderVehicleImage() {
-    if (!this.config.image_url) return '';
+_renderVehicleImage() {
+  if (!this.config.image_url) return '';
 
-    return html`
-      <div class="vehicle-image-container">
-        <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
-      </div>
-    `;
-  }
-
+  return html`
+    <div class="vehicle-image-container">
+      <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
+    </div>
+  `;
+}
   _renderLevelAndRange() {
     const levelEntity = this.config.level_entity ? this.hass.states[this.config.level_entity] : null;
     const level = levelEntity ? parseFloat(levelEntity.state) : null;
