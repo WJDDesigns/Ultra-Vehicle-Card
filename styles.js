@@ -31,6 +31,10 @@ export const styles = css`
     color: var(--primary-text-color);
     text-align: center;
   }
+  .car-state{
+    color: var(--primary-text-color);
+    text-align: center;    
+  }
   .info-line {
     display: flex;
     justify-content: center;
@@ -49,6 +53,13 @@ export const styles = css`
   }
   .level-info {
     flex: 1;
+  }
+  .charge-limit{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: var(--secondary-text-color);
   }
   .item_bar {
     position: relative;

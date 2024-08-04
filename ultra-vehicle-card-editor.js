@@ -63,6 +63,8 @@ export class UltraVehicleCardEditor extends LitElement {
       _chargingStatusEntityFilter: { type: String },
       _locationEntityFilter: { type: String },
       _mileageEntityFilter: { type: String },
+      _stateEntityFilter: { type: String },
+      _limitEntityFilter: { type: String },
       _iconGridFilter: { type: String },
       _selectedIconGridEntities: { type: Array },
       _customIcons: { type: Object },
@@ -150,6 +152,8 @@ export class UltraVehicleCardEditor extends LitElement {
     this._chargingStatusEntityFilter = '';
     this._locationEntityFilter = '';
     this._mileageEntityFilter = '';
+    this._stateEntityFilter = '';
+    this._limitEntityFilter = '';
     this._iconGridFilter = '';
     this._selectedIconGridEntities = [];
     this._customIcons = {};
@@ -168,9 +172,13 @@ export class UltraVehicleCardEditor extends LitElement {
       charging_status_entity: "",
       location_entity: "",
       mileage_entity: "",
+      state_entity: "",
+      limit_entity: "",
       show_level: true,
       show_range: true,
       show_location: true,
+      show_state: true,
+      show_limit: true,
       show_mileage: true,
       icon_grid_entities: [],
       custom_icons: {},
@@ -260,6 +268,8 @@ export class UltraVehicleCardEditor extends LitElement {
       ${this.config.vehicle_type === 'EV' ? this._renderEntityPicker('charging_status_entity', 'Charging Status Entity', 'This is used for charging wording and bar animation.') : ''}
       ${this._renderEntityPicker('location_entity', 'Location Entity', 'This is used to display the vehicle location.')}
       ${this._renderEntityPicker('mileage_entity', 'Mileage Entity', 'This is used to display the vehicle mileage.')}
+      ${this._renderEntityPicker('state_entity', 'Car State Entity', 'This is used to display the car state.')}
+      ${this.config.vehicle_type === 'EV' ? this._renderEntityPicker('limit_entity', 'Charge Limit Entity', 'This is used to display the charge limit.') : ''}
     `;
   }
 
@@ -291,7 +301,7 @@ _renderEntityPicker(configValue, labelText, description) {
             ` : ''}
           </div>
         </div>
-        ${['level_entity', 'range_entity', 'location_entity', 'mileage_entity'].includes(configValue) ? html`
+         ${['level_entity', 'range_entity', 'location_entity', 'mileage_entity', 'state_entity', 'limit_entity'].includes(configValue) ? html`
           <label class="switch">
             <input type="checkbox" 
               ?checked="${this.config[`show_${configValue.split('_')[0]}`]}"
