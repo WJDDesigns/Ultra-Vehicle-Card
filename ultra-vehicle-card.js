@@ -148,10 +148,10 @@ class UltraVehicleCard extends LitElement {
   _renderBatteryLevelAndRange() {
     const batteryLevelEntity = this.config.battery_level_entity ? this.hass.states[this.config.battery_level_entity] : null;
     const batteryLevel = batteryLevelEntity ? parseFloat(batteryLevelEntity.state) : null;
-    
+
     const batteryRangeEntity = this.config.battery_range_entity ? this.hass.states[this.config.battery_range_entity] : null;
     const batteryRange = batteryRangeEntity ? Math.round(parseFloat(batteryRangeEntity.state)) : null;
-    
+
     const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
     const isCharging = chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'on';
 
@@ -180,7 +180,7 @@ class UltraVehicleCard extends LitElement {
   _renderFuelLevelAndRange() {
     const fuelLevelEntity = this.config.fuel_level_entity ? this.hass.states[this.config.fuel_level_entity] : null;
     const fuelLevel = fuelLevelEntity ? parseFloat(fuelLevelEntity.state) : null;
-    
+
     const fuelRangeEntity = this.config.fuel_range_entity ? this.hass.states[this.config.fuel_range_entity] : null;
     const fuelRange = fuelRangeEntity ? Math.round(parseFloat(fuelRangeEntity.state)) : null;
 
@@ -208,7 +208,7 @@ class UltraVehicleCard extends LitElement {
 
   _renderIconGrid() {
     const { icon_grid_entities } = this.config;
-    
+
     if (!icon_grid_entities || icon_grid_entities.length === 0) {
       return '';
     }
@@ -224,19 +224,21 @@ class UltraVehicleCard extends LitElement {
     const entity = this.hass.states[entityId];
     if (!entity) return '';
 
-    const icon = this.config.custom_icons[entityId] || 'mdi:help-circle';
+    // Check for custom icon first, then entity's default icon, then fallback icon
+    const customIcon = this.config.custom_icons[entityId];
+    const defaultIcon = entity.attributes.icon;
+    const icon = customIcon || defaultIcon || 'mdi:help-circle';
+    
     const state = entity.state;
-
     const isActive = ['on', 'open', 'true', 'unlocked'].includes(state.toLowerCase());
     const iconColor = isActive ? 'var(--accent-color)' : 'var(--secondary-text-color)';
-
+  
     return html`
       <div class="icon-item">
         <ha-icon .icon="${icon}" style="color: ${iconColor};"></ha-icon>
       </div>
     `;
   }
-
   static getConfigElement() {
     return document.createElement("ultra-vehicle-card-editor");
   }

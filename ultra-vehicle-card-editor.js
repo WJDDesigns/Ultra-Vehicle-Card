@@ -27,16 +27,16 @@ function compressImage(file, maxWidth, maxHeight, quality) {
         elem.width = width;
         elem.height = height;
         const ctx = elem.getContext('2d');
-        
+
         // Clear the canvas to ensure transparency
         ctx.clearRect(0, 0, width, height);
-        
+
         ctx.drawImage(img, 0, 0, width, height);
-        
+
         // Determine the file type
         const fileType = file.type || 'image/jpeg';
         let data;
-        
+
         if (fileType === 'image/png') {
           // For PNGs, use lossless compression
           data = elem.toDataURL('image/png');
@@ -44,7 +44,7 @@ function compressImage(file, maxWidth, maxHeight, quality) {
           // For other formats, use JPEG compression
           data = elem.toDataURL('image/jpeg', quality);
         }
-        
+
         resolve(data);
       };
       img.onerror = error => reject(error);
@@ -80,12 +80,14 @@ export class UltraVehicleCardEditor extends LitElement {
         .icon-grid-container {
           margin-top: 16px;
         }
+
         .selected-entities {
           display: flex;
           flex-direction: column;
           gap: 8px;
           margin-top: 8px;
         }
+
         .selected-entity {
           display: flex;
           align-items: center;
@@ -95,48 +97,57 @@ export class UltraVehicleCardEditor extends LitElement {
           color: var(--text-primary-color);
           border-radius: 4px;
         }
+
         .entity-content {
           display: flex;
           align-items: center;
         }
+
         .custom-icon {
           margin-right: 8px;
           cursor: pointer;
         }
+
         .entity-name {
           flex-grow: 1;
         }
+
         .remove-entity {
           cursor: pointer;
         }
-         .icon-wrapper {
-        position: relative;
-      }
-          .icon-picker-popup {
-        position: absolute;
-        left: 0;
-        top: 100%;
-        z-index: 1;
-        background-color: var(--card-background-color);
-        border: 1px solid var(--divider-color);
-        border-radius: 4px;
-        padding: 8px;
-        width: 300px;  // Increased width to accommodate ha-icon-picker
-      }
-      
+
+        .icon-wrapper {
+          position: relative;
+        }
+
+        .icon-picker-popup {
+          position: absolute;
+          left: 0;
+          top: 100%;
+          z-index: 1;
+          background-color: var(--card-background-color);
+          border: 1px solid var(--divider-color);
+          border-radius: 4px;
+          padding: 8px;
+          width: 300px; // Increased width to accommodate ha-icon-picker
+        }
+
         .icon-grid {
           display: grid;
           grid-template-columns: repeat(5, 1fr);
           gap: 8px;
         }
+
         .icon-option {
           cursor: pointer;
           padding: 4px;
           border-radius: 4px;
         }
+
         .icon-option:hover {
           background-color: var(--secondary-background-color);
         }
+
         .icon-search {
           width: 100%;
           margin-bottom: 8px;
@@ -145,7 +156,7 @@ export class UltraVehicleCardEditor extends LitElement {
     ];
   }
 
- constructor() {
+  constructor() {
     super();
     this._batteryLevelEntityFilter = '';
     this._batteryRangeEntityFilter = '';
@@ -185,7 +196,7 @@ export class UltraVehicleCardEditor extends LitElement {
       ...config
     };
     this._selectedIconGridEntities = [...this.config.icon_grid_entities];
-    this._customIcons = {...this.config.custom_icons};
+    this._customIcons = { ...this.config.custom_icons };
   }
   render() {
     if (!this.hass) {
@@ -213,7 +224,7 @@ export class UltraVehicleCardEditor extends LitElement {
           .configValue="${'title'}"
         />
       </div>
-      
+
       <div class="input-group">
         <label for="image_url">Image URL</label>
         <input
@@ -224,12 +235,12 @@ export class UltraVehicleCardEditor extends LitElement {
           .configValue="${'image_url'}"
         />
       </div>
-      
+
       <div class="input-group">
         <label for="image_upload">Upload Image</label>
         <input type="file" id="image_upload" @change="${this._handleImageUpload}" accept="image/*">
       </div>
-      
+
       <div class="input-group">
         <label>Vehicle Type</label>
         <div class="radio-group">
@@ -247,7 +258,7 @@ export class UltraVehicleCardEditor extends LitElement {
           </label>
         </div>
       </div>
-      
+
       <div class="input-group">
         <label>Unit Type</label>
         <div class="radio-group">
@@ -277,8 +288,8 @@ export class UltraVehicleCardEditor extends LitElement {
     `;
   }
 
-_renderEntityPicker(configValue, labelText, description) {
-  return html`
+  _renderEntityPicker(configValue, labelText, description) {
+    return html`
     <div class="input-group">
       <label for="${configValue}">${labelText}</label>
       <div class="entity-description">${description}</div>
@@ -295,8 +306,8 @@ _renderEntityPicker(configValue, labelText, description) {
             ${this[`_${configValue}Filter`] ? html`
               <div class="entity-picker-results">
                 ${Object.keys(this.hass.states)
-                  .filter(eid => eid.toLowerCase().includes(this[`_${configValue}Filter`].toLowerCase()))
-                  .map(eid => html`
+          .filter(eid => eid.toLowerCase().includes(this[`_${configValue}Filter`].toLowerCase()))
+          .map(eid => html`
                     <div class="entity-picker-result" @click="${() => this._selectEntity(configValue, eid)}">
                       ${eid}
                     </div>
@@ -318,10 +329,10 @@ _renderEntityPicker(configValue, labelText, description) {
       </div>
     </div>
   `;
-}
+  }
 
-_renderIconGridConfig() {
-  return html`
+  _renderIconGridConfig() {
+    return html`
     <div class="icon-grid-container">
       <h3>Icon Grid</h3>
       <div class="input-group">
@@ -347,16 +358,16 @@ _renderIconGridConfig() {
       </div>
     </div>
   `;
-}
+  }
 
-_renderIconGridResults() {
-  if (!this._iconGridFilter) return '';
+  _renderIconGridResults() {
+    if (!this._iconGridFilter) return '';
 
-  const filteredEntities = Object.keys(this.hass.states)
-    .filter(eid => eid.toLowerCase().includes(this._iconGridFilter.toLowerCase()))
-    .filter(eid => !this._selectedIconGridEntities.includes(eid));
+    const filteredEntities = Object.keys(this.hass.states)
+      .filter(eid => eid.toLowerCase().includes(this._iconGridFilter.toLowerCase()))
+      .filter(eid => !this._selectedIconGridEntities.includes(eid));
 
-  return html`
+    return html`
     <div class="entity-picker-results">
       ${filteredEntities.map(eid => html`
         <div class="entity-picker-result" @click="${() => this._addIconGridEntity(eid)}">
@@ -365,13 +376,17 @@ _renderIconGridResults() {
       `)}
     </div>
   `;
-}
-_renderSelectedEntity(entityId, index) {
-  const entity = this.hass.states[entityId];
-  const friendlyName = entity.attributes.friendly_name || entityId;
-  const currentIcon = this._customIcons[entityId] || 'mdi:help-circle';
+  }
+  _renderSelectedEntity(entityId, index) {
+    const entity = this.hass.states[entityId];
+    const friendlyName = entity.attributes.friendly_name || entityId;
 
-  return html`
+    // Check for custom icon first, then entity's default icon, then fallback icon
+    const customIcon = this._customIcons[entityId];
+    const defaultIcon = entity.attributes.icon;
+    const currentIcon = customIcon || defaultIcon || 'mdi:help-circle';
+
+    return html`
     <div class="selected-entity" draggable="true" @dragstart="${(e) => this._onDragStart(e, index)}">
       <div class="handle">
         <ha-svg-icon .path="${"M3,15H21V13H3V15M3,19H21V17H3V19M3,11H21V9H3V11M3,5V7H21V5H3Z"}"></ha-svg-icon>
@@ -391,10 +406,10 @@ _renderSelectedEntity(entityId, index) {
       <span class="remove-entity" @click="${() => this._removeIconGridEntity(index)}">×</span>
     </div>
   `;
-}
+  }
 
-_renderIconPicker() {
-  return html`
+  _renderIconPicker() {
+    return html`
     <div class="icon-picker-popup" @click="${(e) => e.stopPropagation()}">
       <ha-icon-picker
         .hass=${this.hass}
@@ -403,7 +418,7 @@ _renderIconPicker() {
       ></ha-icon-picker>
     </div>
   `;
-}
+  }
 
   _getDisplayImageUrl(url) {
     return url && url.startsWith('data:image') ? 'Uploaded Image' : url;
@@ -434,7 +449,7 @@ _renderIconPicker() {
     }
   }
 
- _vehicleTypeChanged(ev) {
+  _vehicleTypeChanged(ev) {
     this.config = {
       ...this.config,
       vehicle_type: ev.target.value
@@ -452,42 +467,42 @@ _renderIconPicker() {
     this.requestUpdate();
   }
 
-async _handleImageUpload(ev) {
-  const file = ev.target.files[0];
-  if (file) {
-    try {
-      let quality = 0.7;
-      let compressedImage = await compressImage(file, 800, 600, quality);
-      
-      // For PNGs, we don't reduce quality further as it's lossless
-      if (file.type !== 'image/png') {
-        // Check the length of the base64 string
-        while (compressedImage.length > 500000 && quality > 0.1) {
-          quality -= 0.1;
-          compressedImage = await compressImage(file, 800, 600, quality);
+  async _handleImageUpload(ev) {
+    const file = ev.target.files[0];
+    if (file) {
+      try {
+        let quality = 0.7;
+        let compressedImage = await compressImage(file, 800, 600, quality);
+
+        // For PNGs, we don't reduce quality further as it's lossless
+        if (file.type !== 'image/png') {
+          // Check the length of the base64 string
+          while (compressedImage.length > 500000 && quality > 0.1) {
+            quality -= 0.1;
+            compressedImage = await compressImage(file, 800, 600, quality);
+          }
         }
-      }
 
-      if (compressedImage.length > 500000) {
-        throw new Error("Image is too large even after compression");
-      }
+        if (compressedImage.length > 500000) {
+          throw new Error("Image is too large even after compression");
+        }
 
-      this.config = {
-        ...this.config,
-        image_url: compressedImage
-      };
-      this.configChanged(this.config);
-    } catch (error) {
-      console.error('Error processing image:', error);
-      alert("Failed to process image. Please try a smaller or less complex image.");
+        this.config = {
+          ...this.config,
+          image_url: compressedImage
+        };
+        this.configChanged(this.config);
+      } catch (error) {
+        console.error('Error processing image:', error);
+        alert("Failed to process image. Please try a smaller or less complex image.");
+      }
     }
   }
-}
-  
-_handleIconChange(e) {
-  const newIcon = e.detail.value;
-  this._selectIcon(this._currentEditingEntity, newIcon);
-}
+
+  _handleIconChange(e) {
+    const newIcon = e.detail.value;
+    this._selectIcon(this._currentEditingEntity, newIcon);
+  }
 
   _entityFilterChanged(e, configValue) {
     this[`_${configValue}Filter`] = e.target.value;
@@ -503,10 +518,10 @@ _handleIconChange(e) {
     this.configChanged(this.config);
   }
 
- _iconGridFilterChanged(e) {
-  this._iconGridFilter = e.target.value;
-  this.requestUpdate();
-}
+  _iconGridFilterChanged(e) {
+    this._iconGridFilter = e.target.value;
+    this.requestUpdate();
+  }
 
   _addIconGridEntity(entityId) {
     if (!this._selectedIconGridEntities.includes(entityId)) {
@@ -537,7 +552,7 @@ _handleIconChange(e) {
     e.preventDefault();
     const fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
     const toIndex = [...e.currentTarget.children].indexOf(e.target.closest('.selected-entity'));
-    
+
     if (fromIndex !== toIndex) {
       const newOrder = [...this._selectedIconGridEntities];
       const [removed] = newOrder.splice(fromIndex, 1);
@@ -547,35 +562,35 @@ _handleIconChange(e) {
     }
   }
 
-_openIconPicker(e, entityId) {
-  e.stopPropagation();
-  this._currentEditingEntity = entityId;
-  this._iconSearchFilter = '';
-  this.requestUpdate();
+  _openIconPicker(e, entityId) {
+    e.stopPropagation();
+    this._currentEditingEntity = entityId;
+    this._iconSearchFilter = '';
+    this.requestUpdate();
 
-  // Add click event listener to close picker when clicking outside
-  setTimeout(() => {
-    window.addEventListener('click', this._closeIconPicker);
-  }, 0);
-}
+    // Add click event listener to close picker when clicking outside
+    setTimeout(() => {
+      window.addEventListener('click', this._closeIconPicker);
+    }, 0);
+  }
 
-_closeIconPicker = (e) => {
-  if (e.target.closest('.icon-picker-popup')) return;
-  this._currentEditingEntity = null;
-  this.requestUpdate();
-  window.removeEventListener('click', this._closeIconPicker);
-}
+  _closeIconPicker = (e) => {
+    if (e.target.closest('.icon-picker-popup')) return;
+    this._currentEditingEntity = null;
+    this.requestUpdate();
+    window.removeEventListener('click', this._closeIconPicker);
+  }
 
- _selectIcon(entityId, icon) {
-  this._customIcons = {
-    ...this._customIcons,
-    [entityId]: icon
-  };
-  this._currentEditingEntity = null;
-  this._updateCustomIconsConfig();
-  this.requestUpdate();
-  window.removeEventListener('click', this._closeIconPicker);
-}
+  _selectIcon(entityId, icon) {
+    this._customIcons = {
+      ...this._customIcons,
+      [entityId]: icon
+    };
+    this._currentEditingEntity = null;
+    this._updateCustomIconsConfig();
+    this.requestUpdate();
+    window.removeEventListener('click', this._closeIconPicker);
+  }
 
   _updateIconGridConfig() {
     this.config = {
