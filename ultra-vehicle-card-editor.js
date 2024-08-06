@@ -81,14 +81,12 @@ export class UltraVehicleCardEditor extends LitElement {
         .icon-grid-container {
           margin-top: 16px;
         }
-
         .selected-entities {
           display: flex;
           flex-direction: column;
           gap: 8px;
           margin-top: 8px;
         }
-
         .selected-entity {
           display: flex;
           align-items: center;
@@ -98,21 +96,17 @@ export class UltraVehicleCardEditor extends LitElement {
           color: var(--text-primary-color);
           border-radius: 4px;
         }
-
         .entity-content {
           display: flex;
           align-items: center;
         }
-
         .custom-icon {
           margin-right: 8px;
           cursor: pointer;
         }
-
         .entity-name {
           flex-grow: 1;
         }
-
         .remove-entity {
           cursor: pointer;
         }
@@ -135,17 +129,14 @@ export class UltraVehicleCardEditor extends LitElement {
           grid-template-columns: repeat(5, 1fr);
           gap: 8px;
         }
-
         .icon-option {
           cursor: pointer;
           padding: 4px;
           border-radius: 4px;
         }
-
         .icon-option:hover {
           background-color: var(--secondary-background-color);
         }
-
         .icon-search {
           width: 100%;
           margin-bottom: 8px;
@@ -523,11 +514,7 @@ export class UltraVehicleCardEditor extends LitElement {
   _renderSelectedEntity(entityId, index) {
     const entity = this.hass.states[entityId];
     const friendlyName = entity.attributes.friendly_name || entityId;
-
-    // Check for custom icon first, then entity's default icon, then fallback icon
-    const customIcon = this._customIcons[entityId];
-    const defaultIcon = entity.attributes.icon;
-    const currentIcon = customIcon || defaultIcon || 'mdi:help-circle';
+    const currentIcon = this._customIcons[entityId] || 'mdi:help-circle';
 
     return html`
       <div
