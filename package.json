@@ -1,0 +1,21 @@
+{
+  "name": "ultra-vehicle-card",
+  "module": "ultra-vehicle-card.js",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "husky": "^9.1.4",
+    "lint-staged": "^15.2.8",
+    "prettier": "3.3.3"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "scripts": {
+    "format": "bun prettier . --write",
+    "prepare": "husky"
+  }
+}

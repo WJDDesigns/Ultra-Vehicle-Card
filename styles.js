@@ -1,9 +1,9 @@
-import { css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
+import { css } from 'https://unpkg.com/lit-element@2.4.0/lit-element.js?module';
 
 export const styles = css`
   :host {
     --uvc-primary-color: var(--primary-color);
-  --uvc-background-color: var(--card-background-color, #fff);
+    --uvc-background-color: var(--card-background-color, #fff);
   }
   .vehicle-card-content {
     padding: 16px;
@@ -38,13 +38,15 @@ export const styles = css`
     margin-bottom: 8px;
     text-align: center;
   }
-  .location, .mileage {
+  .location,
+  .mileage {
     display: flex;
     align-items: center;
     font-size: 0.9em;
     color: var(--secondary-text-color);
   }
-  .location ha-icon, .mileage ha-icon {
+  .location ha-icon,
+  .mileage ha-icon {
     margin-right: 4px;
   }
   .level-info {
@@ -61,10 +63,10 @@ export const styles = css`
     position: relative;
     height: 1.5rem;
     width: 100%;
-    background-color: #0B0A0A;
+    background-color: #0b0a0a;
     border-radius: 6px;
     overflow: hidden;
-    border: 2px solid #0B0A0A;
+    border: 2px solid #0b0a0a;
     margin-bottom: 4px;
   }
   .progress {
@@ -109,7 +111,8 @@ export const styles = css`
     color: var(--secondary-text-color);
     margin-bottom: 4px;
   }
-  input[type="text"], .entity-picker-input {
+  input[type='text'],
+  .entity-picker-input {
     width: 100%;
     padding: 10px;
     border: 1px solid var(--divider-color, #e0e0e0);
@@ -119,25 +122,29 @@ export const styles = css`
     color: var(--primary-text-color);
     box-sizing: border-box;
   }
-  input[type="text"]:focus, .entity-picker-input:focus {
+  input[type='text']:focus,
+  .entity-picker-input:focus {
     outline: none;
     border-color: var(--uvc-primary-color);
     box-shadow: 0 0 0 1px var(--uvc-primary-color);
   }
-  .radio-group, .checkbox-group {
+  .radio-group,
+  .checkbox-group {
     display: flex;
     flex-direction: row;
     align-items: center;
   }
-  .radio-group label, .checkbox-group label {
+  .radio-group label,
+  .checkbox-group label {
     margin-right: 16px;
     display: flex;
     align-items: center;
   }
-  input[type="radio"], input[type="checkbox"] {
+  input[type='radio'],
+  input[type='checkbox'] {
     margin-right: 8px;
   }
-  input[type="file"] {
+  input[type='file'] {
     margin-top: 8px;
   }
   .entity-picker-container {
@@ -156,7 +163,7 @@ export const styles = css`
     border-top: none;
     z-index: 1000;
     border-radius: 0 0 4px 4px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     margin-top: -1px;
     width: calc(100% + 2px);
     left: -1px;
@@ -200,18 +207,18 @@ export const styles = css`
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    transition: .4s;
+    transition: 0.4s;
     border-radius: 24px;
   }
   .slider:before {
     position: absolute;
-    content: "";
+    content: '';
     height: 18px;
     width: 18px;
     left: 4px;
     bottom: 3px;
     background-color: white;
-    transition: .4s;
+    transition: 0.4s;
     border-radius: 50%;
   }
   input:checked + .slider {
@@ -260,7 +267,7 @@ export const styles = css`
     cursor: pointer;
     margin-left: 8px;
   }
-  
+
   /* Custom Icons Styles */
   .custom-icons-container {
     margin-top: 16px;
@@ -329,7 +336,7 @@ export const styles = css`
   .icon-option:hover {
     background-color: var(--secondary-background-color);
   }
-  
+
   /* Animation for charging */
   @keyframes move-stripes {
     0% {
@@ -339,7 +346,7 @@ export const styles = css`
       background-position: 50px 0;
     }
   }
-  
+
   .progress.charging {
     background-image: linear-gradient(
       45deg,

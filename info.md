@@ -31,14 +31,13 @@ lovelace:
   resources:
     - url: /local/ultra-vehicle-card.js
       type: module
-```     
+```
 
 [![Repo](https://camo.githubusercontent.com/0ab6126849ccb8c77891afcd6d5b01f76ed99518f52387df274c41c8e3d15c64/68747470733a2f2f6d792e686f6d652d617373697374616e742e696f2f6261646765732f686163735f7265706f7369746f72792e737667)](https://my.home-assistant.io/redirect/hacs_repository/?owner=wjddesigns&repository=ultra-vehicle-card&category=plugin)
 
-    
 ### Cool Tip
 
-Hey there, fellow Home Assistant enthusiast! 🏠✨ 
+Hey there, fellow Home Assistant enthusiast! 🏠✨
 
 Did you know that the Ultra Vehicle Card was inspired by a midnight coding session fueled by an unhealthy amount of caffeine and a sudden realization that cars deserve cool cards too? It's true!
 
@@ -47,4 +46,3 @@ If this card has made your dashboard a little more awesome or saved you from the
 <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4JVCZ46FZPUTG">
   <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" style="width: 150px; height: auto;" />
 </a>
-

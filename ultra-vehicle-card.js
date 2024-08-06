@@ -1,6 +1,10 @@
-import { LitElement, html, css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { UltraVehicleCardEditor } from "./ultra-vehicle-card-editor.js";
-import { styles } from "./styles.js";
+import {
+  LitElement,
+  html,
+  css,
+} from 'https://unpkg.com/lit-element@2.4.0/lit-element.js?module';
+import { UltraVehicleCardEditor } from './ultra-vehicle-card-editor.js';
+import { styles } from './styles.js';
 
 class UltraVehicleCard extends LitElement {
   static get properties() {
@@ -34,26 +38,26 @@ class UltraVehicleCard extends LitElement {
           flex-direction: column;
           gap: 16px;
         }
-      `
+      `,
     ];
   }
 
   setConfig(config) {
     if (!config.title) {
-      throw new Error("You need to define a title");
+      throw new Error('You need to define a title');
     }
     this.config = {
-      title: "My Vehicle",
-      image_url: "",
-      vehicle_type: "EV",
-      unit_type: "mi",
-      battery_level_entity: "",
-      battery_range_entity: "",
-      fuel_level_entity: "",
-      fuel_range_entity: "",
-      charging_status_entity: "",
-      location_entity: "",
-      mileage_entity: "",
+      title: 'My Vehicle',
+      image_url: '',
+      vehicle_type: 'EV',
+      unit_type: 'mi',
+      battery_level_entity: '',
+      battery_range_entity: '',
+      fuel_level_entity: '',
+      fuel_range_entity: '',
+      charging_status_entity: '',
+      location_entity: '',
+      mileage_entity: '',
       show_battery: true,
       show_battery_range: true,
       show_fuel: true,
@@ -62,7 +66,7 @@ class UltraVehicleCard extends LitElement {
       show_mileage: true,
       icon_grid_entities: [],
       custom_icons: {},
-      ...config
+      ...config,
     };
   }
 
@@ -74,22 +78,29 @@ class UltraVehicleCard extends LitElement {
     return html`
       <ha-card>
         <div class="vehicle-card-content">
-          ${this._renderHeader()}
-          ${this._renderVehicleImage()}
-          ${this._renderIconGrid()}
-          ${this._renderLevelAndRange()}
+          ${this._renderHeader()} ${this._renderVehicleImage()}
+          ${this._renderIconGrid()} ${this._renderLevelAndRange()}
         </div>
       </ha-card>
     `;
   }
 
   _renderHeader() {
-    const locationEntity = this.config.location_entity ? this.hass.states[this.config.location_entity] : null;
+    const locationEntity = this.config.location_entity
+      ? this.hass.states[this.config.location_entity]
+      : null;
     const location = locationEntity ? locationEntity.state : null;
 
-    const mileageEntity = this.config.mileage_entity ? this.hass.states[this.config.mileage_entity] : null;
+    const mileageEntity = this.config.mileage_entity
+      ? this.hass.states[this.config.mileage_entity]
+      : null;
     let mileage = mileageEntity ? parseFloat(mileageEntity.state) : null;
-    mileage = mileage !== null ? Math.round(mileage).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null;
+    mileage =
+      mileage !== null
+        ? Math.round(mileage)
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        : null;
 
     return html`
       <h2 class="vehicle-name">${this.config.title}</h2>
@@ -102,18 +113,22 @@ class UltraVehicleCard extends LitElement {
 
     return html`
       <div class="info-line">
-        ${this.config.show_location && location ? html`
-          <span class="location">
-            <ha-icon icon="mdi:map-marker"></ha-icon>
-            ${location}
-          </span>
-        ` : ''}
-        ${this.config.show_mileage && mileage ? html`
-          <span class="mileage">
-            <ha-icon icon="mdi:speedometer"></ha-icon>
-            ${mileage} ${this.config.unit_type}
-          </span>
-        ` : ''}
+        ${this.config.show_location && location
+          ? html`
+              <span class="location">
+                <ha-icon icon="mdi:map-marker"></ha-icon>
+                ${location}
+              </span>
+            `
+          : ''}
+        ${this.config.show_mileage && mileage
+          ? html`
+              <span class="mileage">
+                <ha-icon icon="mdi:speedometer"></ha-icon>
+                ${mileage} ${this.config.unit_type}
+              </span>
+            `
+          : ''}
       </div>
     `;
   }
@@ -123,7 +138,11 @@ class UltraVehicleCard extends LitElement {
 
     return html`
       <div class="vehicle-image-container">
-        <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
+        <img
+          class="vehicle-image"
+          src="${this.config.image_url}"
+          alt="Vehicle Image"
+        />
       </div>
     `;
   }
@@ -146,62 +165,108 @@ class UltraVehicleCard extends LitElement {
   }
 
   _renderBatteryLevelAndRange() {
-    const batteryLevelEntity = this.config.battery_level_entity ? this.hass.states[this.config.battery_level_entity] : null;
-    const batteryLevel = batteryLevelEntity ? parseFloat(batteryLevelEntity.state) : null;
+    const batteryLevelEntity = this.config.battery_level_entity
+      ? this.hass.states[this.config.battery_level_entity]
+      : null;
+    const batteryLevel = batteryLevelEntity
+      ? parseFloat(batteryLevelEntity.state)
+      : null;
 
-    const batteryRangeEntity = this.config.battery_range_entity ? this.hass.states[this.config.battery_range_entity] : null;
-    const batteryRange = batteryRangeEntity ? Math.round(parseFloat(batteryRangeEntity.state)) : null;
+    const batteryRangeEntity = this.config.battery_range_entity
+      ? this.hass.states[this.config.battery_range_entity]
+      : null;
+    const batteryRange = batteryRangeEntity
+      ? Math.round(parseFloat(batteryRangeEntity.state))
+      : null;
 
-    const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
-    const isCharging = chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'on';
+    const chargingStatusEntity = this.config.charging_status_entity
+      ? this.hass.states[this.config.charging_status_entity]
+      : null;
+    const isCharging =
+      chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'on';
 
     if (!this.config.show_battery && !this.config.show_battery_range) return '';
 
     return html`
       <div class="level-info">
-        ${this.config.show_battery && batteryLevel !== null ? html`
-          <div class="item_bar">
-            <div class="progress ${isCharging ? 'charging' : ''}" style="width: ${batteryLevel}%;"></div>
-          </div>
-          <div class="level-text">
-            <span>${batteryLevel}% ${isCharging ? 'Charging' : 'Battery'}</span>
-            ${this.config.show_battery_range && batteryRange !== null ? html`<span class="range">${batteryRange} ${this.config.unit_type}</span>` : ''}
-          </div>
-        ` : ''}
-        ${!this.config.show_battery && this.config.show_battery_range && batteryRange !== null ? html`
-          <div class="level-text">
-            <span class="range">${batteryRange} ${this.config.unit_type}</span>
-          </div>
-        ` : ''}
+        ${this.config.show_battery && batteryLevel !== null
+          ? html`
+              <div class="item_bar">
+                <div
+                  class="progress ${isCharging ? 'charging' : ''}"
+                  style="width: ${batteryLevel}%;"
+                ></div>
+              </div>
+              <div class="level-text">
+                <span
+                  >${batteryLevel}% ${isCharging ? 'Charging' : 'Battery'}</span
+                >
+                ${this.config.show_battery_range && batteryRange !== null
+                  ? html`<span class="range"
+                      >${batteryRange} ${this.config.unit_type}</span
+                    >`
+                  : ''}
+              </div>
+            `
+          : ''}
+        ${!this.config.show_battery &&
+        this.config.show_battery_range &&
+        batteryRange !== null
+          ? html`
+              <div class="level-text">
+                <span class="range"
+                  >${batteryRange} ${this.config.unit_type}</span
+                >
+              </div>
+            `
+          : ''}
       </div>
     `;
   }
 
   _renderFuelLevelAndRange() {
-    const fuelLevelEntity = this.config.fuel_level_entity ? this.hass.states[this.config.fuel_level_entity] : null;
-    const fuelLevel = fuelLevelEntity ? parseFloat(fuelLevelEntity.state) : null;
+    const fuelLevelEntity = this.config.fuel_level_entity
+      ? this.hass.states[this.config.fuel_level_entity]
+      : null;
+    const fuelLevel = fuelLevelEntity
+      ? parseFloat(fuelLevelEntity.state)
+      : null;
 
-    const fuelRangeEntity = this.config.fuel_range_entity ? this.hass.states[this.config.fuel_range_entity] : null;
-    const fuelRange = fuelRangeEntity ? Math.round(parseFloat(fuelRangeEntity.state)) : null;
+    const fuelRangeEntity = this.config.fuel_range_entity
+      ? this.hass.states[this.config.fuel_range_entity]
+      : null;
+    const fuelRange = fuelRangeEntity
+      ? Math.round(parseFloat(fuelRangeEntity.state))
+      : null;
 
     if (!this.config.show_fuel && !this.config.show_fuel_range) return '';
 
     return html`
       <div class="level-info">
-        ${this.config.show_fuel && fuelLevel !== null ? html`
-          <div class="item_bar">
-            <div class="progress" style="width: ${fuelLevel}%;"></div>
-          </div>
-          <div class="level-text">
-            <span>${fuelLevel}% Fuel</span>
-            ${this.config.show_fuel_range && fuelRange !== null ? html`<span class="range">${fuelRange} ${this.config.unit_type}</span>` : ''}
-          </div>
-        ` : ''}
-        ${!this.config.show_fuel && this.config.show_fuel_range && fuelRange !== null ? html`
-          <div class="level-text">
-            <span class="range">${fuelRange} ${this.config.unit_type}</span>
-          </div>
-        ` : ''}
+        ${this.config.show_fuel && fuelLevel !== null
+          ? html`
+              <div class="item_bar">
+                <div class="progress" style="width: ${fuelLevel}%;"></div>
+              </div>
+              <div class="level-text">
+                <span>${fuelLevel}% Fuel</span>
+                ${this.config.show_fuel_range && fuelRange !== null
+                  ? html`<span class="range"
+                      >${fuelRange} ${this.config.unit_type}</span
+                    >`
+                  : ''}
+              </div>
+            `
+          : ''}
+        ${!this.config.show_fuel &&
+        this.config.show_fuel_range &&
+        fuelRange !== null
+          ? html`
+              <div class="level-text">
+                <span class="range">${fuelRange} ${this.config.unit_type}</span>
+              </div>
+            `
+          : ''}
       </div>
     `;
   }
@@ -215,7 +280,7 @@ class UltraVehicleCard extends LitElement {
 
     return html`
       <div class="icon-grid">
-        ${icon_grid_entities.map(entityId => this._renderIconItem(entityId))}
+        ${icon_grid_entities.map((entityId) => this._renderIconItem(entityId))}
       </div>
     `;
   }
@@ -231,8 +296,12 @@ class UltraVehicleCard extends LitElement {
 
     const state = entity.state;
 
-    const isActive = ['on', 'open', 'true', 'unlocked'].includes(state.toLowerCase());
-    const iconColor = isActive ? 'var(--accent-color)' : 'var(--secondary-text-color)';
+    const isActive = ['on', 'open', 'true', 'unlocked'].includes(
+      state.toLowerCase()
+    );
+    const iconColor = isActive
+      ? 'var(--accent-color)'
+      : 'var(--secondary-text-color)';
 
     return html`
       <div class="icon-item">
@@ -242,22 +311,22 @@ class UltraVehicleCard extends LitElement {
   }
 
   static getConfigElement() {
-    return document.createElement("ultra-vehicle-card-editor");
+    return document.createElement('ultra-vehicle-card-editor');
   }
 
   static getStubConfig() {
     return {
-      title: "My Vehicle",
-      image_url: "",
-      vehicle_type: "EV",
-      unit_type: "mi",
-      battery_level_entity: "",
-      battery_range_entity: "",
-      fuel_level_entity: "",
-      fuel_range_entity: "",
-      charging_status_entity: "",
-      location_entity: "",
-      mileage_entity: "",
+      title: 'My Vehicle',
+      image_url: '',
+      vehicle_type: 'EV',
+      unit_type: 'mi',
+      battery_level_entity: '',
+      battery_range_entity: '',
+      fuel_level_entity: '',
+      fuel_range_entity: '',
+      charging_status_entity: '',
+      location_entity: '',
+      mileage_entity: '',
       show_battery: true,
       show_battery_range: true,
       show_fuel: true,
@@ -265,17 +334,18 @@ class UltraVehicleCard extends LitElement {
       show_location: true,
       show_mileage: true,
       icon_grid_entities: [],
-      custom_icons: {}
+      custom_icons: {},
     };
   }
 }
 
-customElements.define("ultra-vehicle-card", UltraVehicleCard);
+customElements.define('ultra-vehicle-card', UltraVehicleCard);
 
 window.customCards = window.customCards || [];
 window.customCards.push({
-  type: "ultra-vehicle-card",
-  name: "Ultra Vehicle Card",
-  description: "A card that displays vehicle information with fuel/charge level, range, location, mileage, and a customizable icon grid.",
-  preview: true
+  type: 'ultra-vehicle-card',
+  name: 'Ultra Vehicle Card',
+  description:
+    'A card that displays vehicle information with fuel/charge level, range, location, mileage, and a customizable icon grid.',
+  preview: true,
 });
