@@ -28,20 +28,15 @@ function compressImage(file, maxWidth, maxHeight, quality) {
         elem.height = height;
         const ctx = elem.getContext('2d');
 
-        // Clear the canvas to ensure transparency
         ctx.clearRect(0, 0, width, height);
-
         ctx.drawImage(img, 0, 0, width, height);
 
-        // Determine the file type
         const fileType = file.type || 'image/jpeg';
         let data;
 
         if (fileType === 'image/png') {
-          // For PNGs, use lossless compression
           data = elem.toDataURL('image/png');
         } else {
-          // For other formats, use JPEG compression
           data = elem.toDataURL('image/jpeg', quality);
         }
 
@@ -69,7 +64,9 @@ export class UltraVehicleCardEditor extends LitElement {
       _selectedIconGridEntities: { type: Array },
       _customIcons: { type: Object },
       _iconSearchFilter: { type: String },
-      _currentEditingEntity: { type: String }
+      _currentEditingEntity: { type: String },
+      _carStateEntityFilter: { type: String },
+      _chargeLimitEntityFilter: { type: String }
     };
   }
 
@@ -93,7 +90,7 @@ export class UltraVehicleCardEditor extends LitElement {
           align-items: center;
           justify-content: space-between;
           padding: 4px 8px;
-          background-color: var(--accent-color);
+          background-color: var(--primary-color);
           color: var(--text-primary-color);
           border-radius: 4px;
         }
@@ -115,11 +112,9 @@ export class UltraVehicleCardEditor extends LitElement {
         .remove-entity {
           cursor: pointer;
         }
-
         .icon-wrapper {
           position: relative;
         }
-
         .icon-picker-popup {
           position: absolute;
           left: 0;
@@ -129,9 +124,8 @@ export class UltraVehicleCardEditor extends LitElement {
           border: 1px solid var(--divider-color);
           border-radius: 4px;
           padding: 8px;
-          width: 300px; // Increased width to accommodate ha-icon-picker
+          width: 300px;
         }
-
         .icon-grid {
           display: grid;
           grid-template-columns: repeat(5, 1fr);
@@ -170,6 +164,8 @@ export class UltraVehicleCardEditor extends LitElement {
     this._customIcons = {};
     this._iconSearchFilter = '';
     this._currentEditingEntity = null;
+    this._carStateEntityFilter = '';
+    this._chargeLimitEntityFilter = '';
   }
 
   setConfig(config) {
@@ -178,26 +174,28 @@ export class UltraVehicleCardEditor extends LitElement {
       image_url: "",
       vehicle_type: "EV",
       unit_type: "mi",
-      battery_level_entity: "",
-      battery_range_entity: "",
-      fuel_level_entity: "",
-      fuel_range_entity: "",
+      level_entity: "",
+      range_entity: "",
       charging_status_entity: "",
       location_entity: "",
       mileage_entity: "",
-      show_battery_level: true,
-      show_battery_range: true,
-      show_fuel_level: true,
-      show_fuel_range: true,
+      show_level: true,
+      show_range: true,
       show_location: true,
       show_mileage: true,
+      show_car_state: true,
+      show_charge_limit: true,
       icon_grid_entities: [],
       custom_icons: {},
+      hybrid_display_order: 'fuel_first',
+      car_state_entity: "",
+      charge_limit_entity: "",
       ...config
     };
     this._selectedIconGridEntities = [...this.config.icon_grid_entities];
     this._customIcons = { ...this.config.custom_icons };
   }
+
   render() {
     if (!this.hass) {
       return html``;
@@ -272,23 +270,50 @@ export class UltraVehicleCardEditor extends LitElement {
           </label>
         </div>
       </div>
+
+      ${this.config.vehicle_type === 'Hybrid' ? html`
+        <div class="input-group">
+          <label>Hybrid Display Order</label>
+          <div class="radio-group">
+            <label>
+              <input type="radio" name="hybrid_display_order" value="fuel_first" 
+                ?checked="${this.config.hybrid_display_order === 'fuel_first'}" 
+                @change="${this._hybridOrderChanged}">
+              Fuel First
+            </label>
+            <label>
+              <input type="radio" name="hybrid_display_order" value="battery_first" 
+                ?checked="${this.config.hybrid_display_order === 'battery_first'}" 
+                @change="${this._hybridOrderChanged}">
+              Battery First
+            </label>
+          </div>
+        </div>
+      ` : ''}
     `;
   }
 
   _renderEntityPickers() {
     const { vehicle_type } = this.config;
     return html`
-      ${(vehicle_type === 'EV' || vehicle_type === 'Hybrid') ? this._renderEntityPicker('battery_level_entity', 'Battery Level Entity', 'This is used for battery percent and bar length.') : ''}
-      ${(vehicle_type === 'EV' || vehicle_type === 'Hybrid') ? this._renderEntityPicker('battery_range_entity', 'Battery Range Entity', 'This is used for the battery range left.') : ''}
-      ${(vehicle_type === 'Fuel' || vehicle_type === 'Hybrid') ? this._renderEntityPicker('fuel_level_entity', 'Fuel Level Entity', 'This is used for fuel percent and bar length.') : ''}
-      ${(vehicle_type === 'Fuel' || vehicle_type === 'Hybrid') ? this._renderEntityPicker('fuel_range_entity', 'Fuel Range Entity', 'This is used for the fuel range left.') : ''}
-      ${(vehicle_type === 'EV' || vehicle_type === 'Hybrid') ? this._renderEntityPicker('charging_status_entity', 'Charging Status Entity', 'This is used for charging wording and bar animation.') : ''}
-      ${this._renderEntityPicker('location_entity', 'Location Entity', 'This is used to display the vehicle location.')}
-      ${this._renderEntityPicker('mileage_entity', 'Mileage Entity', 'This is used to display the vehicle mileage.')}
-    `;
+    ${(vehicle_type === 'EV' || vehicle_type === 'Hybrid') ? html`
+      ${this._renderEntityPicker('battery_level_entity', 'Battery Level Entity', 'This is used for battery percent and bar length.')}
+      ${this._renderEntityPicker('battery_range_entity', 'Battery Range Entity', 'This is used for the battery range left.')}
+      ${this._renderEntityPicker('charging_status_entity', 'Charging Status Entity', 'This is used for charging wording and bar animation.')}
+      ${this._renderEntityPicker('charge_limit_entity', 'Charge Limit Entity', 'This is used to display the charge limit on the battery bar.')}
+    ` : ''}
+    ${(vehicle_type === 'Fuel' || vehicle_type === 'Hybrid') ? html`
+      ${this._renderEntityPicker('fuel_level_entity', 'Fuel Level Entity', 'This is used for fuel percent and bar length.')}
+      ${this._renderEntityPicker('fuel_range_entity', 'Fuel Range Entity', 'This is used for the fuel range left.')}
+    ` : ''}
+    ${this._renderEntityPicker('location_entity', 'Location Entity', 'This is used to display the vehicle location.')}
+    ${this._renderEntityPicker('mileage_entity', 'Mileage Entity', 'This is used to display the vehicle mileage.')}
+    ${this._renderEntityPicker('car_state_entity', 'Car State Entity', 'This is used to display the current state of the car (e.g., offline, charging).')}
+  `;
   }
 
   _renderEntityPicker(configValue, labelText, description) {
+    const toggleName = this._getToggleName(configValue);
     return html`
     <div class="input-group">
       <label for="${configValue}">${labelText}</label>
@@ -316,16 +341,14 @@ export class UltraVehicleCardEditor extends LitElement {
             ` : ''}
           </div>
         </div>
-        ${['battery_level_entity', 'battery_range_entity', 'fuel_level_entity', 'fuel_range_entity', 'location_entity', 'mileage_entity'].includes(configValue) ? html`
-          <label class="switch">
-            <input type="checkbox" 
-              ?checked="${this.config[`show_${configValue.split('_')[0]}`]}"
-              @change="${this._toggleChanged}"
-              .configValue="${`show_${configValue.split('_')[0]}`}"
-            />
-            <span class="slider round"></span>
-          </label>
-        ` : ''}
+        <label class="switch">
+          <input type="checkbox" 
+            ?checked="${this.config[toggleName]}"
+            @change="${this._toggleChanged}"
+            .configValue="${toggleName}"
+          />
+          <span class="slider round"></span>
+        </label>
       </div>
     </div>
   `;
@@ -333,31 +356,31 @@ export class UltraVehicleCardEditor extends LitElement {
 
   _renderIconGridConfig() {
     return html`
-    <div class="icon-grid-container">
-      <h3>Icon Grid</h3>
-      <div class="input-group">
-        <label for="icon_grid_search">Add entities to the icon grid</label>
-        <div class="entity-description">
-          Search and select entities to add to the icon grid. Use the drag handle (≡) to reorder entities.
-          Click on the icon to change it, and use the (×) to remove an entity from the grid.
+      <div class="icon-grid-container">
+        <h3>Icon Grid</h3>
+        <div class="input-group">
+          <label for="icon_grid_search">Add entities to the icon grid</label>
+          <div class="entity-description">
+            Search and select entities to add to the icon grid. Use the drag handle (≡) to reorder entities.
+            Click on the icon to change it, and use the (×) to remove an entity from the grid.
+          </div>
+          <div class="entity-picker-container">
+            <input
+              id="icon_grid_search"
+              type="text"
+              class="entity-picker-input"
+              placeholder="Search entities"
+              .value="${this._iconGridFilter}"
+              @input="${this._iconGridFilterChanged}"
+            >
+            ${this._renderIconGridResults()}
+          </div>
         </div>
-        <div class="entity-picker-container">
-          <input
-            id="icon_grid_search"
-            type="text"
-            class="entity-picker-input"
-            placeholder="Search entities"
-            .value="${this._iconGridFilter}"
-            @input="${this._iconGridFilterChanged}"
-          >
-          ${this._renderIconGridResults()}
+        <div class="selected-entities" @dragover="${this._onDragOver}" @drop="${this._onDrop}">
+          ${this._selectedIconGridEntities.map((entityId, index) => this._renderSelectedEntity(entityId, index))}
         </div>
       </div>
-      <div class="selected-entities" @dragover="${this._onDragOver}" @drop="${this._onDrop}">
-        ${this._selectedIconGridEntities.map((entityId, index) => this._renderSelectedEntity(entityId, index))}
-      </div>
-    </div>
-  `;
+    `;
   }
 
   _renderIconGridResults() {
@@ -368,15 +391,16 @@ export class UltraVehicleCardEditor extends LitElement {
       .filter(eid => !this._selectedIconGridEntities.includes(eid));
 
     return html`
-    <div class="entity-picker-results">
-      ${filteredEntities.map(eid => html`
-        <div class="entity-picker-result" @click="${() => this._addIconGridEntity(eid)}">
-          ${eid}
-        </div>
-      `)}
-    </div>
-  `;
+      <div class="entity-picker-results">
+        ${filteredEntities.map(eid => html`
+          <div class="entity-picker-result" @click="${() => this._addIconGridEntity(eid)}">
+            ${eid}
+          </div>
+        `)}
+      </div>
+    `;
   }
+
   _renderSelectedEntity(entityId, index) {
     const entity = this.hass.states[entityId];
     const friendlyName = entity.attributes.friendly_name || entityId;
@@ -387,37 +411,60 @@ export class UltraVehicleCardEditor extends LitElement {
     const currentIcon = customIcon || defaultIcon || 'mdi:help-circle';
 
     return html`
-    <div class="selected-entity" draggable="true" @dragstart="${(e) => this._onDragStart(e, index)}">
-      <div class="handle">
-        <ha-svg-icon .path="${"M3,15H21V13H3V15M3,19H21V17H3V19M3,11H21V9H3V11M3,5V7H21V5H3Z"}"></ha-svg-icon>
-      </div>
-      <div class="entity-content">
-        <div class="icon-wrapper">
-          <ha-icon
-            .icon="${currentIcon}"
-            @mousedown="${(e) => e.stopPropagation()}"
-            @click="${(e) => this._openIconPicker(e, entityId)}"
-            class="custom-icon"
-          ></ha-icon>
-          ${this._currentEditingEntity === entityId ? this._renderIconPicker() : ''}
+      <div class="selected-entity" draggable="true" @dragstart="${(e) => this._onDragStart(e, index)}">
+        <div class="handle">
+          <ha-svg-icon .path="${"M3,15H21V13H3V15M3,19H21V17H3V19M3,11H21V9H3V11M3,5V7H21V5H3Z"}"></ha-svg-icon>
         </div>
-        <span class="entity-name">${friendlyName}</span>
+        <div class="entity-content">
+          <div class="icon-wrapper">
+            <ha-icon
+              .icon="${currentIcon}"
+              @mousedown="${(e) => e.stopPropagation()}"
+              @click="${(e) => this._openIconPicker(e, entityId)}"
+              class="custom-icon"
+            ></ha-icon>
+            ${this._currentEditingEntity === entityId ? this._renderIconPicker() : ''}
+          </div>
+          <span class="entity-name">${friendlyName}</span>
+        </div>
+        <span class="remove-entity" @click="${() => this._removeIconGridEntity(index)}">×</span>
       </div>
-      <span class="remove-entity" @click="${() => this._removeIconGridEntity(index)}">×</span>
-    </div>
-  `;
+    `;
+  }
+
+  _getToggleName(configValue) {
+    switch (configValue) {
+      case 'battery_level_entity':
+        return this.config.vehicle_type === 'EV' ? 'show_battery' : 'show_battery';
+      case 'battery_range_entity':
+        return this.config.vehicle_type === 'EV' ? 'show_battery_range' : 'show_battery_range';
+      case 'fuel_level_entity':
+        return 'show_fuel';
+      case 'fuel_range_entity':
+        return 'show_fuel_range';
+      case 'location_entity':
+        return 'show_location';
+      case 'mileage_entity':
+        return 'show_mileage';
+      case 'car_state_entity':
+        return 'show_car_state';
+      case 'charge_limit_entity':
+        return 'show_charge_limit';
+      default:
+        return `show_${configValue.split('_')[0]}`;
+    }
   }
 
   _renderIconPicker() {
     return html`
-    <div class="icon-picker-popup" @click="${(e) => e.stopPropagation()}">
-      <ha-icon-picker
-        .hass=${this.hass}
-        .value=${this._customIcons[this._currentEditingEntity] || ''}
-        @value-changed=${this._handleIconChange}
-      ></ha-icon-picker>
-    </div>
-  `;
+      <div class="icon-picker-popup" @click="${(e) => e.stopPropagation()}">
+        <ha-icon-picker
+          .hass=${this.hass}
+          .value=${this._customIcons[this._currentEditingEntity] || ''}
+          @value-changed=${this._handleIconChange}
+        ></ha-icon-picker>
+      </div>
+    `;
   }
 
   _getDisplayImageUrl(url) {
@@ -467,6 +514,14 @@ export class UltraVehicleCardEditor extends LitElement {
     this.requestUpdate();
   }
 
+  _hybridOrderChanged(ev) {
+    this.config = {
+      ...this.config,
+      hybrid_display_order: ev.target.value
+    };
+    this.configChanged(this.config);
+  }
+
   async _handleImageUpload(ev) {
     const file = ev.target.files[0];
     if (file) {
@@ -474,9 +529,7 @@ export class UltraVehicleCardEditor extends LitElement {
         let quality = 0.7;
         let compressedImage = await compressImage(file, 800, 600, quality);
 
-        // For PNGs, we don't reduce quality further as it's lossless
         if (file.type !== 'image/png') {
-          // Check the length of the base64 string
           while (compressedImage.length > 500000 && quality > 0.1) {
             quality -= 0.1;
             compressedImage = await compressImage(file, 800, 600, quality);
@@ -568,7 +621,6 @@ export class UltraVehicleCardEditor extends LitElement {
     this._iconSearchFilter = '';
     this.requestUpdate();
 
-    // Add click event listener to close picker when clicking outside
     setTimeout(() => {
       window.addEventListener('click', this._closeIconPicker);
     }, 0);
