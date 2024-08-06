@@ -404,7 +404,11 @@ render() {
   _renderSelectedEntity(entityId, index) {
     const entity = this.hass.states[entityId];
     const friendlyName = entity.attributes.friendly_name || entityId;
-    const currentIcon = this._customIcons[entityId] || 'mdi:help-circle';
+
+    // Check for custom icon first, then entity's default icon, then fallback icon
+    const customIcon = this._customIcons[entityId];
+    const defaultIcon = entity.attributes.icon;
+    const currentIcon = customIcon || defaultIcon || 'mdi:help-circle';
 
     return html`
       <div class="selected-entity" draggable="true" @dragstart="${(e) => this._onDragStart(e, index)}">
