@@ -33,13 +33,13 @@ function compressImage(file, maxWidth, maxHeight, quality) {
         
         const fileType = file.type || 'image/jpeg';
         let data;
-        
+
         if (fileType === 'image/png') {
           data = elem.toDataURL('image/png');
         } else {
           data = elem.toDataURL('image/jpeg', quality);
         }
-        
+
         resolve(data);
       };
       img.onerror = error => reject(error);
@@ -77,12 +77,14 @@ export class UltraVehicleCardEditor extends LitElement {
         .icon-grid-container {
           margin-top: 16px;
         }
+
         .selected-entities {
           display: flex;
           flex-direction: column;
           gap: 8px;
           margin-top: 8px;
         }
+
         .selected-entity {
           display: flex;
           align-items: center;
@@ -92,17 +94,21 @@ export class UltraVehicleCardEditor extends LitElement {
           color: var(--text-primary-color);
           border-radius: 4px;
         }
+
         .entity-content {
           display: flex;
           align-items: center;
         }
+
         .custom-icon {
           margin-right: 8px;
           cursor: pointer;
         }
+
         .entity-name {
           flex-grow: 1;
         }
+
         .remove-entity {
           cursor: pointer;
         }
@@ -125,14 +131,17 @@ export class UltraVehicleCardEditor extends LitElement {
           grid-template-columns: repeat(5, 1fr);
           gap: 8px;
         }
+
         .icon-option {
           cursor: pointer;
           padding: 4px;
           border-radius: 4px;
         }
+
         .icon-option:hover {
           background-color: var(--secondary-background-color);
         }
+
         .icon-search {
           width: 100%;
           margin-bottom: 8px;
@@ -184,7 +193,7 @@ setConfig(config) {
       ...config
     };
     this._selectedIconGridEntities = [...this.config.icon_grid_entities];
-    this._customIcons = {...this.config.custom_icons};
+    this._customIcons = { ...this.config.custom_icons };
   }
   
 render() {
@@ -213,7 +222,7 @@ render() {
           .configValue="${'title'}"
         />
       </div>
-      
+
       <div class="input-group">
         <label for="image_url">Image URL</label>
         <input
@@ -224,12 +233,12 @@ render() {
           .configValue="${'image_url'}"
         />
       </div>
-      
+
       <div class="input-group">
         <label for="image_upload">Upload Image</label>
         <input type="file" id="image_upload" @change="${this._handleImageUpload}" accept="image/*">
       </div>
-      
+
       <div class="input-group">
         <label>Vehicle Type</label>
         <div class="radio-group">
@@ -247,7 +256,7 @@ render() {
           </label>
         </div>
       </div>
-      
+
       <div class="input-group">
         <label>Unit Type</label>
         <div class="radio-group">
@@ -322,8 +331,8 @@ render() {
             ${this[`_${configValue}Filter`] ? html`
               <div class="entity-picker-results">
                 ${Object.keys(this.hass.states)
-                  .filter(eid => eid.toLowerCase().includes(this[`_${configValue}Filter`].toLowerCase()))
-                  .map(eid => html`
+          .filter(eid => eid.toLowerCase().includes(this[`_${configValue}Filter`].toLowerCase()))
+          .map(eid => html`
                     <div class="entity-picker-result" @click="${() => this._selectEntity(configValue, eid)}">
                       ${eid}
                     </div>
@@ -395,7 +404,11 @@ render() {
   _renderSelectedEntity(entityId, index) {
     const entity = this.hass.states[entityId];
     const friendlyName = entity.attributes.friendly_name || entityId;
-    const currentIcon = this._customIcons[entityId] || 'mdi:help-circle';
+
+    // Check for custom icon first, then entity's default icon, then fallback icon
+    const customIcon = this._customIcons[entityId];
+    const defaultIcon = entity.attributes.icon;
+    const currentIcon = customIcon || defaultIcon || 'mdi:help-circle';
 
     return html`
       <div class="selected-entity" draggable="true" @dragstart="${(e) => this._onDragStart(e, index)}">
@@ -592,7 +605,7 @@ render() {
     e.preventDefault();
     const fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
     const toIndex = [...e.currentTarget.children].indexOf(e.target.closest('.selected-entity'));
-    
+
     if (fromIndex !== toIndex) {
       const newOrder = [...this._selectedIconGridEntities];
       const [removed] = newOrder.splice(fromIndex, 1);

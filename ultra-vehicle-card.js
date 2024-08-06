@@ -338,7 +338,7 @@ _renderInfoLine() {
  
   _renderIconGrid() {
     const { icon_grid_entities } = this.config;
-    
+
     if (!icon_grid_entities || icon_grid_entities.length === 0) {
       return '';
     }
@@ -354,9 +354,12 @@ _renderInfoLine() {
     const entity = this.hass.states[entityId];
     if (!entity) return '';
 
-    const icon = this.config.custom_icons[entityId] || 'mdi:help-circle';
+    // Check for custom icon first, then entity's default icon, then fallback icon
+    const customIcon = this.config.custom_icons[entityId];
+    const defaultIcon = entity.attributes.icon;
+    const icon = customIcon || defaultIcon || 'mdi:help-circle';
+    
     const state = entity.state;
-
     const isActive = ['on', 'open', 'true', 'unlocked'].includes(state.toLowerCase());
     const iconColor = isActive ? 'var(--uvc-primary-color)' : 'var(--secondary-text-color)';
 
