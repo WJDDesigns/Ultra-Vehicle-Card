@@ -4,6 +4,8 @@ export const styles = css`
   :host {
     --uvc-primary-color: var(--primary-color);
     --uvc-background-color: var(--card-background-color, #fff);
+    --uvc-bar-background: var(--uvc-bar-background-color, #595959);
+    --uvc-bar-border-color: var(--uvc-bar-border-color, #595959);
   }
   .vehicle-card-content {
     padding: 16px;
@@ -63,10 +65,10 @@ export const styles = css`
     position: relative;
     height: 1.5rem;
     width: 100%;
-    background-color: #0b0a0a;
+    background-color: var(--uvc-bar-background);
     border-radius: 6px;
     overflow: hidden;
-    border: 2px solid #0b0a0a;
+    border: 2px solid var(--uvc-bar-border-color);
     margin-bottom: 4px;
   }
   .progress {

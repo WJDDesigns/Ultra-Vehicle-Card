@@ -2,8 +2,8 @@
 
 # Ultra Vehicle Card for Home Assistant
 
-<img width="480" alt="Light Screenshot" src="https://github.com/user-attachments/assets/5fba8b7a-eae4-4e70-9c6b-b9b5be4e0feb">
-<img width="480" alt="Dark Screenshot" src="https://github.com/user-attachments/assets/5b112462-23c2-4a90-a576-3f97967ca947">
+<img width="921" alt="Screenshot 2024-08-06 at 9 04 20 AM" src="https://github.com/user-attachments/assets/3289effd-9ded-4f52-97b9-ad3741632126">
+<img width="918" alt="Screenshot 2024-08-06 at 9 05 18 AM" src="https://github.com/user-attachments/assets/83dd08a7-dc82-450f-a8d3-cf38eb275d77">
 
 This custom card allows you to display vehicle information in your Home Assistant dashboard, including the vehicle name, image, and fuel or charge level. For any EVs you will see an animation when charging.
 
@@ -43,6 +43,6 @@ Did you know that the Ultra Vehicle Card was inspired by a midnight coding sessi
 
 If this card has made your dashboard a little more awesome or saved you from the treacherous "low fuel surprise," consider buying the developer a virtual Dr Pepper. It helps keep the creativity flowing and the code bug-free!
 
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4JVCZ46FZPUTG">
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4JVCZ46FZPUTG" target="_blank">
   <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" style="width: 150px; height: auto;" />
 </a>
