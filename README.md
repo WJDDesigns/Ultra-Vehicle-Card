@@ -31,14 +31,13 @@ lovelace:
   resources:
     - url: /local/ultra-vehicle-card.js
       type: module
-```     
+```
 
 [![Repo](https://camo.githubusercontent.com/0ab6126849ccb8c77891afcd6d5b01f76ed99518f52387df274c41c8e3d15c64/68747470733a2f2f6d792e686f6d652d617373697374616e742e696f2f6261646765732f686163735f7265706f7369746f72792e737667)](https://my.home-assistant.io/redirect/hacs_repository/?owner=wjddesigns&repository=ultra-vehicle-card&category=plugin)
 
-    
 ### Cool Tip
 
-Hey there, fellow Home Assistant enthusiast! 🏠✨ 
+Hey there, fellow Home Assistant enthusiast! 🏠✨
 
 Did you know that the Ultra Vehicle Card was inspired by a midnight coding session fueled by an unhealthy amount of caffeine and a sudden realization that cars deserve cool cards too? It's true!
 
@@ -48,3 +47,38 @@ If this card has made your dashboard a little more awesome or saved you from the
   <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" style="width: 150px; height: auto;" />
 </a>
 
+### For Developers
+
+To get started with the project, follow these steps:
+
+1. Install Bun:
+
+   Bun is a fast all-in-one JavaScript runtime. You can install it by following the instructions on their official website.
+
+2. Initial Setup:
+
+   Once you have Bun installed, run the following command to install the necessary dependencies:
+
+```
+bun i
+```
+
+This command installs Prettier, Husky, and lint-staged, which are configured to automatically format your code when you commit changes in Git.
+
+3. Automatic Code Formatting:
+
+- Prettier: Ensures consistent code formatting across the project.
+- Husky: Hooks into Git to run scripts on specific Git events (e.g., pre-commit).
+- lint-staged: Runs linters on staged files in Git, ensuring only files related to your commit are checked.
+
+4. Manual Code Formatting:
+
+   If you need to format your code manually, you can do so by running:
+
+   ```
+   bun run format
+   ```
+
+   This will apply the project’s formatting rules to your codebase.
+
+With these tools, your code will be automatically formatted according to the project’s standards every time you commit changes, helping maintain a clean and consistent codebase.
