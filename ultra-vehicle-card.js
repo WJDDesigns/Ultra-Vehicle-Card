@@ -14,6 +14,15 @@ class UltraVehicleCard extends LitElement {
     return [
       styles,
       css`
+        :host {
+          --uvc-card-background: var(--card-background-color, #fff);
+          --uvc-bar-background: var(--uvc-bar-background-color, #595959);
+          --uvc-bar-fill: var(--uvc-primary-color);
+          --uvc-limit-indicator: white;
+          --uvc-icon-active: var(--uvc-primary-color);
+          --uvc-icon-inactive: var(--secondary-text-color);
+        }
+        
         .icon-grid {
           display: flex;
           flex-wrap: wrap;
@@ -28,37 +37,30 @@ class UltraVehicleCard extends LitElement {
         .icon-item ha-icon {
           width: 24px;
           height: 24px;
-          color: var(--uvc-primary-color);
         }
         .level-info.hybrid {
           display: flex;
           flex-direction: column;
-        
         }
         .item_bar {
           background-color: var(--uvc-bar-background);
           border: 2px solid var(--uvc-bar-border-color);
         }
         .progress {
-          background-color: var(--uvc-primary-color);
+          background-color: var(--uvc-bar-fill);
         }
         .selected-entity {
           background-color: var(--uvc-primary-color);
         }
-         .charge-limit-indicator {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background-color: white;
-        z-index: 1;
-      }
-      .car-state {
-        text-align: center;
-        font-size: 0.9rem;
-        margin-bottom: 8px;
-        text-transform: capitalize;
-      }
+        .charge-limit-indicator {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: 2px;
+          background-color: var(--uvc-limit-indicator);
+          z-index: 1;
+        }
+        
       `
     ];
   }
@@ -67,7 +69,7 @@ class UltraVehicleCard extends LitElement {
     if (!config.title) {
       throw new Error("You need to define a title");
     }
-     this.config = {
+    this.config = {
     title: "My Vehicle",
     image_url: "",
     vehicle_type: "EV",
@@ -92,6 +94,13 @@ class UltraVehicleCard extends LitElement {
     hybrid_display_order: 'fuel_first',
     car_state_entity: "",
     charge_limit_entity: "",
+    cardBackgroundColor: "",
+    barBackgroundColor: "",
+    barFillColor: "",
+    limitIndicatorColor: "",
+    iconActiveColor: "",
+    iconInactiveColor: "",
+    barBorderColor: "",
     ...config
     };
   }
@@ -102,7 +111,7 @@ class UltraVehicleCard extends LitElement {
     }
 
     return html`
-      <ha-card>
+      <ha-card style="background-color: var(--uvc-card-background);">
         <div class="vehicle-card-content">
           ${this._renderHeader()}
           ${this._renderCarState()}
@@ -114,31 +123,31 @@ class UltraVehicleCard extends LitElement {
     `;
   }
 
-  _renderVehicleInfo() {
-    const { vehicle_type } = this.config;
-    
-    switch(vehicle_type) {
-      case 'EV':
-        return this._renderEVInfo();
-      case 'Fuel':
-        return this._renderFuelInfo();
-      case 'Hybrid':
-        return this._renderHybridInfo();
-      default:
-        return html``;
-    }
+_renderVehicleInfo() {
+  const { vehicle_type } = this.config;
+  
+  switch(vehicle_type) {
+    case 'EV':
+      return this._renderEVInfo();
+    case 'Fuel':
+      return this._renderFuelInfo();
+    case 'Hybrid':
+      return this._renderHybridInfo();
+    default:
+      return html`<div class="error">Invalid vehicle type</div>`;
   }
+}
 
-  _renderEVInfo() {
-    const batteryLevelEntity = this.hass.states[this.config.battery_level_entity];
-    const batteryRangeEntity = this.hass.states[this.config.battery_range_entity];
-    const chargingStatusEntity = this.hass.states[this.config.charging_status_entity];
-    const chargeLimitEntity = this.hass.states[this.config.charge_limit_entity];
+_renderEVInfo() {
+  const batteryLevelEntity = this.config.battery_level_entity ? this.hass.states[this.config.battery_level_entity] : null;
+  const batteryRangeEntity = this.config.battery_range_entity ? this.hass.states[this.config.battery_range_entity] : null;
+  const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
+  const chargeLimitEntity = this.config.charge_limit_entity ? this.hass.states[this.config.charge_limit_entity] : null;
 
-    const batteryLevel = batteryLevelEntity ? parseFloat(batteryLevelEntity.state) : null;
-    const batteryRange = batteryRangeEntity ? Math.round(parseFloat(batteryRangeEntity.state)) : null;
-    const isCharging = chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'charging';
-    const chargeLimit = chargeLimitEntity && this.config.show_charge_limit ? parseFloat(chargeLimitEntity.state) : null;
+  const batteryLevel = batteryLevelEntity ? parseFloat(batteryLevelEntity.state) : null;
+  const batteryRange = batteryRangeEntity ? Math.round(parseFloat(batteryRangeEntity.state)) : null;
+  const isCharging = chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'charging';
+  const chargeLimit = chargeLimitEntity && this.config.show_charge_limit ? parseFloat(chargeLimitEntity.state) : null;
 
     return html`
       <div class="level-info">
@@ -164,65 +173,65 @@ class UltraVehicleCard extends LitElement {
     `;
   }
 
-  _renderFuelInfo() {
-    const fuelLevelEntity = this.hass.states[this.config.fuel_level_entity];
-    const fuelRangeEntity = this.hass.states[this.config.fuel_range_entity];
+ _renderFuelInfo() {
+  const fuelLevelEntity = this.config.fuel_level_entity ? this.hass.states[this.config.fuel_level_entity] : null;
+  const fuelRangeEntity = this.config.fuel_range_entity ? this.hass.states[this.config.fuel_range_entity] : null;
 
-    const fuelLevel = fuelLevelEntity ? parseFloat(fuelLevelEntity.state) : null;
-    const fuelRange = fuelRangeEntity ? Math.round(parseFloat(fuelRangeEntity.state)) : null;
+  const fuelLevel = fuelLevelEntity ? parseFloat(fuelLevelEntity.state) : null;
+  const fuelRange = fuelRangeEntity ? Math.round(parseFloat(fuelRangeEntity.state)) : null;
 
-    return html`
-      <div class="level-info">
-        ${this.config.show_fuel && fuelLevel !== null ? html`
-          <div class="item_bar">
-            <div class="progress" style="width: ${fuelLevel}%;"></div>
-          </div>
-          <div class="level-text">
-            <span>${fuelLevel}% Fuel</span>
-            ${this.config.show_fuel_range && fuelRange !== null ? html`
-              <span class="range">${fuelRange} ${this.config.unit_type}</span>
-            ` : ''}
-          </div>
-        ` : this.config.show_fuel_range && fuelRange !== null ? html`
-          <div class="level-text">
-            <span class="range" style="float: right;">${fuelRange} ${this.config.unit_type}</span>
-          </div>
-        ` : ''}
-      </div>
-    `;
-  }
+  return html`
+    <div class="level-info">
+      ${this.config.show_fuel && fuelLevel !== null ? html`
+        <div class="item_bar">
+          <div class="progress" style="width: ${fuelLevel}%;"></div>
+        </div>
+        <div class="level-text">
+          <span>${fuelLevel}% Fuel</span>
+          ${this.config.show_fuel_range && fuelRange !== null ? html`
+            <span class="range">${fuelRange} ${this.config.unit_type}</span>
+          ` : ''}
+        </div>
+      ` : this.config.show_fuel_range && fuelRange !== null ? html`
+        <div class="level-text">
+          <span class="range" style="float: right;">${fuelRange} ${this.config.unit_type}</span>
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
 
-  _renderHybridInfo() {
-    const batteryLevelEntity = this.hass.states[this.config.battery_level_entity];
-    const batteryRangeEntity = this.hass.states[this.config.battery_range_entity];
-    const fuelLevelEntity = this.hass.states[this.config.fuel_level_entity];
-    const fuelRangeEntity = this.hass.states[this.config.fuel_range_entity];
-    const chargingStatusEntity = this.hass.states[this.config.charging_status_entity];
-    const chargeLimitEntity = this.hass.states[this.config.charge_limit_entity];
+_renderHybridInfo() {
+  const batteryLevelEntity = this.config.battery_level_entity ? this.hass.states[this.config.battery_level_entity] : null;
+  const batteryRangeEntity = this.config.battery_range_entity ? this.hass.states[this.config.battery_range_entity] : null;
+  const fuelLevelEntity = this.config.fuel_level_entity ? this.hass.states[this.config.fuel_level_entity] : null;
+  const fuelRangeEntity = this.config.fuel_range_entity ? this.hass.states[this.config.fuel_range_entity] : null;
+  const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
+  const chargeLimitEntity = this.config.charge_limit_entity ? this.hass.states[this.config.charge_limit_entity] : null;
 
-    const batteryLevel = batteryLevelEntity ? parseFloat(batteryLevelEntity.state) : null;
-    const batteryRange = batteryRangeEntity ? Math.round(parseFloat(batteryRangeEntity.state)) : null;
-    const fuelLevel = fuelLevelEntity ? parseFloat(fuelLevelEntity.state) : null;
-    const fuelRange = fuelRangeEntity ? Math.round(parseFloat(fuelRangeEntity.state)) : null;
-    const isCharging = chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'charging';
-    const chargeLimit = chargeLimitEntity && this.config.show_charge_limit ? parseFloat(chargeLimitEntity.state) : null;
+  const batteryLevel = batteryLevelEntity ? parseFloat(batteryLevelEntity.state) : null;
+  const batteryRange = batteryRangeEntity ? Math.round(parseFloat(batteryRangeEntity.state)) : null;
+  const fuelLevel = fuelLevelEntity ? parseFloat(fuelLevelEntity.state) : null;
+  const fuelRange = fuelRangeEntity ? Math.round(parseFloat(fuelRangeEntity.state)) : null;
+  const isCharging = chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'charging';
+  const chargeLimit = chargeLimitEntity && this.config.show_charge_limit ? parseFloat(chargeLimitEntity.state) : null;
 
-    const batteryFirst = this.config.hybrid_display_order === 'battery_first';
+  const batteryFirst = this.config.hybrid_display_order === 'battery_first';
 
-    return html`
-      <div class="level-info hybrid">
-        ${batteryFirst ? html`
-          ${this._renderBatteryBar(batteryLevel, batteryRange, isCharging, chargeLimit)}
-          <div class="hybrid-separator"></div>
-          ${this._renderFuelBar(fuelLevel, fuelRange)}
-        ` : html`
-          ${this._renderFuelBar(fuelLevel, fuelRange)}
-          <div class="hybrid-separator"></div>
-          ${this._renderBatteryBar(batteryLevel, batteryRange, isCharging, chargeLimit)}
-        `}
-      </div>
-    `;
-  }
+  return html`
+    <div class="level-info hybrid">
+      ${batteryFirst ? html`
+        ${this._renderBatteryBar(batteryLevel, batteryRange, isCharging, chargeLimit)}
+        <div class="hybrid-separator"></div>
+        ${this._renderFuelBar(fuelLevel, fuelRange)}
+      ` : html`
+        ${this._renderFuelBar(fuelLevel, fuelRange)}
+        <div class="hybrid-separator"></div>
+        ${this._renderBatteryBar(batteryLevel, batteryRange, isCharging, chargeLimit)}
+      `}
+    </div>
+  `;
+}
 
   _renderBatteryBar(level, range, isCharging, chargeLimit) {
     return html`
@@ -268,13 +277,6 @@ class UltraVehicleCard extends LitElement {
   }
 
   _renderHeader() {
-    const locationEntity = this.config.location_entity ? this.hass.states[this.config.location_entity] : null;
-    const location = locationEntity ? this._capitalizeFirstLetter(locationEntity.state) : null;
-
-    const mileageEntity = this.config.mileage_entity ? this.hass.states[this.config.mileage_entity] : null;
-    let mileage = mileageEntity ? parseFloat(mileageEntity.state) : null;
-    mileage = mileage !== null ? Math.round(mileage).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null;
-
     return html`
        <h2 class="vehicle-name">${this.config.title}</h2>
     ${this._renderInfoLine()}
@@ -282,49 +284,51 @@ class UltraVehicleCard extends LitElement {
   }
 
   _renderCarState() {
-    if (!this.config.show_car_state || !this.config.car_state_entity) return '';
+  if (!this.config.show_car_state || !this.config.car_state_entity) return '';
 
-    const carStateEntity = this.hass.states[this.config.car_state_entity];
-    if (!carStateEntity) return '';
+  const carStateEntity = this.hass.states[this.config.car_state_entity];
+  if (!carStateEntity) return '';
 
-    const state = this._formatState(carStateEntity.state);
+  const state = this._formatState(carStateEntity.state);
 
-    return html`
-      <div class="car-state">${state}</div>
-    `;
-  }
+  return html`
+    <div class="car-state" style="text-align: center;">${state}</div>
+  `;
+}
 
   _formatState(state) {
     return state.toLowerCase().split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   }
 
-  _renderInfoLine() {
-    const locationEntity = this.config.location_entity ? this.hass.states[this.config.location_entity] : null;
-    const location = locationEntity ? this._capitalizeFirstLetter(locationEntity.state) : null;
+_renderInfoLine() {
+  const locationEntity = this.config.location_entity ? this.hass.states[this.config.location_entity] : null;
+  const location = locationEntity ? this._capitalizeFirstLetter(locationEntity.state) : null;
 
-    const mileageEntity = this.config.mileage_entity ? this.hass.states[this.config.mileage_entity] : null;
-    let mileage = mileageEntity ? parseFloat(mileageEntity.state) : null;
-    mileage = mileage !== null ? Math.round(mileage).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null;
+  const mileageEntity = this.config.mileage_entity ? this.hass.states[this.config.mileage_entity] : null;
+  let mileage = mileageEntity ? parseFloat(mileageEntity.state) : null;
+  mileage = mileage !== null ? Math.round(mileage).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null;
 
-    if (!this.config.show_location && !this.config.show_mileage) return '';
+  if (!this.config.show_location && !this.config.show_mileage) return '';
 
-    return html`
-      <div class="info-line">
-        ${this.config.show_location && location ? html`
-          <span class="location">
-            <ha-icon icon="mdi:map-marker"></ha-icon>
-            ${location}
-          </span>
-        ` : ''}
-        ${this.config.show_mileage && mileage ? html`
-          <span class="mileage">
-            <ha-icon icon="mdi:speedometer"></ha-icon>
-            ${mileage} ${this.config.unit_type}
-          </span>
-        ` : ''}
-      </div>
-    `;
-  }
+  const infoTextColor = `var(--uvc-info-text-color, var(--secondary-text-color))`;
+
+  return html`
+    <div class="info-line" style="color: ${infoTextColor};">
+      ${this.config.show_location && location ? html`
+        <span class="location">
+          <ha-icon icon="mdi:map-marker" style="color: ${infoTextColor};"></ha-icon>
+          ${location}
+        </span>
+      ` : ''}
+      ${this.config.show_mileage && mileage ? html`
+        <span class="mileage">
+          <ha-icon icon="mdi:speedometer" style="color: ${infoTextColor};"></ha-icon>
+          ${mileage} ${this.config.unit_type}
+        </span>
+      ` : ''}
+    </div>
+  `;
+}
 
   _renderVehicleImage() {
     if (!this.config.image_url) return '';
@@ -349,19 +353,18 @@ class UltraVehicleCard extends LitElement {
       </div>
     `;
   }
-
- _renderIconItem(entityId) {
+  
+  _renderIconItem(entityId) {
     const entity = this.hass.states[entityId];
     if (!entity) return '';
 
-    // Check for custom icon first, then entity's default icon, then fallback icon
     const customIcon = this.config.custom_icons[entityId];
     const defaultIcon = entity.attributes.icon;
     const icon = customIcon || defaultIcon || 'mdi:help-circle';
     
     const state = entity.state;
     const isActive = ['on', 'open', 'true', 'unlocked'].includes(state.toLowerCase());
-    const iconColor = isActive ? 'var(--uvc-primary-color)' : 'var(--secondary-text-color)';
+    const iconColor = isActive ? 'var(--uvc-icon-active)' : 'var(--uvc-icon-inactive)';
 
     return html`
       <div class="icon-item">
@@ -403,16 +406,30 @@ class UltraVehicleCard extends LitElement {
       car_state_entity: "",
       charge_limit_entity: "",
       show_car_state: true,
-      show_charge_limit: true
+      show_charge_limit: true,
+      cardBackgroundColor: "",
+      barBackgroundColor: "",
+      barFillColor: "",
+      limitIndicatorColor: "",
+      iconActiveColor: "",
+      iconInactiveColor: ""
     };
   }
 
-  updated(changedProps) {
+ updated(changedProps) {
     super.updated(changedProps);
-    if (changedProps.has('hass')) {
-      const darkMode = this.hass.themes.darkMode;
-      this.style.setProperty('--uvc-bar-background-color', darkMode ? '#a6a6a6' : '#595959');
-      this.style.setProperty('--uvc-bar-border-color', darkMode ? '#a6a6a6' : '#595959');
+    if (changedProps.has('config') || changedProps.has('hass')) {
+      const style = getComputedStyle(this);
+      const primaryColor = style.getPropertyValue('--primary-color').trim();
+      
+      this.style.setProperty('--uvc-primary-color', this.config.barFillColor || primaryColor);
+      this.style.setProperty('--uvc-card-background', this.config.cardBackgroundColor || style.getPropertyValue('--card-background-color').trim());
+      this.style.setProperty('--uvc-bar-background', this.config.barBackgroundColor || '#595959');
+      this.style.setProperty('--uvc-bar-border-color', this.config.barBorderColor || '#595959');
+      this.style.setProperty('--uvc-limit-indicator', this.config.limitIndicatorColor || 'white');
+      this.style.setProperty('--uvc-icon-active', this.config.iconActiveColor || primaryColor);
+      this.style.setProperty('--uvc-icon-inactive', this.config.iconInactiveColor || style.getPropertyValue('--secondary-text-color').trim());
+      this.style.setProperty('--uvc-info-text-color', this.config.infoTextColor || style.getPropertyValue('--secondary-text-color').trim());
     }
   }
 }

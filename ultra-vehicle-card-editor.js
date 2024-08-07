@@ -5,6 +5,19 @@ import {
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 import { styles } from "./styles.js";
 
+const fireEvent = (node, type, detail, options) => {
+  options = options || {};
+  detail = detail === null || detail === undefined ? {} : detail;
+  const event = new Event(type, {
+    bubbles: options.bubbles === undefined ? true : options.bubbles,
+    cancelable: Boolean(options.cancelable),
+    composed: options.composed === undefined ? true : options.composed,
+  });
+  event.detail = detail;
+  node.dispatchEvent(event);
+  return event;
+};
+
 function compressImage(file, maxWidth, maxHeight, quality) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -52,6 +65,7 @@ function compressImage(file, maxWidth, maxHeight, quality) {
   });
 }
 
+
 export class UltraVehicleCardEditor extends LitElement {
   static get properties() {
     return {
@@ -71,88 +85,99 @@ export class UltraVehicleCardEditor extends LitElement {
       _currentEditingEntity: { type: String },
       _carStateEntityFilter: { type: String },
       _chargeLimitEntityFilter: { type: String },
+      _cardBackgroundColor: { type: String },
+      _barBackgroundColor: { type: String },
+      _barFillColor: { type: String },
+      _limitIndicatorColor: { type: String },
+      _iconActiveColor: { type: String },
+      _iconInactiveColor: { type: String },
     };
   }
 
-  static get styles() {
-    return [
-      styles,
-      css`
-        .icon-grid-container {
-          margin-top: 16px;
-        }
+static get styles() {
+  return [
+    styles,
+    css`
+        :host {
+        --ha-card-border-radius: var(--ha-config-card-border-radius, 8px);
+      }
+        
+      .editor-container {
+        margin-bottom: 8px;
+      }
+      ha-card {
+        overflow: hidden;
+      }
+      .element-editor {
+        margin-bottom: 8px;
+      }
 
-        .selected-entities {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          margin-top: 8px;
-        }
-
-        .selected-entity {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 4px 8px;
-          background-color: var(--primary-color);
-          color: var(--text-primary-color);
-          border-radius: 4px;
-        }
-
-        .entity-content {
-          display: flex;
-          align-items: center;
-        }
-
-        .custom-icon {
-          margin-right: 8px;
-          cursor: pointer;
-        }
-
-        .entity-name {
-          flex-grow: 1;
-        }
-
-        .remove-entity {
-          cursor: pointer;
-        }
-        .icon-wrapper {
-          position: relative;
-        }
-        .icon-picker-popup {
-          position: absolute;
-          left: 0;
-          top: 100%;
-          z-index: 1;
-          background-color: var(--card-background-color);
-          border: 1px solid var(--divider-color);
-          border-radius: 4px;
-          padding: 8px;
-          width: 300px;
-        }
-        .icon-grid {
-          display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          gap: 8px;
-        }
-
-        .icon-option {
-          cursor: pointer;
-          padding: 4px;
-          border-radius: 4px;
-        }
-
-        .icon-option:hover {
-          background-color: var(--secondary-background-color);
-        }
-
-        .icon-search {
-          width: 100%;
-          margin-bottom: 8px;
-        }
-      `,
-    ];
-  }
+      .icon-grid-container {
+        margin-top: 16px;
+      }
+      .selected-entities {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .selected-entity {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 4px 8px;
+        background-color: var(--primary-color);
+        color: var(--text-primary-color);
+        border-radius: 4px;
+      }
+      .entity-content {
+        display: flex;
+        align-items: center;
+      }
+      .custom-icon {
+        margin-right: 8px;
+        cursor: pointer;
+      }
+      .entity-name {
+        flex-grow: 1;
+      }
+      .remove-entity {
+        cursor: pointer;
+      }
+      .icon-wrapper {
+        position: relative;
+      }
+      .icon-picker-popup {
+        position: absolute;
+        left: 0;
+        top: 100%;
+        z-index: 1;
+        background-color: var(--card-background-color);
+        border: 1px solid var(--divider-color);
+        border-radius: 4px;
+        padding: 8px;
+        width: 300px;
+      }
+      .icon-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+      }
+      .icon-option {
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+      }
+      .icon-option:hover {
+        background-color: var(--secondary-background-color);
+      }
+      .icon-search {
+        width: 100%;
+        margin-bottom: 8px;
+      }
+    `,
+  ];
+}
 
   constructor() {
     super();
@@ -205,11 +230,13 @@ export class UltraVehicleCardEditor extends LitElement {
       return html``;
     }
 
-    return html`
-      <div class="form">
-        ${this._renderBasicConfig()} ${this._renderEntityPickers()}
-        ${this._renderIconGridConfig()}
-      </div>
+   return html`
+    <div class="editor-container">
+      ${this._renderBasicConfig()}
+      ${this._renderEntityPickers()}
+      ${this._renderIconGridConfig()}
+      ${this._renderColorPickers()}
+    </div>
     `;
   }
 
@@ -343,64 +370,64 @@ export class UltraVehicleCardEditor extends LitElement {
     `;
   }
 
-  _renderEntityPickers() {
-    const { vehicle_type } = this.config;
-    return html`
-      ${vehicle_type === "EV" || vehicle_type === "Hybrid"
-        ? html`
-            ${this._renderEntityPicker(
-              "battery_level_entity",
-              "Battery Level Entity",
-              "This is used for battery percent and bar length."
-            )}
-            ${this._renderEntityPicker(
-              "battery_range_entity",
-              "Battery Range Entity",
-              "This is used for the battery range left."
-            )}
-            ${this._renderEntityPicker(
-              "charging_status_entity",
-              "Charging Status Entity",
-              "This is used for charging wording and bar animation."
-            )}
-            ${this._renderEntityPicker(
-              "charge_limit_entity",
-              "Charge Limit Entity",
-              "This is used to display the charge limit on the battery bar."
-            )}
-          `
-        : ""}
-      ${vehicle_type === "Fuel" || vehicle_type === "Hybrid"
-        ? html`
-            ${this._renderEntityPicker(
-              "fuel_level_entity",
-              "Fuel Level Entity",
-              "This is used for fuel percent and bar length."
-            )}
-            ${this._renderEntityPicker(
-              "fuel_range_entity",
-              "Fuel Range Entity",
-              "This is used for the fuel range left."
-            )}
-          `
-        : ""}
-      ${this._renderEntityPicker(
-        "location_entity",
-        "Location Entity",
-        "This is used to display the vehicle location."
-      )}
-      ${this._renderEntityPicker(
-        "mileage_entity",
-        "Mileage Entity",
-        "This is used to display the vehicle mileage."
-      )}
-      ${this._renderEntityPicker(
-        "car_state_entity",
-        "Car State Entity",
-        "This is used to display the current state of the car (e.g., offline, charging)."
-      )}
-    `;
-  }
+ _renderEntityPickers() {
+  const { vehicle_type } = this.config;
+  return html`
+    ${vehicle_type === "EV" || vehicle_type === "Hybrid"
+      ? html`
+          ${this._renderEntityPicker(
+            "battery_level_entity",
+            "Battery Level Entity",
+            "This is used for battery percent and bar length."
+          )}
+          ${this._renderEntityPicker(
+            "battery_range_entity",
+            "Battery Range Entity",
+            "This is used for the battery range left."
+          )}
+          ${this._renderEntityPicker(
+            "charging_status_entity",
+            "Charging Status Entity",
+            "This is used for charging wording and bar animation."
+          )}
+          ${this._renderEntityPicker(
+            "charge_limit_entity",
+            "Charge Limit Entity",
+            "This is used to display the charge limit on the battery bar."
+          )}
+        `
+      : ""}
+    ${vehicle_type === "Fuel" || vehicle_type === "Hybrid"
+      ? html`
+          ${this._renderEntityPicker(
+            "fuel_level_entity",
+            "Fuel Level Entity",
+            "This is used for fuel percent and bar length."
+          )}
+          ${this._renderEntityPicker(
+            "fuel_range_entity",
+            "Fuel Range Entity",
+            "This is used for the fuel range left."
+          )}
+        `
+      : ""}
+    ${this._renderEntityPicker(
+      "location_entity",
+      "Location Entity",
+      "This is used to display the vehicle location."
+    )}
+    ${this._renderEntityPicker(
+      "mileage_entity",
+      "Mileage Entity",
+      "This is used to display the vehicle mileage."
+    )}
+    ${this._renderEntityPicker(
+      "car_state_entity",
+      "Car State Entity",
+      "This is used to display the current state of the car (e.g., offline, charging)."
+    )}
+  `;
+}
 
   _renderEntityPicker(configValue, labelText, description) {
     const toggleName = this._getToggleName(configValue);
@@ -601,6 +628,115 @@ export class UltraVehicleCardEditor extends LitElement {
       </div>
     `;
   }
+  
+  
+  _formatLabel(key) {
+    return key.split(/(?=[A-Z])/).join(' ').replace(/^\w/, c => c.toUpperCase());
+  }
+  
+
+_openColorPicker(e, configKey) {
+    e.stopPropagation();
+    const colorInput = e.target.closest('.color-input-wrapper').querySelector('input[type="color"]');
+    colorInput.click();
+    
+   
+    const rect = e.target.getBoundingClientRect();
+    const pickerPopup = e.target.closest('.color-input-wrapper').querySelector('.color-picker-popup');
+    pickerPopup.style.top = `${rect.bottom}px`;
+    pickerPopup.style.left = `${rect.left}px`;
+
+   
+    const hideColorPicker = (event) => {
+        if (!event.target.closest('.color-input-wrapper')) {
+            colorInput.style.display = 'none';
+            document.removeEventListener('click', hideColorPicker);
+        }
+    };
+
+    setTimeout(() => {
+        document.addEventListener('click', hideColorPicker);
+    }, 0);
+}
+
+_renderColorPicker(label, configKey, defaultValue) {
+  const currentValue = this.config[configKey] || defaultValue;
+  const textColor = this._getContrastYIQ(currentValue);
+  return html`
+    <div class="color-picker">
+      <label>${label}</label>
+      <div class="color-input-wrapper" @click="${(e) => this._openColorPicker(e, configKey)}">
+        <div class="color-preview" style="background-color: ${currentValue}; color: ${textColor};">
+          <span class="color-hex">${currentValue}</span>
+          <ha-icon
+            class="reset-icon"
+            icon="mdi:refresh"
+            @click=${(e) => this._resetColor(e, configKey, defaultValue)}
+          ></ha-icon>
+        </div>
+        <input
+          type="color"
+          .value=${currentValue}
+          @change=${(e) => this._colorChanged(e, configKey)}
+          style="display: none;"
+        >
+      </div>
+    </div>
+  `;
+}
+_renderColorPickers() {
+  const getDefaultColor = (property) => {
+    const style = getComputedStyle(this);
+    return style.getPropertyValue(property).trim() || style.getPropertyValue(`--${property}`).trim();
+  };
+
+  const defaultColors = {
+    cardBackgroundColor: getDefaultColor('--card-background-color') || '#1c1c1c',
+    barBackgroundColor: getDefaultColor('--uvc-bar-background-color') || '#595959',
+    barBorderColor: getDefaultColor('--uvc-bar-border-color') || '#595959',
+    barFillColor: getDefaultColor('--uvc-primary-color') || '#4CAF50',
+    limitIndicatorColor: '#FFFFFF',
+    iconActiveColor: getDefaultColor('--uvc-primary-color') || '#4CAF50',
+    iconInactiveColor: getDefaultColor('--secondary-text-color') || '#9E9E9E',
+    infoTextColor: getDefaultColor('--secondary-text-color') || '#9E9E9E'  // Added this line
+  };
+
+  return html`
+    <div class="color-pickers">
+      <h3>Custom Colors</h3>
+      <div class="entity-description">
+        Customize the colors of various elements in the card. Click on a color to change it, or use the reset icon to revert to the default color.
+      </div>
+      <div class="color-pickers-grid">
+        ${Object.entries(defaultColors).map(([key, defaultValue]) => html`
+          <div class="color-picker-item">
+            ${this._renderColorPicker(this._formatLabel(key), key, defaultValue)}
+          </div>
+        `)}
+      </div>
+    </div>
+  `;
+}
+
+_resetColor(e, configKey, defaultValue) {
+  e.stopPropagation();
+  this.config = {
+    ...this.config,
+    [configKey]: defaultValue,
+  };
+  this.configChanged(this.config);
+  this.requestUpdate();
+}
+  
+
+_colorChanged(e, configKey) {
+  const color = e.target.value;
+  this.config = {
+    ...this.config,
+    [configKey]: color,
+  };
+  this.configChanged(this.config);
+}
 
   _getDisplayImageUrl(url) {
     return url && url.startsWith("data:image") ? "Uploaded Image" : url;
@@ -701,35 +837,6 @@ export class UltraVehicleCardEditor extends LitElement {
       console.error("Error uploading image:", error);
     }
   }
-  // async _handleImageUpload(ev) {
-  //   const file = ev.target.files[0];
-  //   if (file) {
-  //     try {
-  //       let quality = 0.7;
-  //       let compressedImage = await compressImage(file, 800, 600, quality);
-
-  //       if (file.type !== 'image/png') {
-  //         while (compressedImage.length > 500000 && quality > 0.1) {
-  //           quality -= 0.1;
-  //           compressedImage = await compressImage(file, 800, 600, quality);
-  //         }
-  //       }
-
-  //       if (compressedImage.length > 500000) {
-  //         throw new Error("Image is too large even after compression");
-  //       }
-
-  //       this.config = {
-  //         ...this.config,
-  //         image_url: compressedImage
-  //       };
-  //       this.configChanged(this.config);
-  //     } catch (error) {
-  //       console.error('Error processing image:', error);
-  //       alert("Failed to process image. Please try a smaller or less complex image.");
-  //     }
-  //   }
-  // }
 
   _handleIconChange(e) {
     const newIcon = e.detail.value;
@@ -838,7 +945,7 @@ export class UltraVehicleCardEditor extends LitElement {
     this.configChanged(this.config);
   }
 
-  _updateCustomIconsConfig() {
+   _updateCustomIconsConfig() {
     this.config = {
       ...this.config,
       custom_icons: this._customIcons,
@@ -847,12 +954,15 @@ export class UltraVehicleCardEditor extends LitElement {
   }
 
   configChanged(newConfig) {
-    const event = new Event("config-changed", {
-      bubbles: true,
-      composed: true,
-    });
-    event.detail = { config: newConfig };
-    this.dispatchEvent(event);
+    fireEvent(this, "config-changed", { config: newConfig });
+  }
+  
+    _getContrastYIQ(hexcolor) {
+    const r = parseInt(hexcolor.substr(1, 2), 16);
+    const g = parseInt(hexcolor.substr(3, 2), 16);
+    const b = parseInt(hexcolor.substr(5, 2), 16);
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    return (yiq >= 128) ? 'black' : 'white';
   }
 }
 
