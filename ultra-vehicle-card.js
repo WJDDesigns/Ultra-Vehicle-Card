@@ -103,6 +103,13 @@ class UltraVehicleCard extends LitElement {
     barBorderColor: "",
     ...config
     };
+    // Handle backward compatibility for entity names
+if (this.config.level_entity && !this.config.battery_level_entity) {
+  this.config.battery_level_entity = this.config.level_entity;
+}
+if (this.config.range_entity && !this.config.battery_range_entity) {
+  this.config.battery_range_entity = this.config.range_entity;
+}
   }
 
   render() {
