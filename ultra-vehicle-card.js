@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 import { UltraVehicleCardEditor } from "./ultra-vehicle-card-editor.js";
 import { styles } from "./styles.js";
+import { version } from "./var/version.js";
 
 class UltraVehicleCard extends LitElement {
   static get properties() {
@@ -8,6 +9,10 @@ class UltraVehicleCard extends LitElement {
       hass: { type: Object },
       config: { type: Object },
     };
+  }
+
+ static get version() {
+    return version;
   }
 
   static get styles() {
@@ -63,7 +68,7 @@ class UltraVehicleCard extends LitElement {
         
       `
     ];
-  }
+ }
 
   setConfig(config) {
     if (!config.title) {
@@ -153,7 +158,7 @@ _renderEVInfo() {
 
   const batteryLevel = batteryLevelEntity ? parseFloat(batteryLevelEntity.state) : null;
   const batteryRange = batteryRangeEntity ? Math.round(parseFloat(batteryRangeEntity.state)) : null;
-  const isCharging = chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'charging';
+  const isCharging = this._isCharging(chargingStatusEntity);
   const chargeLimit = chargeLimitEntity && this.config.show_charge_limit ? parseFloat(chargeLimitEntity.state) : null;
 
     return html`
@@ -179,8 +184,32 @@ _renderEVInfo() {
       </div>
     `;
   }
+  
+  _isCharging(chargingStatusEntity) {
+  if (!chargingStatusEntity) return false;
 
- _renderFuelInfo() {
+  const state = chargingStatusEntity.state.toLowerCase();
+
+  // Handle boolean entities
+  if (chargingStatusEntity.attributes.device_class === 'binary_sensor' || ['on', 'off'].includes(state)) {
+    return state === 'on';
+  }
+
+  // Handle string-based entities
+  const chargingStates = ['charging', 'in_charging', 'charge_start', 'in_progress', 'active'];
+  return chargingStates.includes(state);
+}
+
+_formatBinarySensorState(state, attributes) {
+  if (state === 'on') {
+    return attributes.device_class ? this._capitalizeFirstLetter(attributes.device_class) : 'On';
+  } else if (state === 'off') {
+    return attributes.device_class ? `Not ${this._capitalizeFirstLetter(attributes.device_class)}` : 'Off';
+  }
+  return this._capitalizeFirstLetter(state);
+}
+
+_renderFuelInfo() {
   const fuelLevelEntity = this.config.fuel_level_entity ? this.hass.states[this.config.fuel_level_entity] : null;
   const fuelRangeEntity = this.config.fuel_range_entity ? this.hass.states[this.config.fuel_range_entity] : null;
 
@@ -220,8 +249,9 @@ _renderHybridInfo() {
   const batteryRange = batteryRangeEntity ? Math.round(parseFloat(batteryRangeEntity.state)) : null;
   const fuelLevel = fuelLevelEntity ? parseFloat(fuelLevelEntity.state) : null;
   const fuelRange = fuelRangeEntity ? Math.round(parseFloat(fuelRangeEntity.state)) : null;
-  const isCharging = chargingStatusEntity && chargingStatusEntity.state.toLowerCase() === 'charging';
+  const isCharging = this._isCharging(chargingStatusEntity);
   const chargeLimit = chargeLimitEntity && this.config.show_charge_limit ? parseFloat(chargeLimitEntity.state) : null;
+  
 
   const batteryFirst = this.config.hybrid_display_order === 'battery_first';
 
@@ -240,28 +270,28 @@ _renderHybridInfo() {
   `;
 }
 
-  _renderBatteryBar(level, range, isCharging, chargeLimit) {
-    return html`
-      ${this.config.show_battery && level !== null ? html`
-        <div class="item_bar">
-          <div class="progress ${isCharging ? 'charging' : ''}" style="width: ${level}%;"></div>
-          ${chargeLimit !== null ? html`
-            <div class="charge-limit-indicator" style="left: ${chargeLimit}%;"></div>
-          ` : ''}
-        </div>
-        <div class="level-text">
-          <span>${level}% ${isCharging ? 'Charging' : 'Charge'}</span>
-          ${this.config.show_battery_range && range !== null ? html`
-            <span class="range">${range} ${this.config.unit_type}</span>
-          ` : ''}
-        </div>
-      ` : this.config.show_battery_range && range !== null ? html`
-        <div class="level-text">
-          <span class="range" style="float: right;">${range} ${this.config.unit_type}</span>
-        </div>
-      ` : ''}
-    `;
-  }
+ _renderBatteryBar(level, range, isCharging, chargeLimit) {
+  return html`
+    ${this.config.show_battery && level !== null ? html`
+      <div class="item_bar">
+        <div class="progress ${isCharging ? 'charging' : ''}" style="width: ${level}%;"></div>
+        ${chargeLimit !== null ? html`
+          <div class="charge-limit-indicator" style="left: ${chargeLimit}%;"></div>
+        ` : ''}
+      </div>
+      <div class="level-text">
+        <span>${level}% ${isCharging ? 'Charging' : 'Charge'}</span>
+        ${this.config.show_battery_range && range !== null ? html`
+          <span class="range">${range} ${this.config.unit_type}</span>
+        ` : ''}
+      </div>
+    ` : this.config.show_battery_range && range !== null ? html`
+      <div class="level-text">
+        <span class="range" style="float: right;">${range} ${this.config.unit_type}</span>
+      </div>
+    ` : ''}
+  `;
+}
 
   _renderFuelBar(level, range) {
     return html`
@@ -290,22 +320,106 @@ _renderHybridInfo() {
     `;
   }
 
-  _renderCarState() {
+_renderCarState() {
   if (!this.config.show_car_state || !this.config.car_state_entity) return '';
 
   const carStateEntity = this.hass.states[this.config.car_state_entity];
   if (!carStateEntity) return '';
 
-  const state = this._formatState(carStateEntity.state);
+
+  const state = this._formatCarState(carStateEntity.state, carStateEntity.attributes);
 
   return html`
-    <div class="car-state" style="text-align: center;">${state}</div>
+    <div class="car-state" style="text-align: center; margin-bottom: 8px;">
+      <span class="state-value">${state}</span>
+    </div>
   `;
 }
-
-  _formatState(state) {
-    return state.toLowerCase().split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+_formatCarState(state, attributes) {
+  // Check if this is a timestamp sensor (like the charging end time)
+  if (attributes.device_class === 'timestamp') {
+    return this._formatChargingEndTime(state);
   }
+
+  const knownStates = {
+    'default': 'Ready',
+    'charging': 'Charging',
+    'error': 'Error',
+    'complete': 'Charging Complete',
+    'fully_charged': 'Fully Charged',
+    'finished_fully_charged': 'Finished - Fully Charged',
+    'finished_not_full': 'Finished - Not Full',
+    'invalid': 'Invalid State',
+    'not_charging': 'Not Charging',
+    'plugged_in': 'Plugged In',
+    'waiting_for_charging': 'Waiting to Charge',
+    'target_reached': 'Target Reached',
+    'on': 'On',
+    'off': 'Off',
+    'unavailable': 'Unavailable',
+    'unknown': 'Unknown',
+    'idle': 'Idle',
+    'running': 'Running',
+    'stopped': 'Stopped'
+  };
+
+  // Handle binary sensors
+  if (this.config.car_state_entity.includes('binary_sensor')) {
+    return this._formatBinarySensorState(state, attributes);
+  }
+
+  // Check if the state is a known state
+  if (knownStates[state.toLowerCase()]) {
+    return knownStates[state.toLowerCase()];
+  }
+
+  // Check for additional attributes
+  if (attributes) {
+    if (attributes.battery_level) {
+      return `Battery ${attributes.battery_level}%`;
+    }
+    if (attributes.charge_limit) {
+      return `Charge Limit ${attributes.charge_limit}%`;
+    }
+    if (attributes.charging_power) {
+      return `Charging at ${attributes.charging_power} kW`;
+    }
+    if (attributes.range) {
+      return `Range ${attributes.range} ${this.config.unit_type}`;
+    }
+    if (attributes.fuel_level) {
+      return `Fuel ${attributes.fuel_level}%`;
+    }
+  }
+
+  // If it's not a known state or attribute, capitalize each word
+  return state.toString().toLowerCase().split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+}
+
+_formatChargingEndTime(isoString) {
+  const endTime = new Date(isoString);
+  const now = new Date();
+
+  // Check if the date is valid
+  if (isNaN(endTime.getTime())) {
+    return `Charging end time: ${isoString}`; // Fallback to display the original string
+  }
+
+  const diffMs = endTime - now;
+  const diffHours = Math.round(diffMs / (1000 * 60 * 60));
+  const diffMinutes = Math.round(diffMs / (1000 * 60));
+
+  if (diffMinutes <= 0) {
+    return "Charging ending soon";
+  } else if (diffMinutes < 60) {
+    return `Charging ending in ${diffMinutes} minute${diffMinutes !== 1 ? 's' : ''}`;
+  } else if (diffHours < 24) {
+    return `Charging ending in ${diffHours} hour${diffHours !== 1 ? 's' : ''}`;
+  } else {
+    const options = { weekday: 'short', hour: 'numeric', minute: 'numeric' };
+    return `Charging until ${endTime.toLocaleString(undefined, options)}`;
+  }
+}
 
 _renderInfoLine() {
   const locationEntity = this.config.location_entity ? this.hass.states[this.config.location_entity] : null;
@@ -448,5 +562,27 @@ window.customCards.push({
   type: "ultra-vehicle-card",
   name: "Ultra Vehicle Card",
   description: "A card that displays vehicle information with fuel/charge level, range, location, mileage, and a customizable icon grid.",
-  preview: true
+  preview: true,
+  documentationURL: "https://github.com/YOUR_USERNAME/ultra-vehicle-card",
+  version: version
 });
+
+// Add this code to log the version in the console with custom styling
+console.info(
+  `%c Ultra Vehicle Card%c 🚗 ${version} `,
+  'background-color: #4299D9;color: #fff;padding: 3px 2px 3px 3px;border-radius: 14px 0 0 14px;font-family: DejaVu Sans,Verdana,Geneva,sans-serif;text-shadow: 0 1px 0 rgba(1, 1, 1, 0.3)',
+  'background-color: #4299D9;color: #fff;padding: 3px 3px 3px 2px;border-radius: 0 14px 14px 0;font-family: DejaVu Sans,Verdana,Geneva,sans-serif;text-shadow: 0 1px 0 rgba(1, 1, 1, 0.3)'
+);
+
+// Add this code to style the card in the browser console
+const style = document.createElement('style');
+style.textContent = `
+  #current_version_ultra-vehicle-card {
+    background-color: #4299D9 !important;
+    color: white !important;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+  }
+`;
+document.head.appendChild(style);
