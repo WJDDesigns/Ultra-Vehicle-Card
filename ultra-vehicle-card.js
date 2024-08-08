@@ -1,7 +1,9 @@
 import { LitElement, html, css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 import { UltraVehicleCardEditor } from "./ultra-vehicle-card-editor.js";
 import { styles } from "./styles.js";
-import { version } from "./var/version.js";
+
+
+const version = "1.1.10"; // 
 
 class UltraVehicleCard extends LitElement {
   static get properties() {
