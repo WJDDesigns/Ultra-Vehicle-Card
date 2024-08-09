@@ -385,11 +385,11 @@ static get styles() {
             "Battery Range Entity",
             "This is used for the battery range left."
           )}
-          ${this._renderEntityPicker(
-            "charging_status_entity",
-            "Charging Status Entity",
-            "This is used for charging wording and bar animation."
-          )}
+         ${this._renderEntityPicker(
+  "charging_status_entity",
+  "Charging Status Entity",
+  "This can be a sensor or binary sensor."
+)}
           ${this._renderEntityPicker(
             "charge_limit_entity",
             "Charge Limit Entity",

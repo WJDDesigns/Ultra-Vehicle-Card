@@ -2,7 +2,7 @@ import { LitElement, html, css } from "https://unpkg.com/lit-element@2.4.0/lit-e
 import { UltraVehicleCardEditor } from "./ultra-vehicle-card-editor.js";
 import { styles } from "./styles.js";
 
-const version = "1.1.11";
+const version = "1.1.12";
 
 class UltraVehicleCard extends LitElement {
   static get properties() {
@@ -191,22 +191,23 @@ _renderEVInfo() {
 
   const state = chargingStatusEntity.state.toLowerCase();
   const entityId = chargingStatusEntity.entity_id.toLowerCase();
+  const deviceClass = chargingStatusEntity.attributes.device_class;
 
-  // Special handling for 'none_charging' entities
-  if (entityId.includes('none_charging')) {
-    return state === 'off';  // 'off' means it IS charging for this entity
-  }
+  console.log('Charging entity:', chargingStatusEntity);
+  console.log('Entity ID:', entityId);
+  console.log('State:', state);
+  console.log('Device Class:', deviceClass);
 
-  // Handle boolean entities
-  if (chargingStatusEntity.attributes.device_class === 'battery_charging' || ['on', 'off'].includes(state)) {
+
+  // Handle other binary sensors
+  if (entityId.includes('binary_sensor')) {
     return state === 'on';
   }
 
-  // Handle string-based entities
+  // Handle regular sensors
   const chargingStates = ['charging', 'in_charging', 'charge_start', 'in_progress', 'active'];
   return chargingStates.includes(state);
 }
-
 
 _formatBinarySensorState(state, attributes) {
   if (state === 'on') {
