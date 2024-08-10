@@ -2,7 +2,7 @@ import { LitElement, html, css } from "https://unpkg.com/lit-element@2.4.0/lit-e
 import { UltraVehicleCardEditor } from "./ultra-vehicle-card-editor.js";
 import { styles } from "./styles.js";
 
-const version = "1.1.12";
+const version = "1.1.11";
 
 class UltraVehicleCard extends LitElement {
   static get properties() {
@@ -17,59 +17,8 @@ class UltraVehicleCard extends LitElement {
   }
 
   static get styles() {
-    return [
-      styles,
-      css`
-        :host {
-          --uvc-card-background: var(--card-background-color, #fff);
-          --uvc-bar-background: var(--uvc-bar-background-color, #595959);
-          --uvc-bar-fill: var(--uvc-primary-color);
-          --uvc-limit-indicator: white;
-          --uvc-icon-active: var(--uvc-primary-color);
-          --uvc-icon-inactive: var(--secondary-text-color);
-        }
-        
-        .icon-grid {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-          gap: 16px;
-          margin: 16px 0;
-        }
-        .icon-item {
-          display: flex;
-          align-items: center;
-        }
-        .icon-item ha-icon {
-          width: 24px;
-          height: 24px;
-        }
-        .level-info.hybrid {
-          display: flex;
-          flex-direction: column;
-        }
-        .item_bar {
-          background-color: var(--uvc-bar-background);
-          border: 2px solid var(--uvc-bar-border-color);
-        }
-        .progress {
-          background-color: var(--uvc-bar-fill);
-        }
-        .selected-entity {
-          background-color: var(--uvc-primary-color);
-        }
-        .charge-limit-indicator {
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          width: 2px;
-          background-color: var(--uvc-limit-indicator);
-          z-index: 1;
-        }
-        
-      `
-    ];
- }
+  return [styles];
+}
 
   setConfig(config) {
     if (!config.title) {
@@ -107,6 +56,7 @@ class UltraVehicleCard extends LitElement {
     iconActiveColor: "",
     iconInactiveColor: "",
     barBorderColor: "",
+    icon_interactions: {},
     ...config
     };
     // Handle backward compatibility for entity names
@@ -191,23 +141,22 @@ _renderEVInfo() {
 
   const state = chargingStatusEntity.state.toLowerCase();
   const entityId = chargingStatusEntity.entity_id.toLowerCase();
-  const deviceClass = chargingStatusEntity.attributes.device_class;
 
-  console.log('Charging entity:', chargingStatusEntity);
-  console.log('Entity ID:', entityId);
-  console.log('State:', state);
-  console.log('Device Class:', deviceClass);
+  // Special handling for 'none_charging' entities
+  if (entityId.includes('none_charging')) {
+    return state === 'off';  // 'off' means it IS charging for this entity
+  }
 
-
-  // Handle other binary sensors
-  if (entityId.includes('binary_sensor')) {
+  // Handle boolean entities
+  if (chargingStatusEntity.attributes.device_class === 'battery_charging' || ['on', 'off'].includes(state)) {
     return state === 'on';
   }
 
-  // Handle regular sensors
+  // Handle string-based entities
   const chargingStates = ['charging', 'in_charging', 'charge_start', 'in_progress', 'active'];
   return chargingStates.includes(state);
 }
+
 
 _formatBinarySensorState(state, attributes) {
   if (state === 'on') {
@@ -484,25 +433,107 @@ _renderInfoLine() {
     `;
   }
   
-  _renderIconItem(entityId) {
-    const entity = this.hass.states[entityId];
-    if (!entity) return '';
+_renderIconItem(entityId) {
+  const entity = this.hass.states[entityId];
+  if (!entity) return '';
 
-    const customIcon = this.config.custom_icons[entityId];
-    const defaultIcon = entity.attributes.icon;
-    const icon = customIcon || defaultIcon || 'mdi:help-circle';
-    
-    const state = entity.state;
-    const isActive = ['on', 'open', 'true', 'unlocked'].includes(state.toLowerCase());
-    const iconColor = isActive ? 'var(--uvc-icon-active)' : 'var(--uvc-icon-inactive)';
+  const customIcon = this.config.custom_icons[entityId] || {};
+  const defaultIcon = entity.attributes.icon;
+  const state = entity.state;
+  const isActive = ['on', 'open', 'true', 'unlocked'].includes(state.toLowerCase());
+  const useActiveColor = customIcon.useActiveColor !== false;
+  
+  const icon = isActive
+    ? (customIcon.active || defaultIcon || 'mdi:help-circle')
+    : (customIcon.inactive || defaultIcon || 'mdi:help-circle');
+  
+  const iconColor = isActive && useActiveColor ? 'var(--uvc-icon-active)' : 'var(--uvc-icon-inactive)';
+  const interaction = this.config.icon_interactions[entityId] || { type: 'more-info' };
 
-    return html`
-      <div class="icon-item">
-        <ha-icon .icon="${icon}" style="color: ${iconColor};"></ha-icon>
-      </div>
-    `;
+  return html`
+    <div class="icon-item" @click="${() => this._handleIconClick(entityId, interaction)}">
+      <ha-icon .icon="${icon}" style="color: ${iconColor};"></ha-icon>
+    </div>
+  `;
+}
+
+_handleIconClick(entityId, interaction) {
+  switch (interaction.type) {
+     case 'more-info':
+      this._fireEvent('hass-more-info', { entityId });
+      break;
+    case 'toggle':
+      this.hass.callService('homeassistant', 'toggle', { entity_id: entityId });
+      break;
+    case 'navigate':
+      this._navigate(interaction.path);
+      break;
+    case 'url':
+      this._openUrl(interaction.url);
+      break;
+    case 'call-service':
+      this._callService(interaction.service, entityId);
+      break;
+     case 'assist':
+      this._openAssistant(interaction.assistant, interaction.startListening);
+      break;
+    case 'none':
+      // Do nothing
+      break;
   }
+}
+_fireEvent(type, detail) {
+  const event = new Event(type, {
+    bubbles: true,
+    composed: true,
+    cancelable: false,
+  });
+  event.detail = detail;
+  this.dispatchEvent(event);
+}
+_navigate(path) {
+  history.pushState(null, "", path);
+  const event = new Event('location-changed', {
+    bubbles: true,
+    composed: true,
+  });
+  this.dispatchEvent(event);
+}
 
+_openUrl(url) {
+  window.open(url, '_blank');
+}
+
+_callService(service, entityId) {
+  const [domain, serviceAction] = service.split('.');
+  this.hass.callService(domain, serviceAction, { entity_id: entityId });
+}
+
+_openAssistant(assistantId, startListening) {
+  this._fireEvent('show-dialog', {
+    dialogTag: 'dialog-voice-command',
+    dialogImport: () => import('../../dialogs/dialog-voice-command'),
+    dialogParams: {
+      assistantId: assistantId,
+      startListening: startListening,
+    },
+  });
+}
+
+_showMoreInfo(entityId) {
+  const event = new Event('hass-more-info', {
+    bubbles: true,
+    composed: true,
+  });
+  event.detail = { entityId };
+  this.dispatchEvent(event);
+}
+
+_toggleEntity(entityId) {
+  this.hass.callService('homeassistant', 'toggle', {
+    entity_id: entityId,
+  });
+}
   _capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }

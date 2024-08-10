@@ -65,7 +65,6 @@ function compressImage(file, maxWidth, maxHeight, quality) {
   });
 }
 
-
 export class UltraVehicleCardEditor extends LitElement {
   static get properties() {
     return {
@@ -83,6 +82,7 @@ export class UltraVehicleCardEditor extends LitElement {
       _customIcons: { type: Object },
       _iconSearchFilter: { type: String },
       _currentEditingEntity: { type: String },
+      _currentEditingIconType: { type: String },
       _carStateEntityFilter: { type: String },
       _chargeLimitEntityFilter: { type: String },
       _cardBackgroundColor: { type: String },
@@ -91,92 +91,13 @@ export class UltraVehicleCardEditor extends LitElement {
       _limitIndicatorColor: { type: String },
       _iconActiveColor: { type: String },
       _iconInactiveColor: { type: String },
+      _draggedElement: { type: Object },
+      _draggedIndex: { type: Number },
     };
   }
 
-static get styles() {
-  return [
-    styles,
-    css`
-        :host {
-        --ha-card-border-radius: var(--ha-config-card-border-radius, 8px);
-      }
-        
-      .editor-container {
-        margin-bottom: 8px;
-      }
-      ha-card {
-        overflow: hidden;
-      }
-      .element-editor {
-        margin-bottom: 8px;
-      }
-
-      .icon-grid-container {
-        margin-top: 16px;
-      }
-      .selected-entities {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        margin-top: 8px;
-      }
-      .selected-entity {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 4px 8px;
-        background-color: var(--primary-color);
-        color: var(--text-primary-color);
-        border-radius: 4px;
-      }
-      .entity-content {
-        display: flex;
-        align-items: center;
-      }
-      .custom-icon {
-        margin-right: 8px;
-        cursor: pointer;
-      }
-      .entity-name {
-        flex-grow: 1;
-      }
-      .remove-entity {
-        cursor: pointer;
-      }
-      .icon-wrapper {
-        position: relative;
-      }
-      .icon-picker-popup {
-        position: absolute;
-        left: 0;
-        top: 100%;
-        z-index: 1;
-        background-color: var(--card-background-color);
-        border: 1px solid var(--divider-color);
-        border-radius: 4px;
-        padding: 8px;
-        width: 300px;
-      }
-      .icon-grid {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 8px;
-      }
-      .icon-option {
-        cursor: pointer;
-        padding: 4px;
-        border-radius: 4px;
-      }
-      .icon-option:hover {
-        background-color: var(--secondary-background-color);
-      }
-      .icon-search {
-        width: 100%;
-        margin-bottom: 8px;
-      }
-    `,
-  ];
+ static get styles() {
+  return [styles];
 }
 
   constructor() {
@@ -193,6 +114,7 @@ static get styles() {
     this._customIcons = {};
     this._iconSearchFilter = "";
     this._currentEditingEntity = null;
+    this._currentEditingIconType = null;
     this._carStateEntityFilter = "";
     this._chargeLimitEntityFilter = "";
   }
@@ -216,6 +138,7 @@ static get styles() {
       show_charge_limit: true,
       icon_grid_entities: [],
       custom_icons: {},
+      icon_interactions: {},
       hybrid_display_order: "fuel_first",
       car_state_entity: "",
       charge_limit_entity: "",
@@ -223,6 +146,7 @@ static get styles() {
     };
     this._selectedIconGridEntities = [...this.config.icon_grid_entities];
     this._customIcons = { ...this.config.custom_icons };
+    this._iconInteractions = { ...this.config.icon_interactions };
   }
 
   render() {
@@ -370,64 +294,64 @@ static get styles() {
     `;
   }
 
- _renderEntityPickers() {
-  const { vehicle_type } = this.config;
-  return html`
-    ${vehicle_type === "EV" || vehicle_type === "Hybrid"
-      ? html`
-          ${this._renderEntityPicker(
-            "battery_level_entity",
-            "Battery Level Entity",
-            "This is used for battery percent and bar length."
-          )}
-          ${this._renderEntityPicker(
-            "battery_range_entity",
-            "Battery Range Entity",
-            "This is used for the battery range left."
-          )}
-         ${this._renderEntityPicker(
-  "charging_status_entity",
-  "Charging Status Entity",
-  "This can be a sensor or binary sensor."
-)}
-          ${this._renderEntityPicker(
-            "charge_limit_entity",
-            "Charge Limit Entity",
-            "This is used to display the charge limit on the battery bar."
-          )}
-        `
-      : ""}
-    ${vehicle_type === "Fuel" || vehicle_type === "Hybrid"
-      ? html`
-          ${this._renderEntityPicker(
-            "fuel_level_entity",
-            "Fuel Level Entity",
-            "This is used for fuel percent and bar length."
-          )}
-          ${this._renderEntityPicker(
-            "fuel_range_entity",
-            "Fuel Range Entity",
-            "This is used for the fuel range left."
-          )}
-        `
-      : ""}
-    ${this._renderEntityPicker(
-      "location_entity",
-      "Location Entity",
-      "This is used to display the vehicle location."
-    )}
-    ${this._renderEntityPicker(
-      "mileage_entity",
-      "Mileage Entity",
-      "This is used to display the vehicle mileage."
-    )}
-    ${this._renderEntityPicker(
-      "car_state_entity",
-      "Car State Entity",
-      "This is used to display the current state of the car (e.g., offline, charging)."
-    )}
-  `;
-}
+  _renderEntityPickers() {
+    const { vehicle_type } = this.config;
+    return html`
+      ${vehicle_type === "EV" || vehicle_type === "Hybrid"
+        ? html`
+            ${this._renderEntityPicker(
+              "battery_level_entity",
+              "Battery Level Entity",
+              "This is used for battery percent and bar length."
+            )}
+            ${this._renderEntityPicker(
+              "battery_range_entity",
+              "Battery Range Entity",
+              "This is used for the battery range left."
+            )}
+            ${this._renderEntityPicker(
+              "charging_status_entity",
+              "Charging Status Entity",
+              "This is used for charging wording and bar animation."
+            )}
+            ${this._renderEntityPicker(
+              "charge_limit_entity",
+              "Charge Limit Entity",
+              "This is used to display the charge limit on the battery bar."
+            )}
+          `
+        : ""}
+      ${vehicle_type === "Fuel" || vehicle_type === "Hybrid"
+        ? html`
+            ${this._renderEntityPicker(
+              "fuel_level_entity",
+              "Fuel Level Entity",
+              "This is used for fuel percent and bar length."
+            )}
+            ${this._renderEntityPicker(
+              "fuel_range_entity",
+              "Fuel Range Entity",
+              "This is used for the fuel range left."
+            )}
+          `
+        : ""}
+      ${this._renderEntityPicker(
+        "location_entity",
+        "Location Entity",
+        "This is used to display the vehicle location."
+      )}
+      ${this._renderEntityPicker(
+        "mileage_entity",
+        "Mileage Entity",
+        "This is used to display the vehicle mileage."
+      )}
+      ${this._renderEntityPicker(
+        "car_state_entity",
+        "Car State Entity",
+        "This is used to display the current state of the car (e.g., offline, charging)."
+      )}
+    `;
+  }
 
   _renderEntityPicker(configValue, labelText, description) {
     const toggleName = this._getToggleName(configValue);
@@ -486,7 +410,7 @@ static get styles() {
     `;
   }
 
-  _renderIconGridConfig() {
+ _renderIconGridConfig() {
     return html`
       <div class="icon-grid-container">
         <h3>Icon Grid</h3>
@@ -547,106 +471,497 @@ static get styles() {
     `;
   }
 
-  _renderSelectedEntity(entityId, index) {
-    const entity = this.hass.states[entityId];
-    const friendlyName = entity.attributes.friendly_name || entityId;
+_renderSelectedEntity(entityId, index) {
+  const sanitizedEntityId = entityId.replace(/\./g, '_');
+  const entity = this.hass.states[entityId];
+  const friendlyName = entity.attributes.friendly_name || entityId;
+  const customIcon = this._customIcons[entityId] || {};
+  const defaultIcon = entity.attributes.icon;
+  const activeIcon = customIcon.active || defaultIcon || "mdi:help-circle";
+  const inactiveIcon = customIcon.inactive || defaultIcon || "mdi:help-circle";
+  const interaction = this._iconInteractions[entityId] || { type: 'none' };
+  const useActiveColor = customIcon.useActiveColor !== false;
 
-    // Check for custom icon first, then entity's default icon, then fallback icon
-    const customIcon = this._customIcons[entityId];
-    const defaultIcon = entity.attributes.icon;
-    const currentIcon = customIcon || defaultIcon || "mdi:help-circle";
-
-    return html`
-      <div
-        class="selected-entity"
-        draggable="true"
-        @dragstart="${(e) => this._onDragStart(e, index)}"
-      >
-        <div class="handle">
-          <ha-svg-icon
-            .path="${"M3,15H21V13H3V15M3,19H21V17H3V19M3,11H21V9H3V11M3,5V7H21V5H3Z"}"
-          ></ha-svg-icon>
+  return html`
+    <div class="selected-entity" data-entity-id="${entityId}" data-index="${index}">
+      <div class="entity-header">
+        <div class="handle" 
+             @mousedown="${(e) => this._onDragStart(e, index)}"
+             @touchstart="${(e) => this._onDragStart(e, index)}">
+          <ha-icon icon="mdi:drag"></ha-icon>
         </div>
-        <div class="entity-content">
-          <div class="icon-wrapper">
-            <ha-icon
-              .icon="${currentIcon}"
-              @mousedown="${(e) => e.stopPropagation()}"
-              @click="${(e) => this._openIconPicker(e, entityId)}"
-              class="custom-icon"
-            ></ha-icon>
-            ${this._currentEditingEntity === entityId
-              ? this._renderIconPicker()
-              : ""}
-          </div>
-          <span class="entity-name">${friendlyName}</span>
-        </div>
-        <span
+        <ha-icon
+          class="toggle-details"
+          icon="mdi:chevron-down"
+          @click="${() => this._toggleEntityDetails(entityId)}"
+        ></ha-icon>
+        <span class="entity-name">${friendlyName}</span>
+        <ha-icon
           class="remove-entity"
+          icon="mdi:close"
           @click="${() => this._removeIconGridEntity(index)}"
-          >×</span
-        >
+        ></ha-icon>
       </div>
-    `;
+      <div class="entity-details" style="display: none;" data-entity-id="${entityId}">
+        <div class="icon-row">
+          <div class="icon-wrapper">
+            <label>Inactive:</label>
+            <ha-icon-picker
+              .hass=${this.hass}
+              .value=${inactiveIcon}
+              @value-changed=${(e) => this._handleIconChange(e, 'inactive', entityId)}
+            ></ha-icon-picker>
+          </div>
+          <div class="icon-wrapper">
+            <label>Active:</label>
+            <ha-icon-picker
+              .hass=${this.hass}
+              .value=${activeIcon}
+              @value-changed=${(e) => this._handleIconChange(e, 'active', entityId)}
+            ></ha-icon-picker>
+          </div>
+          <div class="checkbox-wrapper">
+    <input
+      type="checkbox"
+      id="use-active-color-${sanitizedEntityId}"
+      ?checked=${useActiveColor}
+      @change="${(e) => this._toggleActiveColor(entityId, e.target.checked)}"
+    />
+    <label for="use-active-color-${sanitizedEntityId}">Use Active Color</label>
+  </div>
+        </div>
+        <div class="interaction-row">
+          <label>Interaction:</label>
+          ${this._renderInteractionSelect(entityId, interaction)}
+        </div>
+      </div>
+    </div>
+  `;
+}
+_toggleEntityDetails(entityId) {
+  const detailsElement = this.shadowRoot.querySelector(`.entity-details[data-entity-id="${entityId}"]`);
+  const toggleIcon = this.shadowRoot.querySelector(`.selected-entity[data-entity-id="${entityId}"] .toggle-details`);
+  
+  if (detailsElement && toggleIcon) {
+    const isHidden = detailsElement.style.display === 'none' || !detailsElement.style.display;
+    detailsElement.style.display = isHidden ? 'block' : 'none';
+    toggleIcon.icon = isHidden ? 'mdi:chevron-up' : 'mdi:chevron-down';
+  } else {
+    console.error('Details or toggle icon not found for entityId:', entityId);
+  }
+}
+
+_getNavigationPaths() {
+  return [
+     "overview",
+    "map",
+    "logbook",
+    "history",
+    "energy",
+    "config",
+    "developer-tools",
+    "lovelace",
+    "devices",
+    "integrations",
+    "automations",
+    "scenes",
+    "scripts",
+    "areas",
+    "tags",
+    "people",
+  ];
+}
+
+_toggleActiveColor(entityId, useActiveColor) {
+  this._customIcons = {
+    ...this._customIcons,
+    [entityId]: {
+      ...this._customIcons[entityId],
+      useActiveColor,
+    },
+  };
+  this._updateCustomIconsConfig();
+}
+
+_onDragStart(e, index) {
+  e.stopPropagation();
+  this._draggedElement = e.target.closest('.selected-entity');
+  this._draggedIndex = index;
+  this._draggedElement.classList.add('dragging');
+
+  const moveHandler = (moveEvent) => {
+    this._onDragMove(moveEvent);
+  };
+
+  const endHandler = (endEvent) => {
+    this._onDragEnd(endEvent);
+    document.removeEventListener('mousemove', moveHandler);
+    document.removeEventListener('touchmove', moveHandler);
+    document.removeEventListener('mouseup', endHandler);
+    document.removeEventListener('touchend', endHandler);
+  };
+
+  document.addEventListener('mousemove', moveHandler);
+  document.addEventListener('touchmove', moveHandler);
+  document.addEventListener('mouseup', endHandler);
+  document.addEventListener('touchend', endHandler);
+}
+
+_onDragEnd(e) {
+  e.preventDefault();
+  e.stopPropagation();
+
+  this._draggedElement.classList.remove('dragging');
+  this._draggedElement.style.removeProperty('position');
+  this._draggedElement.style.removeProperty('z-index');
+  this._draggedElement.style.removeProperty('top');
+
+  const newIndex = parseInt(this._draggedElement.dataset.index);
+  if (newIndex !== this._draggedIndex) {
+    const newOrder = [...this._selectedIconGridEntities];
+    const [removed] = newOrder.splice(this._draggedIndex, 1);
+    newOrder.splice(newIndex, 0, removed);
+    this._selectedIconGridEntities = newOrder;
+    this._updateIconGridConfig();
   }
 
-  _getToggleName(configValue) {
-    switch (configValue) {
-      case "battery_level_entity":
-        return this.config.vehicle_type === "EV"
-          ? "show_battery"
-          : "show_battery";
-      case "battery_range_entity":
-        return this.config.vehicle_type === "EV"
-          ? "show_battery_range"
-          : "show_battery_range";
-      case "fuel_level_entity":
-        return "show_fuel";
-      case "fuel_range_entity":
-        return "show_fuel_range";
-      case "location_entity":
-        return "show_location";
-      case "mileage_entity":
-        return "show_mileage";
-      case "car_state_entity":
-        return "show_car_state";
-      case "charge_limit_entity":
-        return "show_charge_limit";
-      default:
-        return `show_${configValue.split("_")[0]}`;
+  this._draggedElement = null;
+  this._draggedIndex = null;
+
+  this.requestUpdate();
+}
+
+_onDragMove(e) {
+  e.preventDefault();
+  const containerRect = this.shadowRoot.querySelector('.selected-entities').getBoundingClientRect();
+  const y = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+
+  this._draggedElement.style.position = 'absolute';
+  this._draggedElement.style.zIndex = '1000';
+  this._draggedElement.style.top = `${y - containerRect.top - 20}px`;
+
+  const elements = this.shadowRoot.querySelectorAll('.selected-entity:not(.dragging)');
+  let closestElement = null;
+  let closestDistance = Infinity;
+
+  elements.forEach((element) => {
+    const rect = element.getBoundingClientRect();
+    const distance = Math.abs(rect.top + rect.height / 2 - y);
+
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      closestElement = element;
     }
+  });
+
+  if (closestElement) {
+    const closestIndex = parseInt(closestElement.dataset.index);
+    if (closestIndex > this._draggedIndex) {
+      closestElement.parentNode.insertBefore(this._draggedElement, closestElement.nextSibling);
+    } else {
+      closestElement.parentNode.insertBefore(this._draggedElement, closestElement);
+    }
+    this._updateIndices();
+  }
+}
+
+_updateIndices() {
+  const elements = this.shadowRoot.querySelectorAll('.selected-entity');
+  elements.forEach((element, index) => {
+    element.dataset.index = index;
+  });
+}
+_renderInteractionSelect(entityId, interaction) {
+  const interactions = [
+    { value: "more-info", label: "More Info" },
+    { value: "toggle", label: "Toggle" },
+    { value: "navigate", label: "Navigate" },
+    { value: "url", label: "URL" },
+    { value: "call-service", label: "Perform action" },
+    { value: "assist", label: "Assist" },
+    { value: "none", label: "None" },
+  ];
+
+   return html`
+    <select
+      class="interaction-select"
+      .value=${interaction.type}
+      @change=${(e) => this._handleInteractionTypeChange(entityId, e.target.value)}
+    >
+      ${interactions.map(
+        (int) => html`
+          <option value=${int.value} ?selected=${interaction.type === int.value}>
+            ${int.label}
+          </option>
+        `
+      )}
+    </select>
+    ${this._renderInteractionOptions(entityId, interaction)}
+  `;
+}
+
+_renderInteractionOptions(entityId, interaction) {
+  switch (interaction.type) {
+    case 'navigate':
+      return this._renderNavigationOption(entityId, interaction);
+    case 'url':
+      return this._renderUrlOption(entityId, interaction);
+     case 'call-service':
+      return this._renderServiceOption(entityId, interaction);
+    case 'assist':
+      return this._renderAssistOption(entityId, interaction);
+    default:
+      return html``;
+  }
+}
+
+_renderNavigationOption(entityId, interaction) {
+  const paths = this._getNavigationPaths();
+  return html`
+    <div class="interaction-option">
+      <label>Navigation path:</label>
+      <select
+        @change=${(e) => this._updateInteractionOption(entityId, 'path', e.target.value)}
+      >
+        ${paths.map(path => html`
+          <option value=${path} ?selected=${interaction.path === path}>${path}</option>
+        `)}
+      </select>
+    </div>
+  `;
+}
+
+_renderUrlOption(entityId, interaction) {
+  return html`
+    <div class="interaction-option">
+      <label>URL:</label>
+      <input
+        type="text"
+        .value=${interaction.url || ''}
+        @input=${(e) => this._updateInteractionOption(entityId, 'url', e.target.value)}
+      />
+    </div>
+  `;
+}
+
+_renderServiceOption(entityId, interaction) {
+  const services = this._getAvailableServices();
+  return html`
+    <div class="interaction-option">
+      <label>Action:</label>
+      <select
+        @change=${(e) => this._updateInteractionOption(entityId, 'service', e.target.value)}
+      >
+        ${services.map(service => html`
+          <option value=${service.service} ?selected=${interaction.service === service.service}>
+            ${service.name}
+          </option>
+        `)}
+      </select>
+      ${interaction.service ? html`
+        <div class="service-description">${this._getServiceDescription(interaction.service)}</div>
+        <div class="targets">
+          <button @click=${() => this._openTargetSelector(entityId, 'area')}>Choose area</button>
+          <button @click=${() => this._openTargetSelector(entityId, 'device')}>Choose device</button>
+          <button @click=${() => this._openTargetSelector(entityId, 'entity')}>Choose entity</button>
+          <button @click=${() => this._openTargetSelector(entityId, 'label')}>Choose label</button>
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+_getServiceDescription(service) {
+  // Implement this function to return the description of the selected service
+  // You may need to fetch this information from Home Assistant
+}
+_getServiceDescription(service) {
+  // Implement this function to return the description of the selected service
+  // You may need to fetch this information from Home Assistant
+}
+
+_renderAssistOption(entityId, interaction) {
+  const assistants = this._getAvailableAssistants();
+  return html`
+    <div class="interaction-option">
+      <label>Assistant:</label>
+      <select
+        @change=${(e) => this._updateInteractionOption(entityId, 'assistant', e.target.value)}
+      >
+        ${assistants.map(assistant => html`
+          <option value=${assistant.id} ?selected=${interaction.assistant === assistant.id}>
+            ${assistant.name}
+          </option>
+        `)}
+      </select>
+      <div class="checkbox-wrapper">
+        <input
+          type="checkbox"
+          id="start-listening-${entityId}"
+          ?checked=${interaction.startListening}
+          @change=${(e) => this._updateInteractionOption(entityId, 'startListening', e.target.checked)}
+        />
+        <label for="start-listening-${entityId}">Start listening</label>
+      </div>
+    </div>
+  `;
+}
+
+_getAvailableAssistants() {
+  // Implement this function to fetch the available assistants from Home Assistant
+  // You may need to use the hass object to get this information
+  return [
+    { id: 'last_used', name: 'Last Used Assistant' },
+    { id: 'home_assistant', name: 'Home Assistant (English)' },
+    { id: 'home_assistant_cloud', name: 'Home Assistant Cloud (English)' },
+  ];
+}
+
+_handleInteractionTypeChange(entityId, newType) {
+  this._iconInteractions = {
+    ...this._iconInteractions,
+    [entityId]: { type: newType },
+  };
+  this._updateIconInteractionsConfig();
+  this.requestUpdate();
+}
+
+_updateInteractionOption(entityId, option, value) {
+  this._iconInteractions = {
+    ...this._iconInteractions,
+    [entityId]: {
+      ...this._iconInteractions[entityId],
+      [option]: value,
+    },
+  };
+  this._updateIconInteractionsConfig();
+}
+
+_getAvailableServices() {
+  const services = [];
+  if (this.hass) {
+    Object.keys(this.hass.services).forEach(domain => {
+      Object.keys(this.hass.services[domain]).forEach(service => {
+        services.push({
+          service: `${domain}.${service}`,
+          name: `${domain}.${service}`
+        });
+      });
+    });
+  }
+  return services;
+}
+
+_getAvailableAssistants() {
+  // This is a placeholder. You'll need to implement this based on how
+  // assistants are managed in your Home Assistant setup.
+  return [
+    { id: 'default', name: 'Default Assistant' },
+    { id: 'google', name: 'Google Assistant' },
+    { id: 'alexa', name: 'Alexa' }
+  ];
+}
+  _handleInteractionChange(entityId, newInteraction) {
+    this._iconInteractions = {
+      ...this._iconInteractions,
+      [entityId]: newInteraction,
+    };
+    this._updateIconInteractionsConfig();
   }
 
-  _renderIconPicker() {
+_handleIconChange(e, iconType, entityId) {
+  const newIcon = e.detail.value;
+  this._selectIcon(entityId, newIcon, iconType);
+}
+
+_selectIcon(entityId, icon, iconType) {
+  this._customIcons = {
+    ...this._customIcons,
+    [entityId]: {
+      ...this._customIcons[entityId],
+      [iconType]: icon,
+    },
+  };
+  this._updateCustomIconsConfig();
+  this.requestUpdate();
+}
+  _updateIconInteractionsConfig() {
+    this.config = {
+      ...this.config,
+      icon_interactions: this._iconInteractions,
+    };
+    this.configChanged(this.config);
+  }
+
+  _renderColorPickers() {
+    const getDefaultColor = (property) => {
+      const style = getComputedStyle(this);
+      return style.getPropertyValue(property).trim() || style.getPropertyValue(`--${property}`).trim();
+    };
+
+    const defaultColors = {
+      cardBackgroundColor: getDefaultColor('--card-background-color') || '#1c1c1c',
+      barBackgroundColor: getDefaultColor('--uvc-bar-background-color') || '#595959',
+      barBorderColor: getDefaultColor('--uvc-bar-border-color') || '#595959',
+      barFillColor: getDefaultColor('--uvc-primary-color') || '#4CAF50',
+      limitIndicatorColor: '#FFFFFF',
+      iconActiveColor: getDefaultColor('--uvc-primary-color') || '#4CAF50',
+      iconInactiveColor: getDefaultColor('--secondary-text-color') || '#9E9E9E',
+      infoTextColor: getDefaultColor('--secondary-text-color') || '#9E9E9E'
+    };
+
     return html`
-      <div class="icon-picker-popup" @click="${(e) => e.stopPropagation()}">
-        <ha-icon-picker
-          .hass=${this.hass}
-          .value=${this._customIcons[this._currentEditingEntity] || ""}
-          @value-changed=${this._handleIconChange}
-        ></ha-icon-picker>
+      <div class="color-pickers">
+        <h3>Custom Colors</h3>
+        <div class="entity-description">
+          Customize the colors of various elements in the card. Click on a color to change it, or use the reset icon to revert to the default color.
+        </div>
+        <div class="color-pickers-grid">
+          ${Object.entries(defaultColors).map(([key, defaultValue]) => html`
+            <div class="color-picker-item">
+              ${this._renderColorPicker(this._formatLabel(key), key, defaultValue)}
+            </div>
+          `)}
+        </div>
       </div>
     `;
   }
-  
-  
-  _formatLabel(key) {
-    return key.split(/(?=[A-Z])/).join(' ').replace(/^\w/, c => c.toUpperCase());
-  }
-  
 
-_openColorPicker(e, configKey) {
+  _renderColorPicker(label, configKey, defaultValue) {
+    const currentValue = this.config[configKey] || defaultValue;
+    const textColor = this._getContrastYIQ(currentValue);
+    return html`
+      <div class="color-picker">
+        <label>${label}</label>
+        <div class="color-input-wrapper" @click="${(e) => this._openColorPicker(e, configKey)}">
+          <div class="color-preview" style="background-color: ${currentValue}; color: ${textColor};">
+            <span class="color-hex">${currentValue}</span>
+            <ha-icon
+              class="reset-icon"
+              icon="mdi:refresh"
+              @click=${(e) => this._resetColor(e, configKey, defaultValue)}
+            ></ha-icon>
+          </div>
+          <input
+            type="color"
+            .value=${currentValue}
+            @change=${(e) => this._colorChanged(e, configKey)}
+            style="display: none;"
+          >
+        </div>
+      </div>
+    `;
+  }
+
+  _openColorPicker(e, configKey) {
     e.stopPropagation();
     const colorInput = e.target.closest('.color-input-wrapper').querySelector('input[type="color"]');
     colorInput.click();
     
-   
     const rect = e.target.getBoundingClientRect();
     const pickerPopup = e.target.closest('.color-input-wrapper').querySelector('.color-picker-popup');
     pickerPopup.style.top = `${rect.bottom}px`;
     pickerPopup.style.left = `${rect.left}px`;
 
-   
     const hideColorPicker = (event) => {
         if (!event.target.closest('.color-input-wrapper')) {
             colorInput.style.display = 'none';
@@ -657,86 +972,26 @@ _openColorPicker(e, configKey) {
     setTimeout(() => {
         document.addEventListener('click', hideColorPicker);
     }, 0);
-}
+  }
 
-_renderColorPicker(label, configKey, defaultValue) {
-  const currentValue = this.config[configKey] || defaultValue;
-  const textColor = this._getContrastYIQ(currentValue);
-  return html`
-    <div class="color-picker">
-      <label>${label}</label>
-      <div class="color-input-wrapper" @click="${(e) => this._openColorPicker(e, configKey)}">
-        <div class="color-preview" style="background-color: ${currentValue}; color: ${textColor};">
-          <span class="color-hex">${currentValue}</span>
-          <ha-icon
-            class="reset-icon"
-            icon="mdi:refresh"
-            @click=${(e) => this._resetColor(e, configKey, defaultValue)}
-          ></ha-icon>
-        </div>
-        <input
-          type="color"
-          .value=${currentValue}
-          @change=${(e) => this._colorChanged(e, configKey)}
-          style="display: none;"
-        >
-      </div>
-    </div>
-  `;
-}
-_renderColorPickers() {
-  const getDefaultColor = (property) => {
-    const style = getComputedStyle(this);
-    return style.getPropertyValue(property).trim() || style.getPropertyValue(`--${property}`).trim();
-  };
+  _resetColor(e, configKey, defaultValue) {
+    e.stopPropagation();
+    this.config = {
+      ...this.config,
+      [configKey]: defaultValue,
+    };
+    this.configChanged(this.config);
+    this.requestUpdate();
+  }
 
-  const defaultColors = {
-    cardBackgroundColor: getDefaultColor('--card-background-color') || '#1c1c1c',
-    barBackgroundColor: getDefaultColor('--uvc-bar-background-color') || '#595959',
-    barBorderColor: getDefaultColor('--uvc-bar-border-color') || '#595959',
-    barFillColor: getDefaultColor('--uvc-primary-color') || '#4CAF50',
-    limitIndicatorColor: '#FFFFFF',
-    iconActiveColor: getDefaultColor('--uvc-primary-color') || '#4CAF50',
-    iconInactiveColor: getDefaultColor('--secondary-text-color') || '#9E9E9E',
-    infoTextColor: getDefaultColor('--secondary-text-color') || '#9E9E9E'  // Added this line
-  };
-
-  return html`
-    <div class="color-pickers">
-      <h3>Custom Colors</h3>
-      <div class="entity-description">
-        Customize the colors of various elements in the card. Click on a color to change it, or use the reset icon to revert to the default color.
-      </div>
-      <div class="color-pickers-grid">
-        ${Object.entries(defaultColors).map(([key, defaultValue]) => html`
-          <div class="color-picker-item">
-            ${this._renderColorPicker(this._formatLabel(key), key, defaultValue)}
-          </div>
-        `)}
-      </div>
-    </div>
-  `;
-}
-
-_resetColor(e, configKey, defaultValue) {
-  e.stopPropagation();
-  this.config = {
-    ...this.config,
-    [configKey]: defaultValue,
-  };
-  this.configChanged(this.config);
-  this.requestUpdate();
-}
-  
-
-_colorChanged(e, configKey) {
-  const color = e.target.value;
-  this.config = {
-    ...this.config,
-    [configKey]: color,
-  };
-  this.configChanged(this.config);
-}
+  _colorChanged(e, configKey) {
+    const color = e.target.value;
+    this.config = {
+      ...this.config,
+      [configKey]: color,
+    };
+    this.configChanged(this.config);
+  }
 
   _getDisplayImageUrl(url) {
     return url && url.startsWith("data:image") ? "Uploaded Image" : url;
@@ -820,14 +1075,12 @@ _colorChanged(e, configKey) {
       const imageId = data.id;
 
       if (!imageId) {
-        console.error("Response structure:", data); // Log the response structure for debugging
+        console.error("Response structure:", data);
         throw new Error("Image ID is missing in the response");
       }
 
       const imageUrl = `/api/image/serve/${imageId}/original`;
-      // console.log("Uploaded image URL:", imageUrl);
 
-      // Add the new image URL to the list of image links
       if (this.config) {
         this.config = { ...this.config, image_url: imageUrl };
         this.configChanged(this.config);
@@ -836,11 +1089,6 @@ _colorChanged(e, configKey) {
     } catch (error) {
       console.error("Error uploading image:", error);
     }
-  }
-
-  _handleIconChange(e) {
-    const newIcon = e.detail.value;
-    this._selectIcon(this._currentEditingEntity, newIcon);
   }
 
   _entityFilterChanged(e, configValue) {
@@ -884,68 +1132,15 @@ _colorChanged(e, configKey) {
     this._updateCustomIconsConfig();
   }
 
-  _onDragStart(e, index) {
-    e.dataTransfer.setData("text/plain", index);
-  }
-
-  _onDragOver(e) {
-    e.preventDefault();
-  }
-
-  _onDrop(e) {
-    e.preventDefault();
-    const fromIndex = parseInt(e.dataTransfer.getData("text/plain"), 10);
-    const toIndex = [...e.currentTarget.children].indexOf(
-      e.target.closest(".selected-entity")
-    );
-
-    if (fromIndex !== toIndex) {
-      const newOrder = [...this._selectedIconGridEntities];
-      const [removed] = newOrder.splice(fromIndex, 1);
-      newOrder.splice(toIndex, 0, removed);
-      this._selectedIconGridEntities = newOrder;
-      this._updateIconGridConfig();
-    }
-  }
-
-  _openIconPicker(e, entityId) {
-    e.stopPropagation();
-    this._currentEditingEntity = entityId;
-    this._iconSearchFilter = "";
-    this.requestUpdate();
-
-    setTimeout(() => {
-      window.addEventListener("click", this._closeIconPicker);
-    }, 0);
-  }
-
-  _closeIconPicker = (e) => {
-    if (e.target.closest(".icon-picker-popup")) return;
-    this._currentEditingEntity = null;
-    this.requestUpdate();
-    window.removeEventListener("click", this._closeIconPicker);
-  };
-
-  _selectIcon(entityId, icon) {
-    this._customIcons = {
-      ...this._customIcons,
-      [entityId]: icon,
-    };
-    this._currentEditingEntity = null;
-    this._updateCustomIconsConfig();
-    this.requestUpdate();
-    window.removeEventListener("click", this._closeIconPicker);
-  }
 
   _updateIconGridConfig() {
-    this.config = {
-      ...this.config,
-      icon_grid_entities: this._selectedIconGridEntities,
-    };
-    this.configChanged(this.config);
-  }
-
-   _updateCustomIconsConfig() {
+  this.config = {
+    ...this.config,
+    icon_grid_entities: this._selectedIconGridEntities,
+  };
+  this.configChanged(this.config);
+}
+  _updateCustomIconsConfig() {
     this.config = {
       ...this.config,
       custom_icons: this._customIcons,
@@ -953,16 +1148,47 @@ _colorChanged(e, configKey) {
     this.configChanged(this.config);
   }
 
-  configChanged(newConfig) {
-    fireEvent(this, "config-changed", { config: newConfig });
+  _getToggleName(configValue) {
+    switch (configValue) {
+      case "battery_level_entity":
+        return this.config.vehicle_type === "EV"
+          ? "show_battery"
+          : "show_battery";
+      case "battery_range_entity":
+        return this.config.vehicle_type === "EV"
+          ? "show_battery_range"
+          : "show_battery_range";
+      case "fuel_level_entity":
+        return "show_fuel";
+      case "fuel_range_entity":
+        return "show_fuel_range";
+      case "location_entity":
+        return "show_location";
+      case "mileage_entity":
+        return "show_mileage";
+      case "car_state_entity":
+        return "show_car_state";
+      case "charge_limit_entity":
+        return "show_charge_limit";
+      default:
+        return `show_${configValue.split("_")[0]}`;
+    }
   }
-  
-    _getContrastYIQ(hexcolor) {
+
+  _formatLabel(key) {
+    return key.split(/(?=[A-Z])/).join(' ').replace(/^\w/, c => c.toUpperCase());
+  }
+
+  _getContrastYIQ(hexcolor) {
     const r = parseInt(hexcolor.substr(1, 2), 16);
     const g = parseInt(hexcolor.substr(3, 2), 16);
     const b = parseInt(hexcolor.substr(5, 2), 16);
     const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
     return (yiq >= 128) ? 'black' : 'white';
+  }
+
+  configChanged(newConfig) {
+    fireEvent(this, "config-changed", { config: newConfig });
   }
 }
 
