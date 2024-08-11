@@ -14,7 +14,29 @@ export const styles = css`
     --ha-card-border-radius: var(--ha-config-card-border-radius, 8px);
     --uvc-icon-grid-size: var(--mdc-icon-size, 24px);
   }
-  
+  .image-upload-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.image-upload-container input[type="text"] {
+  flex-grow: 1;
+}
+
+.file-upload-label {
+  background-color: var(--primary-color);
+  color: var(--text-primary-color);
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.file-upload-label:hover {
+  opacity: 0.9;
+}
   .vehicle-card-content {
     padding: 16px;
     display: flex;

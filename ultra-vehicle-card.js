@@ -3,7 +3,7 @@ import { UltraVehicleCardEditor } from "./ultra-vehicle-card-editor.js";
 import { styles } from "./styles.js";
 
 
-const version = "V1.2.1";
+const version = "V1.2.2";
 
 
 class UltraVehicleCard extends LitElement {
@@ -29,6 +29,7 @@ class UltraVehicleCard extends LitElement {
     this.config = {
       title: "My Vehicle",
       image_url: "",
+    charging_image_url: "",
       vehicle_type: "EV",
       unit_type: "mi",
       battery_level_entity: "",
@@ -388,7 +389,18 @@ _formatChargingEndTime(isoString) {
 
 _renderInfoLine() {
   const locationEntity = this.config.location_entity ? this.hass.states[this.config.location_entity] : null;
-  const location = locationEntity ? this._capitalizeFirstLetter(locationEntity.state) : null;
+  let location = null;
+
+  if (locationEntity) {
+    if (locationEntity.state.toLowerCase() === 'not_home') {
+      location = 'Not Home';
+    } else if (locationEntity.state === 'home') {
+      location = 'Home';
+    } else {
+      // For custom locations, use the friendly name if available, otherwise use the state
+      location = locationEntity.attributes.friendly_name || this._capitalizeFirstLetter(locationEntity.state);
+    }
+  }
 
   const mileageEntity = this.config.mileage_entity ? this.hass.states[this.config.mileage_entity] : null;
   let mileage = mileageEntity ? parseFloat(mileageEntity.state) : null;
@@ -416,15 +428,21 @@ _renderInfoLine() {
   `;
 }
 
-  _renderVehicleImage() {
-    if (!this.config.image_url) return '';
+_renderVehicleImage() {
+  const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
+  const isCharging = this._isCharging(chargingStatusEntity);
+  const imageUrl = isCharging && this.config.charging_image_url
+    ? this.config.charging_image_url
+    : this.config.image_url;
 
-    return html`
-      <div class="vehicle-image-container">
-        <img class="vehicle-image" src="${this.config.image_url}" alt="Vehicle Image">
-      </div>
-    `;
-  }
+  if (!imageUrl) return '';
+
+  return html`
+    <div class="vehicle-image-container">
+      <img class="vehicle-image" src="${imageUrl}" alt="Vehicle Image">
+    </div>
+  `;
+}
 
   _renderIconGrid() {
     const { icon_grid_entities } = this.config;

@@ -84,6 +84,7 @@ export class UltraVehicleCardEditor extends LitElement {
     this.config = {
       title: "My Vehicle",
       image_url: "",
+    charging_image_url: "",
       vehicle_type: "EV",
       unit_type: "mi",
       level_entity: "",
@@ -135,25 +136,55 @@ export class UltraVehicleCardEditor extends LitElement {
 
   _renderBasicConfig() {
     return html`
-      <div class="input-group">
-  <label for="image_url">Image URL</label>
-  <input
-    id="image_url"
-    type="text"
-    .value="${this.config.image_url}"
-    @input="${this._valueChanged}"
-    .configValue="${"image_url"}"
-  />
-</div>
-      <div class="input-group">
-        <label for="image_upload">Upload Image</label>
+        <div class="input-group">
+      <label for="image_url">Main Image</label>
+      <div class="entity-description">You can either upload an image or place a URL directly to an image.</div>
+      <div class="image-upload-container">
         <input
-          type="file"
-          id="image_upload"
-          @change="${this._handleImageUpload}"
-          accept="image/*"
+          id="image_url"
+          type="text"
+          .value="${this.config.image_url}"
+          @input="${this._valueChanged}"
+          .configValue="${"image_url"}"
+          placeholder="Enter image URL"
         />
+        <label for="image_upload" class="file-upload-label">
+          Upload Image
+          <input
+            type="file"
+            id="image_upload"
+            @change="${this._handleImageUpload}"
+            accept="image/*"
+            style="display: none;"
+          />
+        </label>
       </div>
+    </div>
+
+    <div class="input-group">
+      <label for="charging_image_url">Charging Image</label>
+      <div class="entity-description">This is used when vehicle is charging.</div>
+      <div class="image-upload-container">
+        <input
+          id="charging_image_url"
+          type="text"
+          .value="${this.config.charging_image_url || ''}"
+          @input="${this._valueChanged}"
+          .configValue="${"charging_image_url"}"
+          placeholder="Enter charging image URL"
+        />
+        <label for="charging_image_upload" class="file-upload-label">
+          Upload Image
+          <input
+            type="file"
+            id="charging_image_upload"
+            @change="${(e) => this._handleImageUpload(e, 'charging_image_url')}"
+            accept="image/*"
+            style="display: none;"
+          />
+        </label>
+      </div>
+    </div>
 
       <div class="input-group">
         <label>Vehicle Type</label>
@@ -938,16 +969,16 @@ _valueChanged(ev) {
     this.configChanged(this.config);
   }
 
-  async _handleImageUpload(ev) {
+  async _handleImageUpload(ev, configKey = 'image_url') {
     const input = ev.target;
     if (!input.files || input.files.length === 0) {
       return;
     }
-
+  
     const file = input.files[0];
     const formData = new FormData();
     formData.append("file", file);
-
+  
     try {
       const response = await fetch("/api/image/upload", {
         method: "POST",
@@ -956,23 +987,23 @@ _valueChanged(ev) {
           Authorization: `Bearer ${this.hass.auth.data.access_token}`,
         },
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to upload image");
       }
-
+  
       const data = await response.json();
       const imageId = data.id;
-
+  
       if (!imageId) {
         console.error("Response structure:", data);
         throw new Error("Image ID is missing in the response");
       }
-
+  
       const imageUrl = `/api/image/serve/${imageId}/original`;
-
+  
       if (this.config) {
-        this.config = { ...this.config, image_url: imageUrl };
+        this.config = { ...this.config, [configKey]: imageUrl };
         this.configChanged(this.config);
         this.requestUpdate();
       }
