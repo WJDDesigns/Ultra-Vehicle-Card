@@ -49,16 +49,17 @@ export class UltraVehicleCardEditor extends LitElement {
       _draggedIndex: { type: Number },
       _showEntityInformation: { type: Boolean },
       _iconSize: { type: Number },
+      _iconGap: { type: Number },
     };
   }
 
- static get styles() {
-  return [styles];
-}
+  static get styles() {
+    return [styles];
+  }
 
   constructor() {
     super();
-     this._batteryLevelEntityFilter = "";
+    this._batteryLevelEntityFilter = "";
     this._batteryRangeEntityFilter = "";
     this._fuelLevelEntityFilter = "";
     this._fuelRangeEntityFilter = "";
@@ -76,6 +77,7 @@ export class UltraVehicleCardEditor extends LitElement {
     this._showEntityInformation = true;
     this._iconSize = 24;
     this._showEntityInformation = true;
+    this._iconGap = 12;
   }
 
   setConfig(config) {
@@ -98,18 +100,22 @@ export class UltraVehicleCardEditor extends LitElement {
       icon_grid_entities: [],
       custom_icons: {},
       icon_interactions: {},
+      icon_styles: {},
       hybrid_display_order: "fuel_first",
       car_state_entity: "",
       charge_limit_entity: "",
       icon_size: 24,
+      icon_gap: 12,
       showEntityInformation: config.showEntityInformation !== undefined ? config.showEntityInformation : true,
       ...config,
     };
     this._selectedIconGridEntities = [...this.config.icon_grid_entities];
     this._customIcons = { ...this.config.custom_icons };
     this._iconInteractions = { ...this.config.icon_interactions };
+    this._iconStyles = { ...this.config.icon_styles };
     this._iconSize = this.config.icon_size || 24;
     this._showEntityInformation = this.config.showEntityInformation;
+    this._iconGap = this.config.icon_gap || 12;
   }
 
   render() {
@@ -414,17 +420,28 @@ export class UltraVehicleCardEditor extends LitElement {
           )}
         </div>
         <div class="icon-size-slider">
-          <label for="icon-size">Icon Size: ${this._iconSize}px</label>
-          <input
-            type="range"
-            id="icon-size"
-            min="0"
-            max="100"
-            .value="${this._iconSize}"
-            @input="${this._iconSizeChanged}"
-          />
-        </div>
+        <label for="icon-size">Icon Size: ${this._iconSize}px</label>
+        <input
+          type="range"
+          id="icon-size"
+          min="0"
+          max="100"
+          .value="${this._iconSize}"
+          @input="${this._iconSizeChanged}"
+        />
       </div>
+      <div class="icon-gap-slider">
+        <label for="icon-gap">Icon Gap Size: ${this._iconGap}px</label>
+        <input
+          type="range"
+          id="icon-gap"
+          min="0"
+          max="50"
+          .value="${this._iconGap}"
+          @input="${this._iconGapChanged}"
+        />
+      </div>
+    </div>
     `;
   }
 
@@ -453,73 +470,101 @@ export class UltraVehicleCardEditor extends LitElement {
     `;
   }
 
-_renderSelectedEntity(entityId, index) {
-  const sanitizedEntityId = entityId.replace(/\./g, '_');
-  const entity = this.hass.states[entityId];
-  const friendlyName = entity.attributes.friendly_name || entityId;
-  const customIcon = this._customIcons[entityId] || {};
-  const defaultIcon = entity.attributes.icon;
-  const activeIcon = customIcon.active || defaultIcon || "mdi:help-circle";
-  const inactiveIcon = customIcon.inactive || defaultIcon || "mdi:help-circle";
-  const interaction = this._iconInteractions[entityId] || { type: 'none' };
-  const useActiveColor = customIcon.useActiveColor !== false;
+  _renderSelectedEntity(entityId, index) {
+    const sanitizedEntityId = entityId.replace(/\./g, '_');
+    const entity = this.hass.states[entityId];
+    const friendlyName = entity.attributes.friendly_name || entityId;
+    const customIcon = this._customIcons[entityId] || {};
+    const defaultIcon = entity.attributes.icon;
+    const activeIcon = customIcon.active || defaultIcon || "mdi:help-circle";
+    const inactiveIcon = customIcon.inactive || defaultIcon || "mdi:help-circle";
+    const interaction = this._iconInteractions[entityId] || { type: 'none' };
+    const useActiveColor = customIcon.useActiveColor !== false;
+    const buttonStyle = this._iconStyles[entityId] || 'icon';
 
-  return html`
-<div class="selected-entity" draggable="true" @dragstart="${(e) => this._onDragStart(e, index)}" data-entity-id="${entityId}">
-      <div class="entity-header">
-        <div class="handle" 
-             @mousedown="${(e) => this._onDragStart(e, index)}"
-             @touchstart="${(e) => this._onDragStart(e, index)}">
-          <ha-icon icon="mdi:drag"></ha-icon>
+    return html`
+      <div class="selected-entity" draggable="true" @dragstart="${(e) => this._onDragStart(e, index)}" data-entity-id="${entityId}">
+        <div class="entity-header">
+          <div class="handle" 
+               @mousedown="${(e) => this._onDragStart(e, index)}"
+               @touchstart="${(e) => this._onDragStart(e, index)}">
+            <ha-icon icon="mdi:drag"></ha-icon>
+          </div>
+          <ha-icon
+            class="toggle-details"
+            icon="mdi:chevron-down"
+            @click="${() => this._toggleEntityDetails(entityId)}"
+          ></ha-icon>
+          <span class="entity-name">${friendlyName}</span>
+          <ha-icon
+            class="remove-entity"
+            icon="mdi:close"
+            @click="${() => this._removeIconGridEntity(index)}"
+          ></ha-icon>
         </div>
-        <ha-icon
-          class="toggle-details"
-          icon="mdi:chevron-down"
-          @click="${() => this._toggleEntityDetails(entityId)}"
-        ></ha-icon>
-        <span class="entity-name">${friendlyName}</span>
-        <ha-icon
-          class="remove-entity"
-          icon="mdi:close"
-          @click="${() => this._removeIconGridEntity(index)}"
-        ></ha-icon>
+        <div class="entity-details" id="entity-details-${sanitizedEntityId}" style="display: none;">
+          <div class="icon-row">
+            <div class="icon-wrapper">
+              <label>Inactive:</label>
+              <ha-icon-picker
+                .hass=${this.hass}
+                .value=${inactiveIcon}
+                @value-changed=${(e) => this._handleIconChange(e, 'inactive', entityId)}
+              ></ha-icon-picker>
+            </div>
+            <div class="icon-wrapper">
+              <label>Active:</label>
+              <ha-icon-picker
+                .hass=${this.hass}
+                .value=${activeIcon}
+                @value-changed=${(e) => this._handleIconChange(e, 'active', entityId)}
+              ></ha-icon-picker>
+            </div>
+            <div class="checkbox-wrapper">
+              <input
+                type="checkbox"
+                id="use-active-color-${sanitizedEntityId}"
+                ?checked=${useActiveColor}
+                @change="${(e) => this._toggleActiveColor(entityId, e.target.checked)}"
+              />
+              <label for="use-active-color-${sanitizedEntityId}">Use Active Color</label>
+            </div>
+          </div>
+          <div class="icon-row">
+            <div class="icon-wrapper">
+              <label>Button Style:</label>
+              <select
+                @change="${(e) => this._handleButtonStyleChange(entityId, e.target.value)}"
+                .value="${buttonStyle}"
+              >
+                <option value="icon">Icon</option>
+                <option value="round">Round</option>
+                <option value="square">Square</option>
+              </select>
+            </div>
+          </div>
+          <div class="interaction-row">
+            <label>Interaction:</label>
+            ${this._renderInteractionSelect(entityId, interaction)}
+          </div>
+        </div>
       </div>
-      <div class="entity-details" id="entity-details-${sanitizedEntityId}" style="display: none;">
-        <div class="icon-row">
-          <div class="icon-wrapper">
-            <label>Inactive:</label>
-            <ha-icon-picker
-              .hass=${this.hass}
-              .value=${inactiveIcon}
-              @value-changed=${(e) => this._handleIconChange(e, 'inactive', entityId)}
-            ></ha-icon-picker>
-          </div>
-          <div class="icon-wrapper">
-            <label>Active:</label>
-            <ha-icon-picker
-              .hass=${this.hass}
-              .value=${activeIcon}
-              @value-changed=${(e) => this._handleIconChange(e, 'active', entityId)}
-            ></ha-icon-picker>
-          </div>
-          <div class="checkbox-wrapper">
-            <input
-              type="checkbox"
-              id="use-active-color-${sanitizedEntityId}"
-              ?checked=${useActiveColor}
-              @change="${(e) => this._toggleActiveColor(entityId, e.target.checked)}"
-            />
-            <label for="use-active-color-${sanitizedEntityId}">Use Active Color</label>
-          </div>
-        </div>
-        <div class="interaction-row">
-          <label>Interaction:</label>
-          ${this._renderInteractionSelect(entityId, interaction)}
-        </div>
-      </div>
-    </div>
-  `;
-}
+    `;
+  }
+  _handleButtonStyleChange(entityId, style) {
+    this._iconStyles = {
+      ...this._iconStyles,
+      [entityId]: style,
+    };
+    this._updateIconStylesConfig();
+  }
+  _updateIconStylesConfig() {
+    this.config = {
+      ...this.config,
+      icon_styles: this._iconStyles,
+    };
+    this.configChanged(this.config);
+  }
 _toggleEntityDetails(entityId) {
   // Sanitize the entity ID for use in the element ID
   const sanitizedEntityId = entityId.replace(/\./g, '_');
@@ -560,7 +605,15 @@ _getNavigationPaths() {
     "people",
   ];
 }
-
+_iconGapChanged(e) {
+  this._iconGap = parseInt(e.target.value);
+  this.config = {
+    ...this.config,
+    icon_gap: this._iconGap,
+  };
+  this.configChanged(this.config);
+  fireEvent(this, 'config-changed', { config: this.config });
+}
 _toggleActiveColor(entityId, useActiveColor) {
   this._customIcons = {
     ...this._customIcons,
@@ -573,25 +626,36 @@ _toggleActiveColor(entityId, useActiveColor) {
 }
 
 _onDragStart(e, index) {
-    e.dataTransfer.setData('text/plain', index);
+  if (e.dataTransfer) {
+      e.dataTransfer.setData('text/plain', index.toString());
+  }
+  // Store the index in a class property as a fallback
+  this._draggedIndex = index;
 }
 
 _onDragOver(e) {
-    e.preventDefault();
+  e.preventDefault();
 }
 
 _onDrop(e) {
-    e.preventDefault();
-    const fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
-    const toIndex = [...e.currentTarget.children].indexOf(e.target.closest('.selected-entity'));
+  e.preventDefault();
+  let fromIndex;
+  if (e.dataTransfer) {
+      fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
+  } else {
+      fromIndex = this._draggedIndex;
+  }
+  const toIndex = [...e.currentTarget.children].indexOf(e.target.closest('.selected-entity'));
 
-    if (fromIndex !== toIndex && toIndex !== -1) {
-        const newOrder = [...this._selectedIconGridEntities];
-        const [removed] = newOrder.splice(fromIndex, 1);
-        newOrder.splice(toIndex, 0, removed);
-        this._selectedIconGridEntities = newOrder;
-        this._updateIconGridConfig();
-    }
+  if (fromIndex !== undefined && fromIndex !== toIndex && toIndex !== -1) {
+      const newOrder = [...this._selectedIconGridEntities];
+      const [removed] = newOrder.splice(fromIndex, 1);
+      newOrder.splice(toIndex, 0, removed);
+      this._selectedIconGridEntities = newOrder;
+      this._updateIconGridConfig();
+  }
+  // Reset the dragged index
+  this._draggedIndex = undefined;
 }
 _updateIndices() {
   const elements = this.shadowRoot.querySelectorAll('.selected-entity');

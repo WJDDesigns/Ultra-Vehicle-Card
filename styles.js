@@ -17,6 +17,9 @@ export const styles = css`
   
   .vehicle-card-content {
     padding: 16px;
+    display: flex;
+    flex-direction: column;
+    height: 100%; // Ensure the content takes full height of the card
   }
   
   .vehicle-image-container {
@@ -354,18 +357,44 @@ export const styles = css`
   }
   
   .icon-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 16px;
-    margin: 16px 0;
-  }
-  
- .icon-item ha-icon {
-  width: var(--uvc-icon-grid-size);
-  height: var(--uvc-icon-grid-size);
-  color: var(--uvc-primary-color);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 16px 0;
+  flex-grow: 1;
+  gap: var(--uvc-icon-grid-gap, 12px);
 }
+  .icon-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--uvc-icon-grid-size);
+    height: var(--uvc-icon-grid-size);
+  }
+
+  .icon-item.round,
+  .icon-item.square {
+    width: calc(var(--uvc-icon-grid-size) * 1.5);
+    height: calc(var(--uvc-icon-grid-size) * 1.5);
+    background: #ffffff17;
+  }
+
+  .icon-item.round {
+    border-radius: 50%;
+  }
+
+  .icon-item.square {
+    border-radius: 4px;
+  }
+
+  .icon-item.clickable {
+    cursor: pointer;
+  }
+
+  .icon-item.non-interactive {
+    cursor: default;
+  }
   
   .icon-item ha-icon {
     width: 24px;
@@ -406,7 +435,7 @@ export const styles = css`
   .checkbox-wrapper {
     display: flex;
     align-items: center;
-    margin-top: 8px;
+    margin-top: 18px;
   }
   
   .checkbox-wrapper input {
@@ -478,7 +507,10 @@ input[type="color"] {
   }
    .entity-information {
           border: 1px solid var(--divider-color);
-          padding: 16px;
+          padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 16px;
+    padding-right: 16px;
           margin-bottom: 16px;
         }
         .entity-information-header {

@@ -2,7 +2,7 @@ import { LitElement, html, css } from "https://unpkg.com/lit-element@2.4.0/lit-e
 import { UltraVehicleCardEditor } from "./ultra-vehicle-card-editor.js";
 import { styles } from "./styles.js";
 
-const version = "V1.1.12-beta2";
+const version = "V1.2.0";
 
 class UltraVehicleCard extends LitElement {
   static get properties() {
@@ -25,39 +25,41 @@ class UltraVehicleCard extends LitElement {
       throw new Error("You need to define a title");
     }
     this.config = {
-    title: "My Vehicle",
-    image_url: "",
-    vehicle_type: "EV",
-    unit_type: "mi",
-    battery_level_entity: "",
-    battery_range_entity: "",
-    fuel_level_entity: "",
-    fuel_range_entity: "",
-    charging_status_entity: "",
-    location_entity: "",
-    mileage_entity: "",
-    show_battery: true,
-    show_battery_range: true,
-    show_fuel: true,
-    show_fuel_range: true,
-    show_location: true,
-    show_mileage: true,
-    show_car_state: true,
-    show_charge_limit: true,
-    icon_grid_entities: [],
-    custom_icons: {},
-    hybrid_display_order: 'fuel_first',
-    car_state_entity: "",
-    charge_limit_entity: "",
-    cardBackgroundColor: "",
-    barBackgroundColor: "",
-    barFillColor: "",
-    limitIndicatorColor: "",
-    iconActiveColor: "",
-    iconInactiveColor: "",
-    barBorderColor: "",
-    icon_interactions: {},
-    icon_size: config.icon_size || 24,
+      title: "My Vehicle",
+      image_url: "",
+      vehicle_type: "EV",
+      unit_type: "mi",
+      battery_level_entity: "",
+      battery_range_entity: "",
+      fuel_level_entity: "",
+      fuel_range_entity: "",
+      charging_status_entity: "",
+      location_entity: "",
+      mileage_entity: "",
+      show_battery: true,
+      show_battery_range: true,
+      show_fuel: true,
+      show_fuel_range: true,
+      show_location: true,
+      show_mileage: true,
+      show_car_state: true,
+      show_charge_limit: true,
+      icon_grid_entities: [],
+      custom_icons: {},
+      icon_interactions: {},
+      icon_styles: {},
+      hybrid_display_order: 'fuel_first',
+      car_state_entity: "",
+      charge_limit_entity: "",
+      cardBackgroundColor: "",
+      barBackgroundColor: "",
+      barFillColor: "",
+      limitIndicatorColor: "",
+      iconActiveColor: "",
+      iconInactiveColor: "",
+      barBorderColor: "",
+      icon_size: 24,
+      icon_gap: 12,
     ...config
     };
     // Handle backward compatibility for entity names
@@ -75,15 +77,17 @@ if (this.config.range_entity && !this.config.battery_range_entity) {
     }
 
     return html`
-      <ha-card style="background-color: var(--uvc-card-background);">
-        <div class="vehicle-card-content">
-          ${this._renderHeader()}
-          ${this._renderCarState()}
-          ${this._renderVehicleImage()}
+        <ha-card style="background-color: var(--uvc-card-background);">
+      <div class="vehicle-card-content">
+        ${this._renderHeader()}
+        ${this._renderCarState()}
+        ${this._renderVehicleImage()}
+        <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
           ${this._renderIconGrid()}
-          ${this._renderVehicleInfo()}
         </div>
-      </ha-card>
+        ${this._renderVehicleInfo()}
+      </div>
+    </ha-card>
     `;
   }
 
@@ -422,11 +426,11 @@ _renderInfoLine() {
 
   _renderIconGrid() {
     const { icon_grid_entities } = this.config;
-
+  
     if (!icon_grid_entities || icon_grid_entities.length === 0) {
       return '';
     }
-
+  
     return html`
       <div class="icon-grid">
         ${icon_grid_entities.map(entityId => this._renderIconItem(entityId))}
@@ -434,32 +438,39 @@ _renderInfoLine() {
     `;
   }
   
-_renderIconItem(entityId) {
-  const entity = this.hass.states[entityId];
-  if (!entity) return '';
-
-  const customIcon = this.config.custom_icons[entityId] || {};
-  const defaultIcon = entity.attributes.icon;
-  const state = entity.state;
-  const isActive = ['on', 'open', 'true', 'unlocked'].includes(state.toLowerCase());
-  const useActiveColor = customIcon.useActiveColor !== false;
+  _renderIconItem(entityId) {
+    if (!this.hass || !this.hass.states || !this.hass.states[entityId]) {
+      console.warn(`Entity ${entityId} not found. Skipping icon rendering.`);
+      return html``;
+    }
   
-  const icon = isActive
-    ? (customIcon.active || defaultIcon || 'mdi:help-circle')
-    : (customIcon.inactive || defaultIcon || 'mdi:help-circle');
+    const entity = this.hass.states[entityId];
+    const customIcon = this.config.custom_icons && this.config.custom_icons[entityId] ? this.config.custom_icons[entityId] : {};
+    const defaultIcon = entity.attributes.icon;
+    const state = entity.state;
+    const isActive = ['on', 'open', 'true', 'unlocked'].includes(state.toLowerCase());
+    const useActiveColor = customIcon.useActiveColor !== false;
+    
+    const icon = isActive
+      ? (customIcon.active || defaultIcon || 'mdi:help-circle')
+      : (customIcon.inactive || defaultIcon || 'mdi:help-circle');
+    
+    const iconColor = isActive && useActiveColor ? 'var(--uvc-icon-active)' : 'var(--uvc-icon-inactive)';
+    const interaction = this.config.icon_interactions && this.config.icon_interactions[entityId] ? this.config.icon_interactions[entityId] : { type: 'more-info' };
+    const buttonStyle = this.config.icon_styles && this.config.icon_styles[entityId] ? this.config.icon_styles[entityId] : 'icon';
   
-  const iconColor = isActive && useActiveColor ? 'var(--uvc-icon-active)' : 'var(--uvc-icon-inactive)';
-  const interaction = this.config.icon_interactions[entityId] || { type: 'more-info' };
-
-  return html`
-    <div class="icon-item" @click="${() => this._handleIconClick(entityId, interaction)}">
-      <ha-icon 
-        .icon="${icon}" 
-        style="color: ${iconColor}; width: var(--uvc-icon-grid-size); height: var(--uvc-icon-grid-size);"
-      ></ha-icon>
-    </div>
-  `;
-}
+    const isClickable = interaction.type !== 'none';
+    const classes = `icon-item ${buttonStyle} ${isClickable ? 'clickable' : 'non-interactive'}`;
+  
+    return html`
+      <div class="${classes}" @click="${() => this._handleIconClick(entityId, interaction)}">
+        <ha-icon 
+          .icon="${icon}" 
+          style="color: ${iconColor}; width: var(--uvc-icon-grid-size); height: var(--uvc-icon-grid-size);"
+        ></ha-icon>
+      </div>
+    `;
+  }
 
 updated(changedProperties) {
   super.updated(changedProperties);
@@ -607,6 +618,7 @@ updated(changedProps) {
       this.style.setProperty('--uvc-info-text-color', this.config.infoTextColor || style.getPropertyValue('--secondary-text-color').trim());
       this.style.setProperty('--uvc-icon-grid-size', `${this.config.icon_size}px`);
       this.style.setProperty('--mdc-icon-size', `${this.config.icon_size}px`);
+      this.style.setProperty('--uvc-icon-grid-gap', `${this.config.icon_gap}px`);
     }
   }
   }
