@@ -3,7 +3,7 @@ import { UltraVehicleCardEditor } from "./ultra-vehicle-card-editor.js";
 import { styles } from "./styles.js";
 
 
-const version = "V1.2.2";
+const version = "V1.2.3";
 
 
 class UltraVehicleCard extends LitElement {
@@ -115,34 +115,35 @@ _renderEVInfo() {
   const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
   const chargeLimitEntity = this.config.charge_limit_entity ? this.hass.states[this.config.charge_limit_entity] : null;
 
-  const batteryLevel = batteryLevelEntity ? parseFloat(batteryLevelEntity.state) : null;
+  // Round the battery level to the nearest integer
+  const batteryLevel = batteryLevelEntity ? Math.round(parseFloat(batteryLevelEntity.state)) : null;
   const batteryRange = batteryRangeEntity ? Math.round(parseFloat(batteryRangeEntity.state)) : null;
   const isCharging = this._isCharging(chargingStatusEntity);
-  const chargeLimit = chargeLimitEntity && this.config.show_charge_limit ? parseFloat(chargeLimitEntity.state) : null;
+  const chargeLimit = chargeLimitEntity && this.config.show_charge_limit ? Math.round(parseFloat(chargeLimitEntity.state)) : null;
 
-    return html`
-      <div class="level-info">
-        ${this.config.show_battery && batteryLevel !== null ? html`
-          <div class="item_bar">
-            <div class="progress ${isCharging ? 'charging' : ''}" style="width: ${batteryLevel}%;"></div>
-            ${chargeLimit !== null ? html`
-              <div class="charge-limit-indicator" style="left: ${chargeLimit}%;"></div>
-            ` : ''}
-          </div>
-          <div class="level-text">
-            <span>${batteryLevel}% ${isCharging ? 'Charging' : 'Charge'}</span>
-            ${this.config.show_battery_range && batteryRange !== null ? html`
-              <span class="range">${batteryRange} ${this.config.unit_type}</span>
-            ` : ''}
-          </div>
-        ` : this.config.show_battery_range && batteryRange !== null ? html`
-          <div class="level-text">
-            <span class="range" style="float: right;">${batteryRange} ${this.config.unit_type}</span>
-          </div>
-        ` : ''}
-      </div>
-    `;
-  }
+  return html`
+    <div class="level-info">
+      ${this.config.show_battery && batteryLevel !== null ? html`
+        <div class="item_bar">
+          <div class="progress ${isCharging ? 'charging' : ''}" style="width: ${batteryLevel}%;"></div>
+          ${chargeLimit !== null ? html`
+            <div class="charge-limit-indicator" style="left: ${chargeLimit}%;"></div>
+          ` : ''}
+        </div>
+        <div class="level-text">
+          <span>${batteryLevel}% ${isCharging ? 'Charging' : 'Charge'}</span>
+          ${this.config.show_battery_range && batteryRange !== null ? html`
+            <span class="range">${batteryRange} ${this.config.unit_type}</span>
+          ` : ''}
+        </div>
+      ` : this.config.show_battery_range && batteryRange !== null ? html`
+        <div class="level-text">
+          <span class="range" style="float: right;">${batteryRange} ${this.config.unit_type}</span>
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
   
   _isCharging(chargingStatusEntity) {
     if (!chargingStatusEntity) return false;
