@@ -2,7 +2,7 @@ import { LitElement, html, css } from "https://unpkg.com/lit-element@2.4.0/lit-e
 import { UltraVehicleCardEditor } from "./ultra-vehicle-card-editor.js";
 import { styles } from "./styles.js";
 
-const version = "1.1.11";
+const version = "V1.1.12-beta2";
 
 class UltraVehicleCard extends LitElement {
   static get properties() {
@@ -57,6 +57,7 @@ class UltraVehicleCard extends LitElement {
     iconInactiveColor: "",
     barBorderColor: "",
     icon_interactions: {},
+    icon_size: config.icon_size || 24,
     ...config
     };
     // Handle backward compatibility for entity names
@@ -153,7 +154,7 @@ _renderEVInfo() {
   }
 
   // Handle string-based entities
-  const chargingStates = ['charging', 'in_charging', 'charge_start', 'in_progress', 'active'];
+  const chargingStates = ['charging', 'in_charging', 'charge_start', 'in_progress', 'active', 'connected'];
   return chargingStates.includes(state);
 }
 
@@ -452,9 +453,22 @@ _renderIconItem(entityId) {
 
   return html`
     <div class="icon-item" @click="${() => this._handleIconClick(entityId, interaction)}">
-      <ha-icon .icon="${icon}" style="color: ${iconColor};"></ha-icon>
+      <ha-icon 
+        .icon="${icon}" 
+        style="color: ${iconColor}; width: var(--uvc-icon-grid-size); height: var(--uvc-icon-grid-size);"
+      ></ha-icon>
     </div>
   `;
+}
+
+updated(changedProperties) {
+  super.updated(changedProperties);
+  if (changedProperties.has('config')) {
+    this.style.setProperty('--mdc-icon-size', `${this.config.icon_size}px`);
+  }
+}
+_updateIconSize() {
+  this.style.setProperty('--mdc-icon-size', `${this.config.icon_size}px`);
 }
 
 _handleIconClick(entityId, interaction) {
@@ -577,7 +591,7 @@ _toggleEntity(entityId) {
     };
   }
 
- updated(changedProps) {
+updated(changedProps) {
     super.updated(changedProps);
     if (changedProps.has('config') || changedProps.has('hass')) {
       const style = getComputedStyle(this);
@@ -591,9 +605,11 @@ _toggleEntity(entityId) {
       this.style.setProperty('--uvc-icon-active', this.config.iconActiveColor || primaryColor);
       this.style.setProperty('--uvc-icon-inactive', this.config.iconInactiveColor || style.getPropertyValue('--secondary-text-color').trim());
       this.style.setProperty('--uvc-info-text-color', this.config.infoTextColor || style.getPropertyValue('--secondary-text-color').trim());
+      this.style.setProperty('--uvc-icon-grid-size', `${this.config.icon_size}px`);
+      this.style.setProperty('--mdc-icon-size', `${this.config.icon_size}px`);
     }
   }
-}
+  }
 
 customElements.define("ultra-vehicle-card", UltraVehicleCard);
 

@@ -12,6 +12,7 @@ export const styles = css`
     --uvc-icon-inactive: var(--secondary-text-color);
     --uvc-info-text-color: var(--secondary-text-color);
     --ha-card-border-radius: var(--ha-config-card-border-radius, 8px);
+    --uvc-icon-grid-size: var(--mdc-icon-size, 24px);
   }
   
   .vehicle-card-content {
@@ -44,24 +45,31 @@ export const styles = css`
     text-align: center;
   }
   
-  .info-line {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 8px;
-    text-align: center;
-    color: var(--uvc-info-text-color);
-  }
+.info-line {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  text-align: center;
+  color: var(--uvc-info-text-color);
+}
+.info-line ha-icon {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  --mdc-icon-size: 24px !important;
+}
   
   .location, .mileage {
-    display: flex;
-    align-items: center;
-    font-size: 0.9em;
-  }
+  display: flex;
+  align-items: center;
+  font-size: 0.9em;
+}
   
   .location ha-icon, .mileage ha-icon {
-    margin-right: 4px;
-  }
+  margin-right: 4px;
+}
   
   .level-info {
     flex: 1;
@@ -284,6 +292,12 @@ export const styles = css`
     opacity: 0.5;
     background-color: var(--primary-color);
   }
+  .drag-placeholder {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px dashed #ccc;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+}
 
   .handle {
     cursor: move;
@@ -347,15 +361,18 @@ export const styles = css`
     margin: 16px 0;
   }
   
-  .icon-item {
-    display: flex;
-    align-items: center;
-  }
+ .icon-item ha-icon {
+  width: var(--uvc-icon-grid-size);
+  height: var(--uvc-icon-grid-size);
+  color: var(--uvc-primary-color);
+}
   
   .icon-item ha-icon {
     width: 24px;
     height: 24px;
-    color: var(--uvc-primary-color);
+     width: var(--uvc-icon-grid-size);
+  height: var(--uvc-icon-grid-size);
+  color: var(--uvc-primary-color);
   }
   
   .interaction-select {
@@ -396,10 +413,6 @@ export const styles = css`
     margin-right: 8px;
   }
   
-  .color-picker {
-    margin-bottom: 16px;
-    width: 100%;
-  }
   
   .color-input-wrapper {
     display: flex;
@@ -408,7 +421,22 @@ export const styles = css`
     border-radius: 4px;
     position: relative;
     width: 100%;
+    gap: 12px;
+    margin-bottom:12px;
+padding-left: 4px;
+    padding-right: 4px;
+}
+  .color-pickers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .color-pickers-grid {
+    grid-template-columns: 1fr;
   }
+}
   
   .color-preview {
     flex-grow: 1;
@@ -431,20 +459,14 @@ export const styles = css`
     cursor: pointer;
   }
   
-  input[type="color"] {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 1000;
-  }
+input[type="color"] {
+  width: 100%;
+  height: 40px;
+  border: none;
+  cursor: pointer;
+  background-color: unset;
+}
   
-  .color-pickers-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
   
   .charge-limit-indicator {
     position: absolute;
@@ -454,7 +476,22 @@ export const styles = css`
     background-color: var(--uvc-limit-indicator);
     z-index: 1;
   }
-  
+   .entity-information {
+          border: 1px solid var(--divider-color);
+          padding: 16px;
+          margin-bottom: 16px;
+        }
+        .entity-information-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          cursor: pointer;
+        }
+        .icon-size-slider {
+          width: 100%;
+          margin-top: 16px;
+        }
+
   button {
     padding: 8px 16px;
     background-color: var(--primary-color);
@@ -509,9 +546,6 @@ export const styles = css`
   }
 
   @media (max-width: 600px) {
-    .color-pickers-grid {
-      grid-template-columns: 1fr;
-    }
     
     .icon-row, .interaction-row {
       flex-direction: column;

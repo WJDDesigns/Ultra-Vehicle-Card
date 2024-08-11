@@ -18,52 +18,6 @@ const fireEvent = (node, type, detail, options) => {
   return event;
 };
 
-function compressImage(file, maxWidth, maxHeight, quality) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = (event) => {
-      const img = new Image();
-      img.src = event.target.result;
-      img.onload = () => {
-        const elem = document.createElement("canvas");
-        let width = img.width;
-        let height = img.height;
-
-        if (width > height) {
-          if (width > maxWidth) {
-            height *= maxWidth / width;
-            width = maxWidth;
-          }
-        } else {
-          if (height > maxHeight) {
-            width *= maxHeight / height;
-            height = maxHeight;
-          }
-        }
-        elem.width = width;
-        elem.height = height;
-        const ctx = elem.getContext("2d");
-
-        ctx.clearRect(0, 0, width, height);
-        ctx.drawImage(img, 0, 0, width, height);
-
-        const fileType = file.type || "image/jpeg";
-        let data;
-
-        if (fileType === "image/png") {
-          data = elem.toDataURL("image/png");
-        } else {
-          data = elem.toDataURL("image/jpeg", quality);
-        }
-
-        resolve(data);
-      };
-      img.onerror = (error) => reject(error);
-    };
-    reader.onerror = (error) => reject(error);
-  });
-}
 
 export class UltraVehicleCardEditor extends LitElement {
   static get properties() {
@@ -93,6 +47,8 @@ export class UltraVehicleCardEditor extends LitElement {
       _iconInactiveColor: { type: String },
       _draggedElement: { type: Object },
       _draggedIndex: { type: Number },
+      _showEntityInformation: { type: Boolean },
+      _iconSize: { type: Number },
     };
   }
 
@@ -102,7 +58,7 @@ export class UltraVehicleCardEditor extends LitElement {
 
   constructor() {
     super();
-    this._batteryLevelEntityFilter = "";
+     this._batteryLevelEntityFilter = "";
     this._batteryRangeEntityFilter = "";
     this._fuelLevelEntityFilter = "";
     this._fuelRangeEntityFilter = "";
@@ -117,6 +73,9 @@ export class UltraVehicleCardEditor extends LitElement {
     this._currentEditingIconType = null;
     this._carStateEntityFilter = "";
     this._chargeLimitEntityFilter = "";
+    this._showEntityInformation = true;
+    this._iconSize = 24;
+    this._showEntityInformation = true;
   }
 
   setConfig(config) {
@@ -142,11 +101,15 @@ export class UltraVehicleCardEditor extends LitElement {
       hybrid_display_order: "fuel_first",
       car_state_entity: "",
       charge_limit_entity: "",
+      icon_size: 24,
+      showEntityInformation: config.showEntityInformation !== undefined ? config.showEntityInformation : true,
       ...config,
     };
     this._selectedIconGridEntities = [...this.config.icon_grid_entities];
     this._customIcons = { ...this.config.custom_icons };
     this._iconInteractions = { ...this.config.icon_interactions };
+    this._iconSize = this.config.icon_size || 24;
+    this._showEntityInformation = this.config.showEntityInformation;
   }
 
   render() {
@@ -156,10 +119,10 @@ export class UltraVehicleCardEditor extends LitElement {
 
    return html`
     <div class="editor-container">
-      ${this._renderBasicConfig()}
-      ${this._renderEntityPickers()}
-      ${this._renderIconGridConfig()}
-      ${this._renderColorPickers()}
+       ${this._renderBasicConfig()}
+        ${this._renderEntityInformation()}
+        ${this._renderIconGridConfig()}
+        ${this._renderColorPickers()}
     </div>
     `;
   }
@@ -167,27 +130,15 @@ export class UltraVehicleCardEditor extends LitElement {
   _renderBasicConfig() {
     return html`
       <div class="input-group">
-        <label for="title">Title</label>
-        <input
-          id="title"
-          type="text"
-          .value="${this.config.title}"
-          @input="${this._valueChanged}"
-          .configValue="${"title"}"
-        />
-      </div>
-
-      <div class="input-group">
-        <label for="image_url">Image URL</label>
-        <input
-          id="image_url"
-          type="text"
-          .value="${this._getDisplayImageUrl(this.config.image_url)}"
-          @input="${this._valueChanged}"
-          .configValue="${"image_url"}"
-        />
-      </div>
-
+  <label for="image_url">Image URL</label>
+  <input
+    id="image_url"
+    type="text"
+    .value="${this.config.image_url}"
+    @input="${this._valueChanged}"
+    .configValue="${"image_url"}"
+  />
+</div>
       <div class="input-group">
         <label for="image_upload">Upload Image</label>
         <input
@@ -293,6 +244,26 @@ export class UltraVehicleCardEditor extends LitElement {
         : ""}
     `;
   }
+  _renderEntityInformation() {
+    return html`
+      <div class="entity-information">
+        <div class="entity-information-header" @click=${this._toggleEntityInformation}>
+          <h3>Entity Information</h3>
+          <ha-icon icon=${this._showEntityInformation ? "mdi:chevron-up" : "mdi:chevron-down"}></ha-icon>
+        </div>
+        ${this._showEntityInformation ? this._renderEntityPickers() : ''}
+      </div>
+    `;
+  }
+  _toggleEntityInformation() {
+  this._showEntityInformation = !this._showEntityInformation;
+  this.config = {
+    ...this.config,
+    showEntityInformation: this._showEntityInformation,
+  };
+  this.configChanged(this.config);
+  this.requestUpdate();
+}
 
   _renderEntityPickers() {
     const { vehicle_type } = this.config;
@@ -442,6 +413,17 @@ export class UltraVehicleCardEditor extends LitElement {
             this._renderSelectedEntity(entityId, index)
           )}
         </div>
+        <div class="icon-size-slider">
+          <label for="icon-size">Icon Size: ${this._iconSize}px</label>
+          <input
+            type="range"
+            id="icon-size"
+            min="0"
+            max="100"
+            .value="${this._iconSize}"
+            @input="${this._iconSizeChanged}"
+          />
+        </div>
       </div>
     `;
   }
@@ -483,7 +465,7 @@ _renderSelectedEntity(entityId, index) {
   const useActiveColor = customIcon.useActiveColor !== false;
 
   return html`
-    <div class="selected-entity" data-entity-id="${entityId}" data-index="${index}">
+<div class="selected-entity" draggable="true" @dragstart="${(e) => this._onDragStart(e, index)}" data-entity-id="${entityId}">
       <div class="entity-header">
         <div class="handle" 
              @mousedown="${(e) => this._onDragStart(e, index)}"
@@ -502,7 +484,7 @@ _renderSelectedEntity(entityId, index) {
           @click="${() => this._removeIconGridEntity(index)}"
         ></ha-icon>
       </div>
-      <div class="entity-details" style="display: none;" data-entity-id="${entityId}">
+      <div class="entity-details" id="entity-details-${sanitizedEntityId}" style="display: none;">
         <div class="icon-row">
           <div class="icon-wrapper">
             <label>Inactive:</label>
@@ -521,14 +503,14 @@ _renderSelectedEntity(entityId, index) {
             ></ha-icon-picker>
           </div>
           <div class="checkbox-wrapper">
-    <input
-      type="checkbox"
-      id="use-active-color-${sanitizedEntityId}"
-      ?checked=${useActiveColor}
-      @change="${(e) => this._toggleActiveColor(entityId, e.target.checked)}"
-    />
-    <label for="use-active-color-${sanitizedEntityId}">Use Active Color</label>
-  </div>
+            <input
+              type="checkbox"
+              id="use-active-color-${sanitizedEntityId}"
+              ?checked=${useActiveColor}
+              @change="${(e) => this._toggleActiveColor(entityId, e.target.checked)}"
+            />
+            <label for="use-active-color-${sanitizedEntityId}">Use Active Color</label>
+          </div>
         </div>
         <div class="interaction-row">
           <label>Interaction:</label>
@@ -539,8 +521,15 @@ _renderSelectedEntity(entityId, index) {
   `;
 }
 _toggleEntityDetails(entityId) {
-  const detailsElement = this.shadowRoot.querySelector(`.entity-details[data-entity-id="${entityId}"]`);
-  const toggleIcon = this.shadowRoot.querySelector(`.selected-entity[data-entity-id="${entityId}"] .toggle-details`);
+  // Sanitize the entity ID for use in the element ID
+  const sanitizedEntityId = entityId.replace(/\./g, '_');
+  
+  // Find the details element using the sanitized ID
+  const detailsElement = this.shadowRoot.querySelector(`#entity-details-${sanitizedEntityId}`);
+  
+  // Find the toggle icon within the correct entity's row
+  const entityRow = this.shadowRoot.querySelector(`.selected-entity[data-entity-id="${entityId}"]`);
+  const toggleIcon = entityRow ? entityRow.querySelector('.toggle-details') : null;
   
   if (detailsElement && toggleIcon) {
     const isHidden = detailsElement.style.display === 'none' || !detailsElement.style.display;
@@ -584,87 +573,26 @@ _toggleActiveColor(entityId, useActiveColor) {
 }
 
 _onDragStart(e, index) {
-  e.stopPropagation();
-  this._draggedElement = e.target.closest('.selected-entity');
-  this._draggedIndex = index;
-  this._draggedElement.classList.add('dragging');
-
-  const moveHandler = (moveEvent) => {
-    this._onDragMove(moveEvent);
-  };
-
-  const endHandler = (endEvent) => {
-    this._onDragEnd(endEvent);
-    document.removeEventListener('mousemove', moveHandler);
-    document.removeEventListener('touchmove', moveHandler);
-    document.removeEventListener('mouseup', endHandler);
-    document.removeEventListener('touchend', endHandler);
-  };
-
-  document.addEventListener('mousemove', moveHandler);
-  document.addEventListener('touchmove', moveHandler);
-  document.addEventListener('mouseup', endHandler);
-  document.addEventListener('touchend', endHandler);
+    e.dataTransfer.setData('text/plain', index);
 }
 
-_onDragEnd(e) {
-  e.preventDefault();
-  e.stopPropagation();
-
-  this._draggedElement.classList.remove('dragging');
-  this._draggedElement.style.removeProperty('position');
-  this._draggedElement.style.removeProperty('z-index');
-  this._draggedElement.style.removeProperty('top');
-
-  const newIndex = parseInt(this._draggedElement.dataset.index);
-  if (newIndex !== this._draggedIndex) {
-    const newOrder = [...this._selectedIconGridEntities];
-    const [removed] = newOrder.splice(this._draggedIndex, 1);
-    newOrder.splice(newIndex, 0, removed);
-    this._selectedIconGridEntities = newOrder;
-    this._updateIconGridConfig();
-  }
-
-  this._draggedElement = null;
-  this._draggedIndex = null;
-
-  this.requestUpdate();
+_onDragOver(e) {
+    e.preventDefault();
 }
 
-_onDragMove(e) {
-  e.preventDefault();
-  const containerRect = this.shadowRoot.querySelector('.selected-entities').getBoundingClientRect();
-  const y = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+_onDrop(e) {
+    e.preventDefault();
+    const fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
+    const toIndex = [...e.currentTarget.children].indexOf(e.target.closest('.selected-entity'));
 
-  this._draggedElement.style.position = 'absolute';
-  this._draggedElement.style.zIndex = '1000';
-  this._draggedElement.style.top = `${y - containerRect.top - 20}px`;
-
-  const elements = this.shadowRoot.querySelectorAll('.selected-entity:not(.dragging)');
-  let closestElement = null;
-  let closestDistance = Infinity;
-
-  elements.forEach((element) => {
-    const rect = element.getBoundingClientRect();
-    const distance = Math.abs(rect.top + rect.height / 2 - y);
-
-    if (distance < closestDistance) {
-      closestDistance = distance;
-      closestElement = element;
+    if (fromIndex !== toIndex && toIndex !== -1) {
+        const newOrder = [...this._selectedIconGridEntities];
+        const [removed] = newOrder.splice(fromIndex, 1);
+        newOrder.splice(toIndex, 0, removed);
+        this._selectedIconGridEntities = newOrder;
+        this._updateIconGridConfig();
     }
-  });
-
-  if (closestElement) {
-    const closestIndex = parseInt(closestElement.dataset.index);
-    if (closestIndex > this._draggedIndex) {
-      closestElement.parentNode.insertBefore(this._draggedElement, closestElement.nextSibling);
-    } else {
-      closestElement.parentNode.insertBefore(this._draggedElement, closestElement);
-    }
-    this._updateIndices();
-  }
 }
-
 _updateIndices() {
   const elements = this.shadowRoot.querySelectorAll('.selected-entity');
   elements.forEach((element, index) => {
@@ -674,158 +602,109 @@ _updateIndices() {
 _renderInteractionSelect(entityId, interaction) {
   const interactions = [
     { value: "more-info", label: "More Info" },
-    { value: "toggle", label: "Toggle" },
-    { value: "navigate", label: "Navigate" },
-    { value: "url", label: "URL" },
-    { value: "call-service", label: "Perform action" },
-    { value: "assist", label: "Assist" },
-    { value: "none", label: "None" },
+      { value: "toggle", label: "Toggle" },
+      { value: "navigate", label: "Navigate" },
+      { value: "url", label: "URL" },
+      { value: "automation", label: "Automation" },
+      { value: "none", label: "None" },
   ];
 
-   return html`
-    <select
-      class="interaction-select"
-      .value=${interaction.type}
-      @change=${(e) => this._handleInteractionTypeChange(entityId, e.target.value)}
-    >
-      ${interactions.map(
-        (int) => html`
-          <option value=${int.value} ?selected=${interaction.type === int.value}>
-            ${int.label}
-          </option>
-        `
-      )}
-    </select>
-    ${this._renderInteractionOptions(entityId, interaction)}
-  `;
-}
+return html`
+      <select
+        class="interaction-select"
+        .value=${interaction.type}
+        @change=${(e) => this._handleInteractionTypeChange(entityId, e.target.value)}
+      >
+        ${interactions.map(
+          (int) => html`
+            <option value=${int.value} ?selected=${interaction.type === int.value}>
+              ${int.label}
+            </option>
+          `
+        )}
+      </select>
+      ${this._renderInteractionOptions(entityId, interaction)}
+    `;
+  }
 
 _renderInteractionOptions(entityId, interaction) {
-  switch (interaction.type) {
-    case 'navigate':
-      return this._renderNavigationOption(entityId, interaction);
-    case 'url':
-      return this._renderUrlOption(entityId, interaction);
-     case 'call-service':
-      return this._renderServiceOption(entityId, interaction);
-    case 'assist':
-      return this._renderAssistOption(entityId, interaction);
-    default:
-      return html``;
+    switch (interaction.type) {
+      case 'navigate':
+        return this._renderNavigationOption(entityId, interaction);
+      case 'url':
+        return this._renderUrlOption(entityId, interaction);
+      case 'automation':
+        return this._renderAutomationOption(entityId, interaction);
+      default:
+        return html``;
+    }
   }
-}
 
 _renderNavigationOption(entityId, interaction) {
-  const paths = this._getNavigationPaths();
-  return html`
-    <div class="interaction-option">
-      <label>Navigation path:</label>
-      <select
-        @change=${(e) => this._updateInteractionOption(entityId, 'path', e.target.value)}
-      >
-        ${paths.map(path => html`
-          <option value=${path} ?selected=${interaction.path === path}>${path}</option>
-        `)}
-      </select>
-    </div>
-  `;
-}
-
-_renderUrlOption(entityId, interaction) {
-  return html`
-    <div class="interaction-option">
-      <label>URL:</label>
-      <input
-        type="text"
-        .value=${interaction.url || ''}
-        @input=${(e) => this._updateInteractionOption(entityId, 'url', e.target.value)}
-      />
-    </div>
-  `;
-}
-
-_renderServiceOption(entityId, interaction) {
-  const services = this._getAvailableServices();
-  return html`
-    <div class="interaction-option">
-      <label>Action:</label>
-      <select
-        @change=${(e) => this._updateInteractionOption(entityId, 'service', e.target.value)}
-      >
-        ${services.map(service => html`
-          <option value=${service.service} ?selected=${interaction.service === service.service}>
-            ${service.name}
-          </option>
-        `)}
-      </select>
-      ${interaction.service ? html`
-        <div class="service-description">${this._getServiceDescription(interaction.service)}</div>
-        <div class="targets">
-          <button @click=${() => this._openTargetSelector(entityId, 'area')}>Choose area</button>
-          <button @click=${() => this._openTargetSelector(entityId, 'device')}>Choose device</button>
-          <button @click=${() => this._openTargetSelector(entityId, 'entity')}>Choose entity</button>
-          <button @click=${() => this._openTargetSelector(entityId, 'label')}>Choose label</button>
-        </div>
-      ` : ''}
-    </div>
-  `;
-}
-_getServiceDescription(service) {
-  // Implement this function to return the description of the selected service
-  // You may need to fetch this information from Home Assistant
-}
-_getServiceDescription(service) {
-  // Implement this function to return the description of the selected service
-  // You may need to fetch this information from Home Assistant
-}
-
-_renderAssistOption(entityId, interaction) {
-  const assistants = this._getAvailableAssistants();
-  return html`
-    <div class="interaction-option">
-      <label>Assistant:</label>
-      <select
-        @change=${(e) => this._updateInteractionOption(entityId, 'assistant', e.target.value)}
-      >
-        ${assistants.map(assistant => html`
-          <option value=${assistant.id} ?selected=${interaction.assistant === assistant.id}>
-            ${assistant.name}
-          </option>
-        `)}
-      </select>
-      <div class="checkbox-wrapper">
-        <input
-          type="checkbox"
-          id="start-listening-${entityId}"
-          ?checked=${interaction.startListening}
-          @change=${(e) => this._updateInteractionOption(entityId, 'startListening', e.target.checked)}
-        />
-        <label for="start-listening-${entityId}">Start listening</label>
+    const paths = this._getNavigationPaths();
+    return html`
+      <div class="interaction-option">
+        <label>Navigation path:</label>
+        <select
+          @change=${(e) => this._updateInteractionOption(entityId, 'path', e.target.value)}
+        >
+          ${paths.map(path => html`
+            <option value=${path} ?selected=${interaction.path === path}>${path}</option>
+          `)}
+        </select>
       </div>
-    </div>
-  `;
-}
+    `;
+  }
 
-_getAvailableAssistants() {
-  // Implement this function to fetch the available assistants from Home Assistant
-  // You may need to use the hass object to get this information
-  return [
-    { id: 'last_used', name: 'Last Used Assistant' },
-    { id: 'home_assistant', name: 'Home Assistant (English)' },
-    { id: 'home_assistant_cloud', name: 'Home Assistant Cloud (English)' },
-  ];
-}
+ _renderUrlOption(entityId, interaction) {
+    return html`
+      <div class="interaction-option">
+        <label>URL:</label>
+        <input
+          type="text"
+          .value=${interaction.url || ''}
+          @input=${(e) => this._updateInteractionOption(entityId, 'url', e.target.value)}
+        />
+      </div>
+    `;
+  }
+  
+_renderAutomationOption(entityId, interaction) {
+    const automations = this._getAutomations();
+    return html`
+      <div class="interaction-option">
+        <label>Automation:</label>
+        <select
+          @change=${(e) => this._updateInteractionOption(entityId, 'automation', e.target.value)}
+        >
+          ${automations.map(automation => html`
+            <option value=${automation.entity_id} ?selected=${interaction.automation === automation.entity_id}>
+              ${automation.attributes.friendly_name || automation.entity_id}
+            </option>
+          `)}
+        </select>
+      </div>
+    `;
+  }
+
+_getAutomations() {
+    return Object.values(this.hass.states).filter(
+      (entity) => entity.entity_id.startsWith("automation.")
+    );
+  }
 
 _handleInteractionTypeChange(entityId, newType) {
-  this._iconInteractions = {
-    ...this._iconInteractions,
-    [entityId]: { type: newType },
-  };
-  this._updateIconInteractionsConfig();
-  this.requestUpdate();
+    this._iconInteractions = {
+      ...this._iconInteractions,
+      [entityId]: { type: newType },
+    };
+    this._updateIconInteractionsConfig();
+    this.requestUpdate();
+  }
+_getDisplayImageUrl(url) {
+  return url && url.startsWith("data:image") ? "Uploaded Image" : url;
 }
-
-_updateInteractionOption(entityId, option, value) {
+ _updateInteractionOption(entityId, option, value) {
   this._iconInteractions = {
     ...this._iconInteractions,
     [entityId]: {
@@ -836,38 +715,17 @@ _updateInteractionOption(entityId, option, value) {
   this._updateIconInteractionsConfig();
 }
 
-_getAvailableServices() {
-  const services = [];
-  if (this.hass) {
-    Object.keys(this.hass.services).forEach(domain => {
-      Object.keys(this.hass.services[domain]).forEach(service => {
-        services.push({
-          service: `${domain}.${service}`,
-          name: `${domain}.${service}`
-        });
-      });
-    });
-  }
-  return services;
+_iconSizeChanged(e) {
+  this._iconSize = parseInt(e.target.value);
+  this.config = {
+    ...this.config,
+    icon_size: this._iconSize,
+  };
+  this.configChanged(this.config);
+  fireEvent(this, 'config-changed', { config: this.config });
 }
 
-_getAvailableAssistants() {
-  // This is a placeholder. You'll need to implement this based on how
-  // assistants are managed in your Home Assistant setup.
-  return [
-    { id: 'default', name: 'Default Assistant' },
-    { id: 'google', name: 'Google Assistant' },
-    { id: 'alexa', name: 'Alexa' }
-  ];
-}
-  _handleInteractionChange(entityId, newInteraction) {
-    this._iconInteractions = {
-      ...this._iconInteractions,
-      [entityId]: newInteraction,
-    };
-    this._updateIconInteractionsConfig();
-  }
-
+ 
 _handleIconChange(e, iconType, entityId) {
   const newIcon = e.detail.value;
   this._selectIcon(entityId, newIcon, iconType);
@@ -892,87 +750,69 @@ _selectIcon(entityId, icon, iconType) {
     this.configChanged(this.config);
   }
 
-  _renderColorPickers() {
-    const getDefaultColor = (property) => {
-      const style = getComputedStyle(this);
-      return style.getPropertyValue(property).trim() || style.getPropertyValue(`--${property}`).trim();
-    };
+ _renderColorPickers() {
+  const getDefaultColor = (property) => {
+    const style = getComputedStyle(this);
+    return style.getPropertyValue(property).trim() || style.getPropertyValue(`--${property}`).trim();
+  };
 
-    const defaultColors = {
-      cardBackgroundColor: getDefaultColor('--card-background-color') || '#1c1c1c',
-      barBackgroundColor: getDefaultColor('--uvc-bar-background-color') || '#595959',
-      barBorderColor: getDefaultColor('--uvc-bar-border-color') || '#595959',
-      barFillColor: getDefaultColor('--uvc-primary-color') || '#4CAF50',
-      limitIndicatorColor: '#FFFFFF',
-      iconActiveColor: getDefaultColor('--uvc-primary-color') || '#4CAF50',
-      iconInactiveColor: getDefaultColor('--secondary-text-color') || '#9E9E9E',
-      infoTextColor: getDefaultColor('--secondary-text-color') || '#9E9E9E'
-    };
+  const defaultColors = {
+    cardBackgroundColor: getDefaultColor('--card-background-color') || '#1c1c1c',
+    barBackgroundColor: getDefaultColor('--uvc-bar-background') || '#595959',
+    barBorderColor: getDefaultColor('--uvc-bar-border-color') || '#595959',
+    barFillColor: getDefaultColor('--uvc-bar-fill') || '#4CAF50',
+    limitIndicatorColor: '#FFFFFF',
+    iconActiveColor: getDefaultColor('--uvc-icon-active') || '#4CAF50',
+    iconInactiveColor: getDefaultColor('--uvc-icon-inactive') || '#9E9E9E',
+    infoTextColor: getDefaultColor('--uvc-info-text-color') || '#9E9E9E'
+  };
 
-    return html`
-      <div class="color-pickers">
-        <h3>Custom Colors</h3>
-        <div class="entity-description">
-          Customize the colors of various elements in the card. Click on a color to change it, or use the reset icon to revert to the default color.
-        </div>
-        <div class="color-pickers-grid">
-          ${Object.entries(defaultColors).map(([key, defaultValue]) => html`
-            <div class="color-picker-item">
-              ${this._renderColorPicker(this._formatLabel(key), key, defaultValue)}
-            </div>
-          `)}
-        </div>
+  return html`
+    <div class="color-pickers">
+      <h3>Custom Colors</h3>
+      <div class="entity-description">
+        Customize the colors of various elements in the card. Click on a color to change it, or use the reset icon to revert to the default color.
       </div>
-    `;
-  }
-
-  _renderColorPicker(label, configKey, defaultValue) {
-    const currentValue = this.config[configKey] || defaultValue;
-    const textColor = this._getContrastYIQ(currentValue);
-    return html`
-      <div class="color-picker">
-        <label>${label}</label>
-        <div class="color-input-wrapper" @click="${(e) => this._openColorPicker(e, configKey)}">
-          <div class="color-preview" style="background-color: ${currentValue}; color: ${textColor};">
-            <span class="color-hex">${currentValue}</span>
-            <ha-icon
-              class="reset-icon"
-              icon="mdi:refresh"
-              @click=${(e) => this._resetColor(e, configKey, defaultValue)}
-            ></ha-icon>
+      <div class="color-pickers-grid">
+        ${Object.entries(defaultColors).map(([key, defaultValue]) => html`
+          <div class="color-picker-item">
+            ${this._renderColorPicker(this._formatLabel(key), key, defaultValue)}
           </div>
-          <input
-            type="color"
-            .value=${currentValue}
-            @change=${(e) => this._colorChanged(e, configKey)}
-            style="display: none;"
-          >
-        </div>
+        `)}
       </div>
-    `;
-  }
+    </div>
+  `;
+}
 
-  _openColorPicker(e, configKey) {
-    e.stopPropagation();
-    const colorInput = e.target.closest('.color-input-wrapper').querySelector('input[type="color"]');
-    colorInput.click();
-    
-    const rect = e.target.getBoundingClientRect();
-    const pickerPopup = e.target.closest('.color-input-wrapper').querySelector('.color-picker-popup');
-    pickerPopup.style.top = `${rect.bottom}px`;
-    pickerPopup.style.left = `${rect.left}px`;
+_renderColorPicker(label, configKey, defaultValue) {
+  const currentValue = this.config[configKey] || defaultValue;
+  const textColor = this._getContrastYIQ(currentValue);
+  return html`
+    <div class="color-picker">
+      <label>${label}</label>
+      <div class="color-input-wrapper">
+        <input type="color" .value="${currentValue}" @input="${(e) => this._colorChanged(e, configKey)}">
+        <span class="color-hex">${currentValue}</span>
+        <ha-icon
+          class="reset-icon"
+          icon="mdi:refresh"
+          @click=${(e) => this._resetColor(e, configKey, defaultValue)}
+        ></ha-icon>
+      </div>
+    </div>
+  `;
+}
 
-    const hideColorPicker = (event) => {
-        if (!event.target.closest('.color-input-wrapper')) {
-            colorInput.style.display = 'none';
-            document.removeEventListener('click', hideColorPicker);
-        }
-    };
 
-    setTimeout(() => {
-        document.addEventListener('click', hideColorPicker);
-    }, 0);
-  }
+ _colorChanged(e, configKey) {
+  const color = e.target.value;
+  this.config = {
+    ...this.config,
+    [configKey]: color,
+  };
+  this.configChanged(this.config);
+  this.requestUpdate();
+}
 
   _resetColor(e, configKey, defaultValue) {
     e.stopPropagation();
@@ -983,21 +823,7 @@ _selectIcon(entityId, icon, iconType) {
     this.configChanged(this.config);
     this.requestUpdate();
   }
-
-  _colorChanged(e, configKey) {
-    const color = e.target.value;
-    this.config = {
-      ...this.config,
-      [configKey]: color,
-    };
-    this.configChanged(this.config);
-  }
-
-  _getDisplayImageUrl(url) {
-    return url && url.startsWith("data:image") ? "Uploaded Image" : url;
-  }
-
-  _valueChanged(ev) {
+_valueChanged(ev) {
     if (!this.config || !this.hass) {
       return;
     }
@@ -1134,11 +960,11 @@ _selectIcon(entityId, icon, iconType) {
 
 
   _updateIconGridConfig() {
-  this.config = {
-    ...this.config,
-    icon_grid_entities: this._selectedIconGridEntities,
-  };
-  this.configChanged(this.config);
+    this.config = {
+        ...this.config,
+        icon_grid_entities: this._selectedIconGridEntities,
+    };
+    this.configChanged(this.config);
 }
   _updateCustomIconsConfig() {
     this.config = {
