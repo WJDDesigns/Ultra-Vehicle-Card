@@ -3,7 +3,7 @@ import { UltraVehicleCardEditor } from "./ultra-vehicle-card-editor.js";
 import { styles } from "./styles.js";
 
 
-const version = "V1.2.0";
+const version = "V1.2.1";
 
 
 class UltraVehicleCard extends LitElement {
@@ -143,26 +143,26 @@ _renderEVInfo() {
     `;
   }
   
- _isCharging(chargingStatusEntity) {
-  if (!chargingStatusEntity) return false;
-
-  const state = chargingStatusEntity.state.toLowerCase();
-  const entityId = chargingStatusEntity.entity_id.toLowerCase();
-
-  // Special handling for 'none_charging' entities
-  if (entityId.includes('none_charging')) {
-    return state === 'off';  // 'off' means it IS charging for this entity
+  _isCharging(chargingStatusEntity) {
+    if (!chargingStatusEntity) return false;
+  
+    const state = chargingStatusEntity.state.toLowerCase();
+    const entityId = chargingStatusEntity.entity_id.toLowerCase();
+  
+    // Special handling for 'none_charging' entities
+    if (entityId.includes('none_charging')) {
+      return state === 'on';  // 'on' means charging for this specific entity
+    }
+  
+    // Handle boolean entities
+    if (chargingStatusEntity.attributes.device_class === 'battery_charging' || ['on', 'off'].includes(state)) {
+      return state === 'on';
+    }
+  
+    // Handle string-based entities
+    const chargingStates = ['charging', 'in_charging', 'charge_start', 'in_progress', 'active', 'connected'];
+    return chargingStates.includes(state);
   }
-
-  // Handle boolean entities
-  if (chargingStatusEntity.attributes.device_class === 'battery_charging' || ['on', 'off'].includes(state)) {
-    return state === 'on';
-  }
-
-  // Handle string-based entities
-  const chargingStates = ['charging', 'in_charging', 'charge_start', 'in_progress', 'active', 'connected'];
-  return chargingStates.includes(state);
-}
 
 
 _formatBinarySensorState(state, attributes) {
@@ -442,7 +442,6 @@ _renderInfoLine() {
   
   _renderIconItem(entityId) {
     if (!this.hass || !this.hass.states || !this.hass.states[entityId]) {
-      console.warn(`Entity ${entityId} not found. Skipping icon rendering.`);
       return html``;
     }
   
