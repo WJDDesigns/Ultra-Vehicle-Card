@@ -162,7 +162,7 @@ _renderEVInfo() {
     }
   
     // Handle string-based entities
-    const chargingStates = ['charging', 'in_charging', 'charge_start', 'in_progress', 'active', 'connected'];
+    const chargingStates = ['charging', 'in_charging', 'charge_start', 'in_progress', 'active', 'connected', 'true'];
     return chargingStates.includes(state);
   }
 
