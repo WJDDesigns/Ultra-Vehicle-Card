@@ -651,7 +651,7 @@ window.customCards.push({
   name: "Ultra Vehicle Card",
   description: "A card that displays vehicle information with fuel/charge level, range, location, mileage, and a customizable icon grid.",
   preview: true,
-  documentationURL: "https://github.com/YOUR_USERNAME/ultra-vehicle-card",
+  documentationURL: "https://github.com/WJDDesigns/Ultra-Vehicle-Card",
   version: version
 });
 
