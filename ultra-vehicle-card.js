@@ -22,57 +22,94 @@ class UltraVehicleCard extends LitElement {
   return [styles];
 }
 
-  setConfig(config) {
-    if (!config.title) {
-      throw new Error("You need to define a title");
-    }
-    this.config = {
-      title: "My Vehicle",
-      image_url: "",
-    charging_image_url: "",
-      vehicle_type: "EV",
-      unit_type: "mi",
-      battery_level_entity: "",
-      battery_range_entity: "",
-      fuel_level_entity: "",
-      fuel_range_entity: "",
-      charging_status_entity: "",
-      location_entity: "",
-      mileage_entity: "",
-      show_battery: true,
-      show_battery_range: true,
-      show_fuel: true,
-      show_fuel_range: true,
-      show_location: true,
-      show_mileage: true,
-      show_car_state: true,
-      show_charge_limit: true,
-      icon_grid_entities: [],
-      custom_icons: {},
-      icon_interactions: {},
-      icon_styles: {},
-      hybrid_display_order: 'fuel_first',
-      car_state_entity: "",
-      charge_limit_entity: "",
-      cardBackgroundColor: "",
-      barBackgroundColor: "",
-      barFillColor: "",
-      limitIndicatorColor: "",
-      iconActiveColor: "",
-      iconInactiveColor: "",
-      barBorderColor: "",
-      icon_size: 24,
-      icon_gap: 12,
-    ...config
-    };
-    // Handle backward compatibility for entity names
-if (this.config.level_entity && !this.config.battery_level_entity) {
-  this.config.battery_level_entity = this.config.level_entity;
-}
-if (this.config.range_entity && !this.config.battery_range_entity) {
-  this.config.battery_range_entity = this.config.range_entity;
-}
+setConfig(config) {
+  if (!config.title) {
+    throw new Error("You need to define a title");
   }
+  this.config = {
+    title: "My Vehicle",
+    image_url: "",
+    charging_image_url: "",
+    image_url_type: "image",
+    charging_image_url_type: "image",
+    vehicle_type: "EV",
+    unit_type: "mi",
+    battery_level_entity: "",
+    battery_range_entity: "",
+    fuel_level_entity: "",
+    fuel_range_entity: "",
+    charging_status_entity: "",
+    location_entity: "",
+    mileage_entity: "",
+    show_battery: true,
+    show_battery_range: true,
+    show_fuel: true,
+    show_fuel_range: true,
+    show_location: true,
+    show_mileage: true,
+    show_car_state: true,
+    show_charge_limit: true,
+    icon_grid_entities: [],
+    custom_icons: {},
+    icon_interactions: {},
+    icon_styles: config.icon_styles || {},
+    hybrid_display_order: 'fuel_first',
+    car_state_entity: "",
+    charge_limit_entity: "",
+    cardBackgroundColor: "",
+    barBackgroundColor: "",
+    barFillColor: "",
+    limitIndicatorColor: "",
+    iconActiveColor: "",
+    iconInactiveColor: "",
+    barBorderColor: "",
+    icon_size: 24,
+    icon_gap: 12,
+    image_entity: "",
+    charging_image_entity: "",
+    carStateTextColor: config.carStateTextColor || '',
+    rangeTextColor: config.rangeTextColor || '',
+    percentageTextColor: config.percentageTextColor || '',
+    icon_sizes: config.icon_sizes || {},
+    engine_on_entity: "",
+    ...config
+  };
+
+  // Handle backward compatibility for entity names
+  if (this.config.level_entity && !this.config.battery_level_entity) {
+    this.config.battery_level_entity = this.config.level_entity;
+  }
+  if (this.config.range_entity && !this.config.battery_range_entity) {
+    this.config.battery_range_entity = this.config.range_entity;
+  }
+
+  // Ensure image_url_type and charging_image_url_type are set correctly
+  this.config.image_url_type = this.config.image_url_type || "image";
+  this.config.charging_image_url_type = this.config.charging_image_url_type || "image";
+
+  // Handle image entities
+  if (this.config.image_url_type === "entity") {
+    this.config.image_entity = this.config.image_entity || this.config.image_url;
+    this.config.image_url = ""; // Clear image_url if using an entity
+  }
+  if (this.config.charging_image_url_type === "entity") {
+    this.config.charging_image_entity = this.config.charging_image_entity || this.config.charging_image_url;
+    this.config.charging_image_url = ""; // Clear charging_image_url if using an entity
+  }
+
+  // Validate entity configurations
+  this._validateEntityConfig('image_entity', this.config.image_url_type);
+  this._validateEntityConfig('charging_image_entity', this.config.charging_image_url_type);
+
+  console.log('Final configuration:', this.config);
+}
+
+// Add this method to validate entity configurations
+_validateEntityConfig(entityKey, urlType) {
+  if (urlType === 'entity' && !this.config[entityKey]) {
+    console.warn(`${entityKey} is set to use an entity, but no entity is specified.`);
+  }
+}
 
   render() {
     if (!this.hass || !this.config) {
@@ -115,9 +152,8 @@ _renderEVInfo() {
   const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
   const chargeLimitEntity = this.config.charge_limit_entity ? this.hass.states[this.config.charge_limit_entity] : null;
 
-  // Round the battery level to the nearest integer
   const batteryLevel = batteryLevelEntity ? Math.round(parseFloat(batteryLevelEntity.state)) : null;
-  const batteryRange = batteryRangeEntity ? Math.round(parseFloat(batteryRangeEntity.state)) : null;
+  const batteryRange = batteryRangeEntity ? this._formatRange(batteryRangeEntity.state, batteryRangeEntity.attributes.unit_of_measurement) : null;
   const isCharging = this._isCharging(chargingStatusEntity);
   const chargeLimit = chargeLimitEntity && this.config.show_charge_limit ? Math.round(parseFloat(chargeLimitEntity.state)) : null;
 
@@ -131,18 +167,34 @@ _renderEVInfo() {
           ` : ''}
         </div>
         <div class="level-text">
-          <span>${batteryLevel}% ${isCharging ? 'Charging' : 'Charge'}</span>
+          <span style="color: var(--uvc-percentage-text-color);">${batteryLevel}% ${isCharging ? 'Charging' : 'Charge'}</span>
           ${this.config.show_battery_range && batteryRange !== null ? html`
-            <span class="range">${batteryRange} ${this.config.unit_type}</span>
+            <span class="range">${batteryRange}</span>
           ` : ''}
         </div>
       ` : this.config.show_battery_range && batteryRange !== null ? html`
         <div class="level-text">
-          <span class="range" style="float: right;">${batteryRange} ${this.config.unit_type}</span>
+          <span class="range" style="float: right;">${batteryRange}</span>
         </div>
       ` : ''}
     </div>
   `;
+}
+_formatRange(value, unit) {
+  const numValue = parseFloat(value);
+  if (isNaN(numValue)) return value;
+  
+  const formattedValue = this._formatNumberWithCommas(Math.round(numValue));
+  
+  if (unit === 'km' && numValue > 1000) {
+    return `${this._formatNumberWithCommas(Math.round(numValue / 100) / 10)} k${unit}`;
+  } else {
+    return `${formattedValue} ${unit}`;
+  }
+}
+
+_formatNumberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
   
   _isCharging(chargingStatusEntity) {
@@ -162,7 +214,7 @@ _renderEVInfo() {
     }
   
     // Handle string-based entities
-    const chargingStates = ['charging', 'in_charging', 'charge_start', 'in_progress', 'active', 'connected', 'true'];
+    const chargingStates = ['charging', 'in_charging', 'charge_start', 'in_progress', 'active', 'connected'];
     return chargingStates.includes(state);
   }
 
@@ -179,29 +231,38 @@ _formatBinarySensorState(state, attributes) {
 _renderFuelInfo() {
   const fuelLevelEntity = this.config.fuel_level_entity ? this.hass.states[this.config.fuel_level_entity] : null;
   const fuelRangeEntity = this.config.fuel_range_entity ? this.hass.states[this.config.fuel_range_entity] : null;
+  const engineOnEntity = this.config.engine_on_entity ? this.hass.states[this.config.engine_on_entity] : null;
 
   const fuelLevel = fuelLevelEntity ? parseFloat(fuelLevelEntity.state) : null;
-  const fuelRange = fuelRangeEntity ? Math.round(parseFloat(fuelRangeEntity.state)) : null;
+  const fuelRange = fuelRangeEntity ? this._formatRange(fuelRangeEntity.state, fuelRangeEntity.attributes.unit_of_measurement) : null;
+  const isEngineOn = this._isEngineOn(engineOnEntity);
 
   return html`
     <div class="level-info">
       ${this.config.show_fuel && fuelLevel !== null ? html`
         <div class="item_bar">
-          <div class="progress" style="width: ${fuelLevel}%;"></div>
+          <div class="progress ${isEngineOn ? 'engine-on' : ''}" style="width: ${fuelLevel}%;"></div>
         </div>
         <div class="level-text">
-          <span>${fuelLevel}% Fuel</span>
+          <span style="color: var(--uvc-percentage-text-color);">${fuelLevel}% ${isEngineOn ? 'Engine On' : 'Fuel'}</span>
           ${this.config.show_fuel_range && fuelRange !== null ? html`
-            <span class="range">${fuelRange} ${this.config.unit_type}</span>
+            <span class="range">${fuelRange}</span>
           ` : ''}
         </div>
       ` : this.config.show_fuel_range && fuelRange !== null ? html`
         <div class="level-text">
-          <span class="range" style="float: right;">${fuelRange} ${this.config.unit_type}</span>
+          <span class="range" style="float: right;">${fuelRange}</span>
         </div>
       ` : ''}
     </div>
   `;
+}
+
+_isEngineOn(engineOnEntity) {
+  if (!engineOnEntity) return false;
+
+  const state = engineOnEntity.state.toLowerCase();
+  return ['on', 'running', 'true'].includes(state);
 }
 
 _renderHybridInfo() {
@@ -213,9 +274,9 @@ _renderHybridInfo() {
   const chargeLimitEntity = this.config.charge_limit_entity ? this.hass.states[this.config.charge_limit_entity] : null;
 
   const batteryLevel = batteryLevelEntity ? parseFloat(batteryLevelEntity.state) : null;
-  const batteryRange = batteryRangeEntity ? Math.round(parseFloat(batteryRangeEntity.state)) : null;
+  const batteryRange = batteryRangeEntity ? this._formatRange(batteryRangeEntity.state, batteryRangeEntity.attributes.unit_of_measurement) : null;
   const fuelLevel = fuelLevelEntity ? parseFloat(fuelLevelEntity.state) : null;
-  const fuelRange = fuelRangeEntity ? Math.round(parseFloat(fuelRangeEntity.state)) : null;
+  const fuelRange = fuelRangeEntity ? this._formatRange(fuelRangeEntity.state, fuelRangeEntity.attributes.unit_of_measurement) : null;
   const isCharging = this._isCharging(chargingStatusEntity);
   const chargeLimit = chargeLimitEntity && this.config.show_charge_limit ? parseFloat(chargeLimitEntity.state) : null;
   
@@ -237,7 +298,7 @@ _renderHybridInfo() {
   `;
 }
 
- _renderBatteryBar(level, range, isCharging, chargeLimit) {
+_renderBatteryBar(level, range, isCharging, chargeLimit) {
   return html`
     ${this.config.show_battery && level !== null ? html`
       <div class="item_bar">
@@ -247,38 +308,38 @@ _renderHybridInfo() {
         ` : ''}
       </div>
       <div class="level-text">
-        <span>${level}% ${isCharging ? 'Charging' : 'Charge'}</span>
+        <span style="color: var(--uvc-percentage-text-color);">${level}% ${isCharging ? 'Charging' : 'Charge'}</span>
         ${this.config.show_battery_range && range !== null ? html`
-          <span class="range">${range} ${this.config.unit_type}</span>
+          <span class="range">${range}</span>
         ` : ''}
       </div>
     ` : this.config.show_battery_range && range !== null ? html`
       <div class="level-text">
-        <span class="range" style="float: right;">${range} ${this.config.unit_type}</span>
+        <span class="range" style="float: right;">${range}</span>
       </div>
     ` : ''}
   `;
 }
 
-  _renderFuelBar(level, range) {
-    return html`
-      ${this.config.show_fuel && level !== null ? html`
-        <div class="item_bar">
-          <div class="progress" style="width: ${level}%;"></div>
-        </div>
-        <div class="level-text">
-          <span>${level}% Fuel</span>
-          ${this.config.show_fuel_range && range !== null ? html`
-            <span class="range">${range} ${this.config.unit_type}</span>
-          ` : ''}
-        </div>
-      ` : this.config.show_fuel_range && range !== null ? html`
-        <div class="level-text">
-          <span class="range" style="float: right;">${range} ${this.config.unit_type}</span>
-        </div>
-      ` : ''}
-    `;
-  }
+_renderFuelBar(level, range) {
+  return html`
+    ${this.config.show_fuel && level !== null ? html`
+      <div class="item_bar">
+        <div class="progress" style="width: ${level}%;"></div>
+      </div>
+      <div class="level-text">
+        <span style="color: var(--uvc-percentage-text-color);">${level}% Fuel</span>
+        ${this.config.show_fuel_range && range !== null ? html`
+          <span class="range">${range}</span>
+        ` : ''}
+      </div>
+    ` : this.config.show_fuel_range && range !== null ? html`
+      <div class="level-text">
+        <span class="range" style="float: right;">${range}</span>
+      </div>
+    ` : ''}
+  `;
+}
 
   _renderHeader() {
     return html`
@@ -287,21 +348,22 @@ _renderHybridInfo() {
     `;
   }
 
-_renderCarState() {
-  if (!this.config.show_car_state || !this.config.car_state_entity) return '';
-
-  const carStateEntity = this.hass.states[this.config.car_state_entity];
-  if (!carStateEntity) return '';
-
-
-  const state = this._formatCarState(carStateEntity.state, carStateEntity.attributes);
-
-  return html`
-    <div class="car-state" style="text-align: center; margin-bottom: 8px;">
-      <span class="state-value">${state}</span>
-    </div>
-  `;
-}
+  _renderCarState() {
+    if (!this.config.show_car_state || !this.config.car_state_entity) return '';
+  
+    const carStateEntity = this.hass.states[this.config.car_state_entity];
+    if (!carStateEntity) return '';
+  
+    const state = this._formatCarState(carStateEntity.state, carStateEntity.attributes);
+  
+    return html`
+      <div class="car-state clickable" style="text-align: center; margin-bottom: 8px;" @click="${() => this._showMoreInfo(this.config.car_state_entity)}">
+        <span class="state-value">${state}</span>
+      </div>
+    `;
+  }
+  
+  
 _formatCarState(state, attributes) {
   // Check if this is a timestamp sensor (like the charging end time)
   if (attributes.device_class === 'timestamp') {
@@ -393,56 +455,110 @@ _renderInfoLine() {
   let location = null;
 
   if (locationEntity) {
-    if (locationEntity.state.toLowerCase() === 'not_home') {
-      location = 'Not Home';
-    } else if (locationEntity.state === 'home') {
-      location = 'Home';
-    } else {
-      // For custom locations, use the friendly name if available, otherwise use the state
-      location = locationEntity.attributes.friendly_name || this._capitalizeFirstLetter(locationEntity.state);
-    }
+    location = this._formatLocationState(locationEntity.state);
   }
 
   const mileageEntity = this.config.mileage_entity ? this.hass.states[this.config.mileage_entity] : null;
-  let mileage = mileageEntity ? parseFloat(mileageEntity.state) : null;
-  mileage = mileage !== null ? Math.round(mileage).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : null;
+  let mileage = null;
+  if (mileageEntity) {
+    const value = parseFloat(mileageEntity.state);
+    const unit = mileageEntity.attributes.unit_of_measurement || '';
+    mileage = this._formatRange(value, unit);
+  }
 
   if (!this.config.show_location && !this.config.show_mileage) return '';
 
   const infoTextColor = `var(--uvc-info-text-color, var(--secondary-text-color))`;
 
   return html`
-    <div class="info-line" style="color: ${infoTextColor};">
+    <div class="info-line">
       ${this.config.show_location && location ? html`
-        <span class="location">
+        <span class="location clickable" @click="${() => this._showMoreInfo(this.config.location_entity)}">
           <ha-icon icon="mdi:map-marker" style="color: ${infoTextColor};"></ha-icon>
           ${location}
         </span>
       ` : ''}
       ${this.config.show_mileage && mileage ? html`
-        <span class="mileage">
+        <span class="mileage clickable" @click="${() => this._showMoreInfo(this.config.mileage_entity)}">
           <ha-icon icon="mdi:speedometer" style="color: ${infoTextColor};"></ha-icon>
-          ${mileage} ${this.config.unit_type}
+          ${mileage}
         </span>
       ` : ''}
     </div>
   `;
 }
 
-_renderVehicleImage() {
-  const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
-  const isCharging = this._isCharging(chargingStatusEntity);
-  const imageUrl = isCharging && this.config.charging_image_url
-    ? this.config.charging_image_url
-    : this.config.image_url;
 
-  if (!imageUrl) return '';
+_formatLocationState(state) {
+  // Check for "not_home" (case insensitive) and replace with "Away"
+  if (state.toLowerCase() === 'not_home') {
+    return 'Away';
+  }
+
+  // For other states, replace underscores with spaces
+  let formattedState = state.replace(/_/g, ' ');
+  
+  // Capitalize each word
+  formattedState = formattedState.split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+  
+  return formattedState;
+}
+
+_renderVehicleImage() {
+  const isCharging = this._isCharging(this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null);
+  const imageType = isCharging ? this.config.charging_image_url_type : this.config.image_url_type;
+  let imageUrl = '';
+  let entityId = '';
+
+  if (imageType === "none") {
+    return '';
+  }
+
+  if (imageType === "entity") {
+    entityId = isCharging ? this.config.charging_image_entity : this.config.image_entity;
+    const entityState = this.hass.states[entityId];
+    if (entityState) {
+      if (entityState.state && (entityState.state.startsWith('http') || entityState.state.startsWith('/'))) {
+        imageUrl = entityState.state;
+      } else if (entityState.attributes.entity_picture) {
+        imageUrl = entityState.attributes.entity_picture;
+      }
+    }
+  } else if (imageType === "image") {
+    imageUrl = isCharging ? this.config.charging_image_url : this.config.image_url;
+  }
+
+  if (imageUrl && imageUrl.startsWith('/')) {
+    imageUrl = `${window.location.protocol}//${window.location.host}${imageUrl}`;
+  }
+
+  return this._renderImage(imageUrl, entityId);
+}
+
+_renderImage(imageUrl, entityId) {
+  if (!imageUrl) {
+    return html`
+      <div class="vehicle-image-container">
+        <div class="vehicle-image-placeholder">No image available</div>
+      </div>
+    `;
+  }
+
+  const clickHandler = entityId ? () => this._showMoreInfo(entityId) : undefined;
 
   return html`
-    <div class="vehicle-image-container">
-      <img class="vehicle-image" src="${imageUrl}" alt="Vehicle Image">
+    <div class="vehicle-image-container ${entityId ? 'clickable' : ''}" @click="${clickHandler}">
+      <img class="vehicle-image" src="${imageUrl}" alt="Vehicle Image" @error="${this._handleImageError}">
     </div>
   `;
+}
+
+_handleImageError(e) {
+  console.error('Error loading image:', e.target.src);
+  e.target.style.display = 'none';
+  e.target.parentNode.innerHTML = '<div class="vehicle-image-placeholder">No image available</div>';
 }
 
   _renderIconGrid() {
@@ -453,132 +569,131 @@ _renderVehicleImage() {
     }
   
     return html`
-      <div class="icon-grid">
-        ${icon_grid_entities.map(entityId => this._renderIconItem(entityId))}
+      <div class="icon-grid" style="gap: ${this.config.icon_gap}px;">
+        ${icon_grid_entities.map((entityId) => this._renderIcon(entityId))}
       </div>
     `;
   }
   
-  _renderIconItem(entityId) {
-    if (!this.hass || !this.hass.states || !this.hass.states[entityId]) {
-      return html``;
-    }
-  
-    const entity = this.hass.states[entityId];
-    const customIcon = this.config.custom_icons && this.config.custom_icons[entityId] ? this.config.custom_icons[entityId] : {};
-    const defaultIcon = entity.attributes.icon;
-    const state = entity.state;
-    const isActive = ['on', 'open', 'true', 'unlocked'].includes(state.toLowerCase());
-    const useActiveColor = customIcon.useActiveColor !== false;
-    
-    const icon = isActive
-      ? (customIcon.active || defaultIcon || 'mdi:help-circle')
-      : (customIcon.inactive || defaultIcon || 'mdi:help-circle');
-    
-    const iconColor = isActive && useActiveColor ? 'var(--uvc-icon-active)' : 'var(--uvc-icon-inactive)';
-    const interaction = this.config.icon_interactions && this.config.icon_interactions[entityId] ? this.config.icon_interactions[entityId] : { type: 'more-info' };
-    const buttonStyle = this.config.icon_styles && this.config.icon_styles[entityId] ? this.config.icon_styles[entityId] : 'icon';
-  
-    const isClickable = interaction.type !== 'none';
-    const classes = `icon-item ${buttonStyle} ${isClickable ? 'clickable' : 'non-interactive'}`;
-  
+  _renderIcon(entityId) {
+    const state = this.hass.states[entityId];
+    const customIcon = this.config.custom_icons[entityId] || {};
+    const isActive = this._getIconActiveState(entityId);
+    const icon = isActive ? (customIcon.active || state.attributes.icon) : (customIcon.inactive || state.attributes.icon);
+    const color = this._getIconColor(entityId, isActive);
+    const iconSize = this.config.icon_sizes?.[entityId] || this.config.icon_size || 24;
+    const buttonStyle = this.config.icon_styles?.[entityId] || 'icon';
+
     return html`
-      <div class="${classes}" @click="${() => this._handleIconClick(entityId, interaction)}">
-        <ha-icon 
-          .icon="${icon}" 
-          style="color: ${iconColor}; width: var(--uvc-icon-grid-size); height: var(--uvc-icon-grid-size);"
+      <div class="icon-wrapper ${buttonStyle}">
+        <ha-icon
+          icon="${icon}"
+          style="--mdc-icon-size: ${iconSize}px; color: ${color};"
+          @click="${() => this._handleIconClick(entityId)}"
         ></ha-icon>
       </div>
     `;
   }
 
-updated(changedProperties) {
-  super.updated(changedProperties);
-  if (changedProperties.has('config')) {
-    this.style.setProperty('--mdc-icon-size', `${this.config.icon_size}px`);
+  _getIconActiveState(entityId) {
+    const state = this.hass.states[entityId];
+    if (!state) return false;
+    return ['on', 'open', 'true', 'unlocked'].includes(state.state.toLowerCase());
   }
-}
-_updateIconSize() {
-  this.style.setProperty('--mdc-icon-size', `${this.config.icon_size}px`);
-}
 
-_handleIconClick(entityId, interaction) {
-  switch (interaction.type) {
-     case 'more-info':
-      this._fireEvent('hass-more-info', { entityId });
-      break;
-    case 'toggle':
-      this.hass.callService('homeassistant', 'toggle', { entity_id: entityId });
-      break;
-    case 'navigate':
-      this._navigate(interaction.path);
-      break;
-    case 'url':
-      this._openUrl(interaction.url);
-      break;
-    case 'call-service':
-      this._callService(interaction.service, entityId);
-      break;
-     case 'assist':
-      this._openAssistant(interaction.assistant, interaction.startListening);
-      break;
-    case 'none':
-      // Do nothing
-      break;
+  _getIconColor(entityId, isActive) {
+    const customIcon = this.config.custom_icons && this.config.custom_icons[entityId];
+    if (customIcon) {
+      return isActive 
+        ? customIcon.activeColor || this.config.iconActiveColor || 'var(--uvc-icon-active)'
+        : customIcon.inactiveColor || this.config.iconInactiveColor || 'var(--uvc-icon-inactive)';
+    }
+    return isActive
+      ? this.config.iconActiveColor || 'var(--primary-color)'
+      : this.config.iconInactiveColor || 'var(--secondary-text-color)';
   }
-}
-_fireEvent(type, detail) {
-  const event = new Event(type, {
-    bubbles: true,
-    composed: true,
-    cancelable: false,
-  });
-  event.detail = detail;
-  this.dispatchEvent(event);
-}
-_navigate(path) {
-  history.pushState(null, "", path);
-  const event = new Event('location-changed', {
-    bubbles: true,
-    composed: true,
-  });
-  this.dispatchEvent(event);
-}
 
-_openUrl(url) {
-  window.open(url, '_blank');
-}
+  _handleIconClick(entityId) {
+    const interaction = this.config.icon_interactions[entityId] || {};
+    switch (interaction.type) {
+      case 'more-info':
+        this._fireEvent('hass-more-info', { entityId });
+        break;
+      case 'toggle':
+        this.hass.callService('homeassistant', 'toggle', { entity_id: entityId });
+        break;
+      case 'navigate':
+        this._navigate(interaction.path);
+        break;
+      case 'url':
+        this._openUrl(interaction.url);
+        break;
+      case 'call-service':
+        this._callService(interaction.service, entityId);
+        break;
+      case 'assist':
+        this._openAssistant(interaction.assistant, interaction.startListening);
+        break;
+      case 'none':
+        // Do nothing
+        break;
+    }
+  }
 
-_callService(service, entityId) {
-  const [domain, serviceAction] = service.split('.');
-  this.hass.callService(domain, serviceAction, { entity_id: entityId });
-}
+  _fireEvent(type, detail) {
+    const event = new Event(type, {
+      bubbles: true,
+      composed: true,
+      cancelable: false,
+    });
+    event.detail = detail;
+    this.dispatchEvent(event);
+  }
 
-_openAssistant(assistantId, startListening) {
-  this._fireEvent('show-dialog', {
-    dialogTag: 'dialog-voice-command',
-    dialogImport: () => import('../../dialogs/dialog-voice-command'),
-    dialogParams: {
-      assistantId: assistantId,
-      startListening: startListening,
-    },
-  });
-}
+  _navigate(path) {
+    history.pushState(null, "", path);
+    const event = new Event('location-changed', {
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
+  }
 
-_showMoreInfo(entityId) {
-  const event = new Event('hass-more-info', {
-    bubbles: true,
-    composed: true,
-  });
-  event.detail = { entityId };
-  this.dispatchEvent(event);
-}
+  _openUrl(url) {
+    window.open(url, '_blank');
+  }
 
-_toggleEntity(entityId) {
-  this.hass.callService('homeassistant', 'toggle', {
-    entity_id: entityId,
-  });
-}
+  _callService(service, entityId) {
+    const [domain, serviceAction] = service.split('.');
+    this.hass.callService(domain, serviceAction, { entity_id: entityId });
+  }
+
+  _openAssistant(assistantId, startListening) {
+    this._fireEvent('show-dialog', {
+      dialogTag: 'dialog-voice-command',
+      dialogImport: () => import('../../dialogs/dialog-voice-command'),
+      dialogParams: {
+        assistantId: assistantId,
+        startListening: startListening,
+      },
+    });
+  }
+
+  _showMoreInfo(entityId) {
+    const event = new Event('hass-more-info', {
+      bubbles: true,
+      composed: true,
+    });
+    event.detail = { entityId };
+    this.dispatchEvent(event);
+  }
+
+  _toggleEntity(entityId) {
+    this.hass.callService('homeassistant', 'toggle', {
+      entity_id: entityId,
+    });
+  }
+
   _capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
@@ -618,30 +733,49 @@ _toggleEntity(entityId) {
       barFillColor: "",
       limitIndicatorColor: "",
       iconActiveColor: "",
-      iconInactiveColor: ""
+      iconInactiveColor: "",
+      carStateTextColor: "",
+      rangeTextColor: "",
+      percentageTextColor: "",
+      icon_sizes: {}
     };
   }
 
-updated(changedProps) {
+  updated(changedProps) {
     super.updated(changedProps);
     if (changedProps.has('config') || changedProps.has('hass')) {
       const style = getComputedStyle(this);
       const primaryColor = style.getPropertyValue('--primary-color').trim();
+      const cardBackground = style.getPropertyValue('--card-background-color').trim();
+      const primaryTextColor = style.getPropertyValue('--primary-text-color').trim();
+      const secondaryTextColor = style.getPropertyValue('--secondary-text-color').trim();
       
       this.style.setProperty('--uvc-primary-color', this.config.barFillColor || primaryColor);
-      this.style.setProperty('--uvc-card-background', this.config.cardBackgroundColor || style.getPropertyValue('--card-background-color').trim());
-      this.style.setProperty('--uvc-bar-background', this.config.barBackgroundColor || '#595959');
-      this.style.setProperty('--uvc-bar-border-color', this.config.barBorderColor || '#595959');
-      this.style.setProperty('--uvc-limit-indicator', this.config.limitIndicatorColor || 'white');
+      this.style.setProperty('--uvc-card-background', this.config.cardBackgroundColor || cardBackground);
+      this.style.setProperty('--uvc-bar-background', this.config.barBackgroundColor || secondaryTextColor);
+      this.style.setProperty('--uvc-bar-border-color', this.config.barBorderColor || secondaryTextColor);
+      this.style.setProperty('--uvc-limit-indicator', this.config.limitIndicatorColor || primaryTextColor);
       this.style.setProperty('--uvc-icon-active', this.config.iconActiveColor || primaryColor);
-      this.style.setProperty('--uvc-icon-inactive', this.config.iconInactiveColor || style.getPropertyValue('--secondary-text-color').trim());
-      this.style.setProperty('--uvc-info-text-color', this.config.infoTextColor || style.getPropertyValue('--secondary-text-color').trim());
+      this.style.setProperty('--uvc-icon-inactive', this.config.iconInactiveColor || secondaryTextColor);
+      this.style.setProperty('--uvc-info-text-color', this.config.infoTextColor || secondaryTextColor);
       this.style.setProperty('--uvc-icon-grid-size', `${this.config.icon_size}px`);
       this.style.setProperty('--mdc-icon-size', `${this.config.icon_size}px`);
       this.style.setProperty('--uvc-icon-grid-gap', `${this.config.icon_gap}px`);
+      this.style.setProperty('--uvc-car-state-text-color', this.config.carStateTextColor || primaryTextColor);
+      this.style.setProperty('--uvc-range-text-color', this.config.rangeTextColor || primaryTextColor);
+      this.style.setProperty('--uvc-percentage-text-color', this.config.percentageTextColor || primaryTextColor);
+      
+      const rgb = this._hexToRgb(primaryTextColor);
+      this.style.setProperty('--rgb-primary-text-color', rgb);
+      this.style.setProperty('--uvc-icon-background', `rgba(${rgb}, 0.10)`);
     }
   }
+
+  _hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
   }
+}
 
 customElements.define("ultra-vehicle-card", UltraVehicleCard);
 
@@ -657,7 +791,7 @@ window.customCards.push({
 
 // Add this code to log the version in the console with custom styling
 console.info(
-  `%c Ultra Vehicle Card%c 🚗 ${version} `,
+  `%c Ultra Vehicle Card%c  ${version} `,
   'background-color: #4299D9;color: #fff;padding: 3px 2px 3px 3px;border-radius: 14px 0 0 14px;font-family: DejaVu Sans,Verdana,Geneva,sans-serif;text-shadow: 0 1px 0 rgba(1, 1, 1, 0.3)',
   'background-color: #4299D9;color: #fff;padding: 3px 3px 3px 2px;border-radius: 0 14px 14px 0;font-family: DejaVu Sans,Verdana,Geneva,sans-serif;text-shadow: 0 1px 0 rgba(1, 1, 1, 0.3)'
 );

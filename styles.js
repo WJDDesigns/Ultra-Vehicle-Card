@@ -23,15 +23,64 @@ export const styles = css`
 .image-upload-container input[type="text"] {
   flex-grow: 1;
 }
+  .image-input-container {
+   display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
 
+         ha-entity-picker {
+        width: auto;
+      }
+textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--divider-color);
+  border-radius: 4px;
+  background-color: var(--card-background-color);
+  color: var(--primary-text-color);
+}
+  .divider {
+  height: 1px;
+  background-color: var(--divider-color);
+  margin: 16px 0;
+}
+
+.radio-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.radio-group label {
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.radio-group input[type="radio"] {
+  margin-right: 4px;
+}
 .file-upload-label {
-  background-color: var(--primary-color);
+ background-color: var(--primary-color);
   color: var(--text-primary-color);
   padding: 8px 12px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
   white-space: nowrap;
+  overflow: visible; 
+  text-overflow: clip; 
+  text-align: center;
+  min-width: 70px; 
+}
+  .vehicle-image-container.clickable {
+  cursor: pointer;
+}
+
+.vehicle-image-container.clickable:hover {
+  opacity: 0.8;
 }
 
 .file-upload-label:hover {
@@ -46,7 +95,6 @@ export const styles = css`
   
   .vehicle-image-container {
     width: 100%;
-    padding-top: 56.25%;
     position: relative;
     overflow: hidden;
     margin-bottom: 16px;
@@ -54,9 +102,7 @@ export const styles = css`
   }
   
   .vehicle-image {
-    position: absolute;
-    top: 0;
-    left: 0;
+
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -309,8 +355,9 @@ export const styles = css`
   }
 
   .selected-entity {
-    transition: all 0.3s ease;
+    border: 1px solid var(--divider-color);
     margin-bottom: 8px;
+    transition: all 0.3s ease;
   }
 
   .selected-entity.dragging {
@@ -328,6 +375,16 @@ export const styles = css`
     cursor: move;
     touch-action: none;
   }
+    .car-state {
+  color: var(--uvc-car-state-text-color);
+}
+
+.level-text {
+  color: var(--uvc-level-text-color);
+}
+  .level-text .range {
+  color: var(--uvc-range-text-color);
+}
 
   .entity-header {
     display: flex;
@@ -335,11 +392,16 @@ export const styles = css`
     padding: 8px;
     background-color: var(--primary-color);
     color: var(--text-primary-color);
+    cursor: move;
+  }
+
+  .handle {
+    margin-right: 8px;
   }
 
   .toggle-details {
     cursor: pointer;
-    margin-right: 16px;
+    margin-right: 8px;
   }
 
   .entity-name {
@@ -353,7 +415,6 @@ export const styles = css`
 
   .entity-details {
     background-color: var(--card-background-color);
-    border: 1px solid var(--divider-color);
     border-top: none;
     padding: 8px;
   }
@@ -373,11 +434,44 @@ export const styles = css`
     margin-right: 8px;
     min-width: 60px;
   }
+    .icon-color-pickers {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+       .icon-color-pickers .color-picker {
+      flex: 1 1 calc(50% - 8px);
+      min-width: 120px;
+    }
+@media (max-width: 600px) {
+      .icon-color-pickers .color-picker {
+        flex: 1 1 100%;
+      }
+    }
+    .color-picker {
+      margin-bottom: 8px;
+    }
+
+    .color-input-wrapper {
+      position: relative;
+      width: 100%;
+      height: 40px;
+    }
   
   ha-icon-picker {
     flex-grow: 1;
   }
-  
+  .icon-wrapper.round {
+    background-color: var(--uvc-icon-background, rgba(var(--rgb-primary-text-color, 255, 255, 255), 0.10));
+    border-radius: 50%;
+    padding: 8px;
+  }
+
+  .icon-wrapper.square {
+    background-color: var(--uvc-icon-background, rgba(var(--rgb-primary-text-color, 255, 255, 255), 0.10));
+    border-radius: 4px;
+    padding: 8px;
+  }
   .icon-grid {
   display: flex;
   flex-wrap: wrap;
@@ -393,13 +487,14 @@ export const styles = css`
     justify-content: center;
     width: var(--uvc-icon-grid-size);
     height: var(--uvc-icon-grid-size);
+    color: var(--icon-color, var(--primary-text-color));
   }
 
   .icon-item.round,
   .icon-item.square {
     width: calc(var(--uvc-icon-grid-size) * 1.5);
     height: calc(var(--uvc-icon-grid-size) * 1.5);
-    background: #ffffff17;
+    background-color: var(--uvc-icon-background, rgba(var(--rgb-primary-text-color, 255, 255, 255), 0.10));
   }
 
   .icon-item.round {
@@ -409,7 +504,13 @@ export const styles = css`
   .icon-item.square {
     border-radius: 4px;
   }
+.clickable {
+  cursor: pointer;
+}
 
+.clickable:hover {
+  opacity: 0.8;
+}
   .icon-item.clickable {
     cursor: pointer;
   }
@@ -419,11 +520,9 @@ export const styles = css`
   }
   
   .icon-item ha-icon {
-    width: 24px;
-    height: 24px;
-     width: var(--uvc-icon-grid-size);
-  height: var(--uvc-icon-grid-size);
-  color: var(--uvc-primary-color);
+    width: var(--uvc-icon-size, 24px);
+    height: var(--uvc-icon-size, 24px);
+    color: var(--icon-color, var(--uvc-icon-active)) !important;
   }
   
   .interaction-select {
@@ -474,8 +573,6 @@ export const styles = css`
     width: 100%;
     gap: 12px;
     margin-bottom:12px;
-padding-left: 4px;
-    padding-right: 4px;
 }
   .color-pickers-grid {
   display: grid;
@@ -618,5 +715,55 @@ input[type="color"] {
     .interaction-option select {
       width: 100%;
     }
+  }
+
+  .vehicle-image-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 200px;
+    background-color: #f0f0f0;
+    color: #888;
+    font-style: italic;
+  }
+  /* Animation for charging */
+  @keyframes move-stripes {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 50px 0;
+    }
+  }
+  
+  .progress.charging {
+    background-image: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.15) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.15) 50%,
+      rgba(255, 255, 255, 0.15) 75%,
+      transparent 75%,
+      transparent
+    );
+    background-size: 50px 50px;
+    animation: move-stripes 2s linear infinite;
+  }
+
+  .progress.engine-on {
+    background-image: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.15) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.15) 50%,
+      rgba(255, 255, 255, 0.15) 75%,
+      transparent 75%,
+      transparent
+    );
+    background-size: 50px 50px;
+    animation: move-stripes 2s linear infinite;
   }
 `;
