@@ -101,7 +101,6 @@ setConfig(config) {
   this._validateEntityConfig('image_entity', this.config.image_url_type);
   this._validateEntityConfig('charging_image_entity', this.config.charging_image_url_type);
 
-  console.log('Final configuration:', this.config);
 }
 
 // Add this method to validate entity configurations
@@ -556,7 +555,7 @@ _renderImage(imageUrl, entityId) {
 }
 
 _handleImageError(e) {
-  console.error('Error loading image:', e.target.src);
+  .error('Error loading image:', e.target.src);
   e.target.style.display = 'none';
   e.target.parentNode.innerHTML = '<div class="vehicle-image-placeholder">No image available</div>';
 }
