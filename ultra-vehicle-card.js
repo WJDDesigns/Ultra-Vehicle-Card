@@ -555,7 +555,7 @@ _renderImage(imageUrl, entityId) {
 }
 
 _handleImageError(e) {
-  .error('Error loading image:', e.target.src);
+  console.error('Error loading image:', e.target.src);
   e.target.style.display = 'none';
   e.target.parentNode.innerHTML = '<div class="vehicle-image-placeholder">No image available</div>';
 }
