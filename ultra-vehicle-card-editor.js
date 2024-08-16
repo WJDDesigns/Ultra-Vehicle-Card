@@ -132,7 +132,6 @@ export class UltraVehicleCardEditor extends LitElement {
     this._image_urlFilter = "";
   this._charging_image_urlFilter = "";
   this._iconSizes = { ...this.config.icon_sizes };
-  console.log('Final configuration:', this.config);
   }
 
   render() {
@@ -661,7 +660,6 @@ _getIconColor(entityId, colorType) {
 
 _iconColorChanged(e, entityId, colorType) {
   const color = e.target.value;
-  console.log(`Changing ${colorType} for ${entityId} to ${color}`);
 
   this._customIcons = {
     ...this._customIcons,
@@ -671,15 +669,12 @@ _iconColorChanged(e, entityId, colorType) {
     },
   };
 
-  console.log('Updated _customIcons:', JSON.stringify(this._customIcons, null, 2));
-
   this._updateCustomIconsConfig();
   this.requestUpdate();
 }
 
 _resetIconColor(e, entityId, colorType, defaultValue) {
   e.stopPropagation();
-  console.log(`Resetting ${colorType} for ${entityId} to ${defaultValue}`);
   
   this._customIcons = {
     ...this._customIcons,
@@ -688,8 +683,6 @@ _resetIconColor(e, entityId, colorType, defaultValue) {
       [`${colorType}Color`]: undefined,
     },
   };
-  
-  console.log('Updated _customIcons after reset:', JSON.stringify(this._customIcons, null, 2));
   
   this._updateCustomIconsConfig();
   this.requestUpdate();
@@ -711,7 +704,6 @@ _updateCustomIconsConfig() {
     ...this.config,
     custom_icons: cleanedCustomIcons,
   };
-  console.log('Updated config:', JSON.stringify(this.config, null, 2));
   this.configChanged(this.config);
 }
 
@@ -731,7 +723,7 @@ _toggleEntityDetails(entityId) {
     detailsElement.style.display = isHidden ? 'block' : 'none';
     toggleIcon.icon = isHidden ? 'mdi:chevron-up' : 'mdi:chevron-down';
   } else {
-    console.error('Details or toggle icon not found for entityId:', entityId);
+    
   }
 }
 
@@ -1197,11 +1189,9 @@ _selectIcon(entityId, icon, iconType) {
   }
   
   _renderImageInput(configKey, type, value, placeholder) {
-    console.log(`_renderImageInput called with: configKey=${configKey}, type=${type}, value=${value}`);
     
     switch (type) {
       case 'entity':
-        console.log(`Rendering entity picker for ${configKey}`);
         return html`
           <ha-entity-picker
             .hass=${this.hass}
@@ -1212,7 +1202,7 @@ _selectIcon(entityId, icon, iconType) {
           ></ha-entity-picker>
         `;
       case 'template':
-        console.log(`Rendering template input for ${configKey}`);
+       
         return html`
           <textarea
             .value=${value}
@@ -1223,7 +1213,7 @@ _selectIcon(entityId, icon, iconType) {
           ></textarea>
         `;
       default: // 'image'
-        console.log(`Rendering image input for ${configKey}`);
+       
         return html`
           <input
             type="text"
@@ -1439,7 +1429,7 @@ _updateCustomIconsConfig() {
     ...this.config,
     custom_icons: cleanedCustomIcons,
   };
-  console.log('Updated config:', JSON.stringify(this.config, null, 2));
+  
   this.configChanged(this.config);
 }
 
@@ -1494,13 +1484,13 @@ _updateCustomIconsConfig() {
   }
 
   _evaluateTemplate(template) {
-    console.log('Evaluating template:', template);
+   
     try {
       // Use Function constructor to create a function from the template string
       const templateFunction = new Function('states', 'user', `return \`${template}\`;`);
       // Call the function with the hass states and user object
       const result = templateFunction(this.hass.states, this.hass.user);
-      console.log('Template evaluation result:', result);
+     
       return result;
     } catch (error) {
       console.error('Error evaluating template:', error);
