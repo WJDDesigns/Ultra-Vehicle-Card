@@ -3,7 +3,7 @@ import { UltraVehicleCardEditor } from "./ultra-vehicle-card-editor.js";
 import { styles } from "./styles.js";
 
 
-const version = "V1.3.1";
+const version = "V1.3.2";
 
 
 class UltraVehicleCard extends LitElement {
