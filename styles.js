@@ -424,15 +424,43 @@ textarea {
     display: block;
   }
   
-  .icon-wrapper {
+    .icon-wrapper {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
+    justify-content: center;
+    position: relative;
+    
+    font-size: var(--label-size, 14px);
   }
-  
-  .icon-wrapper label {
-    margin-right: 8px;
-    min-width: 60px;
+  .icon-wrapper.label-left, .icon-wrapper.label-right {
+    flex-direction: row;
+  }
+  .icon-wrapper.label-top, .icon-wrapper.label-bottom {
+    flex-direction: column;
+  }
+     .icon-label {
+    position: absolute;
+    padding: 2px 4px;
+    white-space: nowrap;
+    font-size: inherit;
+    line-height: 1;
+    color: var(--label-color, var(--primary-text-color));
+  }
+  .label-left .icon-label {
+    right: calc(100% + 4px);
+  }
+  .label-right .icon-label {
+    left: calc(100% + 4px);
+  }
+  .label-top .icon-label {
+    bottom: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .label-bottom .icon-label {
+    top: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
   }
     .icon-color-pickers {
       display: flex;
@@ -473,14 +501,24 @@ textarea {
     padding: 8px;
   }
   .icon-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  margin: 16px 0;
-  flex-grow: 1;
-  gap: var(--uvc-icon-grid-gap, 12px);
-}
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 0;
+  }
+     .icon-wrapper.label-left {
+    margin-left: var(--label-margin, 24px);
+  }
+  .icon-wrapper.label-right {
+    margin-right: var(--label-margin, 24px);
+  }
+  .icon-wrapper.label-top {
+    margin-top: var(--label-margin, 24px);
+  }
+  .icon-wrapper.label-bottom {
+    margin-bottom: var(--label-margin, 24px);
+  }
   .icon-item {
     display: flex;
     align-items: center;
@@ -766,4 +804,61 @@ input[type="color"] {
     background-size: 50px 50px;
     animation: move-stripes 2s linear infinite;
   }
+
+  .editor-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .editor-item {
+    flex: 1;
+    margin-right: 16px;
+    min-width: 0; /* This prevents flex items from overflowing */
+  }
+
+  .editor-item:last-child {
+    margin-right: 0;
+  }
+
+  .editor-item label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  .editor-item select,
+  .editor-item input[type="number"] {
+    width: 100%;
+    max-width: 100%; /* Ensures the element doesn't exceed its container */
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid var(--divider-color, #e0e0e0);
+    background-color: var(--card-background-color);
+    color: var(--primary-text-color);
+    box-sizing: border-box; /* Includes padding in the width calculation */
+  }
+
+  .editor-item ha-icon-picker {
+    width: 100%;
+    max-width: 100%;
+    border: none !important; /* Explicitly remove border */
+    background: none !important; /* Remove any background */
+    padding: 0 !important; /* Remove any padding */
+  }
+
+  .editor-item input[type="number"] {
+    -moz-appearance: textfield; /* Removes spinner for Firefox */
+  }
+
+  .editor-item input[type="number"]::-webkit-inner-spin-button,
+  .editor-item input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .color-picker {
+    width: 100%;
+  }
+
 `;

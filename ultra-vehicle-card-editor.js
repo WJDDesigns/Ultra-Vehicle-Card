@@ -89,9 +89,9 @@ export class UltraVehicleCardEditor extends LitElement {
     this.config = {
       title: "My Vehicle",
       image_url: "",
-    charging_image_url: "",
-    image_url_type: config.image_url_type || "image",
-    charging_image_url_type: config.charging_image_url_type || "image",
+      charging_image_url: "",
+      image_url_type: config.image_url_type || "image",
+      charging_image_url_type: config.charging_image_url_type || "image",
       vehicle_type: "EV",
       unit_type: "mi",
       level_entity: "",
@@ -109,6 +109,7 @@ export class UltraVehicleCardEditor extends LitElement {
       custom_icons: config.custom_icons || {},
       icon_interactions: {},
       icon_styles: {},
+      icon_labels: config.icon_labels || {},
       hybrid_display_order: "fuel_first",
       car_state_entity: "",
       charge_limit_entity: "",
@@ -133,7 +134,13 @@ export class UltraVehicleCardEditor extends LitElement {
   this._charging_image_urlFilter = "";
   this._iconSizes = { ...this.config.icon_sizes };
   }
-
+  static getStubConfig() {
+    return {
+      // ... existing properties ...
+      icon_labels: {},
+      // ... other properties ...
+    };
+  }
   render() {
     if (!this.hass) {
       return html``;
@@ -553,17 +560,17 @@ export class UltraVehicleCardEditor extends LitElement {
           ></ha-icon>
         </div>
         <div class="entity-details" id="entity-details-${sanitizedEntityId}" style="display: none;">
-          <div class="icon-row">
-            <div class="icon-wrapper">
-              <label>Inactive:</label>
+          <div class="editor-row">
+            <div class="editor-item">
+              <label>Inactive Icon</label>
               <ha-icon-picker
                 .hass=${this.hass}
                 .value=${inactiveIcon}
                 @value-changed=${(e) => this._handleIconChange(e, 'inactive', entityId)}
               ></ha-icon-picker>
             </div>
-            <div class="icon-wrapper">
-              <label>Active:</label>
+            <div class="editor-item">
+              <label>Active Icon</label>
               <ha-icon-picker
                 .hass=${this.hass}
                 .value=${activeIcon}
@@ -571,15 +578,17 @@ export class UltraVehicleCardEditor extends LitElement {
               ></ha-icon-picker>
             </div>
           </div>
-          <div class="icon-row">
-            <div class="icon-color-pickers">
-          ${this._renderIconColorPicker(`Inactive Color`, entityId, 'inactive', inactiveColor)}
-          ${this._renderIconColorPicker(`Active Color`, entityId, 'active', activeColor)}
-        </div>
+          <div class="editor-row">
+            <div class="editor-item">
+              ${this._renderIconColorPicker(`Inactive Color`, entityId, 'inactive', inactiveColor)}
+            </div>
+            <div class="editor-item">
+              ${this._renderIconColorPicker(`Active Color`, entityId, 'active', activeColor)}
+            </div>
           </div>
-          <div class="icon-row">
-            <div class="icon-wrapper">
-              <label>Button Style:</label>
+          <div class="editor-row">
+            <div class="editor-item">
+              <label>Button Style</label>
               <select
                 @change="${(e) => this._handleButtonStyleChange(entityId, e.target.value)}"
                 .value="${buttonStyle}"
@@ -589,21 +598,35 @@ export class UltraVehicleCardEditor extends LitElement {
                 <option value="square">Square</option>
               </select>
             </div>
+            <div class="editor-item">
+              <label>Icon Size</label>
+              <input
+                type="number"
+                .value="${this._getIconSize(entityId)}"
+                @input="${(e) => this._iconSizeChanged(e, entityId)}"
+                min="0"
+                max="100"
+              />
+            </div>
           </div>
-          <div class="interaction-row">
-            <label>Interaction:</label>
-            ${this._renderInteractionSelect(entityId, interaction)}
-          </div>
-          <div class="icon-size-slider">
-            <label for="icon-size-${sanitizedEntityId}">Icon Size: ${this._getIconSize(entityId)}px</label>
-            <input
-              type="range"
-              id="icon-size-${sanitizedEntityId}"
-              min="0"
-              max="100"
-              .value="${this._getIconSize(entityId)}"
-              @input="${(e) => this._iconSizeChanged(e, entityId)}"
-            />
+          <div class="editor-row">
+            <div class="editor-item">
+              <label>Interaction</label>
+              ${this._renderInteractionSelect(entityId, interaction)}
+            </div>
+            <div class="editor-item">
+              <label>Icon Label Position</label>
+              <select
+                .value=${(this.config.icon_labels && this.config.icon_labels[entityId]) || 'none'}
+                @change=${(e) => this._updateIconLabel(entityId, e.target.value)}
+              >
+                <option value="none">None</option>
+                <option value="left">Left</option>
+                <option value="top">Top</option>
+                <option value="right">Right</option>
+                <option value="bottom">Bottom</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -1473,7 +1496,7 @@ _updateCustomIconsConfig() {
   }
 
   configChanged(newConfig) {
-    fireEvent(this, "config-changed", { config: newConfig });
+    fireEvent(this, "config-changed", { config: { ...newConfig, icon_labels: this.config.icon_labels } });
   }
 
   _valueChanged(ev) {
@@ -1516,6 +1539,15 @@ _updateCustomIconsConfig() {
       ...this.config,
       icon_sizes: this._iconSizes,
     };
+    this.configChanged(this.config);
+  }
+
+  _updateIconLabel(entityId, value) {
+    if (!this.config.icon_labels) {
+      this.config.icon_labels = {};
+    }
+    this.config.icon_labels[entityId] = value;
+    console.log('Updated icon labels:', this.config.icon_labels);
     this.configChanged(this.config);
   }
 }

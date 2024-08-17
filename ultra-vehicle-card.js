@@ -63,8 +63,8 @@ setConfig(config) {
     iconActiveColor: "",
     iconInactiveColor: "",
     barBorderColor: "",
-    icon_size: 24,
-    icon_gap: 12,
+    icon_size: 28,
+    icon_gap: 20,
     image_entity: "",
     charging_image_entity: "",
     carStateTextColor: config.carStateTextColor || '',
@@ -72,6 +72,7 @@ setConfig(config) {
     percentageTextColor: config.percentageTextColor || '',
     icon_sizes: config.icon_sizes || {},
     engine_on_entity: "",
+    icon_labels: config.icon_labels || {},
     ...config
   };
 
@@ -495,14 +496,7 @@ _formatLocationState(state) {
   }
 
   // For other states, replace underscores with spaces
-  let formattedState = state.replace(/_/g, ' ');
-  
-  // Capitalize each word
-  formattedState = formattedState.split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
-  
-  return formattedState;
+  return state.replace(/_/g, ' ');
 }
 
 _renderVehicleImage() {
@@ -576,21 +570,43 @@ _handleImageError(e) {
   
   _renderIcon(entityId) {
     const state = this.hass.states[entityId];
-    const customIcon = this.config.custom_icons[entityId] || {};
+    if (!state) return html``;
+
+    const customIcon = this.config.custom_icons?.[entityId] || {};
     const isActive = this._getIconActiveState(entityId);
     const icon = isActive ? (customIcon.active || state.attributes.icon) : (customIcon.inactive || state.attributes.icon);
     const color = this._getIconColor(entityId, isActive);
     const iconSize = this.config.icon_sizes?.[entityId] || this.config.icon_size || 24;
     const buttonStyle = this.config.icon_styles?.[entityId] || 'icon';
+    const labelPosition = this.config.icon_labels?.[entityId] || 'none';
+    const labelText = state.state;
+
+    // Calculate label size based on icon size
+    const labelSize = iconSize > 28 ? Math.round(iconSize * 0.5) : 14;
 
     return html`
-      <div class="icon-wrapper ${buttonStyle}">
+      <div class="icon-wrapper ${buttonStyle} label-${labelPosition}" style="--icon-size: ${iconSize}px; --label-size: ${labelSize}px; --label-color: ${color};">
+        ${this._renderLabel(labelText, labelPosition, 'before')}
         <ha-icon
           icon="${icon}"
           style="--mdc-icon-size: ${iconSize}px; color: ${color};"
           @click="${() => this._handleIconClick(entityId)}"
         ></ha-icon>
+        ${this._renderLabel(labelText, labelPosition, 'after')}
       </div>
+    `;
+  }
+
+  _renderLabel(text, position, renderPosition) {
+    if (position === 'none' || 
+        (renderPosition === 'before' && position !== 'left' && position !== 'top') ||
+        (renderPosition === 'after' && position !== 'right' && position !== 'bottom')) {
+      return html``;
+    }
+    return html`
+      <span class="icon-label">
+        ${text}
+      </span>
     `;
   }
 
@@ -736,7 +752,8 @@ _handleImageError(e) {
       carStateTextColor: "",
       rangeTextColor: "",
       percentageTextColor: "",
-      icon_sizes: {}
+      icon_sizes: {},
+      icon_labels: {}
     };
   }
 
