@@ -492,7 +492,7 @@ export class UltraVehicleCardEditor extends LitElement {
             type="range"
             id="icon-gap"
             min="0"
-            max="50"
+            max="100"
             .value="${this._iconGap}"
             @input="${this._iconGapChanged}"
           />
@@ -649,9 +649,10 @@ export class UltraVehicleCardEditor extends LitElement {
   }
   
   _renderIconColorPicker(label, entityId, colorType, defaultValue) {
-    const currentValue = this._getIconColor(entityId, colorType) || defaultValue;
+    const customIcon = this._customIcons[entityId] || {};
+    const currentValue = customIcon[`${colorType}Color`] || this._getDefaultColor(colorType);
     const textColor = this._getContrastYIQ(currentValue);
-  
+
     return html`
       <div class="color-picker">
         <label>${label}</label>
@@ -665,7 +666,7 @@ export class UltraVehicleCardEditor extends LitElement {
             <ha-icon
               class="reset-icon"
               icon="mdi:refresh"
-              @click="${(e) => this._resetIconColor(e, entityId, colorType, defaultValue)}"
+              @click="${(e) => this._resetIconColor(e, entityId, colorType)}"
             ></ha-icon>
           </div>
         </div>
@@ -673,12 +674,19 @@ export class UltraVehicleCardEditor extends LitElement {
     `;
   }
 
+_getDefaultColor(colorType) {
+  const style = getComputedStyle(this);
+  return colorType === 'active' 
+    ? style.getPropertyValue('--primary-color').trim() 
+    : style.getPropertyValue('--primary-text-color').trim();
+}
+
 _getIconColor(entityId, colorType) {
-  const customColor = this._customIcons[entityId]?.[`${colorType}Color`];
-  if (customColor === undefined) {
-    return colorType === 'active' ? this.config.iconActiveColor : this.config.iconInactiveColor;
+  const customIcon = this._customIcons[entityId];
+  if (customIcon && customIcon[`${colorType}Color`]) {
+    return customIcon[`${colorType}Color`];
   }
-  return customColor;
+  return colorType === 'active' ? this.config.iconActiveColor : this.config.iconInactiveColor;
 }
 
 _iconColorChanged(e, entityId, colorType) {
@@ -696,7 +704,7 @@ _iconColorChanged(e, entityId, colorType) {
   this.requestUpdate();
 }
 
-_resetIconColor(e, entityId, colorType, defaultValue) {
+_resetIconColor(e, entityId, colorType) {
   e.stopPropagation();
   
   this._customIcons = {

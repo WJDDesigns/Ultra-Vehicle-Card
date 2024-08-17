@@ -3,7 +3,7 @@ import { UltraVehicleCardEditor } from "./ultra-vehicle-card-editor.js";
 import { styles } from "./styles.js";
 
 
-const version = "V1.3.1";
+const version = "V1.3.3";
 
 
 class UltraVehicleCard extends LitElement {
@@ -64,7 +64,7 @@ setConfig(config) {
     iconInactiveColor: "",
     barBorderColor: "",
     icon_size: 28,
-    icon_gap: 20,
+    icon_gap: config.icon_gap || 20,
     image_entity: "",
     charging_image_entity: "",
     carStateTextColor: config.carStateTextColor || '',
@@ -620,12 +620,12 @@ _handleImageError(e) {
     const customIcon = this.config.custom_icons && this.config.custom_icons[entityId];
     if (customIcon) {
       return isActive 
-        ? customIcon.activeColor || this.config.iconActiveColor || 'var(--uvc-icon-active)'
-        : customIcon.inactiveColor || this.config.iconInactiveColor || 'var(--uvc-icon-inactive)';
+        ? customIcon.activeColor || this.config.iconActiveColor || 'var(--primary-color)'
+        : customIcon.inactiveColor || this.config.iconInactiveColor || 'var(--primary-text-color)';
     }
     return isActive
       ? this.config.iconActiveColor || 'var(--primary-color)'
-      : this.config.iconInactiveColor || 'var(--secondary-text-color)';
+      : this.config.iconInactiveColor || 'var(--primary-text-color)';
   }
 
   _handleIconClick(entityId) {
@@ -772,7 +772,7 @@ _handleImageError(e) {
       this.style.setProperty('--uvc-bar-border-color', this.config.barBorderColor || secondaryTextColor);
       this.style.setProperty('--uvc-limit-indicator', this.config.limitIndicatorColor || primaryTextColor);
       this.style.setProperty('--uvc-icon-active', this.config.iconActiveColor || primaryColor);
-      this.style.setProperty('--uvc-icon-inactive', this.config.iconInactiveColor || secondaryTextColor);
+      this.style.setProperty('--uvc-icon-inactive', this.config.iconInactiveColor || primaryTextColor);
       this.style.setProperty('--uvc-info-text-color', this.config.infoTextColor || secondaryTextColor);
       this.style.setProperty('--uvc-icon-grid-size', `${this.config.icon_size}px`);
       this.style.setProperty('--mdc-icon-size', `${this.config.icon_size}px`);
