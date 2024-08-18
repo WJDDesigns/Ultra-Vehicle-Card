@@ -861,7 +861,6 @@ input[type="color"] {
   }
     .row-separator {
       width: 100%;
-      margin: 4px 0;
     }
 
     .selected-entity.row-separator {
@@ -882,7 +881,7 @@ input[type="color"] {
     }
 
     .row-separator .entity-header {
-  background-color: var(--mdc-dialog-scrim-color, rgba(0, 0, 0, 0));
+  background-color: var(--uvc-bar-background, rgba(0, 0, 0, 0));
 }
 
 .add-row-button {
@@ -964,5 +963,23 @@ ha-icon-button[disabled] {
 
 .material-icons {
   font-size: 24px;
+}
+
+.selected-entity.separator-ui {
+  background-color: var(--card-background-color);
+  border: 1px solid var(--divider-color);
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.selected-entity.separator-ui .entity-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+}
+
+.selected-entity.separator-ui .entity-details {
+  padding: 8px;
 }
 `;
