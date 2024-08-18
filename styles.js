@@ -97,7 +97,6 @@ textarea {
     width: 100%;
     position: relative;
     overflow: hidden;
-    margin-bottom: 16px;
     border-radius: 12px;
   }
   
@@ -144,6 +143,7 @@ textarea {
   
   .level-info {
     flex: 1;
+    margin-top:12px
   }
   
   .level-info.hybrid {
@@ -505,7 +505,8 @@ textarea {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    padding: 8px 0;
+        padding: 4px 0 4px 0;
+}
   }
      .icon-wrapper.label-left {
     margin-left: var(--label-margin, 24px);
@@ -651,9 +652,7 @@ input[type="color"] {
   border: none;
   cursor: pointer;
   background-color: unset;
-}
-  
-  
+}  
   .charge-limit-indicator {
     position: absolute;
     top: 0;
@@ -805,21 +804,21 @@ input[type="color"] {
     animation: move-stripes 2s linear infinite;
   }
 
-  .editor-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
+ .editor-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 16px;
+}
 
-  .editor-item {
-    flex: 1;
-    margin-right: 16px;
-    min-width: 0; /* This prevents flex items from overflowing */
-  }
+.editor-item {
+  flex: 1;
+  margin-right: 8px;
+}
 
-  .editor-item:last-child {
-    margin-right: 0;
-  }
+.editor-item:last-child {
+  margin-right: 0;
+}
 
   .editor-item label {
     display: block;
@@ -860,5 +859,110 @@ input[type="color"] {
   .color-picker {
     width: 100%;
   }
+    .row-separator {
+      width: 100%;
+      margin: 4px 0;
+    }
 
+    .selected-entity.row-separator {
+      background-color: var(--card-background-color);
+      border: 1px solid var(--divider-color);
+      border-radius: 4px;
+      
+    }
+
+    .selected-entity.row-separator .entity-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .selected-entity.row-separator .entity-details {
+      margin-top: 8px;
+    }
+
+    .row-separator .entity-header {
+  background-color: var(--mdc-dialog-scrim-color, rgba(0, 0, 0, 0));
+}
+
+.add-row-button {
+  margin: 12px 0;
+}
+  .input-with-unit {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.input-with-unit input {
+  width: 100%;
+  padding-right: 25px;
+}
+
+.input-with-unit .unit {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary-text-color);
+  pointer-events: none;
+}
+.transparent-button {
+  height: 36px;
+  white-space: nowrap;
+}
+.color-picker-row {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+.transparent-button:hover {
+  background-color: var(--accent-color:);
+}
+
+ha-icon-button {
+  --mdc-icon-button-size: 36px;
+  color: var(--primary-text-color);
+}
+
+ha-icon-button[disabled] {
+  color: var(--primary-color);
+  opacity: 1;
+}
+
+.alignment-buttons {
+  display: flex;
+  gap: 8px;
+}
+  .alignment-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  color: var(--primary-text-color);
+}
+
+.icon-button:hover {
+  background-color: var(--secondary-background-color);
+}
+
+.icon-button[disabled] {
+  color: var(--primary-color);
+  opacity: 1;
+  cursor: default;
+}
+
+.icon-button[disabled]:hover {
+  background: none;
+}
+
+.material-icons {
+  font-size: 24px;
+}
 `;

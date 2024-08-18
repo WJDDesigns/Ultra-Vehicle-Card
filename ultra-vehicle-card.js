@@ -26,10 +26,16 @@ setConfig(config) {
   if (!config.title) {
     throw new Error("You need to define a title");
   }
+
+  // Get the default color as hex
+  const defaultColor = this._getDefaultColorAsHex();
+
+  const defaultImageUrl = 'https://github.com/user-attachments/assets/4ef72288-5ee9-4fa6-b2f3-c34c4160cf42';
+
   this.config = {
     title: "My Vehicle",
-    image_url: "",
-    charging_image_url: "",
+    image_url: config.image_url || defaultImageUrl,
+    charging_image_url: config.charging_image_url || defaultImageUrl,
     image_url_type: "image",
     charging_image_url_type: "image",
     vehicle_type: "EV",
@@ -73,6 +79,7 @@ setConfig(config) {
     icon_sizes: config.icon_sizes || {},
     engine_on_entity: "",
     icon_labels: config.icon_labels || {},
+    row_separators: config.row_separators || {},
     ...config
   };
 
@@ -102,12 +109,42 @@ setConfig(config) {
   this._validateEntityConfig('image_entity', this.config.image_url_type);
   this._validateEntityConfig('charging_image_entity', this.config.charging_image_url_type);
 
+  // Initialize row_separators if not present
+  if (!this.config.row_separators) {
+    this.config.row_separators = {};
+  }
+
+  // Ensure all row separators have proper default values
+  this.config.icon_grid_entities.forEach((entityId, index) => {
+    if (entityId === 'row-separator' && !this.config.row_separators[index]) {
+      this.config.row_separators[index] = {
+        color: defaultColor, // Use hex color instead of CSS variable
+        height: 1,
+        icon_gap: 20,
+        horizontalAlignment: 'center',
+        verticalAlignment: 'middle'
+      };
+    }
+  });
 }
 
 // Add this method to validate entity configurations
 _validateEntityConfig(entityKey, urlType) {
   if (urlType === 'entity' && !this.config[entityKey]) {
     console.warn(`${entityKey} is set to use an entity, but no entity is specified.`);
+  }
+}
+
+// Add this method to get the default color as hex
+_getDefaultColorAsHex() {
+  const defaultColor = getComputedStyle(document.documentElement).getPropertyValue('--uvc-info-text-color').trim();
+  if (defaultColor.startsWith('#')) {
+    return defaultColor;
+  } else if (defaultColor.startsWith('rgb')) {
+    const rgb = defaultColor.match(/\d+/g);
+    return `#${parseInt(rgb[0]).toString(16).padStart(2, '0')}${parseInt(rgb[1]).toString(16).padStart(2, '0')}${parseInt(rgb[2]).toString(16).padStart(2, '0')}`;
+  } else {
+    return '#808080'; // Fallback color if unable to determine
   }
 }
 
@@ -365,64 +402,7 @@ _renderFuelBar(level, range) {
   
   
 _formatCarState(state, attributes) {
-  // Check if this is a timestamp sensor (like the charging end time)
-  if (attributes.device_class === 'timestamp') {
-    return this._formatChargingEndTime(state);
-  }
-
-  const knownStates = {
-    'default': 'Ready',
-    'charging': 'Charging',
-    'error': 'Error',
-    'complete': 'Charging Complete',
-    'fully_charged': 'Fully Charged',
-    'finished_fully_charged': 'Finished - Fully Charged',
-    'finished_not_full': 'Finished - Not Full',
-    'invalid': 'Invalid State',
-    'not_charging': 'Not Charging',
-    'plugged_in': 'Plugged In',
-    'waiting_for_charging': 'Waiting to Charge',
-    'target_reached': 'Target Reached',
-    'on': 'On',
-    'off': 'Off',
-    'unavailable': 'Unavailable',
-    'unknown': 'Unknown',
-    'idle': 'Idle',
-    'running': 'Running',
-    'stopped': 'Stopped'
-  };
-
-  // Handle binary sensors
-  if (this.config.car_state_entity.includes('binary_sensor')) {
-    return this._formatBinarySensorState(state, attributes);
-  }
-
-  // Check if the state is a known state
-  if (knownStates[state.toLowerCase()]) {
-    return knownStates[state.toLowerCase()];
-  }
-
-  // Check for additional attributes
-  if (attributes) {
-    if (attributes.battery_level) {
-      return `Battery ${attributes.battery_level}%`;
-    }
-    if (attributes.charge_limit) {
-      return `Charge Limit ${attributes.charge_limit}%`;
-    }
-    if (attributes.charging_power) {
-      return `Charging at ${attributes.charging_power} kW`;
-    }
-    if (attributes.range) {
-      return `Range ${attributes.range} ${this.config.unit_type}`;
-    }
-    if (attributes.fuel_level) {
-      return `Fuel ${attributes.fuel_level}%`;
-    }
-  }
-
-  // If it's not a known state or attribute, capitalize each word
-  return state.toString().toLowerCase().split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  return state; // Return the state without any modifications
 }
 
 _formatChargingEndTime(isoString) {
@@ -501,48 +481,10 @@ _formatLocationState(state) {
 
 _renderVehicleImage() {
   const isCharging = this._isCharging(this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null);
-  const imageType = isCharging ? this.config.charging_image_url_type : this.config.image_url_type;
-  let imageUrl = '';
-  let entityId = '';
-
-  if (imageType === "none") {
-    return '';
-  }
-
-  if (imageType === "entity") {
-    entityId = isCharging ? this.config.charging_image_entity : this.config.image_entity;
-    const entityState = this.hass.states[entityId];
-    if (entityState) {
-      if (entityState.state && (entityState.state.startsWith('http') || entityState.state.startsWith('/'))) {
-        imageUrl = entityState.state;
-      } else if (entityState.attributes.entity_picture) {
-        imageUrl = entityState.attributes.entity_picture;
-      }
-    }
-  } else if (imageType === "image") {
-    imageUrl = isCharging ? this.config.charging_image_url : this.config.image_url;
-  }
-
-  if (imageUrl && imageUrl.startsWith('/')) {
-    imageUrl = `${window.location.protocol}//${window.location.host}${imageUrl}`;
-  }
-
-  return this._renderImage(imageUrl, entityId);
-}
-
-_renderImage(imageUrl, entityId) {
-  if (!imageUrl) {
-    return html`
-      <div class="vehicle-image-container">
-        <div class="vehicle-image-placeholder">No image available</div>
-      </div>
-    `;
-  }
-
-  const clickHandler = entityId ? () => this._showMoreInfo(entityId) : undefined;
+  const imageUrl = isCharging ? this.config.charging_image_url : this.config.image_url;
 
   return html`
-    <div class="vehicle-image-container ${entityId ? 'clickable' : ''}" @click="${clickHandler}">
+    <div class="vehicle-image-container">
       <img class="vehicle-image" src="${imageUrl}" alt="Vehicle Image" @error="${this._handleImageError}">
     </div>
   `;
@@ -550,22 +492,68 @@ _renderImage(imageUrl, entityId) {
 
 _handleImageError(e) {
   console.error('Error loading image:', e.target.src);
-  e.target.style.display = 'none';
-  e.target.parentNode.innerHTML = '<div class="vehicle-image-placeholder">No image available</div>';
+  e.target.src = 'https://github.com/user-attachments/assets/4ef72288-5ee9-4fa6-b2f3-c34c4160cf42';
 }
 
   _renderIconGrid() {
-    const { icon_grid_entities } = this.config;
+    const { icon_grid_entities, row_separators } = this.config;
   
     if (!icon_grid_entities || icon_grid_entities.length === 0) {
       return '';
     }
   
-    return html`
-      <div class="icon-grid" style="gap: ${this.config.icon_gap}px;">
-        ${icon_grid_entities.map((entityId) => this._renderIcon(entityId))}
-      </div>
-    `;
+    const rows = [];
+    let currentRow = [];
+    let currentIconGap = this.config.icon_gap || 20;
+    let currentAlignment = { horizontal: 'center', vertical: 'middle' };
+  
+    icon_grid_entities.forEach((entityId, index) => {
+      if (entityId === 'row-separator') {
+        if (currentRow.length > 0) {
+          rows.push(html`
+            <div class="icon-grid" style="
+              gap: ${currentIconGap}px;
+              justify-content: ${currentAlignment.horizontal === 'left' ? 'flex-start' : currentAlignment.horizontal === 'right' ? 'flex-end' : 'center'};
+              align-items: ${currentAlignment.vertical === 'top' ? 'flex-start' : currentAlignment.vertical === 'bottom' ? 'flex-end' : 'center'};
+            ">
+              ${currentRow.map(entityId => this._renderIcon(entityId))}
+            </div>
+          `);
+          currentRow = [];
+        }
+        const separatorConfig = row_separators?.[index] || {};
+        const separatorHeight = separatorConfig.height;
+        if (separatorHeight !== 0) {
+          rows.push(html`
+            <div class="row-separator" style="
+              height: ${separatorHeight}px;
+              background-color: ${separatorConfig.color || 'var(--uvc-info-text-color)'};
+            "></div>
+          `);
+        }
+        currentAlignment = {
+          horizontal: separatorConfig.horizontalAlignment || 'center',
+          vertical: separatorConfig.verticalAlignment || 'middle'
+        };
+        currentIconGap = separatorConfig.icon_gap || 20;
+      } else {
+        currentRow.push(entityId);
+      }
+    });
+  
+    if (currentRow.length > 0) {
+      rows.push(html`
+        <div class="icon-grid" style="
+          gap: ${currentIconGap}px;
+          justify-content: ${currentAlignment.horizontal === 'left' ? 'flex-start' : currentAlignment.horizontal === 'right' ? 'flex-end' : 'center'};
+          align-items: ${currentAlignment.vertical === 'top' ? 'flex-start' : currentAlignment.vertical === 'bottom' ? 'flex-end' : 'center'};
+        ">
+          ${currentRow.map(entityId => this._renderIcon(entityId))}
+        </div>
+      `);
+    }
+  
+    return html`${rows}`;
   }
   
   _renderIcon(entityId) {
@@ -574,7 +562,10 @@ _handleImageError(e) {
 
     const customIcon = this.config.custom_icons?.[entityId] || {};
     const isActive = this._getIconActiveState(entityId);
-    const icon = isActive ? (customIcon.active || state.attributes.icon) : (customIcon.inactive || state.attributes.icon);
+    const defaultIcon = 'mdi:help-circle';  // Default icon if none is specified
+    const activeIcon = customIcon.active === 'no-icon' ? '' : (customIcon.active || state.attributes.icon || defaultIcon);
+    const inactiveIcon = customIcon.inactive === 'no-icon' ? '' : (customIcon.inactive || state.attributes.icon || defaultIcon);
+    const icon = isActive ? activeIcon : inactiveIcon;
     const color = this._getIconColor(entityId, isActive);
     const iconSize = this.config.icon_sizes?.[entityId] || this.config.icon_size || 24;
     const buttonStyle = this.config.icon_styles?.[entityId] || 'icon';
@@ -584,36 +575,53 @@ _handleImageError(e) {
     // Calculate label size based on icon size
     const labelSize = iconSize > 28 ? Math.round(iconSize * 0.5) : 14;
 
-    return html`
-      <div class="icon-wrapper ${buttonStyle} label-${labelPosition}" style="--icon-size: ${iconSize}px; --label-size: ${labelSize}px; --label-color: ${color};">
-        ${this._renderLabel(labelText, labelPosition, 'before')}
-        <ha-icon
-          icon="${icon}"
-          style="--mdc-icon-size: ${iconSize}px; color: ${color};"
-          @click="${() => this._handleIconClick(entityId)}"
-        ></ha-icon>
-        ${this._renderLabel(labelText, labelPosition, 'after')}
-      </div>
-    `;
+    // Determine if we should render anything
+    const shouldRender = icon !== '';
+
+    if (shouldRender) {
+      return html`
+        <div class="icon-wrapper ${buttonStyle} label-${labelPosition}" style="--icon-size: ${iconSize}px; --label-size: ${labelSize}px; --label-color: ${color};">
+          ${this._renderLabel(labelText, labelPosition, 'before', isActive, customIcon)}
+          ${icon ? html`
+            <ha-icon
+              icon="${icon}"
+              style="--mdc-icon-size: ${iconSize}px; color: ${color};"
+              @click="${() => this._handleIconClick(entityId)}"
+            ></ha-icon>
+          ` : ''}
+          ${this._renderLabel(labelText, labelPosition, 'after', isActive, customIcon)}
+        </div>
+      `;
+    }
+    return html``;
   }
 
-  _renderLabel(text, position, renderPosition) {
-    if (position === 'none' || 
-        (renderPosition === 'before' && position !== 'left' && position !== 'top') ||
-        (renderPosition === 'after' && position !== 'right' && position !== 'bottom')) {
-      return html``;
+  _renderLabel(text, position, renderPosition, isActive, customIcon) {
+    if (position === 'none') return html``;
+  
+    const shouldRenderLabel = isActive || customIcon.inactive !== 'no-icon';
+  
+    if (shouldRenderLabel &&
+        ((renderPosition === 'before' && (position === 'left' || position === 'top')) ||
+         (renderPosition === 'after' && (position === 'right' || position === 'bottom')))) {
+      return html`<span class="icon-label">${text}</span>`;
     }
-    return html`
-      <span class="icon-label">
-        ${text}
-      </span>
-    `;
+  
+    return html``;
   }
 
   _getIconActiveState(entityId) {
     const state = this.hass.states[entityId];
     if (!state) return false;
-    return ['on', 'open', 'true', 'unlocked'].includes(state.state.toLowerCase());
+    const stateStr = state.state.toLowerCase();
+  
+    // Handle boolean entities
+    if (['0', '1', 'on', 'off', 'true', 'false'].includes(stateStr)) {
+      return ['1', 'on', 'true'].includes(stateStr);
+    }
+  
+    // Handle other types of entities
+    return ['on', 'open', 'unlocked'].includes(stateStr);
   }
 
   _getIconColor(entityId, isActive) {
@@ -649,10 +657,30 @@ _handleImageError(e) {
       case 'assist':
         this._openAssistant(interaction.assistant, interaction.startListening);
         break;
+      case 'trigger':
+        this._triggerEntity(entityId);
+        break;
       case 'none':
         // Do nothing
         break;
     }
+  }
+
+  _triggerEntity(entityId) {
+    const domain = entityId.split('.')[0];
+    let service = 'turn_on';
+
+    switch (domain) {
+      case 'automation':
+        service = 'trigger';
+        break;
+      case 'script':
+        service = 'turn_on';
+        break;
+      // Add more cases here for other entity types that might need special handling
+    }
+
+    this.hass.callService(domain, service, { entity_id: entityId });
   }
 
   _fireEvent(type, detail) {
@@ -776,7 +804,6 @@ _handleImageError(e) {
       this.style.setProperty('--uvc-info-text-color', this.config.infoTextColor || secondaryTextColor);
       this.style.setProperty('--uvc-icon-grid-size', `${this.config.icon_size}px`);
       this.style.setProperty('--mdc-icon-size', `${this.config.icon_size}px`);
-      this.style.setProperty('--uvc-icon-grid-gap', `${this.config.icon_gap}px`);
       this.style.setProperty('--uvc-car-state-text-color', this.config.carStateTextColor || primaryTextColor);
       this.style.setProperty('--uvc-range-text-color', this.config.rangeTextColor || primaryTextColor);
       this.style.setProperty('--uvc-percentage-text-color', this.config.percentageTextColor || primaryTextColor);

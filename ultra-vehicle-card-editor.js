@@ -5,6 +5,8 @@ import {
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 import { styles } from "./styles.js";
 
+const DEFAULT_IMAGE_URL = 'https://github.com/user-attachments/assets/4ef72288-5ee9-4fa6-b2f3-c34c4160cf42';
+const DEFAULT_IMAGE_TEXT = 'Default Image';
 
 const fireEvent = (node, type, detail, options) => {
   options = options || {};
@@ -52,6 +54,7 @@ export class UltraVehicleCardEditor extends LitElement {
       _iconSize: { type: Number },
       _iconGap: { type: Number },
       _iconSizes: { type: Object },
+      _showRowSeparatorDetails: { type: Boolean },
     };
   }
 
@@ -83,13 +86,14 @@ export class UltraVehicleCardEditor extends LitElement {
     this._image_urlFilter = "";
   this._charging_image_urlFilter = "";
   this._iconSizes = {};
+  this._showRowSeparatorDetails = false;
   }
 
   setConfig(config) {
     this.config = {
       title: "My Vehicle",
-      image_url: "",
-      charging_image_url: "",
+      image_url: config.image_url || DEFAULT_IMAGE_URL,
+      charging_image_url: config.charging_image_url || DEFAULT_IMAGE_URL,
       image_url_type: config.image_url_type || "image",
       charging_image_url_type: config.charging_image_url_type || "image",
       vehicle_type: "EV",
@@ -121,8 +125,27 @@ export class UltraVehicleCardEditor extends LitElement {
       percentageTextColor: config.percentageTextColor || '',
       icon_sizes: config.icon_sizes || {},
       engine_on_entity: "",
+      row_separator_color: config.row_separator_color || this._getDefaultColorAsHex(),
+      row_separator_height: config.row_separator_height || 1,
+      row_separators: config.row_separators || {},
       ...config,
     };
+
+    // Handle backward compatibility for entity names
+    if (this.config.level_entity && !this.config.battery_level_entity) {
+      this.config.battery_level_entity = this.config.level_entity;
+    }
+    if (this.config.range_entity && !this.config.battery_range_entity) {
+      this.config.battery_range_entity = this.config.range_entity;
+    }
+
+    // Ensure image_url_type and charging_image_url_type are set correctly
+    this.config.image_url_type = this.config.image_url_type || "image";
+    this.config.charging_image_url_type = this.config.charging_image_url_type || "image";
+
+    // Handle deprecated fields
+    this._handleDeprecatedFields();
+
     this._selectedIconGridEntities = [...this.config.icon_grid_entities];
     this._customIcons = { ...this.config.custom_icons };
     this._iconInteractions = { ...this.config.icon_interactions };
@@ -134,6 +157,23 @@ export class UltraVehicleCardEditor extends LitElement {
   this._charging_image_urlFilter = "";
   this._iconSizes = { ...this.config.icon_sizes };
   }
+
+  _handleDeprecatedFields() {
+    const deprecatedFields = [
+      { old: 'level_entity', new: 'battery_level_entity' },
+      { old: 'range_entity', new: 'battery_range_entity' },
+      { old: 'show_level', new: 'show_battery' },
+      { old: 'show_range', new: 'show_battery_range' },
+    ];
+
+    deprecatedFields.forEach(({ old, new: newField }) => {
+      if (this.config[old] !== undefined && this.config[newField] === undefined) {
+        this.config[newField] = this.config[old];
+        console.warn(`The '${old}' field is deprecated. Please use '${newField}' instead.`);
+      }
+    });
+  }
+
   static getStubConfig() {
     return {
       // ... existing properties ...
@@ -141,6 +181,7 @@ export class UltraVehicleCardEditor extends LitElement {
       // ... other properties ...
     };
   }
+
   render() {
     if (!this.hass) {
       return html``;
@@ -246,6 +287,8 @@ export class UltraVehicleCardEditor extends LitElement {
 
   _renderImageUploadField(label, configKey, placeholder) {
     const imageTypeKey = `${configKey}_type`;
+    const value = this.config[configKey] || DEFAULT_IMAGE_URL;
+    const displayValue = value === DEFAULT_IMAGE_URL ? DEFAULT_IMAGE_TEXT : value;
     const currentType = this.config[imageTypeKey] || "image";
 
     return html`
@@ -291,10 +334,9 @@ export class UltraVehicleCardEditor extends LitElement {
               <div class="image-upload-container">
                 <input
                   type="text"
-                  .value="${this.config[configKey] || ''}"
+                  .value="${displayValue}"
                   placeholder="${placeholder}"
-                  @input="${(e) => this._valueChanged(e)}"
-                  .configValue="${configKey}"
+                  @input="${(e) => this._handleImageUrlInput(e, configKey)}"
                 />
                 <label class="file-upload-label" for="${configKey}-upload">Upload</label>
                 <input
@@ -310,6 +352,16 @@ export class UltraVehicleCardEditor extends LitElement {
           : ''}
       </div>
     `;
+  }
+
+  _handleImageUrlInput(e, configKey) {
+    const newValue = e.target.value;
+    if (newValue === '' || newValue === DEFAULT_IMAGE_TEXT) {
+      this._updateConfig(configKey, DEFAULT_IMAGE_URL);
+      e.target.value = DEFAULT_IMAGE_TEXT;
+    } else {
+      this._updateConfig(configKey, newValue);
+    }
   }
 
   _renderEntityInformation() {
@@ -462,7 +514,7 @@ export class UltraVehicleCardEditor extends LitElement {
           <label for="icon_grid_search">Add entities to the icon grid</label>
           <div class="entity-description">
             Search and select entities to add to the icon grid. Use the drag
-            handle (≡) to reorder entities. Click on the icon to change it, and
+            handle () to reorder entities. Click on the icon to change it, and
             use the (×) to remove an entity from the grid.
           </div>
           <div class="entity-picker-container">
@@ -477,6 +529,7 @@ export class UltraVehicleCardEditor extends LitElement {
             ${this._renderIconGridResults()}
           </div>
         </div>
+        <button class="add-row-button" @click="${this._addRowSeparator}">Add Row Separator</button>
         <div
           class="selected-entities"
           @dragover="${this._onDragOver}"
@@ -485,17 +538,6 @@ export class UltraVehicleCardEditor extends LitElement {
           ${this._selectedIconGridEntities.map((entityId, index) =>
             this._renderSelectedEntity(entityId, index)
           )}
-        </div>
-        <div class="icon-gap-slider">
-          <label for="icon-gap">Icon Gap Size: ${this._iconGap}px</label>
-          <input
-            type="range"
-            id="icon-gap"
-            min="0"
-            max="100"
-            .value="${this._iconGap}"
-            @input="${this._iconGapChanged}"
-          />
         </div>
       </div>
     `;
@@ -527,6 +569,9 @@ export class UltraVehicleCardEditor extends LitElement {
   }
 
   _renderSelectedEntity(entityId, index) {
+    if (entityId === 'row-separator') {
+      return this._renderRowSeparatorEditor(index);
+    }
     const sanitizedEntityId = entityId.replace(/\./g, '_');
     const entity = this.hass.states[entityId];
     const friendlyName = entity.attributes.friendly_name || entityId;
@@ -565,17 +610,25 @@ export class UltraVehicleCardEditor extends LitElement {
               <label>Inactive Icon</label>
               <ha-icon-picker
                 .hass=${this.hass}
-                .value=${inactiveIcon}
+                .value=${inactiveIcon === 'no-icon' ? '' : inactiveIcon}
                 @value-changed=${(e) => this._handleIconChange(e, 'inactive', entityId)}
               ></ha-icon-picker>
+              <mwc-button
+                @click=${() => this._setNoIcon(entityId, 'inactive')}
+                .selected=${inactiveIcon === 'no-icon'}
+              >${inactiveIcon === 'no-icon' ? '✓ ' : ''}No Icon</mwc-button>
             </div>
             <div class="editor-item">
               <label>Active Icon</label>
               <ha-icon-picker
                 .hass=${this.hass}
-                .value=${activeIcon}
+                .value=${activeIcon === 'no-icon' ? '' : activeIcon}
                 @value-changed=${(e) => this._handleIconChange(e, 'active', entityId)}
               ></ha-icon-picker>
+              <mwc-button
+                @click=${() => this._setNoIcon(entityId, 'active')}
+                .selected=${activeIcon === 'no-icon'}
+              >${activeIcon === 'no-icon' ? '✓ ' : ''}No Icon</mwc-button>
             </div>
           </div>
           <div class="editor-row">
@@ -600,13 +653,18 @@ export class UltraVehicleCardEditor extends LitElement {
             </div>
             <div class="editor-item">
               <label>Icon Size</label>
-              <input
-                type="number"
-                .value="${this._getIconSize(entityId)}"
-                @input="${(e) => this._iconSizeChanged(e, entityId)}"
-                min="0"
-                max="100"
-              />
+              <div class="entity-description">Size of the icon.</div>
+              <div class="input-with-unit">
+                <input
+                  id="icon_size_${entityId}"
+                  type="number"
+                  .value="${this._getIconSize(entityId)}"
+                  @input="${(e) => this._iconSizeChanged(e, entityId)}"
+                  min="12"
+                  max="100"
+                />
+                <span class="unit">px</span>
+              </div>
             </div>
           </div>
           <div class="editor-row">
@@ -632,6 +690,94 @@ export class UltraVehicleCardEditor extends LitElement {
       </div>
     `;
   }
+
+  _renderRowSeparatorEditor(index) {
+    return html`
+      <div class="selected-entity row-separator" draggable="true" @dragstart="${(e) => this._onDragStart(e, index)}" data-entity-id="row-separator">
+        <div class="entity-header">
+          <div class="handle" 
+               @mousedown="${(e) => this._onDragStart(e, index)}"
+               @touchstart="${(e) => this._onDragStart(e, index)}">
+            <ha-icon icon="mdi:drag"></ha-icon>
+          </div>
+          <ha-icon
+            class="toggle-details"
+            icon="mdi:chevron-down"
+            @click="${() => this._toggleRowSeparatorDetails(index)}"
+          ></ha-icon>
+          <span class="entity-name">Row Separator</span>
+          <ha-icon
+            class="remove-entity"
+            icon="mdi:close"
+            @click="${() => this._removeIconGridEntity(index)}"
+          ></ha-icon>
+        </div>
+        <div class="entity-details" id="row-separator-details-${index}" style="display: none;">
+          ${this._renderRowSeparatorDetails(index)}
+        </div>
+      </div>
+    `;
+  }
+
+  _toggleRowSeparatorDetails(index) {
+    const detailsElement = this.shadowRoot.querySelector(`#row-separator-details-${index}`);
+    const toggleIcon = this.shadowRoot.querySelector(`.selected-entity[data-entity-id="row-separator"]:nth-child(${index + 1}) .toggle-details`);
+    
+    if (detailsElement && toggleIcon) {
+      const isHidden = detailsElement.style.display === 'none' || !detailsElement.style.display;
+      detailsElement.style.display = isHidden ? 'block' : 'none';
+      toggleIcon.icon = isHidden ? 'mdi:chevron-up' : 'mdi:chevron-down';
+    }
+  }
+
+  _updateRowSeparatorConfig(index, property, value) {
+    if (!this.config.row_separators) {
+      this.config.row_separators = {};
+    }
+    if (!this.config.row_separators[index]) {
+      this.config.row_separators[index] = {};
+    }
+    this.config.row_separators[index][property] = value;
+    this.configChanged(this.config);
+  }
+
+  _addRowSeparator() {
+    const newIndex = this._selectedIconGridEntities.length;
+    this._selectedIconGridEntities.push('row-separator');
+    if (!this.config.row_separators) {
+      this.config.row_separators = {};
+    }
+    this.config.row_separators[newIndex] = {
+      color: this._getDefaultColorAsHex(),
+      height: 1,
+      icon_gap: 20,
+      horizontalAlignment: 'center',
+      verticalAlignment: 'middle'
+    };
+    this._updateIconGridConfig();
+  }
+
+  _onDrop(e) {
+    e.preventDefault();
+    let fromIndex;
+    if (e.dataTransfer) {
+        fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
+    } else {
+        fromIndex = this._draggedIndex;
+    }
+    const toIndex = [...e.currentTarget.children].indexOf(e.target.closest('.selected-entity'));
+
+    if (fromIndex !== undefined && fromIndex !== toIndex && toIndex !== -1) {
+        const newOrder = [...this._selectedIconGridEntities];
+        const [removed] = newOrder.splice(fromIndex, 1);
+        newOrder.splice(toIndex, 0, removed);
+        this._selectedIconGridEntities = newOrder;
+        this._updateIconGridConfig();
+    }
+    // Reset the dragged index
+    this._draggedIndex = undefined;
+  }
+
   _handleButtonStyleChange(entityId, style) {
     this._iconStyles = {
       ...this._iconStyles,
@@ -722,12 +868,14 @@ _resetIconColor(e, entityId, colorType) {
 _updateCustomIconsConfig() {
   const cleanedCustomIcons = Object.entries(this._customIcons).reduce((acc, [key, value]) => {
     const cleanedValue = {
-      active: value.active,
-      inactive: value.inactive,
+      active: value.active === '' ? undefined : value.active,
+      inactive: value.inactive === '' ? undefined : value.inactive,
       activeColor: value.activeColor,
       inactiveColor: value.inactiveColor,
     };
-    acc[key] = cleanedValue;
+    if (cleanedValue.active || cleanedValue.inactive) {
+      acc[key] = cleanedValue;
+    }
     return acc;
   }, {});
 
@@ -787,109 +935,85 @@ _updateIndices() {
 _renderInteractionSelect(entityId, interaction) {
   const interactions = [
     { value: "more-info", label: "More Info" },
-      { value: "toggle", label: "Toggle" },
-      { value: "navigate", label: "Navigate" },
-      { value: "url", label: "URL" },
-      { value: "automation", label: "Automation" },
-      { value: "none", label: "None" },
+    { value: "toggle", label: "Toggle" },
+    { value: "navigate", label: "Navigate" },
+    { value: "url", label: "URL" },
+    { value: "trigger", label: "Trigger" },
+    { value: "none", label: "None" },
   ];
 
-return html`
-      <select
-        class="interaction-select"
-        .value=${interaction.type}
-        @change=${(e) => this._handleInteractionTypeChange(entityId, e.target.value)}
-      >
-        ${interactions.map(
-          (int) => html`
-            <option value=${int.value} ?selected=${interaction.type === int.value}>
-              ${int.label}
-            </option>
-          `
-        )}
-      </select>
-      ${this._renderInteractionOptions(entityId, interaction)}
-    `;
-  }
+  return html`
+    <select
+      class="interaction-select"
+      .value=${interaction.type}
+      @change=${(e) => this._handleInteractionTypeChange(entityId, e.target.value)}
+    >
+      ${interactions.map(
+        (int) => html`
+          <option value=${int.value} ?selected=${interaction.type === int.value}>
+            ${int.label}
+          </option>
+        `
+      )}
+    </select>
+    ${this._renderInteractionOptions(entityId, interaction)}
+  `;
+}
 
 _renderInteractionOptions(entityId, interaction) {
-    switch (interaction.type) {
-      case 'navigate':
-        return this._renderNavigationOption(entityId, interaction);
-      case 'url':
-        return this._renderUrlOption(entityId, interaction);
-      case 'automation':
-        return this._renderAutomationOption(entityId, interaction);
-      default:
-        return html``;
-    }
+  switch (interaction.type) {
+    case 'navigate':
+      return this._renderNavigationOption(entityId, interaction);
+    case 'url':
+      return this._renderUrlOption(entityId, interaction);
+    default:
+      return html``;
   }
+}
 
 _renderNavigationOption(entityId, interaction) {
-    const paths = this._getNavigationPaths();
-    return html`
-      <div class="interaction-option">
-        <label>Navigation path:</label>
-        <select
-          @change=${(e) => this._updateInteractionOption(entityId, 'path', e.target.value)}
-        >
-          ${paths.map(path => html`
-            <option value=${path} ?selected=${interaction.path === path}>${path}</option>
-          `)}
-        </select>
-      </div>
-    `;
-  }
+  const paths = this._getNavigationPaths();
+  return html`
+    <div class="interaction-option">
+      <label>Navigation path:</label>
+      <select
+        @change=${(e) => this._updateInteractionOption(entityId, 'path', e.target.value)}
+      >
+        ${paths.map(path => html`
+          <option value=${path} ?selected=${interaction.path === path}>${path}</option>
+        `)}
+      </select>
+    </div>
+  `;
+}
 
- _renderUrlOption(entityId, interaction) {
-    return html`
-      <div class="interaction-option">
-        <label>URL:</label>
-        <input
-          type="text"
-          .value=${interaction.url || ''}
-          @input=${(e) => this._updateInteractionOption(entityId, 'url', e.target.value)}
-        />
-      </div>
-    `;
-  }
-  
-_renderAutomationOption(entityId, interaction) {
-    const automations = this._getAutomations();
-    return html`
-      <div class="interaction-option">
-        <label>Automation:</label>
-        <select
-          @change=${(e) => this._updateInteractionOption(entityId, 'automation', e.target.value)}
-        >
-          ${automations.map(automation => html`
-            <option value=${automation.entity_id} ?selected=${interaction.automation === automation.entity_id}>
-              ${automation.attributes.friendly_name || automation.entity_id}
-            </option>
-          `)}
-        </select>
-      </div>
-    `;
-  }
-
-_getAutomations() {
-    return Object.values(this.hass.states).filter(
-      (entity) => entity.entity_id.startsWith("automation.")
-    );
-  }
+_renderUrlOption(entityId, interaction) {
+  return html`
+    <div class="interaction-option">
+      <label>URL:</label>
+      <input
+        type="text"
+        .value=${interaction.url || ''}
+        @input=${(e) => this._updateInteractionOption(entityId, 'url', e.target.value)}
+      />
+    </div>
+  `;
+}
 
 _handleInteractionTypeChange(entityId, newType) {
-    this._iconInteractions = {
-      ...this._iconInteractions,
-      [entityId]: { type: newType },
-    };
-    this._updateIconInteractionsConfig();
-    this.requestUpdate();
-  }
+  this._iconInteractions = {
+    ...this._iconInteractions,
+    [entityId]: { type: newType },
+  };
+  this._updateIconInteractionsConfig();
+  this.requestUpdate();
+}
+
 _getDisplayImageUrl(url) {
   return url && url.startsWith("data:image") ? "Uploaded Image" : url;
 }
- _updateInteractionOption(entityId, option, value) {
+
+_updateInteractionOption(entityId, option, value) {
   this._iconInteractions = {
     ...this._iconInteractions,
     [entityId]: {
@@ -909,22 +1033,15 @@ _iconSizeChanged(e) {
   this.configChanged(this.config);
   fireEvent(this, 'config-changed', { config: this.config });
 }
+
 _onDragStart(e, index) {
   if (e.dataTransfer) {
-      e.dataTransfer.setData('text/plain', index.toString());
+    e.dataTransfer.setData('text/plain', index.toString());
   }
   // Store the index in a class property as a fallback
   this._draggedIndex = index;
 }
-_iconGapChanged(e) {
-  this._iconGap = parseInt(e.target.value);
-  this.config = {
-    ...this.config,
-    icon_gap: this._iconGap,
-  };
-  this.configChanged(this.config);
-  fireEvent(this, 'config-changed', { config: this.config });
-}
+
 _onDragOver(e) {
   e.preventDefault();
 }
@@ -933,526 +1050,564 @@ _onDrop(e) {
   e.preventDefault();
   let fromIndex;
   if (e.dataTransfer) {
-      fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
+    fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
   } else {
-      fromIndex = this._draggedIndex;
+    fromIndex = this._draggedIndex;
   }
   const toIndex = [...e.currentTarget.children].indexOf(e.target.closest('.selected-entity'));
 
   if (fromIndex !== undefined && fromIndex !== toIndex && toIndex !== -1) {
-      const newOrder = [...this._selectedIconGridEntities];
-      const [removed] = newOrder.splice(fromIndex, 1);
-      newOrder.splice(toIndex, 0, removed);
-      this._selectedIconGridEntities = newOrder;
-      this._updateIconGridConfig();
+    const newOrder = [...this._selectedIconGridEntities];
+    const [removed] = newOrder.splice(fromIndex, 1);
+    newOrder.splice(toIndex, 0, removed);
+    this._selectedIconGridEntities = newOrder;
+    this._updateIconGridConfig();
   }
   // Reset the dragged index
   this._draggedIndex = undefined;
 }
- 
+
 _handleIconChange(e, iconType, entityId) {
   const newIcon = e.detail.value;
-  this._selectIcon(entityId, newIcon, iconType);
-}
-
-_selectIcon(entityId, icon, iconType) {
-  this._customIcons = {
-    ...this._customIcons,
-    [entityId]: {
-      ...this._customIcons[entityId],
-      [iconType]: icon,
-    },
-  };
-  this._updateCustomIconsConfig();
-  this.requestUpdate();
-}
-  _updateIconInteractionsConfig() {
-    this.config = {
-      ...this.config,
-      icon_interactions: this._iconInteractions,
+  if (newIcon === '') {
+    this._clearIcon(entityId, iconType);
+  } else {
+    this._customIcons = {
+      ...this._customIcons,
+      [entityId]: {
+        ...this._customIcons[entityId],
+        [iconType]: newIcon,
+      },
     };
-    this.configChanged(this.config);
-  }
-
-  _renderColorPickers() {
-    const getDefaultColor = (property) => {
-      const style = getComputedStyle(this);
-      return style.getPropertyValue(property).trim() || style.getPropertyValue(`--${property}`).trim();
-    };
-  
-    const defaultColors = {
-      cardBackgroundColor: getDefaultColor('--card-background-color') || '#1c1c1c',
-      barBackgroundColor: getDefaultColor('--secondary-text-color') || '#9E9E9E',
-      barBorderColor: getDefaultColor('--secondary-text-color') || '#9E9E9E',
-      barFillColor: getDefaultColor('--primary-color') || '#03a9f4',
-      limitIndicatorColor: getDefaultColor('--primary-text-color') || '#FFFFFF',
-      infoTextColor: getDefaultColor('--secondary-text-color') || '#9E9E9E',
-      carStateTextColor: getDefaultColor('--primary-text-color') || '#FFFFFF',
-      rangeTextColor: getDefaultColor('--primary-text-color') || '#FFFFFF',
-      percentageTextColor: getDefaultColor('--primary-text-color') || '#FFFFFF'
-    };
-  
-    return html`
-      <div class="color-pickers">
-        <h3>Custom Colors</h3>
-        <div class="entity-description">
-          Customize the colors of various elements in the card. Click on a color to change it, or use the reset icon to revert to the default color.
-        </div>
-        <div class="color-pickers-grid">
-          ${Object.entries(defaultColors).map(([key, defaultValue]) => html`
-            <div class="color-picker-item">
-              ${this._renderColorPicker(this._formatLabel(key), key, defaultValue)}
-            </div>
-          `)}
-        </div>
-      </div>
-    `;
-  }
-
-  _renderColorPicker(label, configKey, defaultValue) {
-    const currentValue = this.config[configKey] || defaultValue;
-    const textColor = this._getContrastYIQ(currentValue);
-  
-    return html`
-      <div class="color-picker">
-        <label>${label}</label>
-        <div class="color-input-wrapper">
-          <input type="color" 
-                 .value="${currentValue}" 
-                 @change="${(e) => this._colorChanged(e, configKey)}"
-                 style="opacity: 0; position: absolute; width: 100%; height: 100%; cursor: pointer;">
-          <div class="color-preview" style="background-color: ${currentValue}; color: ${textColor};">
-            <span class="color-hex">${currentValue}</span>
-            <ha-icon
-              class="reset-icon"
-              icon="mdi:refresh"
-              @click="${(e) => this._resetColor(e, configKey, defaultValue)}"
-            ></ha-icon>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-
-  _colorChanged(e, configKey) {
-    const color = e.target.value;
-    if (configKey.includes('_')) {
-      // This is an icon-specific color
-      const [entityId, colorType] = configKey.split('_');
-      this._customIcons = {
-        ...this._customIcons,
-        [entityId]: {
-          ...this._customIcons[entityId],
-          [colorType]: color,
-        },
-      };
-      this._updateCustomIconsConfig();
-    } else {
-      // This is a global color
-      this.config = {
-        ...this.config,
-        [configKey]: color,
-      };
-      this.configChanged(this.config);
-    }
-    this.requestUpdate();
-  }
-
-  _resetColor(e, configKey, defaultValue) {
-    e.stopPropagation();
-    this.config = {
-      ...this.config,
-      [configKey]: defaultValue,
-    };
-    this.configChanged(this.config);
-    this.requestUpdate();
-  }
-
-  _toggleChanged(ev) {
-    const target = ev.target;
-    if (target.configValue) {
-      this.config = {
-        ...this.config,
-        [target.configValue]: target.checked,
-      };
-      this.configChanged(this.config);
-    }
-  }
-
-  _vehicleTypeChanged(ev) {
-    this.config = {
-      ...this.config,
-      vehicle_type: ev.target.value,
-    };
-    this.configChanged(this.config);
-    this.requestUpdate();
-  }
-
-  _unitTypeChanged(ev) {
-    this.config = {
-      ...this.config,
-      unit_type: ev.target.value,
-    };
-    this.configChanged(this.config);
-    this.requestUpdate();
-  }
-
-  _hybridOrderChanged(ev) {
-    this.config = {
-      ...this.config,
-      hybrid_display_order: ev.target.value,
-    };
-    this.configChanged(this.config);
-  }
-  _renderImageUploadField(label, configKey, placeholder) {
-    const imageTypeKey = `${configKey}_type`;
-    const currentType = this.config[imageTypeKey] || "image";
-
-    return html`
-      <div class="image-input-container">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <label style="margin-right: 16px; font-size: 1.2em; font-weight: bold;">${label}</label>
-          <div class="radio-group" style="justify-content: flex-end;">
-            <label>
-              <input
-                type="radio"
-                name="${imageTypeKey}"
-                value="none"
-                ?checked="${currentType === 'none'}"
-                @change="${(e) => this._handleImageSourceChange(configKey, 'none')}"
-              />
-              None
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="${imageTypeKey}"
-                value="image"
-                ?checked="${currentType === 'image'}"
-                @change="${(e) => this._handleImageSourceChange(configKey, 'image')}"
-              />
-              Local/Url
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="${imageTypeKey}"
-                value="entity"
-                ?checked="${currentType === 'entity'}"
-                @change="${(e) => this._handleImageSourceChange(configKey, 'entity')}"
-              />
-              Entity
-            </label>
-          </div>
-        </div>
-
-        ${currentType === 'image' 
-          ? html`
-              <div class="image-upload-container">
-                <input
-                  type="text"
-                  .value="${this.config[configKey] || ''}"
-                  placeholder="${placeholder}"
-                  @input="${(e) => this._valueChanged(e)}"
-                  .configValue="${configKey}"
-                />
-                <label class="file-upload-label" for="${configKey}-upload">Upload</label>
-                <input
-                  type="file"
-                  id="${configKey}-upload"
-                  style="display:none"
-                  @change="${(e) => this._handleImageUpload(e, configKey)}"
-                />
-              </div>
-            `
-          : currentType === 'entity'
-          ? this._renderEntityPickerWithoutToggle(configKey, "Select an Entity", "This entity provides the image for the display.")
-          : ''}
-      </div>
-    `;
-  }
-  _renderEntityPickerWithoutToggle(configValue, labelText, description) {
-    return html`
-      <div class="input-group">
-        <label for="${configValue}">${labelText}</label>
-        <div class="entity-description">${description}</div>
-        <div class="entity-row">
-          <div class="entity-picker-wrapper">
-            <div class="entity-picker-container">
-              <input
-                type="text"
-                class="entity-picker-input"
-                .value="${this.config[configValue] || ""}"
-                @input="${(e) => this._entityFilterChanged(e, configValue)}"
-                placeholder="Search entities"
-              />
-              ${this[`_${configValue}Filter`]
-                ? html`
-                    <div class="entity-picker-results">
-                      ${Object.keys(this.hass.states)
-                        .filter((eid) =>
-                          eid
-                            .toLowerCase()
-                            .includes(
-                              this[`_${configValue}Filter`].toLowerCase()
-                            )
-                        )
-                        .map(
-                          (eid) => html`
-                            <div
-                              class="entity-picker-result"
-                              @click="${() =>
-                                this._selectEntity(configValue, eid)}"
-                            >
-                              ${eid}
-                            </div>
-                          `
-                        )}
-                    </div>
-                  `
-                : ""}
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-  
-  _renderImageInput(configKey, type, value, placeholder) {
-    
-    switch (type) {
-      case 'entity':
-        return html`
-          <ha-entity-picker
-            .hass=${this.hass}
-            .value=${value.startsWith('entity:') ? value.slice(7) : value}
-            .configValue=${configKey}
-            @value-changed=${this._entityPicked}
-            allow-custom-entity
-          ></ha-entity-picker>
-        `;
-      case 'template':
-       
-        return html`
-          <textarea
-            .value=${value}
-            .configValue="${configKey}"
-            @input="${this._templateChanged}"
-            placeholder="Enter template code here"
-            rows="3"
-          ></textarea>
-        `;
-      default: // 'image'
-       
-        return html`
-          <input
-            type="text"
-            .value="${value}"
-            .configValue="${configKey}"
-            placeholder="${placeholder}"
-            @input="${this._valueChanged}"
-          />
-          <label for="${configKey}_upload" class="file-upload-label">
-            Upload
-            <input
-              type="file"
-              id="${configKey}_upload"
-              @change="${(e) => this._handleImageUpload(e, configKey)}"
-              accept="image/*"
-              style="display: none;"
-            />
-          </label>
-        `;
-    }
-  }
-  _templateChanged(ev, configKey) {
-    const newValue = ev.target.value;
-    try {
-      const result = this._evaluateTemplate(newValue);
-      if (result) {
-        this._updateConfig(configKey, newValue);
-      }
-    } catch (error) {
-      console.error('Error evaluating template:', error);
-    }
-  }
-
-  _renderTemplatePicker(configKey, value) {
-    const templates = this._getTemplateHelpers();
-    return html`
-      <ha-combo-box
-        .hass=${this.hass}
-        .value=${value}
-        .items=${templates}
-        .configValue="${configKey}"
-        @value-changed="${this._templatePicked}"
-        item-value-path="value"
-        item-label-path="name"
-      ></ha-combo-box>
-    `;
-  }
-  _templatePicked(ev) {
-    const target = ev.target;
-    const configValue = target.configValue;
-    const newValue = ev.detail.value || '';
-    this._updateConfig(configValue, newValue);
-  }
-  _updateConfig(key, value) {
-    this.config = {
-      ...this.config,
-      [key]: value,
-    };
-    this.configChanged(this.config);
-  }
-  _getTemplateHelpers() {
-    return Object.keys(this.hass.states)
-      .filter(entityId => entityId.startsWith('template.') || entityId.startsWith('input_text.'))
-      .map(entityId => ({
-        value: `{{ states('${entityId}') }}`,
-        name: this.hass.states[entityId].attributes.friendly_name || entityId
-      }));
-  }
-  _handleImageSourceChange(configKey, newType) {
-    const imageTypeKey = `${configKey}_type`;
-    let newValue = '';
-  
-    if (newType === 'entity') {
-      newValue = ''; // Ensure this is properly set with the selected entity ID
-    }
-  
-    this.config = {
-      ...this.config,
-      [imageTypeKey]: newType,
-      [configKey]: newValue,
-    };
-  
-    this.configChanged(this.config);
-  }
-  
-  _selectImageEntity(configKey, entityId) {
-    this.config = {
-      ...this.config,
-      [configKey]: `entity:${entityId}`,
-    };
-    this[`_${configKey}Filter`] = "";
-    this.configChanged(this.config);
-  }
-  
-  _templateChanged(ev) {
-    const target = ev.target;
-    const configValue = target.configValue;
-    const newValue = target.value;
-    this._updateConfig(configValue, newValue);
-  }
-  _entityPicked(ev) {
-    const target = ev.target;
-    const configValue = target.configValue;
-    const newValue = ev.detail.value;
-    this._updateConfig(configValue, newValue);
-  }
-
-  async _handleImageUpload(ev, configKey) {
-    const input = ev.target;
-    if (!input.files || input.files.length === 0) {
-      return;
-    }
-  
-    const file = input.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
-  
-    try {
-      const response = await fetch("/api/image/upload", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${this.hass.auth.data.access_token}`,
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error("Failed to upload image");
-      }
-  
-      const data = await response.json();
-      const imageId = data.id;
-  
-      if (!imageId) {
-        console.error("Response structure:", data);
-        throw new Error("Image ID is missing in the response");
-      }
-  
-      const imageUrl = `/api/image/serve/${imageId}/original`;
-  
-      if (this.config) {
-        this.config = { ...this.config, [configKey]: imageUrl };
-        this.configChanged(this.config);
-        this.requestUpdate();
-      }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
-  }
-
-  _entityFilterChanged(e, configKey) {
-    this[`_${configKey}Filter`] = e.target.value;
-    this.requestUpdate();
-  }
-
-  _selectEntity(configValue, entityId) {
-    this.config = {
-      ...this.config,
-      [configValue]: entityId,
-    };
-    this[`_${configValue}Filter`] = "";
-    this.configChanged(this.config);
-  }
-
-  _iconGridFilterChanged(e) {
-    this._iconGridFilter = e.target.value;
-    this.requestUpdate();
-  }
-
-  _addIconGridEntity(entityId) {
-    if (!this._selectedIconGridEntities.includes(entityId)) {
-      this._selectedIconGridEntities = [
-        ...this._selectedIconGridEntities,
-        entityId,
-      ];
-      this._iconGridFilter = "";
-      this._updateIconGridConfig();
-    }
-  }
-
-  _removeIconGridEntity(index) {
-    const removedEntityId = this._selectedIconGridEntities[index];
-    this._selectedIconGridEntities = this._selectedIconGridEntities.filter(
-      (_, i) => i !== index
-    );
-    const { [removedEntityId]: _, ...restIcons } = this._customIcons;
-    this._customIcons = restIcons;
-    this._updateIconGridConfig();
     this._updateCustomIconsConfig();
   }
+}
 
+_updateIconInteractionsConfig() {
+  this.config = {
+    ...this.config,
+    icon_interactions: this._iconInteractions,
+  };
+  this.configChanged(this.config);
+}
 
-  _updateIconGridConfig() {
+_renderColorPickers() {
+  const getDefaultColor = (property) => {
+    const style = getComputedStyle(this);
+    return style.getPropertyValue(property).trim() || style.getPropertyValue(`--${property}`).trim();
+  };
+
+  const defaultColors = {
+    cardBackgroundColor: getDefaultColor('--card-background-color') || '#1c1c1c',
+    barBackgroundColor: getDefaultColor('--secondary-text-color') || '#9E9E9E',
+    barBorderColor: getDefaultColor('--secondary-text-color') || '#9E9E9E',
+    barFillColor: getDefaultColor('--primary-color') || '#03a9f4',
+    limitIndicatorColor: getDefaultColor('--primary-text-color') || '#FFFFFF',
+    infoTextColor: getDefaultColor('--secondary-text-color') || '#9E9E9E',
+    carStateTextColor: getDefaultColor('--primary-text-color') || '#FFFFFF',
+    rangeTextColor: getDefaultColor('--primary-text-color') || '#FFFFFF',
+    percentageTextColor: getDefaultColor('--primary-text-color') || '#FFFFFF'
+  };
+
+  return html`
+    <div class="color-pickers">
+      <h3>Custom Colors</h3>
+      <div class="entity-description">
+        Customize the colors of various elements in the card. Click on a color to change it, or use the reset icon to revert to the default color.
+      </div>
+      <div class="color-pickers-grid">
+        ${Object.entries(defaultColors).map(([key, defaultValue]) => html`
+          <div class="color-picker-item">
+            ${this._renderColorPicker(this._formatLabel(key), key, defaultValue)}
+          </div>
+        `)}
+      </div>
+    </div>
+  `;
+}
+
+_renderColorPicker(label, configKey, defaultValue) {
+  const currentValue = this.config[configKey] || defaultValue;
+  const textColor = this._getContrastYIQ(currentValue);
+
+  return html`
+    <div class="color-picker">
+      <label>${label}</label>
+      <div class="color-input-wrapper">
+        <input type="color" 
+               .value="${currentValue}" 
+               @change="${(e) => this._colorChanged(e, configKey)}"
+               style="opacity: 0; position: absolute; width: 100%; height: 100%; cursor: pointer;">
+        <div class="color-preview" style="background-color: ${currentValue}; color: ${textColor};">
+          <span class="color-hex">${currentValue}</span>
+          <ha-icon
+            class="reset-icon"
+            icon="mdi:refresh"
+            @click="${(e) => this._resetColor(e, configKey, defaultValue)}"
+          ></ha-icon>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+_colorChanged(e, configKey) {
+  const color = e.target.value;
+  if (configKey.includes('_')) {
+    // This is an icon-specific color
+    const [entityId, colorType] = configKey.split('_');
+    this._customIcons = {
+      ...this._customIcons,
+      [entityId]: {
+        ...this._customIcons[entityId],
+        [colorType]: color,
+      },
+    };
+    this._updateCustomIconsConfig();
+  } else {
+    // This is a global color
     this.config = {
-        ...this.config,
-        icon_grid_entities: this._selectedIconGridEntities,
+      ...this.config,
+      [configKey]: color,
     };
     this.configChanged(this.config);
+  }
+  this.requestUpdate();
 }
+
+_resetColor(e, configKey, defaultValue) {
+  e.stopPropagation();
+  this.config = {
+    ...this.config,
+    [configKey]: defaultValue,
+  };
+  this.configChanged(this.config);
+  this.requestUpdate();
+}
+
+_toggleChanged(ev) {
+  const target = ev.target;
+  if (target.configValue) {
+    this.config = {
+      ...this.config,
+      [target.configValue]: target.checked,
+    };
+    this.configChanged(this.config);
+  }
+}
+
+_vehicleTypeChanged(ev) {
+  this.config = {
+    ...this.config,
+    vehicle_type: ev.target.value,
+  };
+  this.configChanged(this.config);
+  this.requestUpdate();
+}
+
+_unitTypeChanged(ev) {
+  this.config = {
+    ...this.config,
+    unit_type: ev.target.value,
+  };
+  this.configChanged(this.config);
+  this.requestUpdate();
+}
+
+_hybridOrderChanged(ev) {
+  this.config = {
+    ...this.config,
+    hybrid_display_order: ev.target.value,
+  };
+  this.configChanged(this.config);
+}
+
+_renderImageUploadField(label, configKey, placeholder) {
+  const imageTypeKey = `${configKey}_type`;
+  const value = this.config[configKey] || DEFAULT_IMAGE_URL;
+  const displayValue = value === DEFAULT_IMAGE_URL ? DEFAULT_IMAGE_TEXT : value;
+  const currentType = this.config[imageTypeKey] || "image";
+
+  return html`
+    <div class="image-input-container">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <label style="margin-right: 16px; font-size: 1.2em; font-weight: bold;">${label}</label>
+        <div class="radio-group" style="justify-content: flex-end;">
+          <label>
+            <input
+              type="radio"
+              name="${imageTypeKey}"
+              value="none"
+              ?checked="${currentType === 'none'}"
+              @change="${(e) => this._handleImageSourceChange(configKey, 'none')}"
+            />
+            None
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="${imageTypeKey}"
+              value="image"
+              ?checked="${currentType === 'image'}"
+              @change="${(e) => this._handleImageSourceChange(configKey, 'image')}"
+            />
+            Local/Url
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="${imageTypeKey}"
+              value="entity"
+              ?checked="${currentType === 'entity'}"
+              @change="${(e) => this._handleImageSourceChange(configKey, 'entity')}"
+            />
+            Entity
+          </label>
+        </div>
+      </div>
+
+      ${currentType === 'image' 
+        ? html`
+            <div class="image-upload-container">
+              <input
+                type="text"
+                .value="${displayValue}"
+                placeholder="${placeholder}"
+                @input="${(e) => this._handleImageUrlInput(e, configKey)}"
+              />
+              <label class="file-upload-label" for="${configKey}-upload">Upload</label>
+              <input
+                type="file"
+                id="${configKey}-upload"
+                style="display:none"
+                @change="${(e) => this._handleImageUpload(e, configKey)}"
+              />
+            </div>
+          `
+        : currentType === 'entity'
+        ? this._renderEntityPickerWithoutToggle(configKey, "Select an Entity", "This entity provides the image for the display.")
+        : ''}
+    </div>
+  `;
+}
+
+_renderEntityPickerWithoutToggle(configValue, labelText, description) {
+  return html`
+    <div class="input-group">
+      <label for="${configValue}">${labelText}</label>
+      <div class="entity-description">${description}</div>
+      <div class="entity-row">
+        <div class="entity-picker-wrapper">
+          <div class="entity-picker-container">
+            <input
+              type="text"
+              class="entity-picker-input"
+              .value="${this.config[configValue] || ""}"
+              @input="${(e) => this._entityFilterChanged(e, configValue)}"
+              placeholder="Search entities"
+            />
+            ${this[`_${configValue}Filter`]
+              ? html`
+                  <div class="entity-picker-results">
+                    ${Object.keys(this.hass.states)
+                      .filter((eid) =>
+                        eid
+                          .toLowerCase()
+                          .includes(
+                            this[`_${configValue}Filter`].toLowerCase()
+                          )
+                      )
+                      .map(
+                        (eid) => html`
+                          <div
+                            class="entity-picker-result"
+                            @click="${() =>
+                              this._selectEntity(configValue, eid)}"
+                          >
+                            ${eid}
+                          </div>
+                        `
+                      )}
+                  </div>
+                `
+              : ""}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+_renderImageInput(configKey, type, value, placeholder) {
+  value = value || DEFAULT_IMAGE_URL;
+  switch (type) {
+    case 'entity':
+      return html`
+        <ha-entity-picker
+          .hass=${this.hass}
+          .value=${value.startsWith('entity:') ? value.slice(7) : value}
+          .configValue=${configKey}
+          @value-changed=${this._entityPicked}
+          allow-custom-entity
+        ></ha-entity-picker>
+      `;
+    case 'template':
+      return html`
+        <textarea
+          .value=${value}
+          .configValue="${configKey}"
+          @input="${this._templateChanged}"
+          placeholder="Enter template code here"
+          rows="3"
+        ></textarea>
+      `;
+    default: // 'image'
+      return html`
+        <input
+          type="text"
+          .value="${value}"
+          .configValue="${configKey}"
+          placeholder="${placeholder}"
+          @input="${this._valueChanged}"
+        />
+        <label for="${configKey}_upload" class="file-upload-label">
+          Upload
+          <input
+            type="file"
+            id="${configKey}_upload"
+            @change="${(e) => this._handleImageUpload(e, configKey)}"
+            accept="image/*"
+            style="display: none;"
+          />
+        </label>
+      `;
+  }
+}
+
+_templateChanged(ev, configKey) {
+  const newValue = ev.target.value;
+  try {
+    const result = this._evaluateTemplate(newValue);
+    if (result) {
+      this._updateConfig(configKey, newValue);
+    }
+  } catch (error) {
+    console.error('Error evaluating template:', error);
+  }
+}
+
+_renderTemplatePicker(configKey, value) {
+  const templates = this._getTemplateHelpers();
+  return html`
+    <ha-combo-box
+      .hass=${this.hass}
+      .value=${value}
+      .items=${templates}
+      .configValue="${configKey}"
+      @value-changed="${this._templatePicked}"
+      item-value-path="value"
+      item-label-path="name"
+    ></ha-combo-box>
+  `;
+}
+
+_templatePicked(ev) {
+  const target = ev.target;
+  const configValue = target.configValue;
+  const newValue = ev.detail.value || '';
+  this._updateConfig(configValue, newValue);
+}
+
+_updateConfig(key, value) {
+  this.config = {
+    ...this.config,
+    [key]: value,
+  };
+  this.configChanged(this.config);
+}
+
+_getTemplateHelpers() {
+  return Object.keys(this.hass.states)
+    .filter(entityId => entityId.startsWith('template.') || entityId.startsWith('input_text.'))
+    .map(entityId => ({
+      value: `{{ states('${entityId}') }}`,
+      name: this.hass.states[entityId].attributes.friendly_name || entityId
+    }));
+}
+
+_handleImageSourceChange(configKey, newType) {
+  const imageTypeKey = `${configKey}_type`;
+  let newValue = '';
+
+  if (newType === 'entity') {
+    newValue = ''; // Ensure this is properly set with the selected entity ID
+  }
+
+  this.config = {
+    ...this.config,
+    [imageTypeKey]: newType,
+    [configKey]: newValue,
+  };
+
+  this.configChanged(this.config);
+}
+
+_selectImageEntity(configKey, entityId) {
+  this.config = {
+    ...this.config,
+    [configKey]: `entity:${entityId}`,
+  };
+  this[`_${configKey}Filter`] = "";
+  this.configChanged(this.config);
+}
+
+_templateChanged(ev) {
+  const target = ev.target;
+  const configValue = target.configValue;
+  const newValue = target.value;
+  this._updateConfig(configValue, newValue);
+}
+
+_entityPicked(ev) {
+  const target = ev.target;
+  const configValue = target.configValue;
+  const newValue = ev.detail.value ? `entity:${ev.detail.value}` : DEFAULT_IMAGE_URL;
+  this._updateConfig(configValue, newValue);
+}
+
+async _handleImageUpload(ev, configKey) {
+  const input = ev.target;
+  if (!input.files || input.files.length === 0) {
+    return;
+  }
+
+  const file = input.files[0];
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const response = await fetch("/api/image/upload", {
+      method: "POST",
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${this.hass.auth.data.access_token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to upload image");
+    }
+
+    const data = await response.json();
+    const imageId = data.id;
+
+    if (!imageId) {
+      console.error("Response structure:", data);
+      throw new Error("Image ID is missing in the response");
+    }
+
+    const imageUrl = `/api/image/serve/${imageId}/original`;
+
+    if (this.config) {
+      this.config = { ...this.config, [configKey]: imageUrl };
+      this.configChanged(this.config);
+      this.requestUpdate();
+    }
+  } catch (error) {
+    console.error("Error uploading image:", error);
+  }
+}
+
+_entityFilterChanged(e, configKey) {
+  this[`_${configKey}Filter`] = e.target.value;
+  this.requestUpdate();
+}
+
+_selectEntity(configValue, entityId) {
+  this.config = {
+    ...this.config,
+    [configValue]: entityId,
+  };
+  this[`_${configValue}Filter`] = "";
+  this.configChanged(this.config);
+}
+
+_iconGridFilterChanged(e) {
+  this._iconGridFilter = e.target.value;
+  this.requestUpdate();
+}
+
+_addIconGridEntity(entityId) {
+  if (this._selectedIconGridEntities.length === 0) {
+    this._addRowSeparator();
+  }
+  this._selectedIconGridEntities.push(entityId);
+  this._updateIconGridConfig();
+  this._iconGridFilter = "";
+}
+
+_removeIconGridEntity(index) {
+  const removedEntityId = this._selectedIconGridEntities[index];
+  this._selectedIconGridEntities = this._selectedIconGridEntities.filter(
+    (_, i) => i !== index
+  );
+  if (removedEntityId === 'row-separator') {
+    // Remove the row separator configuration
+    const { [index]: _, ...restSeparators } = this.config.row_separators;
+    this.config.row_separators = restSeparators;
+  } else {
+    const { [removedEntityId]: _, ...restIcons } = this._customIcons;
+    this._customIcons = restIcons;
+  }
+
+  // If all entities are removed, remove the last row separator
+  if (this._selectedIconGridEntities.length === 1 && this._selectedIconGridEntities[0] === 'row-separator') {
+    this._selectedIconGridEntities = [];
+    this.config.row_separators = {};
+  }
+
+  this._updateIconGridConfig();
+  this._updateCustomIconsConfig();
+}
+
+_updateIconGridConfig() {
+  this._ensureRowSeparatorAtTop();
+  this.config = {
+    ...this.config,
+    icon_grid_entities: this._selectedIconGridEntities,
+    row_separators: this.config.row_separators,
+  };
+  this.configChanged(this.config);
+}
+
+_ensureRowSeparatorAtTop() {
+  if (this._selectedIconGridEntities.length > 0 && this._selectedIconGridEntities[0] !== 'row-separator') {
+    this._selectedIconGridEntities.unshift('row-separator');
+    if (!this.config.row_separators) {
+      this.config.row_separators = {};
+    }
+    this.config.row_separators[0] = {
+      color: 'var(--uvc-info-text-color)',
+      height: 1,
+      icon_gap: 20,
+      horizontalAlignment: 'center',
+      verticalAlignment: 'middle'
+    };
+    this._updateIconGridConfig();
+  }
+}
+
 _updateCustomIconsConfig() {
   const cleanedCustomIcons = Object.entries(this._customIcons).reduce((acc, [key, value]) => {
     const cleanedValue = {
-      active: value.active,
-      inactive: value.inactive,
+      active: value.active === '' ? undefined : value.active,
+      inactive: value.inactive === '' ? undefined : value.inactive,
       activeColor: value.activeColor,
       inactiveColor: value.inactiveColor,
     };
-    acc[key] = cleanedValue;
+    if (cleanedValue.active || cleanedValue.inactive) {
+      acc[key] = cleanedValue;
+    }
     return acc;
   }, {});
 
@@ -1557,6 +1712,248 @@ _updateCustomIconsConfig() {
     this.config.icon_labels[entityId] = value;
     console.log('Updated icon labels:', this.config.icon_labels);
     this.configChanged(this.config);
+  }
+
+  _setNoIcon(entityId, iconType) {
+    this._customIcons = {
+      ...this._customIcons,
+      [entityId]: {
+        ...this._customIcons[entityId],
+        [iconType]: 'no-icon',
+      },
+    };
+    this._updateCustomIconsConfig();
+    this.requestUpdate();
+  }
+
+  _clearIcon(entityId, iconType) {
+    if (this._customIcons[entityId]) {
+      const { [iconType]: _, ...rest } = this._customIcons[entityId];
+      if (Object.keys(rest).length === 0) {
+        const { [entityId]: __, ...restIcons } = this._customIcons;
+        this._customIcons = restIcons;
+      } else {
+        this._customIcons = {
+          ...this._customIcons,
+          [entityId]: rest,
+        };
+      }
+      this._updateCustomIconsConfig();
+    }
+  }
+
+  _addRowSeparator() {
+    const newIndex = this._selectedIconGridEntities.length;
+    this._selectedIconGridEntities.push('row-separator');
+    if (!this.config.row_separators) {
+      this.config.row_separators = {};
+    }
+    this.config.row_separators[newIndex] = {
+      color: this._getDefaultColorAsHex(),
+      height: 1,
+      icon_gap: 20,
+      horizontalAlignment: 'center',
+      verticalAlignment: 'middle'
+    };
+    this._updateIconGridConfig();
+  }
+
+  _renderRowSeparatorEditor(index) {
+    return html`
+      <div class="selected-entity row-separator" draggable="true" @dragstart="${(e) => this._onDragStart(e, index)}" data-entity-id="row-separator">
+        <div class="entity-header">
+          <div class="handle" 
+               @mousedown="${(e) => this._onDragStart(e, index)}"
+               @touchstart="${(e) => this._onDragStart(e, index)}">
+            <ha-icon icon="mdi:drag"></ha-icon>
+          </div>
+          <ha-icon
+            class="toggle-details"
+            icon="mdi:chevron-down"
+            @click="${() => this._toggleRowSeparatorDetails(index)}"
+          ></ha-icon>
+          <span class="entity-name">Row Separator</span>
+          <ha-icon
+            class="remove-entity"
+            icon="mdi:close"
+            @click="${() => this._removeIconGridEntity(index)}"
+          ></ha-icon>
+        </div>
+        <div class="entity-details" id="row-separator-details-${index}" style="display: none;">
+          ${this._renderRowSeparatorDetails(index)}
+        </div>
+      </div>
+    `;
+  }
+
+  _renderRowSeparatorDetails(index) {
+    const separatorConfig = this._selectedIconGridEntities[index] === 'row-separator' 
+      ? this.config.row_separators?.[index] || {}
+      : {};
+
+    const defaultColor = this._getDefaultColorAsHex();
+    const color = separatorConfig.color || defaultColor;
+    const textColor = this._getContrastYIQ(color);
+    const isTransparent = color === 'transparent';
+    const bgColor = getComputedStyle(document.body).getPropertyValue('--card-background-color').trim() || '#ffffff';
+
+    return html`
+      <div class="separator-color-section">
+        <label>Separator Color</label>
+        <div class="entity-description">Color of the separator line between icon rows.</div>
+        <div class="color-picker-row">
+          <div class="color-picker">
+            <div class="color-input-wrapper">
+              <input type="color" 
+                     .value="${isTransparent ? defaultColor : color}" 
+                     @change="${(e) => this._updateRowSeparatorConfig(index, 'color', e.target.value)}"
+                     style="opacity: 0; position: absolute; width: 100%; height: 100%; cursor: pointer;">
+              <div class="color-preview" style="background-color: ${isTransparent ? bgColor : color}; color: ${isTransparent ? this._getContrastYIQ(bgColor) : textColor};">
+                <span class="color-hex">${isTransparent ? 'Transparent' : color}</span>
+                <ha-icon
+                  class="reset-icon"
+                  icon="mdi:refresh"
+                  @click="${(e) => this._resetRowSeparatorColor(e, index)}"
+                ></ha-icon>
+              </div>
+            </div>
+          </div>
+          <button class="transparent-button" @click="${() => this._toggleTransparentSeparator(index)}">
+            ${isTransparent ? 'Set Color' : 'Make Transparent'}
+          </button>
+        </div>
+      </div>
+      <div class="editor-row">
+        <div class="editor-item">
+          <label for="row_separator_height_${index}">Separator Height</label>
+          <div class="entity-description">Thickness of the separator line.</div>
+          <div class="input-with-unit">
+            <input
+              id="row_separator_height_${index}"
+              type="number"
+              .value="${separatorConfig.height || 1}"
+              @input="${(e) => this._updateRowSeparatorConfig(index, 'height', parseInt(e.target.value))}"
+              min="0"
+              max="20"
+            />
+            <span class="unit">px</span>
+          </div>
+        </div>
+        <div class="editor-item">
+          <label for="row_separator_icon_gap_${index}">Icon Gap Size</label>
+          <div class="entity-description">Space between icons below separator.</div>
+          <div class="input-with-unit">
+            <input
+              id="row_separator_icon_gap_${index}"
+              type="number"
+              .value="${separatorConfig.icon_gap || 20}"
+              @input="${(e) => this._updateRowSeparatorConfig(index, 'icon_gap', parseInt(e.target.value))}"
+              min="0"
+              max="100"
+            />
+            <span class="unit">px</span>
+          </div>
+        </div>
+      </div>
+      <div class="editor-row">
+        <div class="editor-item">
+          <label>Horizontal Alignment</label>
+          <div class="alignment-buttons">
+            <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'horizontalAlignment', 'left')}"
+                    ?disabled="${separatorConfig.horizontalAlignment === 'left'}" title="Align Left">
+              ◀
+            </button>
+            <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'horizontalAlignment', 'center')}"
+                    ?disabled="${separatorConfig.horizontalAlignment === 'center' || separatorConfig.horizontalAlignment === undefined}" title="Align Center">
+              ⬤
+            </button>
+            <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'horizontalAlignment', 'right')}"
+                    ?disabled="${separatorConfig.horizontalAlignment === 'right'}" title="Align Right">
+              ▶
+            </button>
+          </div>
+        </div>
+        <div class="editor-item">
+          <label>Vertical Alignment</label>
+          <div class="alignment-buttons">
+            <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'verticalAlignment', 'top')}"
+                    ?disabled="${separatorConfig.verticalAlignment === 'top'}" title="Align Top">
+              ▲
+            </button>
+            <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'verticalAlignment', 'middle')}"
+                    ?disabled="${separatorConfig.verticalAlignment === 'middle' || separatorConfig.verticalAlignment === undefined}" title="Align Middle">
+              ⬤
+            </button>
+            <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'verticalAlignment', 'bottom')}"
+                    ?disabled="${separatorConfig.verticalAlignment === 'bottom'}" title="Align Bottom">
+              ▼
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  _toggleTransparentSeparator(index) {
+    const currentColor = this.config.row_separators?.[index]?.color;
+    const defaultColor = this._getDefaultColorAsHex();
+    const newColor = currentColor === 'transparent' ? defaultColor : 'transparent';
+    this._updateRowSeparatorConfig(index, 'color', newColor);
+    this.requestUpdate(); // This will trigger a re-render
+  }
+
+  _resetRowSeparatorColor(e, index) {
+    e.stopPropagation();
+    const defaultColor = this._getDefaultColorAsHex();
+    this._updateRowSeparatorConfig(index, 'color', defaultColor);
+  }
+
+  _toggleRowSeparatorDetails(index) {
+    const detailsElement = this.shadowRoot.querySelector(`#row-separator-details-${index}`);
+    const toggleIcon = this.shadowRoot.querySelector(`.selected-entity[data-entity-id="row-separator"]:nth-child(${index + 1}) .toggle-details`);
+    
+    if (detailsElement && toggleIcon) {
+      const isHidden = detailsElement.style.display === 'none' || !detailsElement.style.display;
+      detailsElement.style.display = isHidden ? 'block' : 'none';
+      toggleIcon.icon = isHidden ? 'mdi:chevron-up' : 'mdi:chevron-down';
+    }
+  }
+
+  _updateRowSeparatorConfig(index, property, value) {
+    if (!this.config.row_separators) {
+      this.config.row_separators = {};
+    }
+    if (!this.config.row_separators[index]) {
+      this.config.row_separators[index] = {};
+    }
+    this.config.row_separators[index][property] = value;
+    this.configChanged(this.config);
+  }
+
+  _getDefaultColorAsHex() {
+    const defaultColor = getComputedStyle(document.documentElement).getPropertyValue('--uvc-info-text-color').trim();
+    if (defaultColor.startsWith('#')) {
+      return defaultColor;
+    } else if (defaultColor.startsWith('rgb')) {
+      const rgb = defaultColor.match(/\d+/g);
+      return `#${parseInt(rgb[0]).toString(16).padStart(2, '0')}${parseInt(rgb[1]).toString(16).padStart(2, '0')}${parseInt(rgb[2]).toString(16).padStart(2, '0')}`;
+    } else {
+      return '#808080'; // Fallback color if unable to determine
+    }
+  }
+
+  setDefaultValues() {
+    if (!this.config.image) {
+      this._updateConfig('image', DEFAULT_IMAGE_URL);
+    }
+    if (!this.config.charging_image) {
+      this._updateConfig('charging_image', DEFAULT_IMAGE_URL);
+    }
+  }
+
+  firstUpdated(changedProps) {
+    super.firstUpdated(changedProps);
+    this.setDefaultValues();
   }
 }
 
