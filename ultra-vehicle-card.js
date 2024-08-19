@@ -1,12 +1,10 @@
 import { LitElement, html, css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { UltraVehicleCardEditor } from "./ultra-vehicle-card-editor.js";
-import { styles } from "./styles.js";
+import { version } from './version.js';
+import { UltraVehicleCardEditor } from './ultra-vehicle-card-editor.js';
+import { styles } from './styles.js';
+import { localize } from './localize.js';
 
-
-const version = "V1.4.0";
-
-
-class UltraVehicleCard extends LitElement {
+class UltraVehicleCard extends localize(LitElement) {
   static get properties() {
     return {
       hass: { type: Object },
@@ -30,14 +28,12 @@ setConfig(config) {
   // Get the default color as hex
   const defaultColor = this._getDefaultColorAsHex();
 
-  const defaultImageUrl = 'https://github.com/user-attachments/assets/4ef72288-5ee9-4fa6-b2f3-c34c4160cf42';
-
   this.config = {
     title: "My Vehicle",
-    image_url: config.image_url || defaultImageUrl,
-    charging_image_url: config.charging_image_url || defaultImageUrl,
-    image_url_type: "image",
-    charging_image_url_type: "image",
+    image_url: config.image_url || "",
+    charging_image_url: config.charging_image_url || "",
+    image_url_type: config.image_url_type || "image",
+    charging_image_url_type: config.charging_image_url_type || "image",
     vehicle_type: "EV",
     unit_type: "mi",
     battery_level_entity: "",
@@ -71,8 +67,8 @@ setConfig(config) {
     barBorderColor: "",
     icon_size: 28,
     icon_gap: config.icon_gap || 20,
-    image_entity: "",
-    charging_image_entity: "",
+    image_entity: config.image_entity || "",
+    charging_image_entity: config.charging_image_entity || "",
     carStateTextColor: config.carStateTextColor || '',
     rangeTextColor: config.rangeTextColor || '',
     percentageTextColor: config.percentageTextColor || '',
@@ -126,6 +122,8 @@ setConfig(config) {
       };
     }
   });
+
+  this.loadResources(this.config.language || navigator.language);
 }
 
 // Add this method to validate entity configurations
@@ -179,7 +177,7 @@ _renderVehicleInfo() {
     case 'Hybrid':
       return this._renderHybridInfo();
     default:
-      return html`<div class="error">Invalid vehicle type</div>`;
+      return html`<div class="error">${this.localize('common.invalid_vehicle_type')}</div>`;
   }
 }
 
@@ -204,14 +202,16 @@ _renderEVInfo() {
           ` : ''}
         </div>
         <div class="level-text">
-          <span style="color: var(--uvc-percentage-text-color);">${batteryLevel}% ${isCharging ? 'Charging' : 'Charge'}</span>
+          <span style="color: var(--uvc-percentage-text-color);">
+            ${batteryLevel}% ${isCharging ? this.localize('common.charging') : this.localize('common.battery')}
+          </span>
           ${this.config.show_battery_range && batteryRange !== null ? html`
-            <span class="range">${batteryRange}</span>
+            <span class="range">${this.localize('common.range')}: ${batteryRange}</span>
           ` : ''}
         </div>
       ` : this.config.show_battery_range && batteryRange !== null ? html`
         <div class="level-text">
-          <span class="range" style="float: right;">${batteryRange}</span>
+          <span class="range" style="float: right;">${this.localize('common.range')}: ${batteryRange}</span>
         </div>
       ` : ''}
     </div>
@@ -281,14 +281,16 @@ _renderFuelInfo() {
           <div class="progress ${isEngineOn ? 'engine-on' : ''}" style="width: ${fuelLevel}%;"></div>
         </div>
         <div class="level-text">
-          <span style="color: var(--uvc-percentage-text-color);">${fuelLevel}% ${isEngineOn ? 'Engine On' : 'Fuel'}</span>
+          <span style="color: var(--uvc-percentage-text-color);">
+            ${fuelLevel}% ${isEngineOn ? this.localize('common.engine_on') : this.localize('common.fuel')}
+          </span>
           ${this.config.show_fuel_range && fuelRange !== null ? html`
-            <span class="range">${fuelRange}</span>
+            <span class="range">${this.localize('common.range')}: ${fuelRange}</span>
           ` : ''}
         </div>
       ` : this.config.show_fuel_range && fuelRange !== null ? html`
         <div class="level-text">
-          <span class="range" style="float: right;">${fuelRange}</span>
+          <span class="range" style="float: right;">${this.localize('common.range')}: ${fuelRange}</span>
         </div>
       ` : ''}
     </div>
@@ -345,14 +347,16 @@ _renderBatteryBar(level, range, isCharging, chargeLimit) {
         ` : ''}
       </div>
       <div class="level-text">
-        <span style="color: var(--uvc-percentage-text-color);">${level}% ${isCharging ? 'Charging' : 'Charge'}</span>
+        <span style="color: var(--uvc-percentage-text-color);">
+          ${level}% ${isCharging ? this.localize('common.charging') : this.localize('common.battery')}
+        </span>
         ${this.config.show_battery_range && range !== null ? html`
-          <span class="range">${range}</span>
+          <span class="range">${this.localize('common.range')}: ${range}</span>
         ` : ''}
       </div>
     ` : this.config.show_battery_range && range !== null ? html`
       <div class="level-text">
-        <span class="range" style="float: right;">${range}</span>
+        <span class="range" style="float: right;">${this.localize('common.range')}: ${range}</span>
       </div>
     ` : ''}
   `;
@@ -365,14 +369,16 @@ _renderFuelBar(level, range) {
         <div class="progress" style="width: ${level}%;"></div>
       </div>
       <div class="level-text">
-        <span style="color: var(--uvc-percentage-text-color);">${level}% Fuel</span>
+        <span style="color: var(--uvc-percentage-text-color);">
+          ${level}% ${this.localize('common.fuel')}
+        </span>
         ${this.config.show_fuel_range && range !== null ? html`
-          <span class="range">${range}</span>
+          <span class="range">${this.localize('common.range')}: ${range}</span>
         ` : ''}
       </div>
     ` : this.config.show_fuel_range && range !== null ? html`
       <div class="level-text">
-        <span class="range" style="float: right;">${range}</span>
+        <span class="range" style="float: right;">${this.localize('common.range')}: ${range}</span>
       </div>
     ` : ''}
   `;
@@ -411,7 +417,7 @@ _formatChargingEndTime(isoString) {
 
   // Check if the date is valid
   if (isNaN(endTime.getTime())) {
-    return `Charging end time: ${isoString}`; // Fallback to display the original string
+    return `${this.localize('common.charging_end_time')}: ${isoString}`; // Fallback to display the original string
   }
 
   const diffMs = endTime - now;
@@ -419,14 +425,14 @@ _formatChargingEndTime(isoString) {
   const diffMinutes = Math.round(diffMs / (1000 * 60));
 
   if (diffMinutes <= 0) {
-    return "Charging ending soon";
+    return this.localize('common.charging_ending_soon');
   } else if (diffMinutes < 60) {
-    return `Charging ending in ${diffMinutes} minute${diffMinutes !== 1 ? 's' : ''}`;
+    return `${this.localize('common.charging_ending_in')} ${diffMinutes} ${this.localize(diffMinutes !== 1 ? 'common.minutes' : 'common.minute')}`;
   } else if (diffHours < 24) {
-    return `Charging ending in ${diffHours} hour${diffHours !== 1 ? 's' : ''}`;
+    return `${this.localize('common.charging_ending_in')} ${diffHours} ${this.localize(diffHours !== 1 ? 'common.hours' : 'common.hour')}`;
   } else {
     const options = { weekday: 'short', hour: 'numeric', minute: 'numeric' };
-    return `Charging until ${endTime.toLocaleString(undefined, options)}`;
+    return `${this.localize('common.charging_until')} ${endTime.toLocaleString(undefined, options)}`;
   }
 }
 
@@ -472,7 +478,7 @@ _renderInfoLine() {
 _formatLocationState(state) {
   // Check for "not_home" (case insensitive) and replace with "Away"
   if (state.toLowerCase() === 'not_home') {
-    return 'Away';
+    return this.localize('common.away');
   }
 
   // For other states, replace underscores with spaces
@@ -481,13 +487,47 @@ _formatLocationState(state) {
 
 _renderVehicleImage() {
   const isCharging = this._isCharging(this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null);
-  const imageUrl = isCharging ? this.config.charging_image_url : this.config.image_url;
+  let imageUrl;
+
+  if (isCharging) {
+    imageUrl = this.config.charging_image_url_type === "entity" 
+      ? this._getImageUrlFromEntity(this.config.charging_image_entity)
+      : this.config.charging_image_url;
+  } else {
+    imageUrl = this.config.image_url_type === "entity"
+      ? this._getImageUrlFromEntity(this.config.image_entity)
+      : this.config.image_url;
+  }
+
+  // Process the imageUrl if it starts with "entity:"
+  if (imageUrl && imageUrl.startsWith("entity:")) {
+    const entityId = imageUrl.slice(7);
+    imageUrl = this._getImageUrlFromEntity(entityId);
+  }
+
+
+  // Use the default image only if no valid URL is provided
+  const defaultImageUrl = 'https://github.com/user-attachments/assets/4ef72288-5ee9-4fa6-b2f3-c34c4160cf42';
+  const finalImageUrl = imageUrl || defaultImageUrl;
 
   return html`
     <div class="vehicle-image-container">
-      <img class="vehicle-image" src="${imageUrl}" alt="Vehicle Image" @error="${this._handleImageError}">
+      <img class="vehicle-image" src="${finalImageUrl}" alt="Vehicle Image" @error="${this._handleImageError}">
     </div>
   `;
+}
+
+_getImageUrlFromEntity(entityId) {
+  const entity = this.hass.states[entityId];
+  if (!entity) return null;
+
+  // Check if the state is a valid URL
+  if (entity.state && entity.state.startsWith('http')) {
+    return entity.state;
+  }
+
+  // If not, try to get the URL from the attributes
+  return entity.attributes.entity_picture || entity.attributes.image_url || null;
 }
 
 _handleImageError(e) {
@@ -576,37 +616,38 @@ _handleImageError(e) {
     const labelSize = iconSize > 28 ? Math.round(iconSize * 0.5) : 14;
 
     // Determine if we should render anything
-    const shouldRender = icon !== '';
+    const shouldRender = icon !== '' || buttonStyle === 'label';
 
     if (shouldRender) {
       return html`
         <div class="icon-wrapper ${buttonStyle} label-${labelPosition}" style="--icon-size: ${iconSize}px; --label-size: ${labelSize}px; --label-color: ${color};">
-          ${this._renderLabel(labelText, labelPosition, 'before', isActive, customIcon)}
-          ${icon ? html`
+          ${this._renderLabel(labelText, labelPosition, 'before', isActive, customIcon, buttonStyle)}
+          ${buttonStyle !== 'label' && icon ? html`
             <ha-icon
               icon="${icon}"
               style="--mdc-icon-size: ${iconSize}px; color: ${color};"
               @click="${() => this._handleIconClick(entityId)}"
             ></ha-icon>
           ` : ''}
-          ${this._renderLabel(labelText, labelPosition, 'after', isActive, customIcon)}
+          ${this._renderLabel(labelText, labelPosition, 'after', isActive, customIcon, buttonStyle)}
         </div>
       `;
     }
     return html``;
   }
 
-  _renderLabel(text, position, renderPosition, isActive, customIcon) {
-    if (position === 'none') return html``;
-  
-    const shouldRenderLabel = isActive || customIcon.inactive !== 'no-icon';
-  
+  _renderLabel(text, position, renderPosition, isActive, customIcon, buttonStyle) {
+    if (position === 'none' && buttonStyle !== 'label') return html``;
+
+    const shouldRenderLabel = isActive || customIcon.inactive !== 'no-icon' || buttonStyle === 'label';
+
     if (shouldRenderLabel &&
         ((renderPosition === 'before' && (position === 'left' || position === 'top')) ||
-         (renderPosition === 'after' && (position === 'right' || position === 'bottom')))) {
+         (renderPosition === 'after' && (position === 'right' || position === 'bottom')) ||
+         buttonStyle === 'label')) {
       return html`<span class="icon-label">${text}</span>`;
     }
-  
+
     return html``;
   }
 

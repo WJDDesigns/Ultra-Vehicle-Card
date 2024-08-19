@@ -73,7 +73,6 @@ textarea {
   overflow: visible; 
   text-overflow: clip; 
   text-align: center;
-  min-width: 70px; 
 }
   .vehicle-image-container.clickable {
   cursor: pointer;

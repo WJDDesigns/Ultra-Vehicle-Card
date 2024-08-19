@@ -3,7 +3,9 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { styles } from "./styles.js";
+import { version } from './version.js';
+import { styles } from './styles.js';
+import { localize } from './localize.js';
 
 const DEFAULT_IMAGE_URL = 'https://github.com/user-attachments/assets/4ef72288-5ee9-4fa6-b2f3-c34c4160cf42';
 const DEFAULT_IMAGE_TEXT = 'Default Image';
@@ -22,7 +24,7 @@ const fireEvent = (node, type, detail, options) => {
 };
 
 
-export class UltraVehicleCardEditor extends LitElement {
+export class UltraVehicleCardEditor extends localize(LitElement) {
   static get properties() {
     return {
       hass: { type: Object },
@@ -92,8 +94,8 @@ export class UltraVehicleCardEditor extends LitElement {
   setConfig(config) {
     this.config = {
       title: "My Vehicle",
-      image_url: config.image_url || DEFAULT_IMAGE_URL,
-      charging_image_url: config.charging_image_url || DEFAULT_IMAGE_URL,
+      image_url: config.image_url_type === "entity" ? "" : (config.image_url || DEFAULT_IMAGE_URL),
+      charging_image_url: config.charging_image_url_type === "entity" ? "" : (config.charging_image_url || DEFAULT_IMAGE_URL),
       image_url_type: config.image_url_type || "image",
       charging_image_url_type: config.charging_image_url_type || "image",
       vehicle_type: "EV",
@@ -156,6 +158,8 @@ export class UltraVehicleCardEditor extends LitElement {
     this._image_urlFilter = "";
   this._charging_image_urlFilter = "";
   this._iconSizes = { ...this.config.icon_sizes };
+
+    this.loadResources(this.config.language || navigator.language);
   }
 
   _handleDeprecatedFields() {
@@ -201,7 +205,7 @@ export class UltraVehicleCardEditor extends LitElement {
   _renderBasicConfig() {
     return html`
       <div class="input-group">
-        <label for="title">Title</label>
+        <label for="title">${this.localize('editor.title')}</label>
         <input
           id="title"
           type="text"
@@ -212,7 +216,7 @@ export class UltraVehicleCardEditor extends LitElement {
       </div>
   
       <div class="input-group">
-        <label>Vehicle Type</label>
+        <label>${this.localize('editor.vehicle_type')}</label>
         <div class="radio-group">
           <label>
             <input
@@ -222,7 +226,7 @@ export class UltraVehicleCardEditor extends LitElement {
               ?checked="${this.config.vehicle_type === "EV"}"
               @change="${this._vehicleTypeChanged}"
             />
-            Electric Vehicle
+            ${this.localize('vehicle_types.ev')}
           </label>
           <label>
             <input
@@ -232,7 +236,7 @@ export class UltraVehicleCardEditor extends LitElement {
               ?checked="${this.config.vehicle_type === "Fuel"}"
               @change="${this._vehicleTypeChanged}"
             />
-            Fuel Vehicle
+            ${this.localize('vehicle_types.fuel')}
           </label>
           <label>
             <input
@@ -242,7 +246,7 @@ export class UltraVehicleCardEditor extends LitElement {
               ?checked="${this.config.vehicle_type === "Hybrid"}"
               @change="${this._vehicleTypeChanged}"
             />
-            PHEV (Hybrid)
+            ${this.localize('vehicle_types.hybrid')}
           </label>
         </div>
       </div>
@@ -250,7 +254,7 @@ export class UltraVehicleCardEditor extends LitElement {
       ${this.config.vehicle_type === "Hybrid"
         ? html`
             <div class="input-group">
-              <label>Hybrid Display Order</label>
+              <label>${this.localize('editor.hybrid_display_order')}</label>
               <div class="radio-group">
                 <label>
                   <input
@@ -260,7 +264,7 @@ export class UltraVehicleCardEditor extends LitElement {
                     ?checked="${this.config.hybrid_display_order === "fuel_first"}"
                     @change="${this._hybridOrderChanged}"
                   />
-                  Fuel First
+                  ${this.localize('editor.fuel_first')}
                 </label>
                 <label>
                   <input
@@ -270,7 +274,7 @@ export class UltraVehicleCardEditor extends LitElement {
                     ?checked="${this.config.hybrid_display_order === "battery_first"}"
                     @change="${this._hybridOrderChanged}"
                   />
-                  Battery First
+                  ${this.localize('editor.battery_first')}
                 </label>
               </div>
             </div>
@@ -279,9 +283,9 @@ export class UltraVehicleCardEditor extends LitElement {
   
       <div class="divider"></div>
   
-      <h3>Images</h3>
-      ${this._renderImageUploadField("Main Image", "image_url", "Enter image URL")}
-      ${this._renderImageUploadField("Charging Image", "charging_image_url", "Enter charging image URL")}
+      <h3>${this.localize('editor.images')}</h3>
+      ${this._renderImageUploadField(this.localize('editor.main_image'), "image_url", this.localize('editor.enter_image_url'))}
+      ${this._renderImageUploadField(this.localize('editor.charging_image'), "charging_image_url", this.localize('editor.enter_image_url'))}
     `;
   }
 
@@ -304,7 +308,7 @@ export class UltraVehicleCardEditor extends LitElement {
                 ?checked="${currentType === 'none'}"
                 @change="${(e) => this._handleImageSourceChange(configKey, 'none')}"
               />
-              None
+              ${this.localize('editor.none')}
             </label>
             <label>
               <input
@@ -314,7 +318,7 @@ export class UltraVehicleCardEditor extends LitElement {
                 ?checked="${currentType === 'image'}"
                 @change="${(e) => this._handleImageSourceChange(configKey, 'image')}"
               />
-              Local/Url
+              ${this.localize('editor.local_url')}
             </label>
             <label>
               <input
@@ -324,7 +328,7 @@ export class UltraVehicleCardEditor extends LitElement {
                 ?checked="${currentType === 'entity'}"
                 @change="${(e) => this._handleImageSourceChange(configKey, 'entity')}"
               />
-              Entity
+              ${this.localize('editor.entity')}
             </label>
           </div>
         </div>
@@ -338,7 +342,7 @@ export class UltraVehicleCardEditor extends LitElement {
                   placeholder="${placeholder}"
                   @input="${(e) => this._handleImageUrlInput(e, configKey)}"
                 />
-                <label class="file-upload-label" for="${configKey}-upload">Upload</label>
+                <label class="file-upload-label" for="${configKey}-upload">${this.localize('editor.upload_image')}</label>
                 <input
                   type="file"
                   id="${configKey}-upload"
@@ -348,7 +352,15 @@ export class UltraVehicleCardEditor extends LitElement {
               </div>
             `
           : currentType === 'entity'
-          ? this._renderEntityPickerWithoutToggle(configKey, "Select an Entity", "This entity provides the image for the display.")
+          ? html`
+              <ha-entity-picker
+                .hass=${this.hass}
+                .value=${this.config[configKey]}
+                @value-changed=${(e) => this._entityPicked(e, configKey)}
+                .includeDomains=${['camera', 'image']}
+                allow-custom-entity
+              ></ha-entity-picker>
+            `
           : ''}
       </div>
     `;
@@ -368,7 +380,7 @@ export class UltraVehicleCardEditor extends LitElement {
     return html`
       <div class="entity-information">
         <div class="entity-information-header" @click=${this._toggleEntityInformation}>
-          <h3>Entity Information</h3>
+          <h3>${this.localize('editor.entity_settings')}</h3>
           <ha-icon icon=${this._showEntityInformation ? "mdi:chevron-up" : "mdi:chevron-down"}></ha-icon>
         </div>
         ${this._showEntityInformation ? this._renderEntityPickers() : ''}
@@ -392,23 +404,23 @@ export class UltraVehicleCardEditor extends LitElement {
         ? html`
             ${this._renderEntityPicker(
               "battery_level_entity",
-              "Battery Level Entity",
-              "This is used for battery percent and bar length."
+              this.localize('editor.battery_level'),
+              this.localize('editor.battery_level_description')
             )}
             ${this._renderEntityPicker(
               "battery_range_entity",
-              "Battery Range Entity",
-              "This is used for the battery range left."
+              this.localize('editor.battery_range'),
+              this.localize('editor.battery_range_description')
             )}
             ${this._renderEntityPicker(
               "charging_status_entity",
-              "Charging Status Entity",
-              "This is used for charging wording and bar animation."
+              this.localize('editor.charging_status'),
+              this.localize('editor.charging_status_description')
             )}
             ${this._renderEntityPicker(
               "charge_limit_entity",
-              "Charge Limit Entity",
-              "This is used to display the charge limit on the battery bar."
+              this.localize('editor.charge_limit'),
+              this.localize('editor.charge_limit_description')
             )}
           `
         : ""}
@@ -416,35 +428,35 @@ export class UltraVehicleCardEditor extends LitElement {
         ? html`
             ${this._renderEntityPicker(
               "fuel_level_entity",
-              "Fuel Level Entity",
-              "This is used for fuel percent and bar length."
+              this.localize('editor.fuel_level'),
+              this.localize('editor.fuel_level_description')
             )}
             ${this._renderEntityPicker(
               "fuel_range_entity",
-              "Fuel Range Entity",
-              "This is used for the fuel range left."
+              this.localize('editor.fuel_range'),
+              this.localize('editor.fuel_range_description')
             )}
             ${this._renderEntityPicker(
               "engine_on_entity",
-              "Engine On Entity",
-              "This entity indicates whether the engine is running."
+              this.localize('editor.engine_on'),
+              this.localize('editor.engine_on_description')
             )}
           `
         : ""}
       ${this._renderEntityPicker(
         "location_entity",
-        "Location Entity",
-        "This is used to display the vehicle location."
+        this.localize('editor.location'),
+        this.localize('editor.location_description')
       )}
       ${this._renderEntityPicker(
         "mileage_entity",
-        "Mileage Entity",
-        "This is used to display the vehicle mileage."
+        this.localize('editor.mileage'),
+        this.localize('editor.mileage_description')
       )}
       ${this._renderEntityPicker(
         "car_state_entity",
-        "Car State Entity",
-        "This is used to display the current state of the car (e.g., offline, charging)."
+        this.localize('editor.car_state'),
+        this.localize('editor.car_state_description')
       )}
     `;
   }
@@ -463,7 +475,7 @@ export class UltraVehicleCardEditor extends LitElement {
                 class="entity-picker-input"
                 .value="${this.config[configValue] || ""}"
                 @input="${(e) => this._entityFilterChanged(e, configValue)}"
-                placeholder="Search entities"
+                placeholder="${this.localize('editor.search_entities')}"
               />
               ${this[`_${configValue}Filter`]
                 ? html`
@@ -509,27 +521,46 @@ export class UltraVehicleCardEditor extends LitElement {
  _renderIconGridConfig() {
     return html`
       <div class="icon-grid-container">
-        <h3>Icon Grid</h3>
+        <h3>${this.localize('editor.icon_grid')}</h3>
         <div class="input-group">
-          <label for="icon_grid_search">Add entities to the icon grid</label>
-          <div class="entity-description">
-            Search and select entities to add to the icon grid. Use the drag
-            handle () to reorder entities. Click on the icon to change it, and
-            use the (×) to remove an entity from the grid.
+          <div class="entity-description">${this.localize('editor.icon_grid_description')}</div>
+          <div class="entity-picker-wrapper">
+            <div class="entity-picker-container">
+              <input
+                type="text"
+                class="entity-picker-input"
+                .value="${this._iconGridFilter || ""}"
+                @input="${this._iconGridFilterChanged}"
+                placeholder="${this.localize('editor.search_entities')}"
+              />
+              ${this._iconGridFilter
+                ? html`
+                    <div class="entity-picker-results">
+                      ${Object.keys(this.hass.states)
+                        .filter((eid) =>
+                          eid
+                            .toLowerCase()
+                            .includes(this._iconGridFilter.toLowerCase())
+                        )
+                        .map(
+                          (eid) => html`
+                            <div
+                              class="entity-picker-result"
+                              @click="${() => this._addIconGridEntity(eid)}"
+                            >
+                              ${eid}
+                            </div>
+                          `
+                        )}
+                    </div>
+                  `
+                : ""}
+            </div>
           </div>
-          <div class="entity-picker-container">
-            <input
-              id="icon_grid_search"
-              type="text"
-              class="entity-picker-input"
-              placeholder="Search entities"
-              .value="${this._iconGridFilter}"
-              @input="${this._iconGridFilterChanged}"
-            />
-            ${this._renderIconGridResults()}
-          </div>
+          <button class="add-row-button" @click="${this._addRowSeparator}">
+            ${this.localize('editor.add_row_separator')}
+          </button>
         </div>
-        <button class="add-row-button" @click="${this._addRowSeparator}">Add Row Separator</button>
         <div
           class="selected-entities"
           @dragover="${this._onDragOver}"
@@ -539,31 +570,6 @@ export class UltraVehicleCardEditor extends LitElement {
             this._renderSelectedEntity(entityId, index)
           )}
         </div>
-      </div>
-    `;
-  }
-
-  _renderIconGridResults() {
-    if (!this._iconGridFilter) return "";
-
-    const filteredEntities = Object.keys(this.hass.states)
-      .filter((eid) =>
-        eid.toLowerCase().includes(this._iconGridFilter.toLowerCase())
-      )
-      .filter((eid) => !this._selectedIconGridEntities.includes(eid));
-
-    return html`
-      <div class="entity-picker-results">
-        ${filteredEntities.map(
-          (eid) => html`
-            <div
-              class="entity-picker-result"
-              @click="${() => this._addIconGridEntity(eid)}"
-            >
-              ${eid}
-            </div>
-          `
-        )}
       </div>
     `;
   }
@@ -607,83 +613,83 @@ export class UltraVehicleCardEditor extends LitElement {
         <div class="entity-details" id="entity-details-${sanitizedEntityId}" style="display: none;">
           <div class="editor-row">
             <div class="editor-item">
-              <label>Inactive Icon</label>
-              <ha-icon-picker
-                .hass=${this.hass}
+              <label>${this.localize('editor.inactive_icon')}</label>
+            <ha-icon-picker
+              .hass=${this.hass}
                 .value=${inactiveIcon === 'no-icon' ? '' : inactiveIcon}
-                @value-changed=${(e) => this._handleIconChange(e, 'inactive', entityId)}
-              ></ha-icon-picker>
-              <mwc-button
-                @click=${() => this._setNoIcon(entityId, 'inactive')}
+              @value-changed=${(e) => this._handleIconChange(e, 'inactive', entityId)}
+            ></ha-icon-picker>
+            <mwc-button
+              @click=${() => this._setNoIcon(entityId, 'inactive')}
                 .selected=${inactiveIcon === 'no-icon'}
-              >${inactiveIcon === 'no-icon' ? '✓ ' : ''}No Icon</mwc-button>
-            </div>
+              >${inactiveIcon === 'no-icon' ? '✓ ' : ''}${this.localize('editor.no_icon')}</mwc-button>
+          </div>
             <div class="editor-item">
-              <label>Active Icon</label>
-              <ha-icon-picker
-                .hass=${this.hass}
+              <label>${this.localize('editor.active_icon')}</label>
+            <ha-icon-picker
+              .hass=${this.hass}
                 .value=${activeIcon === 'no-icon' ? '' : activeIcon}
-                @value-changed=${(e) => this._handleIconChange(e, 'active', entityId)}
-              ></ha-icon-picker>
-              <mwc-button
-                @click=${() => this._setNoIcon(entityId, 'active')}
+              @value-changed=${(e) => this._handleIconChange(e, 'active', entityId)}
+            ></ha-icon-picker>
+            <mwc-button
+              @click=${() => this._setNoIcon(entityId, 'active')}
                 .selected=${activeIcon === 'no-icon'}
-              >${activeIcon === 'no-icon' ? '✓ ' : ''}No Icon</mwc-button>
-            </div>
+              >${activeIcon === 'no-icon' ? '✓ ' : ''}${this.localize('editor.no_icon')}</mwc-button>
           </div>
+        </div>
           <div class="editor-row">
             <div class="editor-item">
-              ${this._renderIconColorPicker(`Inactive Color`, entityId, 'inactive', inactiveColor)}
-            </div>
-            <div class="editor-item">
-              ${this._renderIconColorPicker(`Active Color`, entityId, 'active', activeColor)}
-            </div>
+              ${this._renderIconColorPicker(this.localize('editor.inactive_icon_color'), entityId, 'inactive', inactiveColor)}
           </div>
+            <div class="editor-item">
+              ${this._renderIconColorPicker(this.localize('editor.active_icon_color'), entityId, 'active', activeColor)}
+          </div>
+        </div>
           <div class="editor-row">
             <div class="editor-item">
-              <label>Button Style</label>
-              <select
-                @change="${(e) => this._handleButtonStyleChange(entityId, e.target.value)}"
-                .value="${buttonStyle}"
-              >
-                <option value="icon">Icon</option>
-                <option value="round">Round</option>
-                <option value="square">Square</option>
-              </select>
-            </div>
+              <label>${this.localize('editor.icon_style')}</label>
+            <select
+              @change="${(e) => this._handleButtonStyleChange(entityId, e.target.value)}"
+              .value="${buttonStyle}"
+            >
+              <option value="icon">Icon</option>
+              <option value="round">Round</option>
+              <option value="square">Square</option>
+              <option value="label">Label</option>
+            </select>
+          </div>
             <div class="editor-item">
-              <label>Icon Size</label>
-              <div class="entity-description">Size of the icon.</div>
-              <div class="input-with-unit">
-                <input
+              <label>${this.localize('editor.icon_size')}</label>
+            <div class="input-with-unit">
+              <input
                   id="icon_size_${entityId}"
-                  type="number"
+                type="number"
                   .value="${this._getIconSize(entityId)}"
-                  @input="${(e) => this._iconSizeChanged(e, entityId)}"
-                  min="12"
-                  max="100"
-                />
-                <span class="unit">px</span>
-              </div>
+                @input="${(e) => this._iconSizeChanged(e, entityId)}"
+                min="12"
+                max="100"
+              />
+              <span class="unit">px</span>
             </div>
           </div>
+        </div>
           <div class="editor-row">
             <div class="editor-item">
-              <label>Interaction</label>
+              <label>${this.localize('editor.interaction')}</label>
               ${this._renderInteractionSelect(entityId, interaction)}
-            </div>
+          </div>
             <div class="editor-item">
-              <label>Icon Label Position</label>
-              <select
+<label>${this.localize('editor.icon_label_position')}</label>
+            <select
                 .value=${(this.config.icon_labels && this.config.icon_labels[entityId]) || 'none'}
                 @change=${(e) => this._updateIconLabel(entityId, e.target.value)}
-              >
-                <option value="none">None</option>
+            >
+                <option value="none">${this.localize('editor.none')}</option>
                 <option value="left">Left</option>
-                <option value="top">Top</option>
-                <option value="right">Right</option>
+              <option value="top">Top</option>
+              <option value="right">Right</option>
                 <option value="bottom">Bottom</option>
-              </select>
+            </select>
             </div>
           </div>
         </div>
@@ -705,7 +711,7 @@ export class UltraVehicleCardEditor extends LitElement {
             icon="mdi:chevron-down"
             @click="${() => this._toggleRowSeparatorDetails(index)}"
           ></ha-icon>
-          <span class="entity-name">Row Separator</span>
+          <span class="entity-name">${this.localize('editor.row_separator')}</span>
           <ha-icon
             class="remove-entity"
             icon="mdi:close"
@@ -934,15 +940,15 @@ _updateIndices() {
 }
 _renderInteractionSelect(entityId, interaction) {
   const interactions = [
-    { value: "more-info", label: "More Info" },
-    { value: "toggle", label: "Toggle" },
-    { value: "navigate", label: "Navigate" },
-    { value: "url", label: "URL" },
-    { value: "trigger", label: "Trigger" },
-    { value: "none", label: "None" },
+    { value: "more-info", label: this.localize('editor.more_info') },
+    { value: "toggle", label: this.localize('editor.toggle') },
+    { value: "navigate", label: this.localize('editor.navigate') },
+    { value: "url", label: this.localize('editor.url') },
+    { value: "trigger", label: this.localize('editor.trigger') },
+    { value: "none", label: this.localize('editor.none') },
   ];
 
-  return html`
+    return html`
     <select
       class="interaction-select"
       .value=${interaction.type}
@@ -973,9 +979,9 @@ _renderInteractionOptions(entityId, interaction) {
 
 _renderNavigationOption(entityId, interaction) {
   const paths = this._getNavigationPaths();
-  return html`
+    return html`
     <div class="interaction-option">
-      <label>Navigation path:</label>
+      <label>${this.localize('editor.navigation_path')}:</label>
       <select
         @change=${(e) => this._updateInteractionOption(entityId, 'path', e.target.value)}
       >
@@ -983,22 +989,22 @@ _renderNavigationOption(entityId, interaction) {
           <option value=${path} ?selected=${interaction.path === path}>${path}</option>
         `)}
       </select>
-    </div>
-  `;
-}
+      </div>
+    `;
+  }
 
 _renderUrlOption(entityId, interaction) {
-  return html`
+    return html`
     <div class="interaction-option">
-      <label>URL:</label>
-      <input
+      <label>${this.localize('editor.url')}:</label>
+        <input
         type="text"
         .value=${interaction.url || ''}
         @input=${(e) => this._updateInteractionOption(entityId, 'url', e.target.value)}
-      />
-    </div>
-  `;
-}
+        />
+      </div>
+    `;
+  }
 
 _handleInteractionTypeChange(entityId, newType) {
   this._iconInteractions = {
@@ -1010,7 +1016,7 @@ _handleInteractionTypeChange(entityId, newType) {
 }
 
 _getDisplayImageUrl(url) {
-  return url && url.startsWith("data:image") ? "Uploaded Image" : url;
+  return url && url.startsWith("data:image") ? this.localize('editor.uploaded_image') : url;
 }
 
 _updateInteractionOption(entityId, option, value) {
@@ -1084,16 +1090,16 @@ _handleIconChange(e, iconType, entityId) {
 }
 
 _updateIconInteractionsConfig() {
-  this.config = {
-    ...this.config,
+    this.config = {
+      ...this.config,
     icon_interactions: this._iconInteractions,
-  };
-  this.configChanged(this.config);
+    };
+    this.configChanged(this.config);
 }
 
 _renderColorPickers() {
   const getDefaultColor = (property) => {
-    const style = getComputedStyle(this);
+    const style = getComputedStyle(document.body);
     return style.getPropertyValue(property).trim() || style.getPropertyValue(`--${property}`).trim();
   };
 
@@ -1111,14 +1117,14 @@ _renderColorPickers() {
 
   return html`
     <div class="color-pickers">
-      <h3>Custom Colors</h3>
+      <h3>${this.localize('editor.colors')}</h3>
       <div class="entity-description">
-        Customize the colors of various elements in the card. Click on a color to change it, or use the reset icon to revert to the default color.
+        ${this.localize('editor.custom_colors_description')}
       </div>
       <div class="color-pickers-grid">
         ${Object.entries(defaultColors).map(([key, defaultValue]) => html`
           <div class="color-picker-item">
-            ${this._renderColorPicker(this._formatLabel(key), key, defaultValue)}
+            ${this._renderColorPicker(this.localize(`editor.${key}`), key, defaultValue)}
           </div>
         `)}
       </div>
@@ -1172,18 +1178,18 @@ _colorChanged(e, configKey) {
     };
     this.configChanged(this.config);
   }
-  this.requestUpdate();
-}
+    this.requestUpdate();
+  }
 
 _resetColor(e, configKey, defaultValue) {
   e.stopPropagation();
-  this.config = {
-    ...this.config,
+    this.config = {
+      ...this.config,
     [configKey]: defaultValue,
-  };
-  this.configChanged(this.config);
-  this.requestUpdate();
-}
+    };
+    this.configChanged(this.config);
+    this.requestUpdate();
+  }
 
 _toggleChanged(ev) {
   const target = ev.target;
@@ -1197,29 +1203,29 @@ _toggleChanged(ev) {
 }
 
 _vehicleTypeChanged(ev) {
-  this.config = {
-    ...this.config,
+    this.config = {
+      ...this.config,
     vehicle_type: ev.target.value,
-  };
-  this.configChanged(this.config);
-  this.requestUpdate();
-}
+    };
+    this.configChanged(this.config);
+    this.requestUpdate();
+  }
 
 _unitTypeChanged(ev) {
-  this.config = {
-    ...this.config,
+    this.config = {
+      ...this.config,
     unit_type: ev.target.value,
-  };
-  this.configChanged(this.config);
-  this.requestUpdate();
-}
+    };
+    this.configChanged(this.config);
+    this.requestUpdate();
+  }
 
 _hybridOrderChanged(ev) {
-  this.config = {
-    ...this.config,
+    this.config = {
+      ...this.config,
     hybrid_display_order: ev.target.value,
-  };
-  this.configChanged(this.config);
+    };
+    this.configChanged(this.config);
 }
 
 _renderImageUploadField(label, configKey, placeholder) {
@@ -1241,7 +1247,7 @@ _renderImageUploadField(label, configKey, placeholder) {
               ?checked="${currentType === 'none'}"
               @change="${(e) => this._handleImageSourceChange(configKey, 'none')}"
             />
-            None
+            ${this.localize('editor.none')}
           </label>
           <label>
             <input
@@ -1251,7 +1257,7 @@ _renderImageUploadField(label, configKey, placeholder) {
               ?checked="${currentType === 'image'}"
               @change="${(e) => this._handleImageSourceChange(configKey, 'image')}"
             />
-            Local/Url
+            ${this.localize('editor.local_url')}
           </label>
           <label>
             <input
@@ -1261,7 +1267,7 @@ _renderImageUploadField(label, configKey, placeholder) {
               ?checked="${currentType === 'entity'}"
               @change="${(e) => this._handleImageSourceChange(configKey, 'entity')}"
             />
-            Entity
+            ${this.localize('editor.entity')}
           </label>
         </div>
       </div>
@@ -1275,7 +1281,7 @@ _renderImageUploadField(label, configKey, placeholder) {
                 placeholder="${placeholder}"
                 @input="${(e) => this._handleImageUrlInput(e, configKey)}"
               />
-              <label class="file-upload-label" for="${configKey}-upload">Upload</label>
+              <label class="file-upload-label" for="${configKey}-upload">${this.localize('editor.upload_image')}</label>
               <input
                 type="file"
                 id="${configKey}-upload"
@@ -1285,7 +1291,7 @@ _renderImageUploadField(label, configKey, placeholder) {
             </div>
           `
         : currentType === 'entity'
-        ? this._renderEntityPickerWithoutToggle(configKey, "Select an Entity", "This entity provides the image for the display.")
+        ?  this._renderEntityPickerWithoutToggle(configKey, this.localize('editor.select_entity'), this.localize('editor.entity_provides_image'))
         : ''}
     </div>
   `;
@@ -1304,7 +1310,7 @@ _renderEntityPickerWithoutToggle(configValue, labelText, description) {
               class="entity-picker-input"
               .value="${this.config[configValue] || ""}"
               @input="${(e) => this._entityFilterChanged(e, configValue)}"
-              placeholder="Search entities"
+              placeholder="${this.localize('editor.search_entities')}"
             />
             ${this[`_${configValue}Filter`]
               ? html`
@@ -1357,7 +1363,7 @@ _renderImageInput(configKey, type, value, placeholder) {
           .value=${value}
           .configValue="${configKey}"
           @input="${this._templateChanged}"
-          placeholder="Enter template code here"
+          placeholder="${this.localize('editor.enter_template_code')}"
           rows="3"
         ></textarea>
       `;
@@ -1371,7 +1377,7 @@ _renderImageInput(configKey, type, value, placeholder) {
           @input="${this._valueChanged}"
         />
         <label for="${configKey}_upload" class="file-upload-label">
-          Upload
+          ${this.localize('editor.upload')}
           <input
             type="file"
             id="${configKey}_upload"
@@ -1419,11 +1425,11 @@ _templatePicked(ev) {
 }
 
 _updateConfig(key, value) {
-  this.config = {
-    ...this.config,
+    this.config = {
+      ...this.config,
     [key]: value,
-  };
-  this.configChanged(this.config);
+    };
+    this.configChanged(this.config);
 }
 
 _getTemplateHelpers() {
@@ -1440,7 +1446,9 @@ _handleImageSourceChange(configKey, newType) {
   let newValue = '';
 
   if (newType === 'entity') {
-    newValue = ''; // Ensure this is properly set with the selected entity ID
+    newValue = this.config[configKey] || ''; // Preserve existing entity if there is one
+  } else if (newType === 'image') {
+    newValue = this.config[configKey] || DEFAULT_IMAGE_URL;
   }
 
   this.config = {
@@ -1452,27 +1460,14 @@ _handleImageSourceChange(configKey, newType) {
   this.configChanged(this.config);
 }
 
-_selectImageEntity(configKey, entityId) {
-  this.config = {
-    ...this.config,
-    [configKey]: `entity:${entityId}`,
-  };
-  this[`_${configKey}Filter`] = "";
-  this.configChanged(this.config);
+_entityPicked(ev, configKey) {
+  const newValue = ev.detail.value;
+  this._updateConfig(configKey, newValue);
 }
 
-_templateChanged(ev) {
-  const target = ev.target;
-  const configValue = target.configValue;
-  const newValue = target.value;
-  this._updateConfig(configValue, newValue);
-}
-
-_entityPicked(ev) {
-  const target = ev.target;
-  const configValue = target.configValue;
-  const newValue = ev.detail.value ? `entity:${ev.detail.value}` : DEFAULT_IMAGE_URL;
-  this._updateConfig(configValue, newValue);
+_entityPicked(ev, configKey) {
+  const newValue = ev.detail.value;
+  this._updateConfig(configKey, newValue);
 }
 
 async _handleImageUpload(ev, configKey) {
@@ -1524,20 +1519,20 @@ _entityFilterChanged(e, configKey) {
 }
 
 _selectEntity(configValue, entityId) {
-  this.config = {
-    ...this.config,
+    this.config = {
+      ...this.config,
     [configValue]: entityId,
-  };
+    };
   this[`_${configValue}Filter`] = "";
-  this.configChanged(this.config);
+    this.configChanged(this.config);
 }
 
 _iconGridFilterChanged(e) {
   this._iconGridFilter = e.target.value;
-  this.requestUpdate();
-}
+    this.requestUpdate();
+  }
 
-_addIconGridEntity(entityId) {
+  _addIconGridEntity(entityId) {
   if (this._selectedIconGridEntities.length === 0) {
     this._addRowSeparator();
   }
@@ -1572,12 +1567,12 @@ _removeIconGridEntity(index) {
 
 _updateIconGridConfig() {
   this._ensureRowSeparatorAtTop();
-  this.config = {
-    ...this.config,
-    icon_grid_entities: this._selectedIconGridEntities,
+    this.config = {
+      ...this.config,
+      icon_grid_entities: this._selectedIconGridEntities,
     row_separators: this.config.row_separators,
-  };
-  this.configChanged(this.config);
+    };
+    this.configChanged(this.config);
 }
 
 _ensureRowSeparatorAtTop() {
@@ -1611,12 +1606,12 @@ _updateCustomIconsConfig() {
     return acc;
   }, {});
 
-  this.config = {
-    ...this.config,
+    this.config = {
+      ...this.config,
     custom_icons: cleanedCustomIcons,
-  };
+    };
   
-  this.configChanged(this.config);
+    this.configChanged(this.config);
 }
 
   _getToggleName(configValue) {
@@ -1710,7 +1705,6 @@ _updateCustomIconsConfig() {
       this.config.icon_labels = {};
     }
     this.config.icon_labels[entityId] = value;
-    console.log('Updated icon labels:', this.config.icon_labels);
     this.configChanged(this.config);
   }
 
@@ -1772,7 +1766,7 @@ _updateCustomIconsConfig() {
             icon="mdi:chevron-down"
             @click="${() => this._toggleRowSeparatorDetails(index)}"
           ></ha-icon>
-          <span class="entity-name">Row Separator</span>
+          <span class="entity-name">${this.localize('editor.row_separator')}</span>
           <ha-icon
             class="remove-entity"
             icon="mdi:close"
@@ -1799,8 +1793,8 @@ _updateCustomIconsConfig() {
 
     return html`
       <div class="separator-color-section">
-        <label>Separator Color</label>
-        <div class="entity-description">Color of the separator line between icon rows.</div>
+        <label>${this.localize('editor.separator_color')}</label>
+        <div class="entity-description">${this.localize('editor.separator_color_description')}</div>
         <div class="color-picker-row">
           <div class="color-picker">
             <div class="color-input-wrapper">
@@ -1809,7 +1803,7 @@ _updateCustomIconsConfig() {
                      @change="${(e) => this._updateRowSeparatorConfig(index, 'color', e.target.value)}"
                      style="opacity: 0; position: absolute; width: 100%; height: 100%; cursor: pointer;">
               <div class="color-preview" style="background-color: ${isTransparent ? bgColor : color}; color: ${isTransparent ? this._getContrastYIQ(bgColor) : textColor};">
-                <span class="color-hex">${isTransparent ? 'Transparent' : color}</span>
+                <span class="color-hex">${isTransparent ? this.localize('editor.transparent') : color}</span>
                 <ha-icon
                   class="reset-icon"
                   icon="mdi:refresh"
@@ -1819,14 +1813,14 @@ _updateCustomIconsConfig() {
             </div>
           </div>
           <button class="transparent-button" @click="${() => this._toggleTransparentSeparator(index)}">
-            ${isTransparent ? 'Set Color' : 'Make Transparent'}
+            ${isTransparent ? this.localize('editor.set_color') : this.localize('editor.transparent')}
           </button>
         </div>
       </div>
       <div class="editor-row">
         <div class="editor-item">
-          <label for="row_separator_height_${index}">Separator Height</label>
-          <div class="entity-description">Thickness of the separator line.</div>
+          <label for="row_separator_height_${index}">${this.localize('editor.separator_height')}</label>
+          <div class="entity-description">${this.localize('editor.separator_height_description')}</div>
           <div class="input-with-unit">
             <input
               id="row_separator_height_${index}"
@@ -1840,8 +1834,8 @@ _updateCustomIconsConfig() {
           </div>
         </div>
         <div class="editor-item">
-          <label for="row_separator_icon_gap_${index}">Icon Gap Size</label>
-          <div class="entity-description">Space between icons below separator.</div>
+          <label for="row_separator_icon_gap_${index}">${this.localize('editor.icon_gap_size')}</label>
+          <div class="entity-description">${this.localize('editor.icon_gap_description')}</div>
           <div class="input-with-unit">
             <input
               id="row_separator_icon_gap_${index}"
@@ -1857,35 +1851,35 @@ _updateCustomIconsConfig() {
       </div>
       <div class="editor-row">
         <div class="editor-item">
-          <label>Horizontal Alignment</label>
+          <label>${this.localize('editor.horizontal_alignment')}</label>
           <div class="alignment-buttons">
             <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'horizontalAlignment', 'left')}"
-                    ?disabled="${separatorConfig.horizontalAlignment === 'left'}" title="Align Left">
+                    ?disabled="${separatorConfig.horizontalAlignment === 'left'}" title="${this.localize('editor.align_left')}">
               ◀
             </button>
             <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'horizontalAlignment', 'center')}"
-                    ?disabled="${separatorConfig.horizontalAlignment === 'center' || separatorConfig.horizontalAlignment === undefined}" title="Align Center">
+                    ?disabled="${separatorConfig.horizontalAlignment === 'center' || separatorConfig.horizontalAlignment === undefined}" title="${this.localize('editor.align_center')}">
               ⬤
             </button>
             <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'horizontalAlignment', 'right')}"
-                    ?disabled="${separatorConfig.horizontalAlignment === 'right'}" title="Align Right">
+                    ?disabled="${separatorConfig.horizontalAlignment === 'right'}" title="${this.localize('editor.align_right')}">
               ▶
             </button>
           </div>
         </div>
         <div class="editor-item">
-          <label>Vertical Alignment</label>
+          <label>${this.localize('editor.vertical_alignment')}</label>
           <div class="alignment-buttons">
             <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'verticalAlignment', 'top')}"
-                    ?disabled="${separatorConfig.verticalAlignment === 'top'}" title="Align Top">
+                    ?disabled="${separatorConfig.verticalAlignment === 'top'}" title="${this.localize('editor.align_top')}">
               ▲
             </button>
             <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'verticalAlignment', 'middle')}"
-                    ?disabled="${separatorConfig.verticalAlignment === 'middle' || separatorConfig.verticalAlignment === undefined}" title="Align Middle">
+                    ?disabled="${separatorConfig.verticalAlignment === 'middle' || separatorConfig.verticalAlignment === undefined}" title="${this.localize('editor.align_middle')}">
               ⬤
             </button>
             <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'verticalAlignment', 'bottom')}"
-                    ?disabled="${separatorConfig.verticalAlignment === 'bottom'}" title="Align Bottom">
+                    ?disabled="${separatorConfig.verticalAlignment === 'bottom'}" title="${this.localize('editor.align_bottom')}">
               ▼
             </button>
           </div>
@@ -1954,7 +1948,10 @@ _updateCustomIconsConfig() {
   firstUpdated(changedProps) {
     super.firstUpdated(changedProps);
     this.setDefaultValues();
+    this.loadResources(this.config.language || navigator.language).then(() => {
+      this.requestUpdate();
+    });
   }
 }
-
 customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);
+
