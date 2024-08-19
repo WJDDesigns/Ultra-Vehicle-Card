@@ -2,7 +2,7 @@
   "name": "Ultra Vehicle Card",
   "render_readme": true,
   "filename": [
-    "dist/ultra-vehicle-card.js",
+    "ultra-vehicle-card.js",
     "translations/*"
   ]
 }
