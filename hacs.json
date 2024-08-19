@@ -1,6 +1,5 @@
 {
   "name": "Ultra Vehicle Card",
   "render_readme": true,
-  "filename": "ultra-vehicle-card.js",
-  "content_in_root": true
+  "filename": "ultra-vehicle-card.js"
 }
