@@ -1,6 +1,8 @@
 {
   "name": "Ultra Vehicle Card",
   "render_readme": true,
-  "filename": "ultra-vehicle-card.js",
-  "persistent_directory": "translations"
+  "filename": [
+    "dist/ultra-vehicle-card.js",
+    "translations/*"
+  ]
 }
