@@ -186,6 +186,17 @@ textarea {
     align-items: center;
     margin-bottom: 8px;
   }
+
+  .level-text .clickable {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .level-text .clickable:hover {
+    opacity: 0.8;
+  }
+
   
   .range {
     text-align: right;

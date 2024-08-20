@@ -195,45 +195,39 @@ _renderEVInfo() {
   return html`
     <div class="level-info">
       ${this.config.show_battery && batteryLevel !== null ? html`
-        <div class="item_bar">
+        <div class="item_bar clickable" @click="${() => this._handleMoreInfo(this.config.battery_level_entity)}">
           <div class="progress ${isCharging ? 'charging' : ''}" style="width: ${batteryLevel}%;"></div>
           ${chargeLimit !== null ? html`
             <div class="charge-limit-indicator" style="left: ${chargeLimit}%;"></div>
           ` : ''}
         </div>
         <div class="level-text">
-          <span style="color: var(--uvc-percentage-text-color);">
-            ${batteryLevel}% ${isCharging ? this.localize('common.charging') : this.localize('common.battery')}
+          <span class="clickable" @click="${() => this._handleMoreInfo(this.config.battery_level_entity)}">
+            <span style="color: var(--uvc-percentage-text-color);">${batteryLevel}%</span>
+            <span>&nbsp;${isCharging ? this.localize('common.charging') : this.localize('common.battery')}</span>
           </span>
           ${this.config.show_battery_range && batteryRange !== null ? html`
-            <span class="range">${this.localize('common.range')}: ${batteryRange}</span>
+            <span class="range clickable" @click="${() => this._handleMoreInfo(this.config.battery_range_entity)}">${this.localize('common.range')}: ${batteryRange}</span>
           ` : ''}
         </div>
       ` : this.config.show_battery_range && batteryRange !== null ? html`
         <div class="level-text">
-          <span class="range" style="float: right;">${this.localize('common.range')}: ${batteryRange}</span>
+          <span class="range clickable" style="float: right;" @click="${() => this._handleMoreInfo(this.config.battery_range_entity)}">${this.localize('common.range')}: ${batteryRange}</span>
         </div>
       ` : ''}
     </div>
   `;
 }
 _formatRange(value, unit) {
-  const numValue = parseFloat(value);
-  if (isNaN(numValue)) return value;
+  if (value === undefined || value === null) return '';
   
-  const formattedValue = this._formatNumberWithCommas(Math.round(numValue));
+  // Parse the value as a float and round it up to the nearest integer
+  const roundedValue = Math.ceil(parseFloat(value));
   
-  if (unit === 'km' && numValue > 1000) {
-    return `${this._formatNumberWithCommas(Math.round(numValue / 100) / 10)} k${unit}`;
-  } else {
-    return `${formattedValue} ${unit}`;
-  }
+  // Return the formatted string with the unit
+  return `${roundedValue} ${unit || ''}`.trim();
 }
 
-_formatNumberWithCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-  
   _isCharging(chargingStatusEntity) {
     if (!chargingStatusEntity) return false;
   
@@ -277,20 +271,21 @@ _renderFuelInfo() {
   return html`
     <div class="level-info">
       ${this.config.show_fuel && fuelLevel !== null ? html`
-        <div class="item_bar">
+        <div class="item_bar clickable" @click="${() => this._handleMoreInfo(this.config.fuel_level_entity)}">
           <div class="progress ${isEngineOn ? 'engine-on' : ''}" style="width: ${fuelLevel}%;"></div>
         </div>
         <div class="level-text">
-          <span style="color: var(--uvc-percentage-text-color);">
-            ${fuelLevel}% ${isEngineOn ? this.localize('common.engine_on') : this.localize('common.fuel')}
+          <span class="clickable" @click="${() => this._handleMoreInfo(this.config.fuel_level_entity)}">
+            <span style="color: var(--uvc-percentage-text-color);">${fuelLevel}%</span>
+            <span>&nbsp;${isEngineOn ? this.localize('common.engine_on') : this.localize('common.fuel')}</span>
           </span>
           ${this.config.show_fuel_range && fuelRange !== null ? html`
-            <span class="range">${this.localize('common.range')}: ${fuelRange}</span>
+            <span class="range clickable" @click="${() => this._handleMoreInfo(this.config.fuel_range_entity)}">${this.localize('common.range')}: ${fuelRange}</span>
           ` : ''}
         </div>
       ` : this.config.show_fuel_range && fuelRange !== null ? html`
         <div class="level-text">
-          <span class="range" style="float: right;">${this.localize('common.range')}: ${fuelRange}</span>
+          <span class="range clickable" style="float: right;" @click="${() => this._handleMoreInfo(this.config.fuel_range_entity)}">${this.localize('common.range')}: ${fuelRange}</span>
         </div>
       ` : ''}
     </div>
@@ -340,23 +335,24 @@ _renderHybridInfo() {
 _renderBatteryBar(level, range, isCharging, chargeLimit) {
   return html`
     ${this.config.show_battery && level !== null ? html`
-      <div class="item_bar">
+      <div class="item_bar clickable" @click="${() => this._handleMoreInfo(this.config.battery_level_entity)}">
         <div class="progress ${isCharging ? 'charging' : ''}" style="width: ${level}%;"></div>
         ${chargeLimit !== null ? html`
           <div class="charge-limit-indicator" style="left: ${chargeLimit}%;"></div>
         ` : ''}
       </div>
       <div class="level-text">
-        <span style="color: var(--uvc-percentage-text-color);">
-          ${level}% ${isCharging ? this.localize('common.charging') : this.localize('common.battery')}
+        <span class="clickable" @click="${() => this._handleMoreInfo(this.config.battery_level_entity)}">
+          <span style="color: var(--uvc-percentage-text-color);">${level}%</span>
+          <span>&nbsp;${isCharging ? this.localize('common.charging') : this.localize('common.battery')}</span>
         </span>
         ${this.config.show_battery_range && range !== null ? html`
-          <span class="range">${this.localize('common.range')}: ${range}</span>
+          <span class="range clickable" @click="${() => this._handleMoreInfo(this.config.battery_range_entity)}">${this.localize('common.range')}: ${range}</span>
         ` : ''}
       </div>
     ` : this.config.show_battery_range && range !== null ? html`
       <div class="level-text">
-        <span class="range" style="float: right;">${this.localize('common.range')}: ${range}</span>
+        <span class="range clickable" style="float: right;" @click="${() => this._handleMoreInfo(this.config.battery_range_entity)}">${this.localize('common.range')}: ${range}</span>
       </div>
     ` : ''}
   `;
@@ -365,20 +361,21 @@ _renderBatteryBar(level, range, isCharging, chargeLimit) {
 _renderFuelBar(level, range) {
   return html`
     ${this.config.show_fuel && level !== null ? html`
-      <div class="item_bar">
+      <div class="item_bar clickable" @click="${() => this._handleMoreInfo(this.config.fuel_level_entity)}">
         <div class="progress" style="width: ${level}%;"></div>
       </div>
       <div class="level-text">
-        <span style="color: var(--uvc-percentage-text-color);">
-          ${level}% ${this.localize('common.fuel')}
+        <span class="clickable" @click="${() => this._handleMoreInfo(this.config.fuel_level_entity)}">
+          <span style="color: var(--uvc-percentage-text-color);">${level}%</span>
+          <span>&nbsp;${this.localize('common.fuel')}</span>
         </span>
         ${this.config.show_fuel_range && range !== null ? html`
-          <span class="range">${this.localize('common.range')}: ${range}</span>
+          <span class="range clickable" @click="${() => this._handleMoreInfo(this.config.fuel_range_entity)}">${this.localize('common.range')}: ${range}</span>
         ` : ''}
       </div>
     ` : this.config.show_fuel_range && range !== null ? html`
       <div class="level-text">
-        <span class="range" style="float: right;">${this.localize('common.range')}: ${range}</span>
+        <span class="range clickable" style="float: right;" @click="${() => this._handleMoreInfo(this.config.fuel_range_entity)}">${this.localize('common.range')}: ${range}</span>
       </div>
     ` : ''}
   `;
@@ -489,7 +486,7 @@ _renderVehicleImage() {
   const isCharging = this._isCharging(this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null);
   let imageUrl;
 
-  if (isCharging) {
+  if (isCharging && this.config.charging_image_url_type !== "none") {
     imageUrl = this.config.charging_image_url_type === "entity" 
       ? this._getImageUrlFromEntity(this.config.charging_image_entity)
       : this.config.charging_image_url;
@@ -505,13 +502,12 @@ _renderVehicleImage() {
     imageUrl = this._getImageUrlFromEntity(entityId);
   }
 
-
   // Use the default image only if no valid URL is provided
   const defaultImageUrl = 'https://github.com/user-attachments/assets/4ef72288-5ee9-4fa6-b2f3-c34c4160cf42';
   const finalImageUrl = imageUrl || defaultImageUrl;
 
   return html`
-    <div class="vehicle-image-container">
+    <div class="vehicle-image-container clickable" @click="${() => this._handleMoreInfo(this.config.image_entity)}">
       <img class="vehicle-image" src="${finalImageUrl}" alt="Vehicle Image" @error="${this._handleImageError}">
     </div>
   `;
@@ -533,6 +529,18 @@ _getImageUrlFromEntity(entityId) {
 _handleImageError(e) {
   console.error('Error loading image:', e.target.src);
   e.target.src = 'https://github.com/user-attachments/assets/4ef72288-5ee9-4fa6-b2f3-c34c4160cf42';
+}
+
+// Add this method to the UltraVehicleCard class
+_handleMoreInfo(entityId) {
+  if (entityId) {
+    const event = new Event('hass-more-info', {
+      bubbles: true,
+      composed: true,
+    });
+    event.detail = { entityId };
+    this.dispatchEvent(event);
+  }
 }
 
   _renderIconGrid() {
@@ -620,7 +628,7 @@ _handleImageError(e) {
 
     if (shouldRender) {
       return html`
-        <div class="icon-wrapper ${buttonStyle} label-${labelPosition}" style="--icon-size: ${iconSize}px; --label-size: ${labelSize}px; --label-color: ${color};">
+        <div class="icon-wrapper ${buttonStyle} label-${labelPosition} clickable" style="--icon-size: ${iconSize}px; --label-size: ${labelSize}px; --label-color: ${color};">
           ${this._renderLabel(labelText, labelPosition, 'before', isActive, customIcon, buttonStyle)}
           ${buttonStyle !== 'label' && icon ? html`
             <ha-icon
