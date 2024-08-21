@@ -103,6 +103,8 @@ export default {
     separator_color_description: "Wählen Sie die Farbe für den Zeilentrenner.",
     inactive_icon_color: "Inaktive Symbolfarbe",
     active_icon_color: "Aktive Symbolfarbe",
-    custom_colors_description: "Passen Sie die Farben verschiedener Elemente in der Karte an Ihren bevorzugten Stil oder Ihr Thema an."
+    custom_colors_description: "Passen Sie die Farben verschiedener Elemente in der Karte an Ihren bevorzugten Stil oder Ihr Thema an.",
+    formatted_entities: "Formatierte Entitäten",
+    formatted_entities_description: "Bereinigen Sie Entitätswerte durch Runden von Zahlen, Ersetzen von Unterstrichen durch Leerzeichen, Großschreibung von Wörtern und Hinzufügen von Kommas zu großen Zahlen."
   }
 };

@@ -80,6 +80,7 @@ setConfig(config) {
     engine_on_entity: "",
     icon_labels: config.icon_labels || {},
     row_separators: config.row_separators || {},
+    useFormattedEntities: false, // New property for formatted entities
     ...config
   };
 
@@ -192,10 +193,10 @@ _renderEVInfo() {
   const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
   const chargeLimitEntity = this.config.charge_limit_entity ? this.hass.states[this.config.charge_limit_entity] : null;
 
-  const batteryLevel = this._getValueFromEntityOrAttributes(batteryLevelEntity, ['battery_level', 'level']);
-  const batteryRange = this._getValueFromEntityOrAttributes(batteryRangeEntity, ['battery_range', 'range']);
+  const batteryLevel = this._formatEntityValue(this._getValueFromEntityOrAttributes(batteryLevelEntity, ['battery_level', 'level']), this.config.useFormattedEntities);
+  const batteryRange = this._formatRange(batteryRangeEntity?.state, batteryRangeEntity?.attributes.unit_of_measurement);
   const isCharging = this._isCharging(chargingStatusEntity);
-  const chargeLimit = this.config.show_charge_limit ? this._getValueFromEntityOrAttributes(chargeLimitEntity, ['charge_limit']) : null;
+  const chargeLimit = this.config.show_charge_limit ? this._formatEntityValue(this._getValueFromEntityOrAttributes(chargeLimitEntity, ['charge_limit']), this.config.useFormattedEntities) : null;
 
   return html`
     <div class="level-info">
@@ -244,8 +245,17 @@ _formatRange(value, unit) {
   // Parse the value as a float and round it up to the nearest integer
   const roundedValue = Math.ceil(parseFloat(value));
   
+  // Format the number with commas if useFormattedEntities is true
+  const formattedValue = this.config.useFormattedEntities
+    ? this._formatNumber(roundedValue)
+    : roundedValue;
+  
   // Return the formatted string with the unit
-  return `${roundedValue} ${unit || ''}`.trim();
+  return `${formattedValue} ${unit || ''}`.trim();
+}
+
+_formatNumber(number) {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
   _isCharging(chargingStatusEntity) {
@@ -295,7 +305,7 @@ _renderFuelInfo() {
   const engineOnEntity = this.config.engine_on_entity ? this.hass.states[this.config.engine_on_entity] : null;
 
   const fuelLevel = fuelLevelEntity ? parseFloat(fuelLevelEntity.state) : null;
-  const fuelRange = fuelRangeEntity ? this._formatRange(fuelRangeEntity.state, fuelRangeEntity.attributes.unit_of_measurement) : null;
+  const fuelRange = this._formatRange(fuelRangeEntity?.state, fuelRangeEntity?.attributes.unit_of_measurement);
   const isEngineOn = this._isEngineOn(engineOnEntity);
 
   return html`
@@ -338,9 +348,9 @@ _renderHybridInfo() {
   const chargeLimitEntity = this.config.charge_limit_entity ? this.hass.states[this.config.charge_limit_entity] : null;
 
   const batteryLevel = batteryLevelEntity ? parseFloat(batteryLevelEntity.state) : null;
-  const batteryRange = batteryRangeEntity ? this._formatRange(batteryRangeEntity.state, batteryRangeEntity.attributes.unit_of_measurement) : null;
+  const batteryRange = this._formatRange(batteryRangeEntity?.state, batteryRangeEntity?.attributes.unit_of_measurement);
   const fuelLevel = fuelLevelEntity ? parseFloat(fuelLevelEntity.state) : null;
-  const fuelRange = fuelRangeEntity ? this._formatRange(fuelRangeEntity.state, fuelRangeEntity.attributes.unit_of_measurement) : null;
+  const fuelRange = this._formatRange(fuelRangeEntity?.state, fuelRangeEntity?.attributes.unit_of_measurement);
   const isCharging = this._isCharging(chargingStatusEntity);
   const chargeLimit = chargeLimitEntity && this.config.show_charge_limit ? parseFloat(chargeLimitEntity.state) : null;
   
@@ -424,7 +434,7 @@ _renderFuelBar(level, range) {
     const carStateEntity = this.hass.states[this.config.car_state_entity];
     if (!carStateEntity) return '';
   
-    const state = this._formatCarState(carStateEntity.state, carStateEntity.attributes);
+    const state = this._formatEntityValue(carStateEntity.state, this.config.useFormattedEntities);
   
     return html`
       <div class="car-state clickable" style="text-align: center; margin-bottom: 8px;" @click="${() => this._showMoreInfo(this.config.car_state_entity)}">
@@ -573,6 +583,27 @@ _handleMoreInfo(entityId) {
   }
 }
 
+// Add this method to the UltraVehicleCard class
+_formatEntityValue(value, isFormatted) {
+  if (!isFormatted) return value;
+
+  if (typeof value === 'string') {
+    // Replace underscores with spaces and capitalize first letter of each word
+    return value.replace(/_/g, ' ').replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+  }
+
+  if (typeof value === 'number') {
+    // Round numbers with decimal points
+    if (value % 1 !== 0) {
+      value = Math.ceil(value);
+    }
+    // Add commas to separate thousands
+    return this._formatNumber(value);
+  }
+
+  return value;
+}
+
   _renderIconGrid() {
     const { icon_grid_entities, row_separators } = this.config;
   
@@ -648,7 +679,7 @@ _handleMoreInfo(entityId) {
     const iconSize = this.config.icon_sizes?.[entityId] || this.config.icon_size || 24;
     const buttonStyle = this.config.icon_styles?.[entityId] || 'icon';
     const labelPosition = this.config.icon_labels?.[entityId] || 'none';
-    const labelText = state.state;
+    const labelText = this._formatEntityValue(state.state, this.config.useFormattedEntities);
 
     // Calculate label size based on icon size
     const labelSize = iconSize > 28 ? Math.round(iconSize * 0.5) : 14;
@@ -875,7 +906,8 @@ _handleMoreInfo(entityId) {
       rangeTextColor: "",
       percentageTextColor: "",
       icon_sizes: {},
-      icon_labels: {}
+      icon_labels: {},
+      useFormattedEntities: false, // New property for formatted entities
     };
   }
 

@@ -103,6 +103,8 @@ export default {
     separator_color_description: "Kies de kleur voor de rijscheiding.",
     inactive_icon_color: "Inactieve Icoonkleur",
     active_icon_color: "Actieve Icoonkleur",
-    custom_colors_description: "Pas de kleuren van verschillende elementen in de kaart aan om ze te laten passen bij uw voorkeuren of thema."
+    custom_colors_description: "Pas de kleuren van verschillende elementen in de kaart aan om ze te laten passen bij uw voorkeuren of thema.",
+    formatted_entities: "Geformatteerde Entiteiten",
+    formatted_entities_description: "Maak entiteitswaarden op door getallen af te ronden, onderstrepingstekens te vervangen door spaties, woorden met hoofdletters te schrijven en komma's toe te voegen aan grote getallen."
   }
 };

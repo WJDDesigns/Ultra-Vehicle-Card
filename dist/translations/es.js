@@ -103,6 +103,8 @@ export default {
     separator_color_description: "Elija el color para el separador de fila.",
     inactive_icon_color: "Color de Icono Inactivo",
     active_icon_color: "Color de Icono Activo",
-    custom_colors_description: "Personalice los colores de varios elementos en la tarjeta para que coincidan con su estilo o tema preferido."
+    custom_colors_description: "Personalice los colores de varios elementos en la tarjeta para que coincidan con su estilo o tema preferido.",
+    formatted_entities: "Entidades Formateadas",
+    formatted_entities_description: "Limpie los valores de las entidades redondeando números, reemplazando guiones bajos con espacios, capitalizando palabras y agregando comas a números grandes."
   }
 };

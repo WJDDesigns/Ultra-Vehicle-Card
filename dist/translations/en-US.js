@@ -118,6 +118,8 @@ export default {
     navigate: "Navigate",
     url: "Open URL",
     trigger: "Trigger",
-    none: "None"
+    none: "None",
+    formatted_entities: "Formatted Entities",
+    formatted_entities_description: "Clean up entity values by rounding numbers, replacing underscores with spaces, capitalizing words, and adding commas to large numbers."
   }
 }

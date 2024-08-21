@@ -96,6 +96,8 @@ export default {
     horizontal_alignment: "Horisontell justering",
     vertical_alignment: "Vertikal justering",
     more_info: "Mer information",
-    bottom: "Botten"
+    bottom: "Botten",
+    formatted_entities: "Formaterade Enheter",
+    formatted_entities_description: "Rensa upp enhetsvärden genom att avrunda tal, ersätta understreck med mellanslag, använda stor bokstav i ord och lägga till kommatecken i stora tal."
   }
 };

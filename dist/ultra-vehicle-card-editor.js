@@ -149,6 +149,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       row_separators: config.row_separators || {},
       iconActiveColor: config.iconActiveColor || 'var(--primary-color)',
       iconInactiveColor: config.iconInactiveColor || 'var(--primary-text-color)',
+      useFormattedEntities: config.useFormattedEntities || false,
       ...config,
     };
 
@@ -201,6 +202,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     return {
       // ... existing properties ...
       icon_labels: {},
+      useFormattedEntities: false,
       // ... other properties ...
     };
   }
@@ -407,19 +409,52 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
           <h3>${this.localize('editor.entity_settings')}</h3>
           <ha-icon icon=${this._showEntityInformation ? "mdi:chevron-up" : "mdi:chevron-down"}></ha-icon>
         </div>
-        ${this._showEntityInformation ? this._renderEntityPickers() : ''}
+        ${this._showEntityInformation ? html`
+          ${this._renderEntityPickers()}
+          <div class="input-group">
+            <label for="useFormattedEntities">${this.localize('editor.formatted_entities')}</label>
+            <div class="entity-description">${this.localize('editor.formatted_entities_description')}</div>
+            <label class="switch">
+              <input
+                type="checkbox"
+                id="useFormattedEntities"
+                .checked=${this.config.useFormattedEntities || false}
+                @change=${this._toggleFormattedEntities}
+              />
+              <span class="slider round"></span>
+            </label>
+          </div>
+        ` : ''}
       </div>
     `;
   }
+
   _toggleEntityInformation() {
-  this._showEntityInformation = !this._showEntityInformation;
-  this.config = {
-    ...this.config,
-    showEntityInformation: this._showEntityInformation,
-  };
-  this.configChanged(this.config);
-  this.requestUpdate();
-}
+    this._showEntityInformation = !this._showEntityInformation;
+    this.config = {
+      ...this.config,
+      showEntityInformation: this._showEntityInformation,
+    };
+    this.configChanged(this.config);
+    this.requestUpdate();
+  }
+
+  _toggleFormattedEntities(e) {
+    const useFormattedEntities = e.target.checked;
+    this._updateConfig('useFormattedEntities', useFormattedEntities);
+    
+    // Force a re-render of the card
+    this._fireEvent('config-changed', { config: this.config });
+  }
+
+  _fireEvent(type, detail) {
+    const event = new CustomEvent(type, {
+      detail,
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
+  }
 
   _renderEntityPickers() {
     const { vehicle_type } = this.config;
