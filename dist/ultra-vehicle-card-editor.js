@@ -71,7 +71,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       _iconGap: { type: Number },
       _iconSizes: { type: Object },
       _showRowSeparatorDetails: { type: Boolean },
-      _isLoading: { type: Boolean },
     };
   }
 
@@ -104,7 +103,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   this._charging_image_urlFilter = "";
   this._iconSizes = {};
   this._showRowSeparatorDetails = false;
-  this._isLoading = false;
   this._debouncedColorChanged = debounce(this._applyColorChange.bind(this), 100);
   }
 
@@ -200,10 +198,42 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   static getStubConfig() {
     return {
-      // ... existing properties ...
+      title: "My Vehicle",
+      image_url: "",
+      vehicle_type: "EV",
+      unit_type: "mi",
+      battery_level_entity: "",
+      battery_range_entity: "",
+      fuel_level_entity: "",
+      fuel_range_entity: "",
+      charging_status_entity: "",
+      location_entity: "",
+      mileage_entity: "",
+      show_battery: true,
+      show_battery_range: true,
+      show_fuel: true,
+      show_fuel_range: true,
+      show_location: true,
+      show_mileage: true,
+      icon_grid_entities: [],
+      custom_icons: {},
+      hybrid_display_order: 'fuel_first',
+      car_state_entity: "",
+      charge_limit_entity: "",
+      show_car_state: true,
+      show_charge_limit: true,
+      cardBackgroundColor: "",
+      barBackgroundColor: "",
+      barFillColor: "",
+      limitIndicatorColor: "",
+      iconActiveColor: "var(--primary-color)",
+      iconInactiveColor: "var(--primary-text-color)",
+      carStateTextColor: "",
+      rangeTextColor: "",
+      percentageTextColor: "",
+      icon_sizes: {},
       icon_labels: {},
       useFormattedEntities: false,
-      // ... other properties ...
     };
   }
 
@@ -218,11 +248,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         ${this._renderEntityInformation()}
         ${this._renderIconGridConfig()}
         ${this._renderColorPickers()}
-        ${this._isLoading ? html`
-          <div class="loading-overlay">
-            <div class="loading-spinner"></div>
-          </div>
-        ` : ''}
     </div>
     `;
     
@@ -1223,13 +1248,7 @@ _renderColorPicker(label, configKey, defaultValue) {
 
 _colorChanged(e, configKey) {
   const color = e.target.value;
-  this._isLoading = true;
-  this.requestUpdate();
-
-  // Schedule the update using requestAnimationFrame
-  requestAnimationFrame(() => {
-    this._applyColorChange(configKey, color);
-  });
+  this._applyColorChange(configKey, color);
 }
 
 _applyColorChange(configKey, color) {
@@ -1252,7 +1271,6 @@ _applyColorChange(configKey, color) {
     };
     this._updateSingleColor(configKey, color);
   }
-  this._isLoading = false;
   this.requestUpdate();
 }
 
@@ -2059,12 +2077,7 @@ _updateCustomIconsConfig() {
 
   _colorChanged(e, configKey) {
     const color = e.target.value;
-    this._isLoading = true;
-    this.requestUpdate();
-
-    requestAnimationFrame(() => {
-      this._applyColorChange(configKey, color);
-    });
+    this._applyColorChange(configKey, color);
   }
 
   _applyColorChange(configKey, color) {
@@ -2087,7 +2100,6 @@ _updateCustomIconsConfig() {
       };
       this._updateSingleColor(configKey, color);
     }
-    this._isLoading = false;
     this.requestUpdate();
   }
 

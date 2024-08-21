@@ -118,6 +118,9 @@ export default {
     toggle: "Schakelen",
     navigate: "Navigeren",
     url: "URL openen",
-    trigger: "Activeren"
+    trigger: "Activeren",
+    fuel_level_description: "Selecteer de entiteit die het brandstofniveau van uw voertuig weergeeft.",
+    fuel_range_description: "Selecteer de entiteit die het resterende brandstofbereik van uw voertuig weergeeft.",
+    engine_on_description: "Selecteer de entiteit die aangeeft of de motor van uw voertuig momenteel draait."
   }
 };

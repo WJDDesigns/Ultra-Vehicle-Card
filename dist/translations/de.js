@@ -118,6 +118,9 @@ export default {
     toggle: "Umschalten",
     navigate: "Navigieren",
     url: "URL öffnen",
-    trigger: "Auslösen"
+    trigger: "Auslösen",
+    fuel_level_description: "Wählen Sie die Entität, die den Kraftstoffstand Ihres Fahrzeugs darstellt.",
+    fuel_range_description: "Wählen Sie die Entität, die die verbleibende Kraftstoffreichweite Ihres Fahrzeugs darstellt.",
+    engine_on_description: "Wählen Sie die Entität, die anzeigt, ob der Motor Ihres Fahrzeugs derzeit läuft."
   }
 };

@@ -118,6 +118,9 @@ export default {
     toggle: "Alternar",
     navigate: "Navegar",
     url: "Abrir URL",
-    trigger: "Activar"
+    trigger: "Activar",
+    fuel_level_description: "Seleccione la entidad que representa el nivel de combustible de su vehículo.",
+    fuel_range_description: "Seleccione la entidad que representa la autonomía de combustible restante de su vehículo.",
+    engine_on_description: "Seleccione la entidad que indica si el motor de su vehículo está actualmente en funcionamiento."
   }
 };

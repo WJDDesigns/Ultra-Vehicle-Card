@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 import { version, setVersion } from './version.js';
-setVersion('V1.5.2');
+setVersion('V1.5.3');
 
 const UltraVehicleCardEditor = await import ('./ultra-vehicle-card-editor.js?v='+version);
 const stl = await import ('./styles.js?v='+version);
@@ -66,8 +66,8 @@ setConfig(config) {
     barBackgroundColor: "",
     barFillColor: "",
     limitIndicatorColor: "",
-    iconActiveColor: this._getComputedColor('--primary-color'),
-    iconInactiveColor: this._getComputedColor('--primary-text-color'),
+    iconActiveColor: "var(--primary-color)",
+    iconInactiveColor: "var(--primary-text-color)",
     barBorderColor: "",
     icon_size: 28,
     icon_gap: config.icon_gap || 20,
@@ -212,13 +212,13 @@ _renderEVInfo() {
             <span style="color: var(--uvc-percentage-text-color);">${batteryLevel}%</span>
             <span>&nbsp;${isCharging ? this.localize('common.charging') : this.localize('common.battery')}</span>
           </span>
-          ${this.config.show_battery_range && batteryRange !== null ? html`
+          ${this.config.show_battery_range && this.config.battery_range_entity && batteryRange !== null ? html`
             <span class="range clickable" @click="${() => this._handleMoreInfo(this.config.battery_range_entity)}">${this.localize('common.range')}: ${batteryRange}</span>
           ` : ''}
         </div>
-      ` : this.config.show_battery_range && batteryRange !== null ? html`
+      ` : this.config.show_battery_range && this.config.battery_range_entity && batteryRange !== null ? html`
         <div class="level-text">
-          <span class="range clickable" style="float: right;" @click="${() => this._handleMoreInfo(this.config.battery_range_entity)}">${this.localize('common.range')}: ${batteryRange}</span>
+          <span class="range clickable" @click="${() => this._handleMoreInfo(this.config.battery_range_entity)}">${this.localize('common.range')}: ${batteryRange}</span>
         </div>
       ` : ''}
     </div>
@@ -319,13 +319,13 @@ _renderFuelInfo() {
             <span style="color: var(--uvc-percentage-text-color);">${fuelLevel}%</span>
             <span>&nbsp;${isEngineOn ? this.localize('common.engine_on') : this.localize('common.fuel')}</span>
           </span>
-          ${this.config.show_fuel_range && fuelRange !== null ? html`
+          ${this.config.show_fuel_range && this.config.fuel_range_entity && fuelRange !== null ? html`
             <span class="range clickable" @click="${() => this._handleMoreInfo(this.config.fuel_range_entity)}">${this.localize('common.range')}: ${fuelRange}</span>
           ` : ''}
         </div>
-      ` : this.config.show_fuel_range && fuelRange !== null ? html`
+      ` : this.config.show_fuel_range && this.config.fuel_range_entity && fuelRange !== null ? html`
         <div class="level-text">
-          <span class="range clickable" style="float: right;" @click="${() => this._handleMoreInfo(this.config.fuel_range_entity)}">${this.localize('common.range')}: ${fuelRange}</span>
+          <span class="range clickable" @click="${() => this._handleMoreInfo(this.config.fuel_range_entity)}">${this.localize('common.range')}: ${fuelRange}</span>
         </div>
       ` : ''}
     </div>
@@ -386,13 +386,13 @@ _renderBatteryBar(level, range, isCharging, chargeLimit) {
           <span style="color: var(--uvc-percentage-text-color);">${level}%</span>
           <span>&nbsp;${isCharging ? this.localize('common.charging') : this.localize('common.battery')}</span>
         </span>
-        ${this.config.show_battery_range && range !== null ? html`
+        ${this.config.show_battery_range && this.config.battery_range_entity && range !== null ? html`
           <span class="range clickable" @click="${() => this._handleMoreInfo(this.config.battery_range_entity)}">${this.localize('common.range')}: ${range}</span>
         ` : ''}
       </div>
-    ` : this.config.show_battery_range && range !== null ? html`
+    ` : this.config.show_battery_range && this.config.battery_range_entity && range !== null ? html`
       <div class="level-text">
-        <span class="range clickable" style="float: right;" @click="${() => this._handleMoreInfo(this.config.battery_range_entity)}">${this.localize('common.range')}: ${range}</span>
+        <span class="range clickable" @click="${() => this._handleMoreInfo(this.config.battery_range_entity)}">${this.localize('common.range')}: ${range}</span>
       </div>
     ` : ''}
   `;
@@ -409,13 +409,13 @@ _renderFuelBar(level, range) {
           <span style="color: var(--uvc-percentage-text-color);">${level}%</span>
           <span>&nbsp;${this.localize('common.fuel')}</span>
         </span>
-        ${this.config.show_fuel_range && range !== null ? html`
+        ${this.config.show_fuel_range && this.config.fuel_range_entity && range !== null ? html`
           <span class="range clickable" @click="${() => this._handleMoreInfo(this.config.fuel_range_entity)}">${this.localize('common.range')}: ${range}</span>
         ` : ''}
       </div>
-    ` : this.config.show_fuel_range && range !== null ? html`
+    ` : this.config.show_fuel_range && this.config.fuel_range_entity && range !== null ? html`
       <div class="level-text">
-        <span class="range clickable" style="float: right;" @click="${() => this._handleMoreInfo(this.config.fuel_range_entity)}">${this.localize('common.range')}: ${range}</span>
+        <span class="range clickable" @click="${() => this._handleMoreInfo(this.config.fuel_range_entity)}">${this.localize('common.range')}: ${range}</span>
       </div>
     ` : ''}
   `;
@@ -915,8 +915,8 @@ _isISODateString(str) {
       barBackgroundColor: "",
       barFillColor: "",
       limitIndicatorColor: "",
-      iconActiveColor: this._getComputedColor('--primary-color'),
-      iconInactiveColor: this._getComputedColor('--primary-text-color'),
+      iconActiveColor: "var(--primary-color)",
+      iconInactiveColor: "var(--primary-text-color)",
       carStateTextColor: "",
       rangeTextColor: "",
       percentageTextColor: "",

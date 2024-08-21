@@ -111,6 +111,9 @@ export default {
     toggle: "Växla",
     navigate: "Navigera",
     url: "Öppna URL",
-    trigger: "Utlösa"
+    trigger: "Utlösa",
+    fuel_level_description: "Välj enheten som representerar bränslenivån för ditt fordon.",
+    fuel_range_description: "Välj enheten som representerar återstående bränsleräckvidd för ditt fordon.",
+    engine_on_description: "Välj enheten som indikerar om motorn på ditt fordon för närvarande är igång."
   }
 };
