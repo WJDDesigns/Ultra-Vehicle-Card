@@ -1,8 +1,12 @@
 import { LitElement, html, css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from './version.js';
-import { UltraVehicleCardEditor } from './ultra-vehicle-card-editor.js';
-import { styles } from './styles.js';
-import { localize } from './localize.js';
+import { version, setVersion } from './version.js';
+setVersion('V1.5.2');
+
+const UltraVehicleCardEditor = await import ('./ultra-vehicle-card-editor.js?v='+version);
+const stl = await import ('./styles.js?v='+version);
+const loc = await import ('./localize.js?v='+version);
+const styles = stl.styles;
+const localize = loc.localize;
 
 class UltraVehicleCard extends localize(LitElement) {
   static get properties() {

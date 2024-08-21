@@ -4,8 +4,11 @@ import {
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 import { version } from './version.js';
-import { styles } from './styles.js';
-import { localize } from './localize.js';
+
+const stl = await import ('./styles.js?v='+version);
+const loc = await import ('./localize.js?v='+version);
+const styles = stl.styles;
+const localize = loc.localize;
 
 const DEFAULT_IMAGE_URL = 'https://github.com/user-attachments/assets/4ef72288-5ee9-4fa6-b2f3-c34c4160cf42';
 const DEFAULT_IMAGE_TEXT = 'Default Image';
