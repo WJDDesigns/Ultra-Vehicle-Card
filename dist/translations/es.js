@@ -8,7 +8,16 @@ export default {
     location: "Ubicación",
     car_state: "Estado del Vehículo",
     charge_limit: "Límite de Carga",
-    engine_on: "Motor Encendido"
+    engine_on: "Motor Encendido",
+    away: "Ausente",
+    charging_end_time: "Hora de fin de carga",
+    charging_ending_soon: "Carga finalizando pronto",
+    charging_ending_in: "Carga finalizando en",
+    charging_until: "Cargando hasta",
+    minutes: "minutos",
+    minute: "minuto",
+    hours: "horas",
+    hour: "hora"
   },
   vehicle_types: {
     ev: "Vehículo Eléctrico",
@@ -105,6 +114,10 @@ export default {
     active_icon_color: "Color de Icono Activo",
     custom_colors_description: "Personalice los colores de varios elementos en la tarjeta para que coincidan con su estilo o tema preferido.",
     formatted_entities: "Entidades Formateadas",
-    formatted_entities_description: "Limpie los valores de las entidades redondeando números, reemplazando guiones bajos con espacios, capitalizando palabras y agregando comas a números grandes."
+    formatted_entities_description: "Limpie los valores de las entidades redondeando números, reemplazando guiones bajos con espacios, capitalizando palabras y agregando comas a números grandes.",
+    toggle: "Alternar",
+    navigate: "Navegar",
+    url: "Abrir URL",
+    trigger: "Activar"
   }
 };

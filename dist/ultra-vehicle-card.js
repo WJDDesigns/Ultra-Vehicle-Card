@@ -478,7 +478,7 @@ _renderInfoLine() {
   let location = null;
 
   if (locationEntity) {
-    location = this._formatLocationState(locationEntity.state);
+    location = this._formatEntityValue(this._formatLocationState(locationEntity.state), this.config.useFormattedEntities);
   }
 
   const mileageEntity = this.config.mileage_entity ? this.hass.states[this.config.mileage_entity] : null;
@@ -487,6 +487,12 @@ _renderInfoLine() {
     const value = parseFloat(mileageEntity.state);
     const unit = mileageEntity.attributes.unit_of_measurement || '';
     mileage = this._formatRange(value, unit);
+  }
+
+  const carStateEntity = this.config.car_state_entity ? this.hass.states[this.config.car_state_entity] : null;
+  let carState = null;
+  if (carStateEntity) {
+    carState = this._formatEntityValue(carStateEntity.state, this.config.useFormattedEntities);
   }
 
   if (!this.config.show_location && !this.config.show_mileage) return '';
@@ -588,20 +594,29 @@ _formatEntityValue(value, isFormatted) {
   if (!isFormatted) return value;
 
   if (typeof value === 'string') {
-    // Replace underscores with spaces and capitalize first letter of each word
-    return value.replace(/_/g, ' ').replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+    // Check if it's a date string
+    if (this._isISODateString(value)) {
+      return this._formatChargingEndTime(value);
+    }
+    // Capitalize each word for location or other string values
+    return value.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
   }
 
-  if (typeof value === 'number') {
-    // Round numbers with decimal points
-    if (value % 1 !== 0) {
-      value = Math.ceil(value);
-    }
+  if (typeof value === 'number' || !isNaN(parseFloat(value))) {
+    // Convert to number if it's a numeric string
+    const numValue = parseFloat(value);
+    // Round numbers to 2 decimal places
+    const roundedValue = Math.round(numValue * 100) / 100;
     // Add commas to separate thousands
-    return this._formatNumber(value);
+    return this._formatNumber(roundedValue);
   }
 
   return value;
+}
+
+// Add this method to check if a string is an ISO date string
+_isISODateString(str) {
+  return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?([+-]\d{2}:\d{2}|Z)?$/.test(str);
 }
 
   _renderIconGrid() {

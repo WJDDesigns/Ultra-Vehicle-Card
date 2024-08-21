@@ -8,7 +8,16 @@ export default {
     location: "Standort",
     car_state: "Fahrzeugzustand",
     charge_limit: "Ladelimit",
-    engine_on: "Motor An"
+    engine_on: "Motor An",
+    away: "Abwesend",
+    charging_end_time: "Ladeende",
+    charging_ending_soon: "Laden endet bald",
+    charging_ending_in: "Laden endet in",
+    charging_until: "Laden bis",
+    minutes: "Minuten",
+    minute: "Minute",
+    hours: "Stunden",
+    hour: "Stunde"
   },
   vehicle_types: {
     ev: "Elektrofahrzeug",
@@ -105,6 +114,10 @@ export default {
     active_icon_color: "Aktive Symbolfarbe",
     custom_colors_description: "Passen Sie die Farben verschiedener Elemente in der Karte an Ihren bevorzugten Stil oder Ihr Thema an.",
     formatted_entities: "Formatierte Entitäten",
-    formatted_entities_description: "Bereinigen Sie Entitätswerte durch Runden von Zahlen, Ersetzen von Unterstrichen durch Leerzeichen, Großschreibung von Wörtern und Hinzufügen von Kommas zu großen Zahlen."
+    formatted_entities_description: "Bereinigen Sie Entitätswerte durch Runden von Zahlen, Ersetzen von Unterstrichen durch Leerzeichen, Großschreibung von Wörtern und Hinzufügen von Kommas zu großen Zahlen.",
+    toggle: "Umschalten",
+    navigate: "Navigieren",
+    url: "URL öffnen",
+    trigger: "Auslösen"
   }
 };

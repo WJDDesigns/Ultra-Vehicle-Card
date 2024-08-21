@@ -8,7 +8,16 @@ export default {
     location: "Location",
     car_state: "Car State",
     charge_limit: "Charge Limit",
-    engine_on: "Engine On"
+    engine_on: "Engine On",
+    away: "Away",
+    charging_end_time: "Charging End Time",
+    charging_ending_soon: "Charging ending soon",
+    charging_ending_in: "Charging ending in",
+    charging_until: "Charging until",
+    minutes: "minutes",
+    minute: "minute",
+    hours: "hours",
+    hour: "hour"
   },
   vehicle_types: {
     ev: "Electric Vehicle",

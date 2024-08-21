@@ -8,7 +8,16 @@ export default {
     location: "Locatie",
     car_state: "Autostatus",
     charge_limit: "Oplaadlimiet",
-    engine_on: "Motor Aan"
+    engine_on: "Motor Aan",
+    away: "Afwezig",
+    charging_end_time: "Oplaadeindtijd",
+    charging_ending_soon: "Opladen eindigt binnenkort",
+    charging_ending_in: "Opladen eindigt over",
+    charging_until: "Opladen tot",
+    minutes: "minuten",
+    minute: "minuut",
+    hours: "uren",
+    hour: "uur"
   },
   vehicle_types: {
     ev: "Elektrisch Voertuig",
@@ -105,6 +114,10 @@ export default {
     active_icon_color: "Actieve Icoonkleur",
     custom_colors_description: "Pas de kleuren van verschillende elementen in de kaart aan om ze te laten passen bij uw voorkeuren of thema.",
     formatted_entities: "Geformatteerde Entiteiten",
-    formatted_entities_description: "Maak entiteitswaarden op door getallen af te ronden, onderstrepingstekens te vervangen door spaties, woorden met hoofdletters te schrijven en komma's toe te voegen aan grote getallen."
+    formatted_entities_description: "Maak entiteitswaarden op door getallen af te ronden, onderstrepingstekens te vervangen door spaties, woorden met hoofdletters te schrijven en komma's toe te voegen aan grote getallen.",
+    toggle: "Schakelen",
+    navigate: "Navigeren",
+    url: "URL openen",
+    trigger: "Activeren"
   }
 };

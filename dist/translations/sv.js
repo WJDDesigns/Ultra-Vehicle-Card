@@ -8,7 +8,16 @@ export default {
     location: "Plats",
     car_state: "Bilstatus",
     charge_limit: "Laddgräns",
-    engine_on: "Motor På"
+    engine_on: "Motor På",
+    away: "Borta",
+    charging_end_time: "Laddning slutar",
+    charging_ending_soon: "Laddning slutar snart",
+    charging_ending_in: "Laddning slutar om",
+    charging_until: "Laddar tills",
+    minutes: "minuter",
+    minute: "minut",
+    hours: "timmar",
+    hour: "timme"
   },
   vehicle_types: {
     ev: "Elbil",
@@ -98,6 +107,10 @@ export default {
     more_info: "Mer information",
     bottom: "Botten",
     formatted_entities: "Formaterade Enheter",
-    formatted_entities_description: "Rensa upp enhetsvärden genom att avrunda tal, ersätta understreck med mellanslag, använda stor bokstav i ord och lägga till kommatecken i stora tal."
+    formatted_entities_description: "Rensa upp enhetsvärden genom att avrunda tal, ersätta understreck med mellanslag, använda stor bokstav i ord och lägga till kommatecken i stora tal.",
+    toggle: "Växla",
+    navigate: "Navigera",
+    url: "Öppna URL",
+    trigger: "Utlösa"
   }
 };
