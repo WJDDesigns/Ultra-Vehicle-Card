@@ -23,6 +23,17 @@ const fireEvent = (node, type, detail, options) => {
   return event;
 };
 
+const debounce = (func, wait) => {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
 
 export class UltraVehicleCardEditor extends localize(LitElement) {
   static get properties() {
@@ -57,6 +68,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       _iconGap: { type: Number },
       _iconSizes: { type: Object },
       _showRowSeparatorDetails: { type: Boolean },
+      _isLoading: { type: Boolean },
     };
   }
 
@@ -89,6 +101,8 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   this._charging_image_urlFilter = "";
   this._iconSizes = {};
   this._showRowSeparatorDetails = false;
+  this._isLoading = false;
+  this._debouncedColorChanged = debounce(this._applyColorChange.bind(this), 100);
   }
 
   setConfig(config) {
@@ -130,6 +144,8 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       row_separator_color: config.row_separator_color || this._getDefaultColorAsHex(),
       row_separator_height: config.row_separator_height || 1,
       row_separators: config.row_separators || {},
+      iconActiveColor: config.iconActiveColor || 'var(--primary-color)',
+      iconInactiveColor: config.iconInactiveColor || 'var(--primary-text-color)',
       ...config,
     };
 
@@ -197,6 +213,11 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         ${this._renderEntityInformation()}
         ${this._renderIconGridConfig()}
         ${this._renderColorPickers()}
+        ${this._isLoading ? html`
+          <div class="loading-overlay">
+            <div class="loading-spinner"></div>
+          </div>
+        ` : ''}
     </div>
     `;
     
@@ -685,10 +706,10 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 @change=${(e) => this._updateIconLabel(entityId, e.target.value)}
             >
                 <option value="none">${this.localize('editor.none')}</option>
-                <option value="left">Left</option>
-              <option value="top">Top</option>
-              <option value="right">Right</option>
-                <option value="bottom">Bottom</option>
+                <option value="left">${this.localize('editor.left')}</option>
+                <option value="top">${this.localize('editor.top')}</option>
+                <option value="right">${this.localize('editor.right')}</option>
+                <option value="bottom">${this.localize('editor.bottom')}</option>
             </select>
             </div>
           </div>
@@ -745,6 +766,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
     this.config.row_separators[index][property] = value;
     this.configChanged(this.config);
+    this.requestUpdate();
   }
 
   _addRowSeparator() {
@@ -800,27 +822,35 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this.configChanged(this.config);
   }
   
-  _renderIconColorPicker(label, entityId, colorType, defaultValue) {
-    const customIcon = this._customIcons[entityId] || {};
-    const currentValue = customIcon[`${colorType}Color`] || this._getDefaultColor(colorType);
-    const textColor = this._getContrastYIQ(currentValue);
+  _renderIconColorPicker(label, entityId, iconType) {
+    const isActive = iconType === 'active';
+    const defaultColor = isActive ? 'var(--primary-color)' : 'var(--primary-text-color)';
+    const currentColor = this.config.custom_icons[entityId]?.[`${iconType}Color`] || defaultColor;
 
     return html`
       <div class="color-picker">
         <label>${label}</label>
-        <div class="color-input-wrapper">
-          <input type="color" 
-                 .value="${currentValue}" 
-                 @change="${(e) => this._iconColorChanged(e, entityId, colorType)}"
-                 style="opacity: 0; position: absolute; width: 100%; height: 100%; cursor: pointer;">
-          <div class="color-preview" style="background-color: ${currentValue}; color: ${textColor};">
-            <span class="color-hex">${currentValue}</span>
+        <div class="icon-grid-color-picker-wrapper">
+          <input type="text" 
+                 .value="${currentColor}" 
+                 @input="${(e) => this._iconColorChanged(e, entityId, iconType)}"
+                 class="hex-input"
+                 style="background-color: ${currentColor}; color: ${this._getContrastYIQ(currentColor)};">
+          <div class="color-preview" style="background-color: ${currentColor};">
             <ha-icon
-              class="reset-icon"
-              icon="mdi:refresh"
-              @click="${(e) => this._resetIconColor(e, entityId, colorType)}"
+              icon="mdi:palette"
+              style="color: ${this._getContrastYIQ(currentColor)};"
             ></ha-icon>
+            <input type="color" 
+                   .value="${currentColor}" 
+                   @input="${(e) => this._iconColorChanged(e, entityId, iconType)}"
+                   class="color-input">
           </div>
+          <ha-icon
+            class="reset-icon"
+            icon="mdi:refresh"
+            @click="${(e) => this._resetIconColor(e, entityId, iconType)}"
+          ></ha-icon>
         </div>
       </div>
     `;
@@ -841,34 +871,22 @@ _getIconColor(entityId, colorType) {
   return colorType === 'active' ? this.config.iconActiveColor : this.config.iconInactiveColor;
 }
 
-_iconColorChanged(e, entityId, colorType) {
+_iconColorChanged(e, entityId, iconType) {
   const color = e.target.value;
-
-  this._customIcons = {
-    ...this._customIcons,
-    [entityId]: {
-      ...this._customIcons[entityId],
-      [`${colorType}Color`]: color,
-    },
-  };
-
-  this._updateCustomIconsConfig();
-  this.requestUpdate();
+  if (!this.config.custom_icons[entityId]) {
+    this.config.custom_icons[entityId] = {};
+  }
+  this.config.custom_icons[entityId][`${iconType}Color`] = color;
+  this._updateConfigAndRequestUpdate('custom_icons', this.config.custom_icons);
 }
 
-_resetIconColor(e, entityId, colorType) {
+_resetIconColor(e, entityId, iconType) {
   e.stopPropagation();
-  
-  this._customIcons = {
-    ...this._customIcons,
-    [entityId]: {
-      ...this._customIcons[entityId],
-      [`${colorType}Color`]: undefined,
-    },
-  };
-  
-  this._updateCustomIconsConfig();
-  this.requestUpdate();
+  const defaultColor = iconType === 'active' ? 'var(--primary-color)' : 'var(--primary-text-color)';
+  if (this.config.custom_icons[entityId]) {
+    this.config.custom_icons[entityId][`${iconType}Color`] = defaultColor;
+  }
+  this._updateConfigAndRequestUpdate('custom_icons', this.config.custom_icons);
 }
 
 _updateCustomIconsConfig() {
@@ -1099,7 +1117,7 @@ _updateIconInteractionsConfig() {
 
 _renderColorPickers() {
   const getDefaultColor = (property) => {
-    const style = getComputedStyle(document.body);
+    const style = getComputedStyle(this);
     return style.getPropertyValue(property).trim() || style.getPropertyValue(`--${property}`).trim();
   };
 
@@ -1139,19 +1157,27 @@ _renderColorPicker(label, configKey, defaultValue) {
   return html`
     <div class="color-picker">
       <label>${label}</label>
-      <div class="color-input-wrapper">
-        <input type="color" 
+      <div class="icon-grid-color-picker-wrapper">
+        <input type="text" 
                .value="${currentValue}" 
-               @change="${(e) => this._colorChanged(e, configKey)}"
-               style="opacity: 0; position: absolute; width: 100%; height: 100%; cursor: pointer;">
-        <div class="color-preview" style="background-color: ${currentValue}; color: ${textColor};">
-          <span class="color-hex">${currentValue}</span>
+               @input="${(e) => this._colorChanged(e, configKey)}"
+               class="hex-input"
+               style="background-color: ${currentValue}; color: ${textColor};">
+        <div class="color-preview" style="background-color: ${currentValue};">
           <ha-icon
-            class="reset-icon"
-            icon="mdi:refresh"
-            @click="${(e) => this._resetColor(e, configKey, defaultValue)}"
+            icon="mdi:palette"
+            style="color: ${textColor};"
           ></ha-icon>
+          <input type="color" 
+                 .value="${currentValue}" 
+                 @input="${(e) => this._colorChanged(e, configKey)}"
+                 class="color-input">
         </div>
+        <ha-icon
+          class="reset-icon"
+          icon="mdi:refresh"
+          @click="${(e) => this._resetColor(e, configKey, defaultValue)}"
+        ></ha-icon>
       </div>
     </div>
   `;
@@ -1159,6 +1185,16 @@ _renderColorPicker(label, configKey, defaultValue) {
 
 _colorChanged(e, configKey) {
   const color = e.target.value;
+  this._isLoading = true;
+  this.requestUpdate();
+
+  // Schedule the update using requestAnimationFrame
+  requestAnimationFrame(() => {
+    this._applyColorChange(configKey, color);
+  });
+}
+
+_applyColorChange(configKey, color) {
   if (configKey.includes('_')) {
     // This is an icon-specific color
     const [entityId, colorType] = configKey.split('_');
@@ -1176,20 +1212,30 @@ _colorChanged(e, configKey) {
       ...this.config,
       [configKey]: color,
     };
-    this.configChanged(this.config);
+    this._updateSingleColor(configKey, color);
   }
-    this.requestUpdate();
-  }
+  this._isLoading = false;
+  this.requestUpdate();
+}
+
+_updateSingleColor(configKey, color) {
+  const event = new CustomEvent('config-changed', {
+    detail: { config: { ...this.config, [configKey]: color } },
+    bubbles: true,
+    composed: true
+  });
+  this.dispatchEvent(event);
+}
 
 _resetColor(e, configKey, defaultValue) {
   e.stopPropagation();
-    this.config = {
-      ...this.config,
+  this.config = {
+    ...this.config,
     [configKey]: defaultValue,
-    };
-    this.configChanged(this.config);
-    this.requestUpdate();
-  }
+  };
+  this.configChanged(this.config);
+  this.requestUpdate();
+}
 
 _toggleChanged(ev) {
   const target = ev.target;
@@ -1208,7 +1254,7 @@ _vehicleTypeChanged(ev) {
     vehicle_type: ev.target.value,
     };
     this.configChanged(this.config);
-    this.requestUpdate();
+    this.requestUpdate()
   }
 
 _unitTypeChanged(ev) {
@@ -1458,11 +1504,6 @@ _handleImageSourceChange(configKey, newType) {
   };
 
   this.configChanged(this.config);
-}
-
-_entityPicked(ev, configKey) {
-  const newValue = ev.detail.value;
-  this._updateConfig(configKey, newValue);
 }
 
 _entityPicked(ev, configKey) {
@@ -1781,108 +1822,114 @@ _updateCustomIconsConfig() {
   }
 
   _renderRowSeparatorDetails(index) {
-    const separatorConfig = this._selectedIconGridEntities[index] === 'row-separator' 
-      ? this.config.row_separators?.[index] || {}
-      : {};
-
-    const defaultColor = this._getDefaultColorAsHex();
-    const color = separatorConfig.color || defaultColor;
-    const textColor = this._getContrastYIQ(color);
-    const isTransparent = color === 'transparent';
-    const bgColor = getComputedStyle(document.body).getPropertyValue('--card-background-color').trim() || '#ffffff';
-
+    const separatorConfig = this.config.row_separators?.[index] || {};
     return html`
-      <div class="separator-color-section">
-        <label>${this.localize('editor.separator_color')}</label>
-        <div class="entity-description">${this.localize('editor.separator_color_description')}</div>
-        <div class="color-picker-row">
-          <div class="color-picker">
-            <div class="color-input-wrapper">
-              <input type="color" 
-                     .value="${isTransparent ? defaultColor : color}" 
-                     @change="${(e) => this._updateRowSeparatorConfig(index, 'color', e.target.value)}"
-                     style="opacity: 0; position: absolute; width: 100%; height: 100%; cursor: pointer;">
-              <div class="color-preview" style="background-color: ${isTransparent ? bgColor : color}; color: ${isTransparent ? this._getContrastYIQ(bgColor) : textColor};">
-                <span class="color-hex">${isTransparent ? this.localize('editor.transparent') : color}</span>
-                <ha-icon
-                  class="reset-icon"
-                  icon="mdi:refresh"
-                  @click="${(e) => this._resetRowSeparatorColor(e, index)}"
-                ></ha-icon>
-              </div>
+      <div class="row-separator-details">
+        ${this._renderRowSeparatorColorPicker(index)}
+        <div class="editor-row">
+          <div class="editor-item">
+            <label>${this.localize('editor.separator_height')}</label>
+            <div class="input-with-unit">
+              <input
+                type="number"
+                .value="${separatorConfig.height || 1}"
+                @input="${(e) => this._updateRowSeparatorConfig(index, 'height', parseInt(e.target.value))}"
+                min="0"
+                max="100"
+              >
+              <span class="unit">px</span>
             </div>
           </div>
+          <div class="editor-item">
+            <label>${this.localize('editor.icon_gap_size')}</label>
+            <div class="input-with-unit">
+              <input
+                type="number"
+                .value="${separatorConfig.icon_gap || 20}"
+                @input="${(e) => this._updateRowSeparatorConfig(index, 'icon_gap', parseInt(e.target.value))}"
+                min="0"
+                max="100"
+              >
+              <span class="unit">px</span>
+            </div>
+          </div>
+        </div>
+        <div class="editor-row">
+          <div class="editor-item">
+            <label>${this.localize('editor.horizontal_alignment')}</label>
+            <div class="alignment-buttons">
+              <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'horizontalAlignment', 'left')}"
+                      ?disabled="${separatorConfig.horizontalAlignment === 'left'}" title="${this.localize('editor.align_left')}">
+                ◀
+              </button>
+              <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'horizontalAlignment', 'center')}"
+                      ?disabled="${separatorConfig.horizontalAlignment === 'center' || separatorConfig.horizontalAlignment === undefined}" title="${this.localize('editor.align_center')}">
+                ⬤
+              </button>
+              <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'horizontalAlignment', 'right')}"
+                      ?disabled="${separatorConfig.horizontalAlignment === 'right'}" title="${this.localize('editor.align_right')}">
+                ▶
+              </button>
+            </div>
+          </div>
+          <div class="editor-item">
+            <label>${this.localize('editor.vertical_alignment')}</label>
+            <div class="alignment-buttons">
+              <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'verticalAlignment', 'top')}"
+                      ?disabled="${separatorConfig.verticalAlignment === 'top'}" title="${this.localize('editor.align_top')}">
+                ▲
+              </button>
+              <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'verticalAlignment', 'middle')}"
+                      ?disabled="${separatorConfig.verticalAlignment === 'middle' || separatorConfig.verticalAlignment === undefined}" title="${this.localize('editor.align_middle')}">
+                ⬤
+              </button>
+              <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'verticalAlignment', 'bottom')}"
+                      ?disabled="${separatorConfig.verticalAlignment === 'bottom'}" title="${this.localize('editor.align_bottom')}">
+                ▼
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  _renderRowSeparatorColorPicker(index) {
+    const currentColor = this.config.row_separators?.[index]?.color || this._getDefaultColorAsHex();
+    const textColor = this._getContrastYIQ(currentColor);
+    const isTransparent = currentColor === 'transparent';
+
+    return html`
+      <div class="row-separator-color-row">
+        <div class="color-picker row-separator-color-picker">
+          <label>${this.localize('editor.separator_color')}</label>
+          <div class="icon-grid-color-picker-wrapper">
+            <input type="text" 
+                   .value="${isTransparent ? this.localize('editor.transparent') : currentColor}" 
+                   @input="${(e) => this._rowSeparatorColorChanged(e, index)}"
+                   class="hex-input"
+                   style="background-color: ${isTransparent ? 'transparent' : currentColor}; color: ${textColor};">
+            <div class="color-preview" style="background-color: ${isTransparent ? 'transparent' : currentColor};">
+              <ha-icon
+                icon="mdi:palette"
+                style="color: ${textColor};"
+              ></ha-icon>
+              <input type="color" 
+                     .value="${isTransparent ? '#ffffff' : currentColor}" 
+                     @input="${(e) => this._rowSeparatorColorChanged(e, index)}"
+                     class="color-input">
+            </div>
+            <ha-icon
+              class="reset-icon"
+              icon="mdi:refresh"
+              @click="${(e) => this._resetRowSeparatorColor(e, index)}"
+            ></ha-icon>
+          </div>
+        </div>
+        <div class="transparent-button-wrapper">
           <button class="transparent-button" @click="${() => this._toggleTransparentSeparator(index)}">
             ${isTransparent ? this.localize('editor.set_color') : this.localize('editor.transparent')}
           </button>
-        </div>
-      </div>
-      <div class="editor-row">
-        <div class="editor-item">
-          <label for="row_separator_height_${index}">${this.localize('editor.separator_height')}</label>
-          <div class="entity-description">${this.localize('editor.separator_height_description')}</div>
-          <div class="input-with-unit">
-            <input
-              id="row_separator_height_${index}"
-              type="number"
-              .value="${separatorConfig.height || 1}"
-              @input="${(e) => this._updateRowSeparatorConfig(index, 'height', parseInt(e.target.value))}"
-              min="0"
-              max="20"
-            />
-            <span class="unit">px</span>
-          </div>
-        </div>
-        <div class="editor-item">
-          <label for="row_separator_icon_gap_${index}">${this.localize('editor.icon_gap_size')}</label>
-          <div class="entity-description">${this.localize('editor.icon_gap_description')}</div>
-          <div class="input-with-unit">
-            <input
-              id="row_separator_icon_gap_${index}"
-              type="number"
-              .value="${separatorConfig.icon_gap || 20}"
-              @input="${(e) => this._updateRowSeparatorConfig(index, 'icon_gap', parseInt(e.target.value))}"
-              min="0"
-              max="100"
-            />
-            <span class="unit">px</span>
-          </div>
-        </div>
-      </div>
-      <div class="editor-row">
-        <div class="editor-item">
-          <label>${this.localize('editor.horizontal_alignment')}</label>
-          <div class="alignment-buttons">
-            <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'horizontalAlignment', 'left')}"
-                    ?disabled="${separatorConfig.horizontalAlignment === 'left'}" title="${this.localize('editor.align_left')}">
-              ◀
-            </button>
-            <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'horizontalAlignment', 'center')}"
-                    ?disabled="${separatorConfig.horizontalAlignment === 'center' || separatorConfig.horizontalAlignment === undefined}" title="${this.localize('editor.align_center')}">
-              ⬤
-            </button>
-            <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'horizontalAlignment', 'right')}"
-                    ?disabled="${separatorConfig.horizontalAlignment === 'right'}" title="${this.localize('editor.align_right')}">
-              ▶
-            </button>
-          </div>
-        </div>
-        <div class="editor-item">
-          <label>${this.localize('editor.vertical_alignment')}</label>
-          <div class="alignment-buttons">
-            <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'verticalAlignment', 'top')}"
-                    ?disabled="${separatorConfig.verticalAlignment === 'top'}" title="${this.localize('editor.align_top')}">
-              ▲
-            </button>
-            <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'verticalAlignment', 'middle')}"
-                    ?disabled="${separatorConfig.verticalAlignment === 'middle' || separatorConfig.verticalAlignment === undefined}" title="${this.localize('editor.align_middle')}">
-              ⬤
-            </button>
-            <button class="icon-button" @click="${() => this._updateRowSeparatorConfig(index, 'verticalAlignment', 'bottom')}"
-                    ?disabled="${separatorConfig.verticalAlignment === 'bottom'}" title="${this.localize('editor.align_bottom')}">
-              ▼
-            </button>
-          </div>
         </div>
       </div>
     `;
@@ -1893,7 +1940,7 @@ _updateCustomIconsConfig() {
     const defaultColor = this._getDefaultColorAsHex();
     const newColor = currentColor === 'transparent' ? defaultColor : 'transparent';
     this._updateRowSeparatorConfig(index, 'color', newColor);
-    this.requestUpdate(); // This will trigger a re-render
+    this.requestUpdate();
   }
 
   _resetRowSeparatorColor(e, index) {
@@ -1922,6 +1969,7 @@ _updateCustomIconsConfig() {
     }
     this.config.row_separators[index][property] = value;
     this.configChanged(this.config);
+    this.requestUpdate();
   }
 
   _getDefaultColorAsHex() {
@@ -1951,6 +1999,67 @@ _updateCustomIconsConfig() {
     this.loadResources(this.config.language || navigator.language).then(() => {
       this.requestUpdate();
     });
+  }
+
+  _camelToKebab(string) {
+    return string.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
+  }
+
+  _updateConfigAndRequestUpdate(key, value) {
+    this.config = {
+      ...this.config,
+      [key]: value,
+    };
+    this.configChanged(this.config);
+    this.requestUpdate();
+  }
+
+  _rowSeparatorColorChanged(e, index) {
+    const color = e.target.value;
+    this._updateRowSeparatorConfig(index, 'color', color);
+  }
+
+  _colorChanged(e, configKey) {
+    const color = e.target.value;
+    this._isLoading = true;
+    this.requestUpdate();
+
+    requestAnimationFrame(() => {
+      this._applyColorChange(configKey, color);
+    });
+  }
+
+  _applyColorChange(configKey, color) {
+    if (configKey.includes('_')) {
+      // This is an icon-specific color
+      const [entityId, colorType] = configKey.split('_');
+      this._customIcons = {
+        ...this._customIcons,
+        [entityId]: {
+          ...this._customIcons[entityId],
+          [colorType]: color,
+        },
+      };
+      this._updateCustomIconsConfig();
+    } else {
+      // This is a global color
+      this.config = {
+        ...this.config,
+        [configKey]: color,
+      };
+      this._updateSingleColor(configKey, color);
+    }
+    this._isLoading = false;
+    this.requestUpdate();
+  }
+
+  _updateSingleColor(configKey, color) {
+    const event = new CustomEvent('config-changed', {
+      detail: { config: { ...this.config, [configKey]: color } },
+      bubbles: true,
+      composed: true
+    });
+    this.dispatchEvent(event);
   }
 }
 customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);

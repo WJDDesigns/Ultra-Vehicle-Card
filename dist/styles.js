@@ -3,17 +3,27 @@ import { css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 export const styles = css`
   :host {
     --uvc-primary-color: var(--primary-color);
-    --uvc-background-color: var(--card-background-color, #fff);
-    --uvc-bar-background: var(--uvc-bar-background-color, #595959);
-    --uvc-bar-border-color: var(--uvc-bar-border-color, #595959);
-    --uvc-bar-fill: var(--uvc-primary-color);
-    --uvc-limit-indicator: white;
-    --uvc-icon-active: var(--uvc-primary-color);
-    --uvc-icon-inactive: var(--secondary-text-color);
+    --uvc-card-background: var(--card-background-color);
+    --uvc-bar-background: var(--secondary-text-color);
+    --uvc-bar-border-color: var(--secondary-text-color);
+    --uvc-limit-indicator: var(--primary-text-color);
+    --uvc-icon-active: var(--primary-color);
+    --uvc-icon-inactive: var(--primary-text-color);
     --uvc-info-text-color: var(--secondary-text-color);
-    --ha-card-border-radius: var(--ha-config-card-border-radius, 8px);
-    --uvc-icon-grid-size: var(--mdc-icon-size, 24px);
+    --uvc-car-state-text-color: var(--primary-text-color);
+    --uvc-range-text-color: var(--primary-text-color);
+    --uvc-percentage-text-color: var(--primary-text-color);
   }
+
+  .progress {
+    background-color: var(--uvc-primary-color);
+  }
+
+  .item_bar {
+    background-color: var(--uvc-bar-background);
+    border-color: var(--uvc-bar-border-color);
+  }
+
   .image-upload-container {
   display: flex;
   align-items: center;
@@ -173,7 +183,7 @@ textarea {
     width: 0;
     height: 1.5rem;
     margin: 0;
-    background-color: var(--uvc-bar-fill);
+    background-color: var(--uvc-primary-color);
     border-radius: 4px;
   }
   
@@ -230,7 +240,7 @@ textarea {
     width: 100%;
     padding: 10px;
     border: 1px solid var(--divider-color, #e0e0e0);
-    border-radius: 4px;
+    border-radius: 2px 0px 0px 2px;
     font-size: 16px;
     background-color: var(--card-background-color, #fff);
     color: var(--primary-text-color);
@@ -636,23 +646,25 @@ textarea {
 }
   
   .color-preview {
-    flex-grow: 1;
-    height: 40px;
-    border-radius: 4px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 12px;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    border: none;
     cursor: pointer;
-  }
+    margin-left: 8px;
+    margin-right: 8px;
+    position: relative;
+    padding: 4px;
+    border-radius: 100%;
+}
   
-  .color-hex {
-    font-family: monospace;
-    font-size: 14px;
-  }
-  
-  .reset-icon {
-    --mdc-icon-size: 20px;
+  .color-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
     cursor: pointer;
   }
   
@@ -991,5 +1003,88 @@ ha-icon-button[disabled] {
 
 .selected-entity.separator-ui .entity-details {
   padding: 8px;
+}
+
+.hex-input {
+  width: 60px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.color-input {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.reset-icon {
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.icon-grid-color-picker-wrapper {
+  display: flex;
+  align-items: center;
+  border: solid;
+  border-radius: 4px;
+  position: relative;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.row-separator-color-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.row-separator-color-picker {
+  flex: 1;
+  margin-right: 16px;
+}
+
+.transparent-button-wrapper {
+  display: flex;
+  align-items: flex-end;
+}
+
+.transparent-button {
+  height: 36px;
+  white-space: nowrap;
+  padding: 0 16px;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 `;

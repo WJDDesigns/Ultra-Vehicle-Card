@@ -62,8 +62,8 @@ setConfig(config) {
     barBackgroundColor: "",
     barFillColor: "",
     limitIndicatorColor: "",
-    iconActiveColor: "",
-    iconInactiveColor: "",
+    iconActiveColor: this._getComputedColor('--primary-color'),
+    iconInactiveColor: this._getComputedColor('--primary-text-color'),
     barBorderColor: "",
     icon_size: 28,
     icon_gap: config.icon_gap || 20,
@@ -124,6 +124,7 @@ setConfig(config) {
   });
 
   this.loadResources(this.config.language || navigator.language);
+  this._updateStyles();
 }
 
 // Add this method to validate entity configurations
@@ -187,10 +188,10 @@ _renderEVInfo() {
   const chargingStatusEntity = this.config.charging_status_entity ? this.hass.states[this.config.charging_status_entity] : null;
   const chargeLimitEntity = this.config.charge_limit_entity ? this.hass.states[this.config.charge_limit_entity] : null;
 
-  const batteryLevel = batteryLevelEntity ? Math.round(parseFloat(batteryLevelEntity.state)) : null;
-  const batteryRange = batteryRangeEntity ? this._formatRange(batteryRangeEntity.state, batteryRangeEntity.attributes.unit_of_measurement) : null;
+  const batteryLevel = this._getValueFromEntityOrAttributes(batteryLevelEntity, ['battery_level', 'level']);
+  const batteryRange = this._getValueFromEntityOrAttributes(batteryRangeEntity, ['battery_range', 'range']);
   const isCharging = this._isCharging(chargingStatusEntity);
-  const chargeLimit = chargeLimitEntity && this.config.show_charge_limit ? Math.round(parseFloat(chargeLimitEntity.state)) : null;
+  const chargeLimit = this.config.show_charge_limit ? this._getValueFromEntityOrAttributes(chargeLimitEntity, ['charge_limit']) : null;
 
   return html`
     <div class="level-info">
@@ -218,6 +219,21 @@ _renderEVInfo() {
     </div>
   `;
 }
+
+_getValueFromEntityOrAttributes(entity, attributeNames) {
+  if (!entity) return null;
+
+  // Check attributes first
+  for (const attr of attributeNames) {
+    if (entity.attributes[attr] !== undefined) {
+      return Math.round(parseFloat(entity.attributes[attr]));
+    }
+  }
+
+  // Fallback to state
+  return Math.round(parseFloat(entity.state));
+}
+
 _formatRange(value, unit) {
   if (value === undefined || value === null) return '';
   
@@ -233,6 +249,16 @@ _formatRange(value, unit) {
   
     const state = chargingStatusEntity.state.toLowerCase();
     const entityId = chargingStatusEntity.entity_id.toLowerCase();
+    const attributes = chargingStatusEntity.attributes;
+  
+    // Check attributes for 'charging' status
+    if (attributes) {
+      for (const [key, value] of Object.entries(attributes)) {
+        if (typeof value === 'string' && value.toLowerCase() === 'charging') {
+          return true;
+        }
+      }
+    }
   
     // Special handling for 'none_charging' entities
     if (entityId.includes('none_charging')) {
@@ -677,12 +703,27 @@ _handleMoreInfo(entityId) {
     const customIcon = this.config.custom_icons && this.config.custom_icons[entityId];
     if (customIcon) {
       return isActive 
-        ? customIcon.activeColor || this.config.iconActiveColor || 'var(--primary-color)'
-        : customIcon.inactiveColor || this.config.iconInactiveColor || 'var(--primary-text-color)';
+        ? customIcon.activeColor || this.config.iconActiveColor || this._getComputedColor('--primary-color')
+        : customIcon.inactiveColor || this.config.iconInactiveColor || this._getComputedColor('--primary-text-color');
     }
     return isActive
-      ? this.config.iconActiveColor || 'var(--primary-color)'
-      : this.config.iconInactiveColor || 'var(--primary-text-color)';
+      ? this.config.iconActiveColor || this._getComputedColor('--primary-color')
+      : this.config.iconInactiveColor || this._getComputedColor('--primary-text-color');
+  }
+
+  _getComputedColor(cssVar) {
+    const color = getComputedStyle(document.documentElement).getPropertyValue(cssVar).trim();
+    if (color.startsWith('#')) {
+      return color;
+    } else if (color.startsWith('rgb')) {
+      return this._rgbToHex(color);
+    }
+    return '#000000'; // Fallback color
+  }
+
+  _rgbToHex(rgb) {
+    const [r, g, b] = rgb.match(/\d+/g);
+    return `#${((1 << 24) + (parseInt(r) << 16) + (parseInt(g) << 8) + parseInt(b)).toString(16).slice(1)}`;
   }
 
   _handleIconClick(entityId) {
@@ -824,8 +865,8 @@ _handleMoreInfo(entityId) {
       barBackgroundColor: "",
       barFillColor: "",
       limitIndicatorColor: "",
-      iconActiveColor: "",
-      iconInactiveColor: "",
+      iconActiveColor: this._getComputedColor('--primary-color'),
+      iconInactiveColor: this._getComputedColor('--primary-text-color'),
       carStateTextColor: "",
       rangeTextColor: "",
       percentageTextColor: "",
@@ -836,31 +877,48 @@ _handleMoreInfo(entityId) {
 
   updated(changedProps) {
     super.updated(changedProps);
-    if (changedProps.has('config') || changedProps.has('hass')) {
-      const style = getComputedStyle(this);
-      const primaryColor = style.getPropertyValue('--primary-color').trim();
-      const cardBackground = style.getPropertyValue('--card-background-color').trim();
-      const primaryTextColor = style.getPropertyValue('--primary-text-color').trim();
-      const secondaryTextColor = style.getPropertyValue('--secondary-text-color').trim();
-      
-      this.style.setProperty('--uvc-primary-color', this.config.barFillColor || primaryColor);
-      this.style.setProperty('--uvc-card-background', this.config.cardBackgroundColor || cardBackground);
-      this.style.setProperty('--uvc-bar-background', this.config.barBackgroundColor || secondaryTextColor);
-      this.style.setProperty('--uvc-bar-border-color', this.config.barBorderColor || secondaryTextColor);
-      this.style.setProperty('--uvc-limit-indicator', this.config.limitIndicatorColor || primaryTextColor);
-      this.style.setProperty('--uvc-icon-active', this.config.iconActiveColor || primaryColor);
-      this.style.setProperty('--uvc-icon-inactive', this.config.iconInactiveColor || primaryTextColor);
-      this.style.setProperty('--uvc-info-text-color', this.config.infoTextColor || secondaryTextColor);
+    if (changedProps.has('config')) {
+      this._updateStyles();
+    }
+  }
+
+  _updateStyles() {
+    if (!this.config) return;
+
+    const colorProps = [
+      { config: 'barFillColor', css: '--uvc-primary-color' },
+      { config: 'cardBackgroundColor', css: '--uvc-card-background' },
+      { config: 'barBackgroundColor', css: '--uvc-bar-background' },
+      { config: 'barBorderColor', css: '--uvc-bar-border-color' },
+      { config: 'limitIndicatorColor', css: '--uvc-limit-indicator' },
+      { config: 'iconActiveColor', css: '--uvc-icon-active' },
+      { config: 'iconInactiveColor', css: '--uvc-icon-inactive' },
+      { config: 'infoTextColor', css: '--uvc-info-text-color' },
+      { config: 'carStateTextColor', css: '--uvc-car-state-text-color' },
+      { config: 'rangeTextColor', css: '--uvc-range-text-color' },
+      { config: 'percentageTextColor', css: '--uvc-percentage-text-color' }
+    ];
+
+    colorProps.forEach(({ config, css }) => {
+      if (this.config[config]) {
+        this.style.setProperty(css, this.config[config]);
+      }
+    });
+
+    // Update icon size
+    if (this.config.icon_size) {
       this.style.setProperty('--uvc-icon-grid-size', `${this.config.icon_size}px`);
       this.style.setProperty('--mdc-icon-size', `${this.config.icon_size}px`);
-      this.style.setProperty('--uvc-car-state-text-color', this.config.carStateTextColor || primaryTextColor);
-      this.style.setProperty('--uvc-range-text-color', this.config.rangeTextColor || primaryTextColor);
-      this.style.setProperty('--uvc-percentage-text-color', this.config.percentageTextColor || primaryTextColor);
-      
-      const rgb = this._hexToRgb(primaryTextColor);
+    }
+
+    // Update RGB values for icon background
+    if (this.config.iconInactiveColor) {
+      const rgb = this._hexToRgb(this.config.iconInactiveColor);
       this.style.setProperty('--rgb-primary-text-color', rgb);
       this.style.setProperty('--uvc-icon-background', `rgba(${rgb}, 0.10)`);
     }
+
+    this.requestUpdate();
   }
 
   _hexToRgb(hex) {
