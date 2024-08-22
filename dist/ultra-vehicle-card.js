@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version, setVersion } from './version.js';
-setVersion('V1.5.3');
+import { version, setVersion } from './version.js?v=1';
+setVersion('V1.5.4');
 
 const UltraVehicleCardEditor = await import ('./ultra-vehicle-card-editor.js?v='+version);
 const stl = await import ('./styles.js?v='+version);
