@@ -835,8 +835,8 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   _addRowSeparator() {
     const newIndex = this._selectedIconGridEntities.length;
     this._selectedIconGridEntities.push('row-separator');
-    if (!this.config.row_separators) {
-      this.config.row_separators = {};
+    if (!this.config.row_separators || Object.isFrozen(this.config.row_separators)) {
+      this.config.row_separators = { ...this.config.row_separators };
     }
     this.config.row_separators[newIndex] = {
       color: this._getDefaultColorAsHex(),
@@ -1667,7 +1667,7 @@ _updateIconGridConfig() {
     this.config = {
       ...this.config,
       icon_grid_entities: this._selectedIconGridEntities,
-    row_separators: this.config.row_separators,
+    row_separators: { ...this.config.row_separators },
     };
     this.configChanged(this.config);
 }
@@ -1836,8 +1836,8 @@ _updateCustomIconsConfig() {
   _addRowSeparator() {
     const newIndex = this._selectedIconGridEntities.length;
     this._selectedIconGridEntities.push('row-separator');
-    if (!this.config.row_separators) {
-      this.config.row_separators = {};
+    if (!this.config.row_separators || Object.isFrozen(this.config.row_separators)) {
+      this.config.row_separators = { ...this.config.row_separators };
     }
     this.config.row_separators[newIndex] = {
       color: this._getDefaultColorAsHex(),

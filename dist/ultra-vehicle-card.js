@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version, setVersion } from './version.js?v=1';
-setVersion('V1.5.4-beta');
+import { version, setVersion } from './version.js?v=2';
+setVersion('V1.5.5');
 
 const UltraVehicleCardEditor = await import ('./ultra-vehicle-card-editor.js?v='+version);
 const stl = await import ('./styles.js?v='+version);
@@ -32,12 +32,15 @@ setConfig(config) {
   // Get the default color as hex
   const defaultColor = this._getDefaultColorAsHex();
 
+  // Create a deep copy of the config to ensure all objects are extensible
+  const extensibleConfig = JSON.parse(JSON.stringify(config));
+
   this.config = {
     title: "My Vehicle",
-    image_url: config.image_url || "",
-    charging_image_url: config.charging_image_url || "",
-    image_url_type: config.image_url_type || "image",
-    charging_image_url_type: config.charging_image_url_type || "image",
+    image_url: extensibleConfig.image_url || "",
+    charging_image_url: extensibleConfig.charging_image_url || "",
+    image_url_type: extensibleConfig.image_url_type || "image",
+    charging_image_url_type: extensibleConfig.charging_image_url_type || "image",
     vehicle_type: "EV",
     unit_type: "mi",
     battery_level_entity: "",
@@ -58,7 +61,7 @@ setConfig(config) {
     icon_grid_entities: [],
     custom_icons: {},
     icon_interactions: {},
-    icon_styles: config.icon_styles || {},
+    icon_styles: extensibleConfig.icon_styles || {},
     hybrid_display_order: 'fuel_first',
     car_state_entity: "",
     charge_limit_entity: "",
@@ -70,18 +73,18 @@ setConfig(config) {
     iconInactiveColor: "var(--primary-text-color)",
     barBorderColor: "",
     icon_size: 28,
-    icon_gap: config.icon_gap || 20,
-    image_entity: config.image_entity || "",
-    charging_image_entity: config.charging_image_entity || "",
-    carStateTextColor: config.carStateTextColor || '',
-    rangeTextColor: config.rangeTextColor || '',
-    percentageTextColor: config.percentageTextColor || '',
-    icon_sizes: config.icon_sizes || {},
+    icon_gap: extensibleConfig.icon_gap || 20,
+    image_entity: extensibleConfig.image_entity || "",
+    charging_image_entity: extensibleConfig.charging_image_entity || "",
+    carStateTextColor: extensibleConfig.carStateTextColor || '',
+    rangeTextColor: extensibleConfig.rangeTextColor || '',
+    percentageTextColor: extensibleConfig.percentageTextColor || '',
+    icon_sizes: extensibleConfig.icon_sizes || {},
     engine_on_entity: "",
-    icon_labels: config.icon_labels || {},
-    row_separators: config.row_separators || {},
+    icon_labels: extensibleConfig.icon_labels || {},
+    row_separators: extensibleConfig.row_separators || {},
     useFormattedEntities: false, // New property for formatted entities
-    ...config
+    ...extensibleConfig
   };
 
   // Handle backward compatibility for entity names
@@ -231,24 +234,24 @@ _getValueFromEntityOrAttributes(entity, attributeNames) {
   // Check attributes first
   for (const attr of attributeNames) {
     if (entity.attributes[attr] !== undefined) {
-      return Math.round(parseFloat(entity.attributes[attr]));
+      return this._roundNumber(parseFloat(entity.attributes[attr]));
     }
   }
 
   // Fallback to state
-  return Math.round(parseFloat(entity.state));
+  return this._roundNumber(parseFloat(entity.state));
 }
 
 _formatRange(value, unit) {
   if (value === undefined || value === null) return '';
   
-  // Parse the value as a float and round it up to the nearest integer
-  const roundedValue = Math.ceil(parseFloat(value));
+  // Parse the value as a float
+  const numValue = parseFloat(value);
   
-  // Format the number with commas if useFormattedEntities is true
+  // Format the number based on the useFormattedEntities setting
   const formattedValue = this.config.useFormattedEntities
-    ? this._formatNumber(roundedValue)
-    : roundedValue;
+    ? this._formatNumber(Math.round(numValue))  // Round to whole number and format
+    : value;  // Use the original value without modification
   
   // Return the formatted string with the unit
   return `${formattedValue} ${unit || ''}`.trim();
@@ -291,12 +294,7 @@ _formatNumber(number) {
 
 
 _formatBinarySensorState(state, attributes) {
-  if (state === 'on') {
-    return attributes.device_class ? this._capitalizeFirstLetter(attributes.device_class) : 'On';
-  } else if (state === 'off') {
-    return attributes.device_class ? `Not ${this._capitalizeFirstLetter(attributes.device_class)}` : 'Off';
-  }
-  return this._capitalizeFirstLetter(state);
+  return state;
 }
 
 _renderFuelInfo() {
@@ -598,17 +596,15 @@ _formatEntityValue(value, isFormatted) {
     if (this._isISODateString(value)) {
       return this._formatChargingEndTime(value);
     }
-    // Capitalize each word for location or other string values
-    return value.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+    // Return the original string value without modification
+    return value;
   }
 
   if (typeof value === 'number' || !isNaN(parseFloat(value))) {
     // Convert to number if it's a numeric string
     const numValue = parseFloat(value);
-    // Round numbers to 2 decimal places
-    const roundedValue = Math.round(numValue * 100) / 100;
-    // Add commas to separate thousands
-    return this._formatNumber(roundedValue);
+    // Round to whole number and format with commas
+    return this._formatNumber(Math.round(numValue));
   }
 
   return value;
@@ -617,6 +613,17 @@ _formatEntityValue(value, isFormatted) {
 // Add this method to check if a string is an ISO date string
 _isISODateString(str) {
   return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?([+-]\d{2}:\d{2}|Z)?$/.test(str);
+}
+
+// Add this new method for rounding
+_roundNumber(number) {
+  // Check if the number has decimal places
+  if (Number.isInteger(number)) {
+    return number;
+  }
+  
+  // Round to one decimal place
+  return Math.round(number * 10) / 10;
 }
 
   _renderIconGrid() {
@@ -694,7 +701,11 @@ _isISODateString(str) {
     const iconSize = this.config.icon_sizes?.[entityId] || this.config.icon_size || 24;
     const buttonStyle = this.config.icon_styles?.[entityId] || 'icon';
     const labelPosition = this.config.icon_labels?.[entityId] || 'none';
-    const labelText = this._formatEntityValue(state.state, this.config.useFormattedEntities);
+  
+    // Format the label text and add unit of measurement
+    const formattedValue = this._universalFormatValue(state.state, this.config.useFormattedEntities);
+    const unit = state.attributes.unit_of_measurement || '';
+    const labelText = `${formattedValue}${unit ? ' ' + unit : ''}`;
 
     // Calculate label size based on icon size
     const labelSize = iconSize > 28 ? Math.round(iconSize * 0.5) : 14;
@@ -975,6 +986,61 @@ _isISODateString(str) {
   _hexToRgb(hex) {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
+  }
+
+  _universalFormatValue(value, isFormatted) {
+    if (!isFormatted) return value;
+
+    if (typeof value === 'string') {
+      // Check if it's a date string
+      if (this._isISODateString(value)) {
+        return this._formatChargingEndTime(value);
+      }
+      // Check if it's a numeric string
+      if (!isNaN(parseFloat(value))) {
+        // Convert to number and format
+        return this._formatNumber(Math.round(parseFloat(value)));
+      }
+      // Return other strings as-is
+      return value;
+    }
+
+    if (typeof value === 'number') {
+      // Round to whole number and format with commas
+      return this._formatNumber(Math.round(value));
+    }
+
+    return value;
+  }
+
+  _formatNumber(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  _isISODateString(value) {
+    return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$/.test(value);
+  }
+
+  _formatChargingEndTime(isoDateString) {
+    const date = new Date(isoDateString);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const formattedHours = hours % 12 || 12;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    return `${formattedHours}:${formattedMinutes} ${ampm}`;
+  }
+
+  _formatRange(value, unit) {
+    if (value === undefined || value === null) return '';
+  
+    const formattedValue = this._universalFormatValue(value, this.config.useFormattedEntities);
+  
+    return `${formattedValue} ${unit || ''}`.trim();
+  }
+
+  _formatEntityValue(value, isFormatted) {
+    return this._universalFormatValue(value, isFormatted);
   }
 }
 
