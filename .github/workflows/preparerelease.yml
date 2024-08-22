@@ -17,16 +17,16 @@ jobs:
       run: |
         VERSION=${{ github.event.inputs.version }}
         
-        # Update ultra-vehicle-card.js
-        sed -i "s/setVersion('.*')/setVersion('V$VERSION')/" ultra-vehicle-card.js
+        # Update ultra-vehicle-card.js in dist folder
+        sed -i "s/setVersion('.*')/setVersion('V$VERSION')/" dist/ultra-vehicle-card.js
         
         # Increment the import version
-        IMPORT_VERSION=$(grep -oP "version\.js\?v=\K\d+" ultra-vehicle-card.js)
+        IMPORT_VERSION=$(grep -oP "version\.js\?v=\K\d+" dist/ultra-vehicle-card.js)
         NEW_IMPORT_VERSION=$((IMPORT_VERSION + 1))
-        sed -i "s/version\.js?v=$IMPORT_VERSION/version.js?v=$NEW_IMPORT_VERSION/" ultra-vehicle-card.js
+        sed -i "s/version\.js?v=$IMPORT_VERSION/version.js?v=$NEW_IMPORT_VERSION/" dist/ultra-vehicle-card.js
         
-        # Update other files
-        for file in ultra-vehicle-card-editor.js localize.js; do
+        # Update other files in dist folder
+        for file in dist/ultra-vehicle-card-editor.js dist/localize.js; do
           sed -i "s/version\.js?v=$IMPORT_VERSION/version.js?v=$NEW_IMPORT_VERSION/" $file
         done
 
