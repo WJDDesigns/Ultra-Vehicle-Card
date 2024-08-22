@@ -11,7 +11,10 @@ jobs:
   update-version:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.VERSIONING_BOT }}
+        fetch-depth: 0
 
     - name: Update version in files
       run: |
@@ -31,11 +34,13 @@ jobs:
         done
 
     - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v5
       with:
+        token: ${{ secrets.VERSIONING_BOT }}
+        commit-message: Prepare release ${{ github.event.inputs.version }}
         title: Prepare release ${{ github.event.inputs.version }}
         body: |
           This PR updates the version number to ${{ github.event.inputs.version }} and increments the import version.
           Please review and merge this PR before creating the release.
         branch: prepare-release-${{ github.event.inputs.version }}
-        base: main
+        delete-branch: true
