@@ -10,10 +10,12 @@ on:
 jobs:
   update-version:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
     - uses: actions/checkout@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
         fetch-depth: 0
 
     - name: Update version in files
@@ -36,7 +38,7 @@ jobs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
       with:
-        token: ${{ secrets.VERSIONING_BOT }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: Prepare release ${{ github.event.inputs.version }}
         title: Prepare release ${{ github.event.inputs.version }}
         body: |
