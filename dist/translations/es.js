@@ -26,6 +26,7 @@ export default {
   },
   editor: {
     title: "Tarjeta Ultra de Vehículo",
+    card_title: "Título de la Tarjeta",
     vehicle_type: "Tipo de Vehículo",
     unit_type: "Tipo de Unidad",
     show_battery: "Mostrar Batería",

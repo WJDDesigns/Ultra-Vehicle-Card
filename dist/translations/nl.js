@@ -26,6 +26,7 @@ export default {
   },
   editor: {
     title: "Ultra Voertuigkaart",
+    card_title: "Kaarttitel",
     vehicle_type: "Voertuigtype",
     unit_type: "Eenheidstype",
     show_battery: "Toon Batterij",

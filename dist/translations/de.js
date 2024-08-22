@@ -26,6 +26,7 @@ export default {
   },
   editor: {
     title: "Ultra Fahrzeugkarte",
+    card_title: "Kartentitel",
     vehicle_type: "Fahrzeugtyp",
     unit_type: "Einheitentyp",
     show_battery: "Batterie anzeigen",

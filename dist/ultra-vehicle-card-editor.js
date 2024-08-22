@@ -256,7 +256,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   _renderBasicConfig() {
     return html`
       <div class="input-group">
-        <label for="title">${this.localize('editor.title')}</label>
+        <label for="title">${this.localize('editor.card_title')}</label>
         <input
           id="title"
           type="text"

@@ -26,6 +26,7 @@ export default {
   },
   editor: {
     title: "Ultra Fordonskort",
+    card_title: "Korttitel",
     vehicle_type: "Fordonstyp",
     unit_type: "Enhetstyp",
     show_battery: "Visa Batteri",

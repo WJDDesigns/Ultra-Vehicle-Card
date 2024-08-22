@@ -26,7 +26,7 @@ export default {
   },
   editor: {
     title: "Ultra Vehicle Card",
-    vehicle_type: "Vehicle Type",
+    card_title: "Card Title",
     unit_type: "Unit Type",
     show_battery: "Show Battery",
     show_battery_range: "Show Battery Range",

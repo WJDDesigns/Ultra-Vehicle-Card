@@ -6,6 +6,4 @@ function setVersion(value) {
   version = value;
 }
 
-setVersion('1.5.4-beta');
-
 export { version, setVersion };
