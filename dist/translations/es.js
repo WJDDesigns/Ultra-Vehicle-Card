@@ -44,7 +44,7 @@ export default {
     main_image: "Imagen Principal",
     charging_image: "Imagen de Carga",
     enter_image_url: "Ingrese URL de la imagen",
-    upload_image: "Subir Imagen",
+    upload_image: "Subir imagen",
     entity_settings: "Configuración de Entidades",
     battery_level: "Nivel de Batería",
     battery_range: "Autonomía de Batería",
@@ -63,8 +63,8 @@ export default {
     inactive_icon: "Icono Inactivo",
     active_icon: "Icono Activo",
     no_icon: "SIN ICONO",
-    inactive_icon_color: "Color de Icono Inactivo",
-    active_icon_color: "Color de Icono Activo",
+    inactive_icon_color: "Color del icono inactivo",
+    active_icon_color: "Color del icono activo",
     icon_style: "Estilo de Icono",
     icon_size: "Tamaño de Icono",
     icon_size_description: "Tamaño del icono.",
@@ -95,8 +95,8 @@ export default {
     custom_colors_description: "Personalice los colores de varios elementos en la tarjeta para que coincidan con su estilo o tema preferido.",
     row_separator: "Separador de Fila",
     add_row_separator: "Agregar Separador de Fila",
-    separator_color: "Color del Separador",
-    separator_color_description: "Elija el color para el separador de fila.",
+    separator_color: "Color del separador",
+    separator_color_description: "Elija el color para el separador de filas.",
     transparent: "Transparente",
     set_color: "Establecer Color",
     separator_height: "Altura del Separador",
@@ -109,11 +109,6 @@ export default {
     bottom: "Abajo",
     select_entity: "Seleccionar Entidad",
     entity_provides_image: "La Entidad Proporciona Imagen",
-    separator_color: "Color del Separador",
-    separator_color_description: "Elija el color para el separador de fila.",
-    inactive_icon_color: "Color de Icono Inactivo",
-    active_icon_color: "Color de Icono Activo",
-    custom_colors_description: "Personalice los colores de varios elementos en la tarjeta para que coincidan con su estilo o tema preferido.",
     formatted_entities: "Entidades Formateadas",
     formatted_entities_description: "Limpie los valores de las entidades redondeando números, reemplazando guiones bajos con espacios, capitalizando palabras y agregando comas a números grandes.",
     toggle: "Alternar",
@@ -122,6 +117,121 @@ export default {
     trigger: "Activar",
     fuel_level_description: "Seleccione la entidad que representa el nivel de combustible de su vehículo.",
     fuel_range_description: "Seleccione la entidad que representa la autonomía de combustible restante de su vehículo.",
-    engine_on_description: "Seleccione la entidad que indica si el motor de su vehículo está actualmente en funcionamiento."
+    engine_on_description: "Seleccione la entidad que indica si el motor de su vehículo está actualmente en funcionamiento.",
+    top: "Arriba"
+  },
+  device_class: {
+    battery: {
+      on: "Baja",
+      off: "Normal"
+    },
+    battery_charging: {
+      on: "Cargando",
+      off: "No Cargando"
+    },
+    carbon_monoxide: {
+      on: "Detectado",
+      off: "Despejado"
+    },
+    cold: {
+      on: "Frío",
+      off: "Normal"
+    },
+    connectivity: {
+      on: "Conectado",
+      off: "Desconectado"
+    },
+    door: {
+      on: "Abierta",
+      off: "Cerrada"
+    },
+    garage_door: {
+      on: "Abierta",
+      off: "Cerrada"
+    },
+    gas: {
+      on: "Detectado",
+      off: "Despejado"
+    },
+    heat: {
+      on: "Caliente",
+      off: "Normal"
+    },
+    light: {
+      on: "Detectada",
+      off: "Despejado"
+    },
+    lock: {
+      on: "Desbloqueado",
+      off: "Bloqueado"
+    },
+    moisture: {
+      on: "Húmedo",
+      off: "Seco"
+    },
+    motion: {
+      on: "Detectado",
+      off: "Despejado"
+    },
+    moving: {
+      on: "En movimiento",
+      off: "Detenido"
+    },
+    occupancy: {
+      on: "Ocupado",
+      off: "Despejado"
+    },
+    opening: {
+      on: "Abierto",
+      off: "Cerrado"
+    },
+    plug: {
+      on: "Enchufado",
+      off: "Desenchufado"
+    },
+    power: {
+      on: "Detectado",
+      off: "Sin energía"
+    },
+    presence: {
+      on: "En casa",
+      off: "Fuera"
+    },
+    problem: {
+      on: "Problema",
+      off: "OK"
+    },
+    running: {
+      on: "Funcionando",
+      off: "No funcionando"
+    },
+    safety: {
+      on: "Inseguro",
+      off: "Seguro"
+    },
+    smoke: {
+      on: "Detectado",
+      off: "Despejado"
+    },
+    sound: {
+      on: "Detectado",
+      off: "Despejado"
+    },
+    tamper: {
+      on: "Detectado",
+      off: "Despejado"
+    },
+    update: {
+      on: "Disponible",
+      off: "Actualizado"
+    },
+    vibration: {
+      on: "Detectado",
+      off: "Despejado"
+    },
+    window: {
+      on: "Abierta",
+      off: "Cerrada"
+    }
   }
 };

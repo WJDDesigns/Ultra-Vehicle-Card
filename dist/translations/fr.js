@@ -8,7 +8,16 @@ export default {
     location: "Emplacement",
     car_state: "État de la voiture",
     charge_limit: "Limite de charge",
-    engine_on: "Moteur allumé"
+    engine_on: "Moteur allumé",
+    away: "Absent",
+    charging_end_time: "Fin de charge",
+    charging_ending_soon: "Charge se terminant bientôt",
+    charging_ending_in: "Charge se terminant dans",
+    charging_until: "Charge jusqu'à",
+    minutes: "minutes",
+    minute: "minute",
+    hours: "heures",
+    hour: "heure"
   },
   vehicle_types: {
     ev: "Véhicule électrique",
@@ -121,9 +130,123 @@ export default {
     trigger: "Déclencher",
     none: "Aucun",
     formatted_entities: "Entités formatées",
-      formatted_entities_description: "Nettoyez les valeurs des entités en arrondissant les nombres, en remplaçant les underscores par des espaces, en capitalisant les mots et en ajoutant des virgules aux grands nombres.",
-        fuel_level_description: "Sélectionnez l'entité qui représente le niveau de carburant de votre véhicule.",
-        fuel_range_description: "Sélectionnez l'entité qui représente l'autonomie restante de votre véhicule à carburant.",
-        engine_on_description: "Sélectionnez l'entité qui indique si le moteur de votre véhicule est actuellement en marche."
+    formatted_entities_description: "Nettoyez les valeurs des entités en arrondissant les nombres, en remplaçant les underscores par des espaces, en capitalisant les mots et en ajoutant des virgules aux grands nombres.",
+    fuel_level_description: "Sélectionnez l'entité qui représente le niveau de carburant de votre véhicule.",
+    fuel_range_description: "Sélectionnez l'entité qui représente l'autonomie restante de votre véhicule à carburant.",
+    engine_on_description: "Sélectionnez l'entité qui indique si le moteur de votre véhicule est actuellement en marche."
+  },
+  device_class: {
+    battery: {
+      on: "Faible",
+      off: "Normal"
+    },
+    battery_charging: {
+      on: "En charge",
+      off: "Pas en charge"
+    },
+    carbon_monoxide: {
+      on: "Détecté",
+      off: "Aucun"
+    },
+    cold: {
+      on: "Froid",
+      off: "Normal"
+    },
+    connectivity: {
+      on: "Connecté",
+      off: "Déconnecté"
+    },
+    door: {
+      on: "Ouverte",
+      off: "Fermée"
+    },
+    garage_door: {
+      on: "Ouverte",
+      off: "Fermée"
+    },
+    gas: {
+      on: "Détecté",
+      off: "Aucun"
+    },
+    heat: {
+      on: "Chaud",
+      off: "Normal"
+    },
+    light: {
+      on: "Détectée",
+      off: "Aucune"
+    },
+    lock: {
+      on: "Déverrouillé",
+      off: "Verrouillé"
+    },
+    moisture: {
+      on: "Humide",
+      off: "Sec"
+    },
+    motion: {
+      on: "Détecté",
+      off: "Aucun"
+    },
+    moving: {
+      on: "En mouvement",
+      off: "Arrêté"
+    },
+    occupancy: {
+      on: "Occupé",
+      off: "Libre"
+    },
+    opening: {
+      on: "Ouvert",
+      off: "Fermé"
+    },
+    plug: {
+      on: "Branché",
+      off: "Débranché"
+    },
+    power: {
+      on: "Détecté",
+      off: "Pas d'alimentation"
+    },
+    presence: {
+      on: "Présent",
+      off: "Absent"
+    },
+    problem: {
+      on: "Problème",
+      off: "OK"
+    },
+    running: {
+      on: "En marche",
+      off: "Arrêté"
+    },
+    safety: {
+      on: "Dangereux",
+      off: "Sûr"
+    },
+    smoke: {
+      on: "Détecté",
+      off: "Aucun"
+    },
+    sound: {
+      on: "Détecté",
+      off: "Aucun"
+    },
+    tamper: {
+      on: "Détecté",
+      off: "Aucun"
+    },
+    update: {
+      on: "Disponible",
+      off: "À jour"
+    },
+    vibration: {
+      on: "Détecté",
+      off: "Aucun"
+    },
+    window: {
+      on: "Ouverte",
+      off: "Fermée"
+    }
   }
 }

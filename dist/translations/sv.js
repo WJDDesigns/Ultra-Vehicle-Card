@@ -95,8 +95,8 @@ export default {
     custom_colors_description: "Anpassa färgerna på olika element i kortet för att matcha din föredragna stil eller tema.",
     row_separator: "Radavskiljare",
     add_row_separator: "Lägg till radavskiljare",
-    separator_color: "Avskiljarfärg",
-    separator_color_description: "Välj färg för radavskiljaren.",
+    separator_color: "Separatorfärg",
+    separator_color_description: "Välj färg för radseparatorn.",
     transparent: "Transparent",
     set_color: "Ställ in färg",
     separator_height: "Avskiljarhöjd",
@@ -115,6 +115,122 @@ export default {
     trigger: "Utlösa",
     fuel_level_description: "Välj enheten som representerar bränslenivån för ditt fordon.",
     fuel_range_description: "Välj enheten som representerar återstående bränsleräckvidd för ditt fordon.",
-    engine_on_description: "Välj enheten som indikerar om motorn på ditt fordon för närvarande är igång."
+    engine_on_description: "Välj enheten som indikerar om motorn på ditt fordon för närvarande är igång.",
+    select_entity: "Välj en enhet",
+    entity_provides_image: "Denna enhet tillhandahåller bilden för visningen."
+  },
+  device_class: {
+    battery: {
+      on: "Låg",
+      off: "Normal"
+    },
+    battery_charging: {
+      on: "Laddar",
+      off: "Laddar inte"
+    },
+    carbon_monoxide: {
+      on: "Detekterad",
+      off: "Klar"
+    },
+    cold: {
+      on: "Kall",
+      off: "Normal"
+    },
+    connectivity: {
+      on: "Ansluten",
+      off: "Frånkopplad"
+    },
+    door: {
+      on: "Öppen",
+      off: "Stängd"
+    },
+    garage_door: {
+      on: "Öppen",
+      off: "Stängd"
+    },
+    gas: {
+      on: "Detekterad",
+      off: "Klar"
+    },
+    heat: {
+      on: "Varm",
+      off: "Normal"
+    },
+    light: {
+      on: "Detekterad",
+      off: "Klar"
+    },
+    lock: {
+      on: "Olåst",
+      off: "Låst"
+    },
+    moisture: {
+      on: "Fuktig",
+      off: "Torr"
+    },
+    motion: {
+      on: "Detekterad",
+      off: "Klar"
+    },
+    moving: {
+      on: "Rör sig",
+      off: "Stoppad"
+    },
+    occupancy: {
+      on: "Upptagen",
+      off: "Klar"
+    },
+    opening: {
+      on: "Öppen",
+      off: "Stängd"
+    },
+    plug: {
+      on: "Inkopplad",
+      off: "Urkopplad"
+    },
+    power: {
+      on: "Detekterad",
+      off: "Ingen ström"
+    },
+    presence: {
+      on: "Hemma",
+      off: "Borta"
+    },
+    problem: {
+      on: "Problem",
+      off: "OK"
+    },
+    running: {
+      on: "Kör",
+      off: "Kör inte"
+    },
+    safety: {
+      on: "Osäker",
+      off: "Säker"
+    },
+    smoke: {
+      on: "Detekterad",
+      off: "Klar"
+    },
+    sound: {
+      on: "Detekterad",
+      off: "Klar"
+    },
+    tamper: {
+      on: "Detekterad",
+      off: "Klar"
+    },
+    update: {
+      on: "Tillgänglig",
+      off: "Uppdaterad"
+    },
+    vibration: {
+      on: "Detekterad",
+      off: "Klar"
+    },
+    window: {
+      on: "Öppet",
+      off: "Stängt"
+    }
   }
-};
+}

@@ -68,6 +68,10 @@ export default {
     icon_size: "Icon Size",
     icon_size_description: "Size of the icon.",
     icon_label_position: "Icon Label Position",
+    left: "Left",
+    top: "Top",
+    right: "Right",
+    bottom: "Bottom",
     interaction: "Interaction",
     colors: "Colours",
     cardBackgroundColor: "Card Background Colour",
@@ -133,5 +137,119 @@ export default {
     fuel_level_description: "Select the entity that represents the fuel level of your vehicle.",
     fuel_range_description: "Select the entity that represents the remaining fuel range of your vehicle.",
     engine_on_description: "Select the entity that indicates whether your vehicle's engine is currently running."
+  },
+  device_class: {
+    battery: {
+      on: "Low",
+      off: "Normal"
+    },
+    battery_charging: {
+      on: "Charging",
+      off: "Not Charging"
+    },
+    carbon_monoxide: {
+      on: "Detected",
+      off: "Clear"
+    },
+    cold: {
+      on: "Cold",
+      off: "Normal"
+    },
+    connectivity: {
+      on: "Connected",
+      off: "Disconnected"
+    },
+    door: {
+      on: "Open",
+      off: "Closed"
+    },
+    garage_door: {
+      on: "Open",
+      off: "Closed"
+    },
+    gas: {
+      on: "Detected",
+      off: "Clear"
+    },
+    heat: {
+      on: "Hot",
+      off: "Normal"
+    },
+    light: {
+      on: "Detected",
+      off: "Clear"
+    },
+    lock: {
+      on: "Unlocked",
+      off: "Locked"
+    },
+    moisture: {
+      on: "Wet",
+      off: "Dry"
+    },
+    motion: {
+      on: "Detected",
+      off: "Clear"
+    },
+    moving: {
+      on: "Moving",
+      off: "Stopped"
+    },
+    occupancy: {
+      on: "Occupied",
+      off: "Clear"
+    },
+    opening: {
+      on: "Open",
+      off: "Closed"
+    },
+    plug: {
+      on: "Plugged In",
+      off: "Unplugged"
+    },
+    power: {
+      on: "Detected",
+      off: "No Power"
+    },
+    presence: {
+      on: "Home",
+      off: "Away"
+    },
+    problem: {
+      on: "Problem",
+      off: "OK"
+    },
+    running: {
+      on: "Running",
+      off: "Not Running"
+    },
+    safety: {
+      on: "Unsafe",
+      off: "Safe"
+    },
+    smoke: {
+      on: "Detected",
+      off: "Clear"
+    },
+    sound: {
+      on: "Detected",
+      off: "Clear"
+    },
+    tamper: {
+      on: "Detected",
+      off: "Clear"
+    },
+    update: {
+      on: "Available",
+      off: "Up-to-date"
+    },
+    vibration: {
+      on: "Detected",
+      off: "Clear"
+    },
+    window: {
+      on: "Open",
+      off: "Closed"
+    }
   }
 }

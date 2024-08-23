@@ -95,8 +95,8 @@ export default {
     custom_colors_description: "Pas de kleuren van verschillende elementen in de kaart aan om ze te laten passen bij uw voorkeuren of thema.",
     row_separator: "Rijscheiding",
     add_row_separator: "Rijscheiding Toevoegen",
-    separator_color: "Scheidingskleur",
-    separator_color_description: "Kies de kleur voor de rijscheiding.",
+    separator_color: "Kleur van de scheidingslijn",
+    separator_color_description: "Kies de kleur voor de scheidingslijn.",
     transparent: "Transparant",
     set_color: "Kleur Instellen",
     separator_height: "Scheidingshoogte",
@@ -109,10 +109,10 @@ export default {
     bottom: "Onder",
     select_entity: "Selecteer Entiteit",
     entity_provides_image: "Entiteit Levert Afbeelding",
-    separator_color: "Scheidingskleur",
-    separator_color_description: "Kies de kleur voor de rijscheiding.",
-    inactive_icon_color: "Inactieve Icoonkleur",
-    active_icon_color: "Actieve Icoonkleur",
+    separator_color: "Kleur van de scheidingslijn",
+    separator_color_description: "Kies de kleur voor de scheidingslijn.",
+    inactive_icon_color: "Kleur van inactief pictogram",
+    active_icon_color: "Kleur van actief pictogram",
     custom_colors_description: "Pas de kleuren van verschillende elementen in de kaart aan om ze te laten passen bij uw voorkeuren of thema.",
     formatted_entities: "Geformatteerde Entiteiten",
     formatted_entities_description: "Maak entiteitswaarden op door getallen af te ronden, onderstrepingstekens te vervangen door spaties, woorden met hoofdletters te schrijven en komma's toe te voegen aan grote getallen.",
@@ -123,5 +123,119 @@ export default {
     fuel_level_description: "Selecteer de entiteit die het brandstofniveau van uw voertuig weergeeft.",
     fuel_range_description: "Selecteer de entiteit die het resterende brandstofbereik van uw voertuig weergeeft.",
     engine_on_description: "Selecteer de entiteit die aangeeft of de motor van uw voertuig momenteel draait."
+  },
+  device_class: {
+    battery: {
+      on: "Laag",
+      off: "Normaal"
+    },
+    battery_charging: {
+      on: "Opladen",
+      off: "Niet aan het opladen"
+    },
+    carbon_monoxide: {
+      on: "Gedetecteerd",
+      off: "Vrij"
+    },
+    cold: {
+      on: "Koud",
+      off: "Normaal"
+    },
+    connectivity: {
+      on: "Verbonden",
+      off: "Niet verbonden"
+    },
+    door: {
+      on: "Open",
+      off: "Dicht"
+    },
+    garage_door: {
+      on: "Open",
+      off: "Dicht"
+    },
+    gas: {
+      on: "Gedetecteerd",
+      off: "Vrij"
+    },
+    heat: {
+      on: "Heet",
+      off: "Normaal"
+    },
+    light: {
+      on: "Gedetecteerd",
+      off: "Vrij"
+    },
+    lock: {
+      on: "Ontgrendeld",
+      off: "Vergrendeld"
+    },
+    moisture: {
+      on: "Nat",
+      off: "Droog"
+    },
+    motion: {
+      on: "Gedetecteerd",
+      off: "Vrij"
+    },
+    moving: {
+      on: "Bewegend",
+      off: "Gestopt"
+    },
+    occupancy: {
+      on: "Bezet",
+      off: "Vrij"
+    },
+    opening: {
+      on: "Open",
+      off: "Dicht"
+    },
+    plug: {
+      on: "Aangesloten",
+      off: "Niet aangesloten"
+    },
+    power: {
+      on: "Gedetecteerd",
+      off: "Geen stroom"
+    },
+    presence: {
+      on: "Thuis",
+      off: "Afwezig"
+    },
+    problem: {
+      on: "Probleem",
+      off: "OK"
+    },
+    running: {
+      on: "Actief",
+      off: "Inactief"
+    },
+    safety: {
+      on: "Onveilig",
+      off: "Veilig"
+    },
+    smoke: {
+      on: "Gedetecteerd",
+      off: "Vrij"
+    },
+    sound: {
+      on: "Gedetecteerd",
+      off: "Vrij"
+    },
+    tamper: {
+      on: "Gedetecteerd",
+      off: "Vrij"
+    },
+    update: {
+      on: "Beschikbaar",
+      off: "Bijgewerkt"
+    },
+    vibration: {
+      on: "Gedetecteerd",
+      off: "Vrij"
+    },
+    window: {
+      on: "Open",
+      off: "Dicht"
+    }
   }
 };

@@ -109,11 +109,6 @@ export default {
     bottom: "Unten",
     select_entity: "Entität auswählen",
     entity_provides_image: "Entität liefert Bild",
-    separator_color: "Trennfarbe",
-    separator_color_description: "Wählen Sie die Farbe für den Zeilentrenner.",
-    inactive_icon_color: "Inaktive Symbolfarbe",
-    active_icon_color: "Aktive Symbolfarbe",
-    custom_colors_description: "Passen Sie die Farben verschiedener Elemente in der Karte an Ihren bevorzugten Stil oder Ihr Thema an.",
     formatted_entities: "Formatierte Entitäten",
     formatted_entities_description: "Bereinigen Sie Entitätswerte durch Runden von Zahlen, Ersetzen von Unterstrichen durch Leerzeichen, Großschreibung von Wörtern und Hinzufügen von Kommas zu großen Zahlen.",
     toggle: "Umschalten",
@@ -123,5 +118,119 @@ export default {
     fuel_level_description: "Wählen Sie die Entität, die den Kraftstoffstand Ihres Fahrzeugs darstellt.",
     fuel_range_description: "Wählen Sie die Entität, die die verbleibende Kraftstoffreichweite Ihres Fahrzeugs darstellt.",
     engine_on_description: "Wählen Sie die Entität, die anzeigt, ob der Motor Ihres Fahrzeugs derzeit läuft."
+  },
+  device_class: {
+    battery: {
+      on: "Niedrig",
+      off: "Normal"
+    },
+    battery_charging: {
+      on: "Lädt",
+      off: "Lädt nicht"
+    },
+    carbon_monoxide: {
+      on: "Erkannt",
+      off: "Klar"
+    },
+    cold: {
+      on: "Kalt",
+      off: "Normal"
+    },
+    connectivity: {
+      on: "Verbunden",
+      off: "Getrennt"
+    },
+    door: {
+      on: "Offen",
+      off: "Geschlossen"
+    },
+    garage_door: {
+      on: "Offen",
+      off: "Geschlossen"
+    },
+    gas: {
+      on: "Erkannt",
+      off: "Klar"
+    },
+    heat: {
+      on: "Heiß",
+      off: "Normal"
+    },
+    light: {
+      on: "Erkannt",
+      off: "Klar"
+    },
+    lock: {
+      on: "Entriegelt",
+      off: "Verriegelt"
+    },
+    moisture: {
+      on: "Feucht",
+      off: "Trocken"
+    },
+    motion: {
+      on: "Erkannt",
+      off: "Klar"
+    },
+    moving: {
+      on: "Bewegt sich",
+      off: "Gestoppt"
+    },
+    occupancy: {
+      on: "Belegt",
+      off: "Frei"
+    },
+    opening: {
+      on: "Offen",
+      off: "Geschlossen"
+    },
+    plug: {
+      on: "Eingesteckt",
+      off: "Ausgesteckt"
+    },
+    power: {
+      on: "Erkannt",
+      off: "Kein Strom"
+    },
+    presence: {
+      on: "Zuhause",
+      off: "Abwesend"
+    },
+    problem: {
+      on: "Problem",
+      off: "OK"
+    },
+    running: {
+      on: "Läuft",
+      off: "Läuft nicht"
+    },
+    safety: {
+      on: "Unsicher",
+      off: "Sicher"
+    },
+    smoke: {
+      on: "Erkannt",
+      off: "Klar"
+    },
+    sound: {
+      on: "Erkannt",
+      off: "Klar"
+    },
+    tamper: {
+      on: "Erkannt",
+      off: "Klar"
+    },
+    update: {
+      on: "Verfügbar",
+      off: "Aktuell"
+    },
+    vibration: {
+      on: "Erkannt",
+      off: "Klar"
+    },
+    window: {
+      on: "Offen",
+      off: "Geschlossen"
+    }
   }
 };
