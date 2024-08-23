@@ -17,7 +17,13 @@ export default {
     minutes: "Minuten",
     minute: "Minute",
     hours: "Stunden",
-    hour: "Stunde"
+    hour: "Stunde",
+    state: {
+      default: {
+        on: "An",
+        off: "Aus"
+      }
+    }
   },
   vehicle_types: {
     ev: "Elektrofahrzeug",

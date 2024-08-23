@@ -17,7 +17,13 @@ export default {
     minutes: "minuter",
     minute: "minut",
     hours: "timmar",
-    hour: "timme"
+    hour: "timme",
+    state: {
+      default: {
+        on: "På",
+        off: "Av"
+      }
+    }
   },
   vehicle_types: {
     ev: "Elbil",

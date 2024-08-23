@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version, setVersion } from "./version.js?v=4";
+import { version, setVersion } from "./version.js?v=3";
 setVersion("V1.5.6");
 
 const UltraVehicleCardEditor = await import(
@@ -410,20 +410,11 @@ class UltraVehicleCard extends localize(LitElement) {
         return (
           this.hass.localize(`component.binary_sensor.state.${key}`) ||
           this.localize(key) ||
-          (isOn
-            ? this.localize("state.default.on")
-            : this.localize("state.default.off"))
+          (isOn ? "On" : "Off")
         );
       }
-      // Fallback to friendly name or custom on/off states
-      const friendlyName = attributes.friendly_name;
-      const customOn = attributes.state_on || attributes.on || "on";
-      const customOff = attributes.state_off || attributes.off || "off";
-      return isOn
-        ? friendlyName || customOn
-        : friendlyName
-        ? `${this.localize("common.not")} ${friendlyName}`
-        : customOff;
+      // For binary sensors without device class, just return "On" or "Off"
+      return isOn ? "On" : "Off";
     }
 
     // Handle sensors with units
@@ -1036,26 +1027,51 @@ class UltraVehicleCard extends localize(LitElement) {
   }
 
   // Add this method to the UltraVehicleCard class
-  _formatEntityValue(value, isFormatted) {
-    if (!isFormatted) return value;
+  _formatEntityValue(entity, useFormattedEntities) {
+    if (!entity) return null;
 
-    if (typeof value === "string") {
-      // Check if it's a date string
-      if (this._isISODateString(value)) {
-        return this._formatChargingEndTime(value);
+    const state = entity.state;
+    const attributes = entity.attributes || {};
+    const deviceClass = attributes.device_class;
+    const unitOfMeasurement = attributes.unit_of_measurement;
+
+    // Handle binary sensors
+    if (entity.entity_id.split(".")[0] === "binary_sensor") {
+      const isOn = state.toLowerCase() === "on";
+      if (deviceClass) {
+        const key = `device_class.${deviceClass}.${isOn ? "on" : "off"}`;
+        return (
+          this.hass.localize(`component.binary_sensor.state.${key}`) ||
+          this.localize(key) ||
+          (isOn ? "On" : "Off")
+        );
       }
-      // Return the original string value without modification
-      return value;
+      // For binary sensors without device class, just return "On" or "Off"
+      return isOn ? "On" : "Off";
     }
 
-    if (typeof value === "number" || !isNaN(parseFloat(value))) {
-      // Convert to number if it's a numeric string
-      const numValue = parseFloat(value);
+    if (!useFormattedEntities) return state;
+
+    if (typeof state === "string") {
+      // Check if it's a date string
+      if (this._isISODateString(state)) {
+        return this._formatChargingEndTime(state);
+      }
+      // Check if it's a numeric string
+      if (!isNaN(parseFloat(state))) {
+        // Convert to number and format
+        return this._formatNumberWithCommas(Math.round(parseFloat(state)));
+      }
+      // Return other strings as-is
+      return state;
+    }
+
+    if (typeof state === "number") {
       // Round to whole number and format with commas
-      return this._formatNumberWithCommas(Math.round(numValue));
+      return this._formatNumberWithCommas(Math.round(state));
     }
 
-    return value;
+    return state;
   }
 
   // Add this method to check if a string is an ISO date string
@@ -1594,55 +1610,34 @@ class UltraVehicleCard extends localize(LitElement) {
         return (
           this.hass.localize(`component.binary_sensor.state.${key}`) ||
           this.localize(key) ||
-          (isOn
-            ? this.localize("state.default.on")
-            : this.localize("state.default.off"))
+          (isOn ? "On" : "Off")
         );
       }
-      // Fallback to friendly name or custom on/off states
-      const friendlyName = attributes.friendly_name;
-      const customOn = attributes.state_on || attributes.on || "on";
-      const customOff = attributes.state_off || attributes.off || "off";
-      return isOn
-        ? friendlyName || customOn
-        : friendlyName
-        ? `${this.localize("common.not")} ${friendlyName}`
-        : customOff;
+      // For binary sensors without device class, just return "On" or "Off"
+      return isOn ? "On" : "Off";
     }
 
-    // Handle sensors with units
-    if (unitOfMeasurement) {
-      const numericValue = parseFloat(state);
-      if (!isNaN(numericValue)) {
-        let formattedValue;
-        if (useFormattedEntities) {
-          // Round the number and add commas
-          formattedValue = this._formatNumberWithCommas(
-            Math.round(numericValue)
-          );
-        } else {
-          formattedValue = numericValue;
-        }
-        return `${formattedValue} ${unitOfMeasurement}`;
+    if (!useFormattedEntities) return state;
+
+    if (typeof state === "string") {
+      // Check if it's a date string
+      if (this._isISODateString(state)) {
+        return this._formatChargingEndTime(state);
       }
+      // Check if it's a numeric string
+      if (!isNaN(parseFloat(state))) {
+        // Convert to number and format
+        return this._formatNumberWithCommas(Math.round(parseFloat(state)));
+      }
+      // Return other strings as-is
+      return state;
     }
 
-    // Handle numeric values without units
-    const numericValue = parseFloat(state);
-    if (!isNaN(numericValue) && useFormattedEntities) {
-      return this._formatNumberWithCommas(Math.round(numericValue));
+    if (typeof state === "number") {
+      // Round to whole number and format with commas
+      return this._formatNumberWithCommas(Math.round(state));
     }
 
-    // Handle specific device classes
-    switch (deviceClass) {
-      case "timestamp":
-        return this._formatTimestamp(state);
-      case "date":
-        return this._formatDate(state);
-      // Add more device classes as needed
-    }
-
-    // For other types, return the state as is
     return state;
   }
 
