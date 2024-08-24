@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version, setVersion } from "./version.js?v=4";
+import { version, setVersion } from "./version.js?v=5";
 setVersion("V1.5.7");
 
 const UltraVehicleCardEditor = await import(
