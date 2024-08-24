@@ -1750,21 +1750,17 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   _handleImageSourceChange(configKey, newType) {
     const imageTypeKey = `${configKey}_type`;
-    let newValue = "";
+    this._updateConfig(imageTypeKey, newType);
 
-    if (newType === "entity") {
-      newValue = this.config[configKey] || ""; // Preserve existing entity if there is one
-    } else if (newType === "image") {
-      newValue = this.config[configKey] || DEFAULT_IMAGE_URL;
+    if (newType === "none") {
+      this._updateConfig(configKey, "");
+    } else if (newType === "image" && !this.config[configKey]) {
+      this._updateConfig(configKey, DEFAULT_IMAGE_URL);
+    } else if (newType === "entity") {
+      this._updateConfig(configKey, "");
     }
 
-    this.config = {
-      ...this.config,
-      [imageTypeKey]: newType,
-      [configKey]: newValue,
-    };
-
-    this.configChanged(this.config);
+    this.requestUpdate();
   }
 
   _entityPicked(ev, configKey) {

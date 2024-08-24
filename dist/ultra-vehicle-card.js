@@ -417,7 +417,27 @@ class UltraVehicleCard extends localize(LitElement) {
       return isOn ? "On" : "Off";
     }
 
-    // Handle sensors with units
+    if (!useFormattedEntities) return state;
+
+    // Format Device Tracker
+    if (entity.entity_id.startsWith('device_tracker.')) {
+      const locationName = attributes.location_name || state;
+      
+      if (!useFormattedEntities) {
+        return locationName;
+      }
+      
+      if (locationName.toLowerCase() === 'home') {
+        return 'Home';
+      } else if (locationName.toLowerCase() === 'not_home') {
+        return 'Away';
+      } else {
+        // This handles custom zones
+        return locationName.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      }
+    }
+
+    // Handle numeric values with units
     if (unitOfMeasurement) {
       const numericValue = parseFloat(state);
       if (!isNaN(numericValue)) {
@@ -428,8 +448,9 @@ class UltraVehicleCard extends localize(LitElement) {
             Math.round(numericValue)
           );
         } else {
-          formattedValue = numericValue;
+          formattedValue = numericValue.toString();
         }
+        // Always append the unit, regardless of formatting
         return `${formattedValue} ${unitOfMeasurement}`;
       }
     }
@@ -915,7 +936,7 @@ class UltraVehicleCard extends localize(LitElement) {
                   icon="mdi:map-marker"
                   style="color: ${infoTextColor};"
                 ></ha-icon>
-                ${location}
+                ${this._getLocalizedState(locationEntity.state)}
               </span>
             `
           : ""}
@@ -937,14 +958,11 @@ class UltraVehicleCard extends localize(LitElement) {
     `;
   }
 
-  _formatLocationState(state) {
-    // Check for "not_home" (case insensitive) and replace with "Away"
-    if (state.toLowerCase() === "not_home") {
-      return this.localize("common.away");
+  _getLocalizedState(state) {
+    if (state === "not_home") {
+      return this.hass.localize("state.device_tracker.not_home") || this.localize("common.away");
     }
-
-    // For other states, replace underscores with spaces
-    return state.replace(/_/g, " ");
+    return this.hass.localize(`state.device_tracker.${state}`) || state;
   }
 
   _renderVehicleImage() {
@@ -960,11 +978,13 @@ class UltraVehicleCard extends localize(LitElement) {
         this.config.charging_image_url_type === "entity"
           ? this._getImageUrlFromEntity(this.config.charging_image_entity)
           : this.config.charging_image_url;
-    } else {
+    } else if (this.config.image_url_type !== "none") {
       imageUrl =
         this.config.image_url_type === "entity"
           ? this._getImageUrlFromEntity(this.config.image_entity)
           : this.config.image_url;
+    } else {
+      return ''; // Return empty string if both image types are set to "none"
     }
 
     // Process the imageUrl if it starts with "entity:"
@@ -973,10 +993,14 @@ class UltraVehicleCard extends localize(LitElement) {
       imageUrl = this._getImageUrlFromEntity(entityId);
     }
 
-    // Use the default image only if no valid URL is provided
+    // Use the default image only if no valid URL is provided and image type is not "none"
     const defaultImageUrl =
       "https://github.com/user-attachments/assets/4ef72288-5ee9-4fa6-b2f3-c34c4160cf42";
-    const finalImageUrl = imageUrl || defaultImageUrl;
+    const finalImageUrl = imageUrl || (this.config.image_url_type !== "none" ? defaultImageUrl : '');
+
+    if (!finalImageUrl) {
+      return ''; // Return empty string if there's no image to display
+    }
 
     return html`
       <div
@@ -1052,6 +1076,24 @@ class UltraVehicleCard extends localize(LitElement) {
 
     if (!useFormattedEntities) return state;
 
+    // Format Device Tracker
+    if (entity.entity_id.startsWith('device_tracker.')) {
+      const locationName = attributes.location_name || state;
+      
+      if (!useFormattedEntities) {
+        return locationName;
+      }
+      
+      if (locationName.toLowerCase() === 'home') {
+        return 'Home';
+      } else if (locationName.toLowerCase() === 'not_home') {
+        return 'Away';
+      } else {
+        // This handles custom zones
+        return locationName.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      }
+    }
+
     if (typeof state === "string") {
       // Check if it's a date string
       if (this._isISODateString(state)) {
@@ -1069,6 +1111,24 @@ class UltraVehicleCard extends localize(LitElement) {
     if (typeof state === "number") {
       // Round to whole number and format with commas
       return this._formatNumberWithCommas(Math.round(state));
+    }
+
+    // Handle numeric values with units
+    if (unitOfMeasurement) {
+      const numericValue = parseFloat(state);
+      if (!isNaN(numericValue)) {
+        let formattedValue;
+        if (useFormattedEntities) {
+          // Round the number and add commas
+          formattedValue = this._formatNumberWithCommas(
+            Math.round(numericValue)
+          );
+        } else {
+          formattedValue = numericValue.toString();
+        }
+        // Always append the unit, regardless of formatting
+        return `${formattedValue} ${unitOfMeasurement}`;
+      }
     }
 
     return state;
@@ -1599,14 +1659,29 @@ class UltraVehicleCard extends localize(LitElement) {
 
     const state = entity.state;
     const attributes = entity.attributes || {};
-    const deviceClass = attributes.device_class;
     const unitOfMeasurement = attributes.unit_of_measurement;
+
+    // Handle numeric values with units
+    if (unitOfMeasurement) {
+      const numericValue = parseFloat(state);
+      if (!isNaN(numericValue)) {
+        let formattedValue;
+        if (useFormattedEntities) {
+          // Round the number and add commas
+          formattedValue = this._formatNumberWithCommas(Math.round(numericValue));
+        } else {
+          formattedValue = numericValue.toString();
+        }
+        // Always append the unit, regardless of formatting
+        return `${formattedValue} ${unitOfMeasurement}`;
+      }
+    }
 
     // Handle binary sensors
     if (entity.entity_id.split(".")[0] === "binary_sensor") {
       const isOn = state.toLowerCase() === "on";
-      if (deviceClass) {
-        const key = `device_class.${deviceClass}.${isOn ? "on" : "off"}`;
+      if (attributes.device_class) {
+        const key = `device_class.${attributes.device_class}.${isOn ? "on" : "off"}`;
         return (
           this.hass.localize(`component.binary_sensor.state.${key}`) ||
           this.localize(key) ||
@@ -1618,6 +1693,24 @@ class UltraVehicleCard extends localize(LitElement) {
     }
 
     if (!useFormattedEntities) return state;
+
+    // Format Device Tracker
+    if (entity.entity_id.startsWith('device_tracker.')) {
+      const locationName = attributes.location_name || state;
+      
+      if (!useFormattedEntities) {
+        return locationName;
+      }
+      
+      if (locationName.toLowerCase() === 'home') {
+        return 'Home';
+      } else if (locationName.toLowerCase() === 'not_home') {
+        return 'Away';
+      } else {
+        // This handles custom zones and 'away'
+        return locationName.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      }
+    }
 
     if (typeof state === "string") {
       // Check if it's a date string
@@ -1654,6 +1747,13 @@ class UltraVehicleCard extends localize(LitElement) {
   _roundNumber(value) {
     // Round to the nearest integer
     return Math.round(value).toString();
+  }
+
+  _getLocalizedState(state) {
+    if (state === "not_home") {
+      return this.hass.localize("state.device_tracker.not_home") || this.localize("common.away");
+    }
+    return this.hass.localize(`state.device_tracker.${state}`) || state;
   }
 }
 
