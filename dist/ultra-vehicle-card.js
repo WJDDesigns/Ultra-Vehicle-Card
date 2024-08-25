@@ -6,6 +6,9 @@ import {
 import { version, setVersion } from "./version.js?v=5";
 setVersion("V1.5.8");
 
+const sensorModule = await import("./sensors.js?v=" + version);
+const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn } = sensorModule;
+
 const UltraVehicleCardEditor = await import(
   "./ultra-vehicle-card-editor.js?v=" + version
 );
@@ -298,9 +301,11 @@ class UltraVehicleCard extends localize(LitElement) {
       batteryLevelEntity,
       ["battery_level", "level"]
     );
-    const batteryRange = this._formatEntityValue(
+    const batteryRange = formatEntityValue(
       batteryRangeEntity,
-      this.config.useFormattedEntities
+      this.config.useFormattedEntities,
+      this.hass,
+      this.localize
     );
     const isCharging = this._isCharging(chargingStatusEntity);
     const chargeLimit = this.config.show_charge_limit
@@ -394,103 +399,9 @@ class UltraVehicleCard extends localize(LitElement) {
     return this._roundNumber(parseFloat(entity.state));
   }
 
-  _formatEntityValue(entity, useFormattedEntities) {
-    if (!entity) return null;
-
-    const state = entity.state;
-    const attributes = entity.attributes || {};
-    const deviceClass = attributes.device_class;
-    const unitOfMeasurement = attributes.unit_of_measurement;
-
-    // Handle binary sensors
-    if (entity.entity_id.split(".")[0] === "binary_sensor") {
-      const isOn = state.toLowerCase() === "on";
-      if (deviceClass) {
-        const key = `device_class.${deviceClass}.${isOn ? "on" : "off"}`;
-        return (
-          this.hass.localize(`component.binary_sensor.state.${key}`) ||
-          this.localize(key) ||
-          (isOn ? "On" : "Off")
-        );
-      }
-      // For binary sensors without device class, just return "On" or "Off"
-      return isOn ? "On" : "Off";
-    }
-
-    if (!useFormattedEntities) return state;
-
-    // Format Device Tracker
-    if (entity.entity_id.startsWith('device_tracker.')) {
-      const locationName = attributes.location_name || state;
-      
-      if (!useFormattedEntities) {
-        return locationName;
-      }
-      
-      if (locationName.toLowerCase() === 'home') {
-        return 'Home';
-      } else if (locationName.toLowerCase() === 'not_home') {
-        return 'Away';
-      } else {
-        // This handles custom zones
-        return locationName.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-      }
-    }
-
-    // Handle numeric values with units
-    if (unitOfMeasurement) {
-      const numericValue = parseFloat(state);
-      if (!isNaN(numericValue)) {
-        let formattedValue;
-        if (useFormattedEntities) {
-          // Round the number and add commas
-          formattedValue = this._formatNumberWithCommas(
-            Math.round(numericValue)
-          );
-        } else {
-          formattedValue = numericValue.toString();
-        }
-        // Always append the unit, regardless of formatting
-        return `${formattedValue} ${unitOfMeasurement}`;
-      }
-    }
-
-    // Handle numeric values without units
-    const numericValue = parseFloat(state);
-    if (!isNaN(numericValue) && useFormattedEntities) {
-      return this._formatNumberWithCommas(Math.round(numericValue));
-    }
-
-    // Handle specific device classes
-    switch (deviceClass) {
-      case "timestamp":
-        return this._formatTimestamp(state);
-      case "date":
-        return this._formatDate(state);
-      // Add more device classes as needed
-    }
-
-    // For other types, return the state as is
-    return state;
-  }
-
-  _formatTimestamp(timestamp) {
-    const date = new Date(timestamp);
-    return date.toLocaleString();
-  }
-
-  _formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString();
-  }
-
   _roundNumber(value) {
     // Round to the nearest integer
     return Math.round(value).toString();
-  }
-
-  _formatNumberWithCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   _isCharging(chargingStatusEntity) {
@@ -534,10 +445,6 @@ class UltraVehicleCard extends localize(LitElement) {
     return chargingStates.includes(state);
   }
 
-  _formatBinarySensorState(state, attributes) {
-    return state;
-  }
-
   _renderFuelInfo() {
     const fuelLevelEntity = this.config.fuel_level_entity
       ? this.hass.states[this.config.fuel_level_entity]
@@ -552,11 +459,13 @@ class UltraVehicleCard extends localize(LitElement) {
     const fuelLevel = fuelLevelEntity
       ? parseFloat(fuelLevelEntity.state)
       : null;
-    const fuelRange = this._formatEntityValue(
+    const fuelRange = formatEntityValue(
       fuelRangeEntity,
-      this.config.useFormattedEntities
+      this.config.useFormattedEntities,
+      this.hass,
+      this.localize
     );
-    const isEngineOn = this._isEngineOn(engineOnEntity);
+    const isEngineOn = sensorModule.isEngineOn(engineOnEntity);
 
     return html`
       <div class="level-info">
@@ -619,13 +528,6 @@ class UltraVehicleCard extends localize(LitElement) {
     `;
   }
 
-  _isEngineOn(engineOnEntity) {
-    if (!engineOnEntity) return false;
-
-    const state = engineOnEntity.state.toLowerCase();
-    return ["on", "running", "true"].includes(state);
-  }
-
   _renderHybridInfo() {
     const batteryLevelEntity = this.config.battery_level_entity
       ? this.hass.states[this.config.battery_level_entity]
@@ -649,16 +551,20 @@ class UltraVehicleCard extends localize(LitElement) {
     const batteryLevel = batteryLevelEntity
       ? parseFloat(batteryLevelEntity.state)
       : null;
-    const batteryRange = this._formatEntityValue(
+    const batteryRange = formatEntityValue(
       batteryRangeEntity,
-      this.config.useFormattedEntities
+      this.config.useFormattedEntities,
+      this.hass,
+      this.localize
     );
     const fuelLevel = fuelLevelEntity
       ? parseFloat(fuelLevelEntity.state)
       : null;
-    const fuelRange = this._formatEntityValue(
+    const fuelRange = formatEntityValue(
       fuelRangeEntity,
-      this.config.useFormattedEntities
+      this.config.useFormattedEntities,
+      this.hass,
+      this.localize
     );
     const isCharging = this._isCharging(chargingStatusEntity);
     const chargeLimit =
@@ -829,9 +735,11 @@ class UltraVehicleCard extends localize(LitElement) {
     const carStateEntity = this.hass.states[this.config.car_state_entity];
     if (!carStateEntity) return "";
 
-    const state = this._formatEntityValue(
+    const state = formatEntityValue(
       carStateEntity,
-      this.config.useFormattedEntities
+      this.config.useFormattedEntities,
+      this.hass,
+      this.localize
     );
 
     return html`
@@ -891,10 +799,13 @@ class UltraVehicleCard extends localize(LitElement) {
     let location = null;
 
     if (locationEntity) {
-      location = this._formatEntityValue(
+      location = formatEntityValue(
         locationEntity,
-        this.config.useFormattedEntities
+        this.config.useFormattedEntities,
+        this.hass,
+        this.localize
       );
+      console.log('Formatted location:', location);
     }
 
     const mileageEntity = this.config.mileage_entity
@@ -902,9 +813,11 @@ class UltraVehicleCard extends localize(LitElement) {
       : null;
     let mileage = null;
     if (mileageEntity) {
-      mileage = this._formatEntityValue(
+      mileage = formatEntityValue(
         mileageEntity,
-        this.config.useFormattedEntities
+        this.config.useFormattedEntities,
+        this.hass,
+        this.localize
       );
     }
 
@@ -913,9 +826,11 @@ class UltraVehicleCard extends localize(LitElement) {
       : null;
     let carState = null;
     if (carStateEntity) {
-      carState = this._formatEntityValue(
+      carState = formatEntityValue(
         carStateEntity,
-        this.config.useFormattedEntities
+        this.config.useFormattedEntities,
+        this.hass,
+        this.localize
       );
     }
 
@@ -936,7 +851,7 @@ class UltraVehicleCard extends localize(LitElement) {
                   icon="mdi:map-marker"
                   style="color: ${infoTextColor};"
                 ></ha-icon>
-                ${this._getLocalizedState(locationEntity.state)}
+                ${location}
               </span>
             `
           : ""}
@@ -1050,90 +965,6 @@ class UltraVehicleCard extends localize(LitElement) {
     }
   }
 
-  // Add this method to the UltraVehicleCard class
-  _formatEntityValue(entity, useFormattedEntities) {
-    if (!entity) return null;
-
-    const state = entity.state;
-    const attributes = entity.attributes || {};
-    const deviceClass = attributes.device_class;
-    const unitOfMeasurement = attributes.unit_of_measurement;
-
-    // Handle binary sensors
-    if (entity.entity_id.split(".")[0] === "binary_sensor") {
-      const isOn = state.toLowerCase() === "on";
-      if (deviceClass) {
-        const key = `device_class.${deviceClass}.${isOn ? "on" : "off"}`;
-        return (
-          this.hass.localize(`component.binary_sensor.state.${key}`) ||
-          this.localize(key) ||
-          (isOn ? "On" : "Off")
-        );
-      }
-      // For binary sensors without device class, just return "On" or "Off"
-      return isOn ? "On" : "Off";
-    }
-
-    if (!useFormattedEntities) return state;
-
-    // Format Device Tracker
-    if (entity.entity_id.startsWith('device_tracker.')) {
-      const locationName = attributes.location_name || state;
-      
-      if (!useFormattedEntities) {
-        return locationName;
-      }
-      
-      if (locationName.toLowerCase() === 'home') {
-        return 'Home';
-      } else if (locationName.toLowerCase() === 'not_home') {
-        return 'Away';
-      } else {
-        // This handles custom zones
-        return locationName.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-      }
-    }
-
-    if (typeof state === "string") {
-      // Check if it's a date string
-      if (this._isISODateString(state)) {
-        return this._formatChargingEndTime(state);
-      }
-      // Check if it's a numeric string
-      if (!isNaN(parseFloat(state))) {
-        // Convert to number and format
-        return this._formatNumberWithCommas(Math.round(parseFloat(state)));
-      }
-      // Return other strings as-is
-      return state;
-    }
-
-    if (typeof state === "number") {
-      // Round to whole number and format with commas
-      return this._formatNumberWithCommas(Math.round(state));
-    }
-
-    // Handle numeric values with units
-    if (unitOfMeasurement) {
-      const numericValue = parseFloat(state);
-      if (!isNaN(numericValue)) {
-        let formattedValue;
-        if (useFormattedEntities) {
-          // Round the number and add commas
-          formattedValue = this._formatNumberWithCommas(
-            Math.round(numericValue)
-          );
-        } else {
-          formattedValue = numericValue.toString();
-        }
-        // Always append the unit, regardless of formatting
-        return `${formattedValue} ${unitOfMeasurement}`;
-      }
-    }
-
-    return state;
-  }
-
   // Add this method to check if a string is an ISO date string
   _isISODateString(str) {
     return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?([+-]\d{2}:\d{2}|Z)?$/.test(
@@ -1244,29 +1075,30 @@ class UltraVehicleCard extends localize(LitElement) {
     if (!state) return html``;
 
     const customIcon = this.config.custom_icons?.[entityId] || {};
-    const isActive = this._getIconActiveState(entityId);
-    const defaultIcon = "mdi:help-circle"; // Default icon if none is specified
-    const activeIcon =
-      customIcon.active === "no-icon"
-        ? ""
-        : customIcon.active || state.attributes.icon || defaultIcon;
-    const inactiveIcon =
-      customIcon.inactive === "no-icon"
-        ? ""
-        : customIcon.inactive || state.attributes.icon || defaultIcon;
-    const icon = isActive ? activeIcon : inactiveIcon;
+    const isActive = getIconActiveState(entityId, this.hass);
+    const defaultIcon = "mdi:help-circle";
+    
+    // Determine which icon to use
+    let icon;
+    if (isActive) {
+      icon = customIcon.active === "no-icon" ? "" : (customIcon.active || state.attributes.icon || defaultIcon);
+    } else {
+      icon = customIcon.inactive === "no-icon" ? "" : (customIcon.inactive || state.attributes.icon || defaultIcon);
+    }
+
     const color = this._getIconColor(entityId, isActive);
-    const iconSize =
-      this.config.icon_sizes?.[entityId] || this.config.icon_size || 24;
+    const iconSize = this.config.icon_sizes?.[entityId] || this.config.icon_size || 24;
     const buttonStyle = this.config.icon_styles?.[entityId] || "icon";
     const labelPosition = this.config.icon_labels?.[entityId] || "none";
 
     // Format the label text and add unit of measurement
-    const formattedValue = this._formatEntityValue(
+    const formattedValue = formatEntityValue(
       state,
-      this.config.useFormattedEntities
+      this.config.useFormattedEntities,
+      this.hass,
+      this.localize
     );
-    const labelText = formattedValue; // Remove the unit here as it's already included in formattedValue
+    const labelText = formattedValue;
 
     // Calculate label size based on icon size
     const labelSize = iconSize > 28 ? Math.round(iconSize * 0.5) : 14;
@@ -1277,7 +1109,7 @@ class UltraVehicleCard extends localize(LitElement) {
     if (shouldRender) {
       return html`
         <div
-          class="icon-wrapper ${buttonStyle} label-${labelPosition} clickable"
+          class="icon-wrapper ${buttonStyle} label-${labelPosition} clickable ${isActive ? 'active' : 'inactive'}"
           style="--icon-size: ${iconSize}px; --label-size: ${labelSize}px; --label-color: ${color};"
           @click="${() => this._handleIconClick(entityId)}"
         >
@@ -1336,20 +1168,6 @@ class UltraVehicleCard extends localize(LitElement) {
     }
 
     return html``;
-  }
-
-  _getIconActiveState(entityId) {
-    const state = this.hass.states[entityId];
-    if (!state) return false;
-    const stateStr = state.state.toLowerCase();
-
-    // Handle boolean entities
-    if (["0", "1", "on", "off", "true", "false"].includes(stateStr)) {
-      return ["1", "on", "true"].includes(stateStr);
-    }
-
-    // Handle other types of entities
-    return ["on", "open", "unlocked"].includes(stateStr);
   }
 
   _getIconColor(entityId, isActive) {
@@ -1652,86 +1470,6 @@ class UltraVehicleCard extends localize(LitElement) {
     );
 
     return `${formattedValue} ${unit || ""}`.trim();
-  }
-
-  _formatEntityValue(entity, useFormattedEntities) {
-    if (!entity) return null;
-
-    const state = entity.state;
-    const attributes = entity.attributes || {};
-    const unitOfMeasurement = attributes.unit_of_measurement;
-
-    // Handle numeric values with units
-    if (unitOfMeasurement) {
-      const numericValue = parseFloat(state);
-      if (!isNaN(numericValue)) {
-        let formattedValue;
-        if (useFormattedEntities) {
-          // Round the number and add commas
-          formattedValue = this._formatNumberWithCommas(Math.round(numericValue));
-        } else {
-          formattedValue = numericValue.toString();
-        }
-        // Always append the unit, regardless of formatting
-        return `${formattedValue} ${unitOfMeasurement}`;
-      }
-    }
-
-    // Handle binary sensors
-    if (entity.entity_id.split(".")[0] === "binary_sensor") {
-      const isOn = state.toLowerCase() === "on";
-      if (attributes.device_class) {
-        const key = `device_class.${attributes.device_class}.${isOn ? "on" : "off"}`;
-        return (
-          this.hass.localize(`component.binary_sensor.state.${key}`) ||
-          this.localize(key) ||
-          (isOn ? "On" : "Off")
-        );
-      }
-      // For binary sensors without device class, just return "On" or "Off"
-      return isOn ? "On" : "Off";
-    }
-
-    if (!useFormattedEntities) return state;
-
-    // Format Device Tracker
-    if (entity.entity_id.startsWith('device_tracker.')) {
-      const locationName = attributes.location_name || state;
-      
-      if (!useFormattedEntities) {
-        return locationName;
-      }
-      
-      if (locationName.toLowerCase() === 'home') {
-        return 'Home';
-      } else if (locationName.toLowerCase() === 'not_home') {
-        return 'Away';
-      } else {
-        // This handles custom zones and 'away'
-        return locationName.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-      }
-    }
-
-    if (typeof state === "string") {
-      // Check if it's a date string
-      if (this._isISODateString(state)) {
-        return this._formatChargingEndTime(state);
-      }
-      // Check if it's a numeric string
-      if (!isNaN(parseFloat(state))) {
-        // Convert to number and format
-        return this._formatNumberWithCommas(Math.round(parseFloat(state)));
-      }
-      // Return other strings as-is
-      return state;
-    }
-
-    if (typeof state === "number") {
-      // Round to whole number and format with commas
-      return this._formatNumberWithCommas(Math.round(state));
-    }
-
-    return state;
   }
 
   _formatTimestamp(timestamp) {
