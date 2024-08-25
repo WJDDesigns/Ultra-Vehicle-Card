@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version, setVersion } from "./version.js?v=5";
+import { version, setVersion } from "./version.js?v=6";
 setVersion("V1.5.8");
 
 const sensorModule = await import("./sensors.js?v=" + version);
