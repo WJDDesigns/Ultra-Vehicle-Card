@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=5";
+import { version } from "./version.js?v=6";
 
 const stl = await import("./styles.js?v=" + version);
 const loc = await import("./localize.js?v=" + version);
@@ -64,6 +64,10 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       _iconGap: { type: Number },
       _iconSizes: { type: Object },
       _showRowSeparatorDetails: { type: Boolean },
+      _mainImageHeight: { type: String },
+      _chargingImageHeight: { type: String },
+      _image_type: { type: String },
+      _image_entity: { type: String },
     };
   }
 
@@ -103,21 +107,19 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this._charging_image_urlFilter = "";
     this._iconSizes = {};
     this._showRowSeparatorDetails = false;
+    this._mainImageHeight = "180px";
+    this._chargingImageHeight = "180px";
+    this._image_type = "image";
+    this._image_entity = "";
   }
 
   setConfig(config) {
     this.config = {
       title: "My Vehicle",
-      image_url:
-        config.image_url_type === "entity"
-          ? ""
-          : config.image_url || DEFAULT_IMAGE_URL,
-      charging_image_url:
-        config.charging_image_url_type === "entity"
-          ? ""
-          : config.charging_image_url || DEFAULT_IMAGE_URL,
-      image_url_type: config.image_url_type || "image",
-      charging_image_url_type: config.charging_image_url_type || "image",
+      image_url: "",
+      charging_image_url: "",
+      image_url_type: "image",
+      charging_image_url_type: "none",
       vehicle_type: "EV",
       unit_type: "mi",
       level_entity: "",
@@ -158,6 +160,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       iconInactiveColor:
         config.iconInactiveColor || "var(--primary-text-color)",
       useFormattedEntities: config.useFormattedEntities || false,
+      mainImageHeight: config.image_url_type !== "none" ? (config.mainImageHeight || '180px') : '0px',
+      chargingImageHeight: config.charging_image_url_type !== "none" ? (config.chargingImageHeight || '180px') : '0px',
+      showTitle: config.showTitle !== false,
       ...config,
     };
 
@@ -191,7 +196,10 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   static getStubConfig() {
     return {
       title: "My Vehicle",
-      image_url: "",
+      image_url: DEFAULT_IMAGE_URL,
+      charging_image_url: "",
+      image_url_type: "default",
+      charging_image_url_type: "none",
       vehicle_type: "EV",
       unit_type: "mi",
       battery_level_entity: "",
@@ -229,6 +237,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       icon_sizes: {},
       icon_labels: {},
       useFormattedEntities: false,
+      mainImageHeight: '180px',
+      chargingImageHeight: '180px',
+      showTitle: true,
     };
   }
 
@@ -255,8 +266,10 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
     return html`
       <div class="editor-container">
-        ${this._renderBasicConfig()} ${this._renderFormattedEntitiesToggle()}
-        ${this._renderEntityInformation()} ${this._renderIconGridConfig()}
+        ${this._renderBasicConfig()}
+        ${this._renderFormattedEntitiesToggle()}
+        ${this._renderEntityInformation()}
+        ${this._renderIconGridConfig()}
         ${this._renderColorPickers()}
       </div>
     `;
@@ -266,13 +279,24 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     return html`
       <div class="input-group">
         <label for="title">${this.localize("editor.card_title")}</label>
-        <input
-          id="title"
-          type="text"
-          .value="${this.config.title}"
-          @input="${this._valueChanged}"
-          .configValue="${"title"}"
-        />
+        <div class="title-toggle-container">
+          <input
+            id="title"
+            type="text"
+            .value="${this.config.title}"
+            @input="${this._valueChanged}"
+            .configValue="${"title"}"
+          />
+          <label class="switch">
+            <input
+              type="checkbox"
+              .checked="${this.config.showTitle !== false}"
+              @change="${this._toggleChanged}"
+              .configValue="${"showTitle"}"
+            />
+            <span class="slider round"></span>
+          </label>
+        </div>
       </div>
 
       <div class="input-group">
@@ -345,124 +369,165 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
       <div class="divider"></div>
 
-      <h3>${this.localize("editor.images")}</h3>
-      ${this._renderImageUploadField(
-        this.localize("editor.main_image"),
-        "image_url",
-        this.localize("editor.enter_image_url")
-      )}
-      ${this._renderImageUploadField(
-        this.localize("editor.charging_image"),
-        "charging_image_url",
-        this.localize("editor.enter_image_url")
-      )}
+      <div class="image-section">
+        <div class="image-section-title">${this.localize("editor.main_image_section")}</div>
+        ${this._renderImageUploadField(
+          this.localize("editor.main_image"),
+          "image_url",
+          this.localize("editor.enter_image_url")
+        )}
+        <div class="editor-item" id="main-image-height">
+          <label>${this.localize("editor.main_image_height")}</label>
+          <div class="input-with-unit">
+            <input
+              type="number"
+              min="50"
+              max="500"
+              .value="${parseInt(this.config.mainImageHeight) || 180}"
+              @input="${this._valueChanged}"
+              .configValue="${"mainImageHeight"}"
+            />
+            <span class="unit">px</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="image-section">
+        <div class="image-section-title">${this.localize("editor.charging_image_section")}</div>
+        ${this._renderImageUploadField(
+          this.localize("editor.charging_image"),
+          "charging_image_url",
+          this.localize("editor.enter_image_url")
+        )}
+        <div class="editor-item" id="charging-image-height">
+          <label>${this.localize("editor.charging_image_height")}</label>
+          <div class="input-with-unit">
+            <input
+              type="number"
+              min="50"
+              max="500"
+              .value="${parseInt(this.config.chargingImageHeight) || 180}"
+              @input="${this._valueChanged}"
+              .configValue="${"chargingImageHeight"}"
+            />
+            <span class="unit">px</span>
+          </div>
+        </div>
+      </div>
     `;
   }
 
   _renderImageUploadField(label, configKey, placeholder) {
     const imageTypeKey = `${configKey}_type`;
-    const value = this.config[configKey] || DEFAULT_IMAGE_URL;
-    const displayValue =
-      value === DEFAULT_IMAGE_URL ? DEFAULT_IMAGE_TEXT : value;
-    const currentType = this.config[imageTypeKey] || "image";
+    const entityKey = configKey === 'image_url' ? 'image_entity' : 'charging_image_entity';
+    const value = this.config[configKey] || "";
+    const currentType = this.config[imageTypeKey] || "default";
 
     return html`
       <div class="image-input-container">
-        <div
-          style="display: flex; justify-content: space-between; align-items: center;"
-        >
-          <label
-            style="margin-right: 16px; font-size: 1.2em; font-weight: bold;"
-            >${label}</label
-          >
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label style="margin-right: 16px; font-size: 1.2em; font-weight: bold;">${label}</label>
           <div class="radio-group" style="justify-content: flex-end;">
             <label>
-              <input
-                type="radio"
-                name="${imageTypeKey}"
-                value="none"
+              <input type="radio" name="${imageTypeKey}" value="none"
                 ?checked="${currentType === "none"}"
-                @change="${(e) =>
-                  this._handleImageSourceChange(configKey, "none")}"
+                @change="${(e) => this._handleImageSourceChange(configKey, "none")}"
               />
               ${this.localize("editor.none")}
             </label>
             <label>
-              <input
-                type="radio"
-                name="${imageTypeKey}"
-                value="image"
+              <input type="radio" name="${imageTypeKey}" value="image"
                 ?checked="${currentType === "image"}"
-                @change="${(e) =>
-                  this._handleImageSourceChange(configKey, "image")}"
+                @change="${(e) => this._handleImageSourceChange(configKey, "image")}"
               />
               ${this.localize("editor.local_url")}
             </label>
             <label>
-              <input
-                type="radio"
-                name="${imageTypeKey}"
-                value="entity"
+              <input type="radio" name="${imageTypeKey}" value="entity"
                 ?checked="${currentType === "entity"}"
-                @change="${(e) =>
-                  this._handleImageSourceChange(configKey, "entity")}"
+                @change="${(e) => this._handleImageSourceChange(configKey, "entity")}"
               />
               ${this.localize("editor.entity")}
             </label>
           </div>
         </div>
 
-        ${currentType === "image"
-          ? html`
-              <div class="image-upload-container">
-                <input
-                  type="text"
-                  .value="${displayValue}"
-                  placeholder="${placeholder}"
-                  @input="${(e) => this._handleImageUrlInput(e, configKey)}"
-                />
-                <label class="file-upload-label" for="${configKey}-upload"
-                  >${this.localize("editor.upload_image")}</label
-                >
-                <input
-                  type="file"
-                  id="${configKey}-upload"
-                  style="display:none"
-                  @change="${(e) => this._handleImageUpload(e, configKey)}"
-                />
-              </div>
-            `
-          : currentType === "entity"
-          ? html`
-              <ha-entity-picker
-                .hass=${this.hass}
-                .value=${this.config[configKey]}
-                @value-changed=${(e) => this._entityPicked(e, configKey)}
-                .includeDomains=${["camera", "image"]}
-                allow-custom-entity
-              ></ha-entity-picker>
-            `
-          : ""}
+        ${currentType === "default" 
+          ? html`<img src="${DEFAULT_IMAGE_URL}" alt="Default Image" style="width: 100%; max-height: 200px; object-fit: contain;">`
+          : currentType === "image"
+            ? html`
+                <div class="image-upload-container">
+                  <input
+                    type="text"
+                    .value="${value}"
+                    placeholder="${placeholder}"
+                    @input="${(e) => this._handleImageUrlInput(e, configKey)}"
+                  />
+                  <label class="file-upload-label" for="${configKey}-upload"
+                    >${this.localize("editor.upload_image")}</label
+                  >
+                  <input
+                    type="file"
+                    id="${configKey}-upload"
+                    style="display:none"
+                    @change="${(e) => this._handleImageUpload(e, configKey)}"
+                  />
+                </div>
+              `
+            : currentType === "entity"
+              ? html`
+                  <div class="entity-picker-wrapper">
+                    <div class="entity-picker-container">
+                      <input
+                        type="text"
+                        class="entity-picker-input"
+                        .value="${this.config[entityKey] || ""}"
+                        @input="${(e) => this._entityFilterChanged(e, entityKey)}"
+                        placeholder="${this.localize("editor.search_entities")}"
+                      />
+                      ${this[`_${entityKey}Filter`]
+                        ? html`
+                            <div class="entity-picker-results">
+                              ${Object.keys(this.hass.states)
+                                .filter((eid) =>
+                                  eid
+                                    .toLowerCase()
+                                    .includes(
+                                      this[`_${entityKey}Filter`].toLowerCase()
+                                    )
+                                )
+                                .map(
+                                  (eid) => html`
+                                    <div
+                                      class="entity-picker-result"
+                                      @click="${() =>
+                                        this._selectEntity(entityKey, eid)}"
+                                    >
+                                      ${eid}
+                                    </div>
+                                  `
+                                )}
+                            </div>
+                          `
+                        : ""}
+                    </div>
+                  </div>
+                `
+              : ""}
       </div>
     `;
   }
 
   _handleImageUrlInput(e, configKey) {
     const newValue = e.target.value;
-    if (newValue === "" || newValue === DEFAULT_IMAGE_TEXT) {
-      this._updateConfig(configKey, DEFAULT_IMAGE_URL);
-      e.target.value = DEFAULT_IMAGE_TEXT;
-    } else {
-      this._updateConfig(configKey, newValue);
-    }
+    this._updateConfig(configKey, newValue);
+    this._fireEvent('config-changed', { config: this.config });
   }
 
   _renderFormattedEntitiesToggle() {
     return html`
       <div class="input-group">
-        <label for="useFormattedEntities"
-          >${this.localize("editor.formatted_entities")}</label
-        >
+        <label for="useFormattedEntities">${this.localize("editor.formatted_entities")}</label>
         <div class="entity-description">
           ${this.localize("editor.formatted_entities_description")}
         </div>
@@ -1478,6 +1543,31 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     };
     this.configChanged(this.config);
     this.requestUpdate();
+    if (configKey === 'cardBackgroundColor') {
+      this._updateIconBackground();
+    }
+  }
+
+  _updateIconBackground() {
+    const cardBackgroundColor = this.config.cardBackgroundColor || getComputedStyle(this).getPropertyValue('--card-background-color').trim();
+    const isDarkBackground = this._isColorDark(cardBackgroundColor);
+    this._updateIconBackgroundColor(isDarkBackground);
+  }
+
+  _isColorDark(color) {
+    const rgb = this._hexToRgb(color);
+    if (!rgb) return false;
+    const [r, g, b] = rgb.split(',').map(Number);
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness < 128;
+  }
+
+  _hexToRgb(hex) {
+    if (!hex) return null;
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
   }
 
   _toggleChanged(ev) {
@@ -1519,84 +1609,101 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   _renderImageUploadField(label, configKey, placeholder) {
     const imageTypeKey = `${configKey}_type`;
-    const value = this.config[configKey] || DEFAULT_IMAGE_URL;
-    const displayValue =
-      value === DEFAULT_IMAGE_URL ? DEFAULT_IMAGE_TEXT : value;
-    const currentType = this.config[imageTypeKey] || "image";
+    const entityKey = configKey === 'image_url' ? 'image_entity' : 'charging_image_entity';
+    const value = this.config[configKey] || "";
+    const currentType = this.config[imageTypeKey] || "default";
 
     return html`
       <div class="image-input-container">
-        <div
-          style="display: flex; justify-content: space-between; align-items: center;"
-        >
-          <label
-            style="margin-right: 16px; font-size: 1.2em; font-weight: bold;"
-            >${label}</label
-          >
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label style="margin-right: 16px; font-size: 1.2em; font-weight: bold;">${label}</label>
           <div class="radio-group" style="justify-content: flex-end;">
             <label>
-              <input
-                type="radio"
-                name="${imageTypeKey}"
-                value="none"
+              <input type="radio" name="${imageTypeKey}" value="none"
                 ?checked="${currentType === "none"}"
-                @change="${(e) =>
-                  this._handleImageSourceChange(configKey, "none")}"
+                @change="${(e) => this._handleImageSourceChange(configKey, "none")}"
               />
               ${this.localize("editor.none")}
             </label>
             <label>
-              <input
-                type="radio"
-                name="${imageTypeKey}"
-                value="image"
+              <input type="radio" name="${imageTypeKey}" value="image"
                 ?checked="${currentType === "image"}"
-                @change="${(e) =>
-                  this._handleImageSourceChange(configKey, "image")}"
+                @change="${(e) => this._handleImageSourceChange(configKey, "image")}"
               />
               ${this.localize("editor.local_url")}
             </label>
             <label>
-              <input
-                type="radio"
-                name="${imageTypeKey}"
-                value="entity"
+              <input type="radio" name="${imageTypeKey}" value="entity"
                 ?checked="${currentType === "entity"}"
-                @change="${(e) =>
-                  this._handleImageSourceChange(configKey, "entity")}"
+                @change="${(e) => this._handleImageSourceChange(configKey, "entity")}"
               />
               ${this.localize("editor.entity")}
             </label>
           </div>
         </div>
 
-        ${currentType === "image"
-          ? html`
-              <div class="image-upload-container">
-                <input
-                  type="text"
-                  .value="${displayValue}"
-                  placeholder="${placeholder}"
-                  @input="${(e) => this._handleImageUrlInput(e, configKey)}"
-                />
-                <label class="file-upload-label" for="${configKey}-upload"
-                  >${this.localize("editor.upload_image")}</label
-                >
-                <input
-                  type="file"
-                  id="${configKey}-upload"
-                  style="display:none"
-                  @change="${(e) => this._handleImageUpload(e, configKey)}"
-                />
-              </div>
-            `
-          : currentType === "entity"
-          ? this._renderEntityPickerWithoutToggle(
-              configKey,
-              this.localize("editor.select_entity"),
-              this.localize("editor.entity_provides_image")
-            )
-          : ""}
+        ${currentType === "default" 
+          ? html`<img src="${DEFAULT_IMAGE_URL}" alt="Default Image" style="width: 100%; max-height: 200px; object-fit: contain;">`
+          : currentType === "image"
+            ? html`
+                <div class="image-upload-container">
+                  <input
+                    type="text"
+                    .value="${value}"
+                    placeholder="${placeholder}"
+                    @input="${(e) => this._handleImageUrlInput(e, configKey)}"
+                  />
+                  <label class="file-upload-label" for="${configKey}-upload"
+                    >${this.localize("editor.upload_image")}</label
+                  >
+                  <input
+                    type="file"
+                    id="${configKey}-upload"
+                    style="display:none"
+                    @change="${(e) => this._handleImageUpload(e, configKey)}"
+                  />
+                </div>
+              `
+            : currentType === "entity"
+              ? html`
+                  <div class="entity-picker-wrapper">
+                    <div class="entity-picker-container">
+                      <input
+                        type="text"
+                        class="entity-picker-input"
+                        .value="${this.config[entityKey] || ""}"
+                        @input="${(e) => this._entityFilterChanged(e, entityKey)}"
+                        placeholder="${this.localize("editor.search_entities")}"
+                      />
+                      ${this[`_${entityKey}Filter`]
+                        ? html`
+                            <div class="entity-picker-results">
+                              ${Object.keys(this.hass.states)
+                                .filter((eid) =>
+                                  eid
+                                    .toLowerCase()
+                                    .includes(
+                                      this[`_${entityKey}Filter`].toLowerCase()
+                                    )
+                                )
+                                .map(
+                                  (eid) => html`
+                                    <div
+                                      class="entity-picker-result"
+                                      @click="${() =>
+                                        this._selectEntity(entityKey, eid)}"
+                                    >
+                                      ${eid}
+                                    </div>
+                                  `
+                                )}
+                            </div>
+                          `
+                        : ""}
+                    </div>
+                  </div>
+                `
+              : ""}
       </div>
     `;
   }
@@ -1656,7 +1763,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
           <ha-entity-picker
             .hass=${this.hass}
             .value=${value.startsWith("entity:") ? value.slice(7) : value}
-            .configValue=${configKey}
+            .configValue="${configKey}"
             @value-changed=${this._entityPicked}
             allow-custom-entity
           ></ha-entity-picker>
@@ -1749,66 +1856,65 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _handleImageSourceChange(configKey, newType) {
-    const imageTypeKey = `${configKey}_type`;
-    this._updateConfig(imageTypeKey, newType);
-
-    if (newType === "none") {
-      this._updateConfig(configKey, "");
-    } else if (newType === "image" && !this.config[configKey]) {
-      this._updateConfig(configKey, DEFAULT_IMAGE_URL);
-    } else if (newType === "entity") {
-      this._updateConfig(configKey, "");
+    this._updateConfig(`${configKey}_type`, newType);
+    if (newType === 'none') {
+      this._updateConfig(configKey, '');
+      this._updateConfig(`${configKey.replace('_url', '_entity')}`, '');
+    } else if (newType === 'entity') {
+      this._updateConfig(configKey, '');
+    } else if (newType === 'image') {
+      this._updateConfig(`${configKey.replace('_url', '_entity')}`, '');
+      if (this.config[configKey] === DEFAULT_IMAGE_URL) {
+        this._updateConfig(configKey, '');
+      }
     }
-
+    this._updateImageHeightVisibility();
     this.requestUpdate();
+    
+    // Force a full update of the card
+    this._fireEvent('config-changed', { config: this.config });
   }
 
-  _entityPicked(ev, configKey) {
-    const newValue = ev.detail.value;
-    this._updateConfig(configKey, newValue);
-  }
-
-  async _handleImageUpload(ev, configKey) {
-    const input = ev.target;
-    if (!input.files || input.files.length === 0) {
-      return;
+  _entityPicked(e, configKey) {
+    const newValue = e.detail.value;
+    if (newValue) {
+      this._updateConfig(configKey, newValue);
     }
+  }
 
-    const file = input.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
+  // Make sure to call this method when the component is first updated
+  firstUpdated(changedProps) {
+    super.firstUpdated(changedProps);
+    this._updateImageHeightVisibility();
+  }
 
-    try {
-      const response = await fetch("/api/image/upload", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${this.hass.auth.data.access_token}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to upload image");
-      }
-
-      const data = await response.json();
-      const imageId = data.id;
-
-      if (!imageId) {
-        console.error("Response structure:", data);
-        throw new Error("Image ID is missing in the response");
-      }
-
-      const imageUrl = `/api/image/serve/${imageId}/original`;
-
-      if (this.config) {
-        this.config = { ...this.config, [configKey]: imageUrl };
-        this.configChanged(this.config);
+  _handleImageUpload(e, configKey) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const imageData = e.target.result;
+        this._updateConfig(configKey, imageData);
+        this._updateConfig(`${configKey}_type`, 'image');
         this.requestUpdate();
-      }
-    } catch (error) {
-      console.error("Error uploading image:", error);
+        // Force a full update of the card
+        this._fireEvent('config-changed', { config: this.config });
+      };
+      reader.readAsDataURL(file);
     }
+  }
+
+  _fireEvent(type, detail, options) {
+    options = options || {};
+    detail = detail === null || detail === undefined ? {} : detail;
+    const event = new Event(type, {
+      bubbles: options.bubbles === undefined ? true : options.bubbles,
+      cancelable: Boolean(options.cancelable),
+      composed: options.composed === undefined ? true : options.composed,
+    });
+    event.detail = detail;
+    this.dispatchEvent(event);
+    return event;
   }
 
   _entityFilterChanged(e, configKey) {
@@ -1964,16 +2070,44 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   configChanged(newConfig) {
-    fireEvent(this, "config-changed", {
-      config: { ...newConfig, icon_labels: this.config.icon_labels },
+    const event = new CustomEvent("config-changed", {
+      detail: { config: newConfig },
+      bubbles: true,
+      composed: true
     });
+    this.dispatchEvent(event);
   }
 
   _valueChanged(ev) {
+    if (!this.config) {
+      return;
+    }
     const target = ev.target;
+    const value = target.value;
     const configValue = target.configValue;
-    const newValue = target.value;
-    this._updateConfig(configValue, newValue);
+
+    if (configValue) {
+      if (configValue === 'mainImageHeight' || configValue === 'chargingImageHeight') {
+        // For image height inputs, append 'px' to the value if it's not already there
+        this._updateConfig(configValue, value.endsWith('px') ? value : `${value}px`);
+      } else if (configValue === 'image_url' || configValue === 'charging_image_url') {
+        this._updateConfig(configValue, value);
+      } else if (target.type === 'number') {
+        this._updateConfig(configValue, value);
+      } else {
+        this._updateConfig(configValue, value);
+      }
+    }
+    this.configChanged(this.config);
+  }
+
+  _updateConfig(key, value) {
+    if (this.config) {
+      this.config = {
+        ...this.config,
+        [key]: value
+      };
+    }
   }
 
   _evaluateTemplate(template) {
@@ -2228,7 +2362,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 separatorConfig.verticalAlignment === undefined}"
                 title="${this.localize("editor.align_middle")}"
               >
-                ⬤
+                
               </button>
               <button
                 class="icon-button"
@@ -2516,6 +2650,150 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         </div>
       </div>
     `;
+  }
+
+  // Add this method to hide/show image height inputs
+  _updateImageHeightVisibility() {
+    const mainImageHeightInput = this.shadowRoot.querySelector('#main-image-height');
+    const chargingImageHeightInput = this.shadowRoot.querySelector('#charging-image-height');
+
+    if (mainImageHeightInput) {
+      mainImageHeightInput.style.display = this.config.image_url_type === 'none' ? 'none' : 'block';
+    }
+    if (chargingImageHeightInput) {
+      chargingImageHeightInput.style.display = this.config.charging_image_url_type === 'none' ? 'none' : 'block';
+    }
+  }
+
+  // Call this method in the updated lifecycle method
+  updated(changedProperties) {
+    super.updated(changedProperties);
+    if (changedProperties.has('config')) {
+      this._updateImageHeightVisibility();
+    }
+  }
+
+  // Update the image type change handlers
+  _onMainImageTypeChange(e) {
+    this._handleImageSourceChange('image_url', e.target.value);
+  }
+
+  _onChargingImageTypeChange(e) {
+    this._handleImageSourceChange('charging_image_url', e.target.value);
+  }
+
+  _handleImageSourceChange(configKey, newType) {
+    this._updateConfig(`${configKey}_type`, newType);
+    if (newType === 'none') {
+      this._updateConfig(configKey, '');
+      this._updateConfig(`${configKey.replace('_url', '_entity')}`, '');
+    } else if (newType === 'entity') {
+      this._updateConfig(configKey, '');
+    } else if (newType === 'image') {
+      this._updateConfig(`${configKey.replace('_url', '_entity')}`, '');
+      if (this.config[configKey] === DEFAULT_IMAGE_URL) {
+        this._updateConfig(configKey, '');
+      }
+    }
+    this._updateImageHeightVisibility();
+    
+    // Force a full update of the card
+    this._fireEvent('config-changed', { config: this.config });
+  }
+
+  _valueChanged(ev) {
+    if (!this.config) {
+      return;
+    }
+    const target = ev.target;
+    const value = target.value;
+    const configValue = target.configValue;
+
+    if (configValue) {
+      if (configValue === 'mainImageHeight' || configValue === 'chargingImageHeight') {
+        // For image height inputs, append 'px' to the value if it's not already there
+        this._updateConfig(configValue, value.endsWith('px') ? value : `${value}px`);
+      } else if (configValue === 'image_url' || configValue === 'charging_image_url') {
+        this._updateConfig(configValue, value);
+      } else {
+        this._updateConfig(configValue, target.checked !== undefined ? target.checked : value);
+      }
+    }
+    this.configChanged(this.config);
+  }
+
+  _handleImageUpload(e, configKey) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const imageData = e.target.result;
+        this._updateConfig(configKey, imageData);
+        this._updateConfig(`${configKey}_type`, 'image');
+        this.requestUpdate();
+        // Force a full update of the card
+        this._fireEvent('config-changed', { config: this.config });
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  _fireEvent(type, detail, options) {
+    options = options || {};
+    detail = detail === null || detail === undefined ? {} : detail;
+    const event = new Event(type, {
+      bubbles: options.bubbles === undefined ? true : options.bubbles,
+      cancelable: Boolean(options.cancelable),
+      composed: options.composed === undefined ? true : options.composed,
+    });
+    event.detail = detail;
+    this.dispatchEvent(event);
+    return event;
+  }
+
+  _entityFilterChanged(e, configKey) {
+    this[`_${configKey}Filter`] = e.target.value;
+    this.requestUpdate();
+  }
+
+  _resetColor(e, configKey, defaultValue) {
+    e.stopPropagation();
+    this.config = {
+      ...this.config,
+      [configKey]: defaultValue,
+    };
+    this.configChanged(this.config);
+    this.requestUpdate();
+    if (configKey === 'cardBackgroundColor') {
+      this._updateIconBackground();
+    }
+  }
+
+  _updateIconBackground() {
+    const cardBackgroundColor = this.config.cardBackgroundColor || getComputedStyle(this).getPropertyValue('--card-background-color').trim();
+    const isDarkBackground = this._isColorDark(cardBackgroundColor);
+    this._updateIconBackgroundColor(isDarkBackground);
+  }
+
+  _isColorDark(color) {
+    const rgb = this._hexToRgb(color);
+    if (!rgb) return false;
+    const [r, g, b] = rgb.split(',').map(Number);
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness < 128;
+  }
+
+  _hexToRgb(hex) {
+    if (!hex) return null;
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
+  }
+
+  _updateIconBackgroundColor(isDarkBackground) {
+    const iconBackgroundColor = isDarkBackground ? '#ffffff' : '#000000';
+    this.style.setProperty('--uvc-icon-background', iconBackgroundColor);
   }
 }
 customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);

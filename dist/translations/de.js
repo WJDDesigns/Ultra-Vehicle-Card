@@ -123,7 +123,19 @@ export default {
     trigger: "Auslösen",
     fuel_level_description: "Wählen Sie die Entität, die den Kraftstoffstand Ihres Fahrzeugs darstellt.",
     fuel_range_description: "Wählen Sie die Entität, die die verbleibende Kraftstoffreichweite Ihres Fahrzeugs darstellt.",
-    engine_on_description: "Wählen Sie die Entität, die anzeigt, ob der Motor Ihres Fahrzeugs derzeit läuft."
+    engine_on_description: "Wählen Sie die Entität, die anzeigt, ob der Motor Ihres Fahrzeugs derzeit läuft.",
+    left: "Links",
+    top: "Oben",
+    right: "Rechts",
+    bottom: "Unten",
+    infoTextColor: "Informationstextfarbe",
+    carStateTextColor: "Fahrzeugzustandstextfarbe",
+    rangeTextColor: "Reichweitentextfarbe",
+    percentageTextColor: "Prozenttextfarbe",
+    main_image_height: "Hauptbildhöhe",
+    charging_image_height: "Ladebildhöhe",
+    main_image_section: "Haupteinstellungen für Bilder",
+    charging_image_section: "Ladebildeinstellungen"
   },
   device_class: {
     battery: {

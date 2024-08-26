@@ -3,8 +3,8 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version, setVersion } from "./version.js?v=5";
-setVersion("V1.5.8");
+import { version, setVersion } from "./version.js?v=6";
+setVersion("V1.5.9-beta");
 
 const sensorModule = await import("./sensors.js?v=" + version);
 const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn } = sensorModule;
@@ -73,6 +73,8 @@ class UltraVehicleCard extends localize(LitElement) {
       icon_sizes: {},
       icon_labels: {},
       useFormattedEntities: false,
+      mainImageHeight: '180px',
+      chargingImageHeight: '180px',
     };
   }
 
@@ -93,23 +95,17 @@ class UltraVehicleCard extends localize(LitElement) {
   }
 
   setConfig(config) {
-    if (!config.title) {
-      throw new Error("You need to define a title");
+    if (!config) {
+      throw new Error("Invalid configuration");
     }
 
-    // Get the default color as hex
-    const defaultColor = this._getDefaultColorAsHex();
-
-    // Create a deep copy of the config to ensure all objects are extensible
-    const extensibleConfig = JSON.parse(JSON.stringify(config));
-
+    // Create a new config object with default values
     this.config = {
       title: "My Vehicle",
-      image_url: extensibleConfig.image_url || "",
-      charging_image_url: extensibleConfig.charging_image_url || "",
-      image_url_type: extensibleConfig.image_url_type || "image",
-      charging_image_url_type:
-        extensibleConfig.charging_image_url_type || "image",
+      image_url: "",
+      charging_image_url: "",
+      image_url_type: "image",
+      charging_image_url_type: "image",
       vehicle_type: "EV",
       unit_type: "mi",
       battery_level_entity: "",
@@ -129,34 +125,24 @@ class UltraVehicleCard extends localize(LitElement) {
       show_charge_limit: true,
       icon_grid_entities: [],
       custom_icons: {},
-      icon_interactions: {},
-      icon_styles: extensibleConfig.icon_styles || {},
       hybrid_display_order: "fuel_first",
       car_state_entity: "",
       charge_limit_entity: "",
-      cardBackgroundColor: "",
-      barBackgroundColor: "",
-      barFillColor: "",
-      limitIndicatorColor: "",
-      iconActiveColor: UltraVehicleCard._getComputedColor("--primary-color"),
-      iconInactiveColor: UltraVehicleCard._getComputedColor(
-        "--primary-text-color"
-      ),
-      barBorderColor: "",
-      icon_size: 28,
-      icon_gap: extensibleConfig.icon_gap || 20,
-      image_entity: extensibleConfig.image_entity || "",
-      charging_image_entity: extensibleConfig.charging_image_entity || "",
-      carStateTextColor: extensibleConfig.carStateTextColor || "",
-      rangeTextColor: extensibleConfig.rangeTextColor || "",
-      percentageTextColor: extensibleConfig.percentageTextColor || "",
-      icon_sizes: extensibleConfig.icon_sizes || {},
-      engine_on_entity: "",
-      icon_labels: extensibleConfig.icon_labels || {},
-      row_separators: extensibleConfig.row_separators || {},
-      useFormattedEntities: false, // New property for formatted entities
-      ...extensibleConfig,
+      icon_size: 24,
+      icon_gap: 12,
+      mainImageHeight: '180px',
+      chargingImageHeight: '180px',
+      ...config  // Spread the provided config to override defaults
+      
     };
+
+    // Ensure mainImageHeight and chargingImageHeight are set
+    this.config.mainImageHeight = this.config.mainImageHeight || '180px';
+    this.config.chargingImageHeight = this.config.chargingImageHeight || '180px';
+
+    // Set CSS custom properties
+    this.style.setProperty('--vehicle-image-height', this.config.mainImageHeight);
+    this.style.setProperty('--vehicle-charging-image-height', this.config.chargingImageHeight);
 
     // Handle backward compatibility for entity names
     if (this.config.level_entity && !this.config.battery_level_entity) {
@@ -199,7 +185,7 @@ class UltraVehicleCard extends localize(LitElement) {
     this.config.icon_grid_entities.forEach((entityId, index) => {
       if (entityId === "row-separator" && !this.config.row_separators[index]) {
         this.config.row_separators[index] = {
-          color: defaultColor, // Use hex color instead of CSS variable
+          color: this._getDefaultColorAsHex(), // Use hex color instead of CSS variable
           height: 1,
           icon_gap: 20,
           horizontalAlignment: "center",
@@ -209,12 +195,14 @@ class UltraVehicleCard extends localize(LitElement) {
     });
 
     // Initialize icon_interactions
-    if (extensibleConfig.icon_interactions) {
-      this.config.icon_interactions = {...extensibleConfig.icon_interactions};
+    if (config.icon_interactions) {
+      this.config.icon_interactions = {...config.icon_interactions};
     }
 
     this.loadResources(this.config.language || navigator.language);
     this._updateStyles();
+    this._updateIconBackground();
+    this.requestUpdate();
   }
 
   // Add this method to validate entity configurations
@@ -724,7 +712,9 @@ class UltraVehicleCard extends localize(LitElement) {
 
   _renderHeader() {
     return html`
-      <h2 class="vehicle-name">${this.config.title}</h2>
+      ${this.config.showTitle !== false
+        ? html`<h2 class="vehicle-name">${this.config.title}</h2>`
+        : ""}
       ${this._renderInfoLine()}
     `;
   }
@@ -805,7 +795,6 @@ class UltraVehicleCard extends localize(LitElement) {
         this.hass,
         this.localize
       );
-      console.log('Formatted location:', location);
     }
 
     const mileageEntity = this.config.mileage_entity
@@ -881,76 +870,63 @@ class UltraVehicleCard extends localize(LitElement) {
   }
 
   _renderVehicleImage() {
-    const isCharging = this._isCharging(
-      this.config.charging_status_entity
-        ? this.hass.states[this.config.charging_status_entity]
-        : null
-    );
-    let imageUrl;
+    const isCharging = this._isCharging(this.hass.states[this.config.charging_status_entity]);
+    const imageType = isCharging ? this.config.charging_image_url_type : this.config.image_url_type;
+    
 
-    if (isCharging && this.config.charging_image_url_type !== "none") {
-      imageUrl =
-        this.config.charging_image_url_type === "entity"
-          ? this._getImageUrlFromEntity(this.config.charging_image_entity)
-          : this.config.charging_image_url;
-    } else if (this.config.image_url_type !== "none") {
-      imageUrl =
-        this.config.image_url_type === "entity"
-          ? this._getImageUrlFromEntity(this.config.image_entity)
-          : this.config.image_url;
-    } else {
-      return ''; // Return empty string if both image types are set to "none"
+    if (imageType === 'none') {
+      return html``;
     }
 
-    // Process the imageUrl if it starts with "entity:"
-    if (imageUrl && imageUrl.startsWith("entity:")) {
-      const entityId = imageUrl.slice(7);
-      imageUrl = this._getImageUrlFromEntity(entityId);
-    }
+    const imageUrl = this._getImageUrl(isCharging ? 'charging' : 'main');
+    
 
-    // Use the default image only if no valid URL is provided and image type is not "none"
-    const defaultImageUrl =
-      "https://github.com/user-attachments/assets/4ef72288-5ee9-4fa6-b2f3-c34c4160cf42";
-    const finalImageUrl = imageUrl || (this.config.image_url_type !== "none" ? defaultImageUrl : '');
-
-    if (!finalImageUrl) {
-      return ''; // Return empty string if there's no image to display
+    if (!imageUrl) {
+      return html``;
     }
 
     return html`
-      <div
-        class="vehicle-image-container clickable"
-        @click="${() => this._handleMoreInfo(this.config.image_entity)}"
-      >
+      <div class="vehicle-image-container">
         <img
-          class="vehicle-image"
-          src="${finalImageUrl}"
-          alt="Vehicle Image"
-          @error="${this._handleImageError}"
+          src="${imageUrl}"
+          alt="Vehicle"
+          class="${isCharging ? 'vehicle-charging-image' : 'vehicle-image'}"
+          @click="${() => this._handleImageClick(isCharging)}"
         />
       </div>
     `;
   }
 
-  _getImageUrlFromEntity(entityId) {
-    const entity = this.hass.states[entityId];
-    if (!entity) return null;
+  _getImageUrl(type) {
+    const config = type === 'charging' ? this.config.charging_image_url_type : this.config.image_url_type;
+    const entity = type === 'charging' ? this.config.charging_image_entity : this.config.image_entity;
+    const url = type === 'charging' ? this.config.charging_image_url : this.config.image_url;
 
-    // Check if the state is a valid URL
-    if (entity.state && entity.state.startsWith("http")) {
-      return entity.state;
+
+    if (config === 'entity') {
+      return this._getImageUrlFromEntity(entity);
+    } else if (config === 'url' || config === 'image') {
+      return url || null;
     }
+    return null;
+  }
 
-    // If not, try to get the URL from the attributes
-    return (
-      entity.attributes.entity_picture || entity.attributes.image_url || null
-    );
+  _getImageUrlFromEntity(entityId) {
+    const stateObj = this.hass.states[entityId];
+    if (stateObj && stateObj.attributes && stateObj.attributes.entity_picture) {
+      return stateObj.attributes.entity_picture;
+    }
+    return null;
   }
 
   _handleImageError(e) {
-    console.error("Error loading image:", e.target.src);
-    e.target.src =
-      "https://github.com/user-attachments/assets/4ef72288-5ee9-4fa6-b2f3-c34c4160cf42";
+    console.error("Image failed to load:", e.target.src);
+    // Instead of trying to load a default image, let's just hide the image container
+    const container = e.target.closest('.vehicle-image-container');
+    if (container) {
+      container.style.display = 'none';
+    }
+    e.target.style.display = 'none';
   }
 
   // Add this method to the UltraVehicleCard class
@@ -1110,7 +1086,11 @@ class UltraVehicleCard extends localize(LitElement) {
       return html`
         <div
           class="icon-wrapper ${buttonStyle} label-${labelPosition} clickable ${isActive ? 'active' : 'inactive'}"
-          style="--icon-size: ${iconSize}px; --label-size: ${labelSize}px; --label-color: ${color};"
+          style="
+            --icon-size: ${iconSize}px;
+            --label-size: ${labelSize}px;
+            --label-color: ${color};
+          "
           @click="${() => this._handleIconClick(entityId)}"
         >
           ${this._renderLabel(
@@ -1202,13 +1182,10 @@ class UltraVehicleCard extends localize(LitElement) {
   }
 
   _handleIconClick(entityId) {
-    console.log("Icon clicked:", entityId);
     const interaction = this.config.icon_interactions[entityId] || {};
-    console.log("Interaction config:", interaction);
     
     switch (interaction.type) {
       case "more-info":
-        console.log("Attempting to fire more-info event for:", entityId);
         this._handleMoreInfo(entityId);
         break;
       case "toggle":
@@ -1319,7 +1296,7 @@ class UltraVehicleCard extends localize(LitElement) {
   static getStubConfig() {
     return {
       title: "My Vehicle",
-      image_url: "",
+      image_url: "https://github.com/user-attachments/assets/4ef72288-5ee9-4fa6-b2f3-c34c4160cf42",
       vehicle_type: "EV",
       unit_type: "mi",
       battery_level_entity: "",
@@ -1402,7 +1379,8 @@ class UltraVehicleCard extends localize(LitElement) {
     if (this.config.iconInactiveColor) {
       const rgb = this._hexToRgb(this.config.iconInactiveColor);
       this.style.setProperty("--rgb-primary-text-color", rgb);
-      this.style.setProperty("--uvc-icon-background", `rgba(${rgb}, 0.10)`);
+      this.style.setProperty("--uvc-icon-background-light", `rgba(${rgb}, 0.10)`);
+      this.style.setProperty("--uvc-icon-background-dark", `rgba(${rgb}, 0.10)`);
     }
 
     this.requestUpdate();
@@ -1428,7 +1406,7 @@ class UltraVehicleCard extends localize(LitElement) {
       }
       // Check if it's a numeric string
       if (!isNaN(parseFloat(value))) {
-        // Convert to number and format
+        // Convert to number, round to nearest integer, and format
         return this._formatNumberWithCommas(Math.round(parseFloat(value)));
       }
       // Return other strings as-is
@@ -1493,6 +1471,152 @@ class UltraVehicleCard extends localize(LitElement) {
     }
     return this.hass.localize(`state.device_tracker.${state}`) || state;
   }
+
+  updated(changedProperties) {
+    super.updated(changedProperties);
+    if (changedProperties.has('config')) {
+      this.style.setProperty('--vehicle-image-height', this.config.mainImageHeight);
+      this.style.setProperty('--vehicle-charging-image-height', this.config.chargingImageHeight);
+    }
+  }
+
+  setConfig(config) {
+    if (!config) {
+      throw new Error("Invalid configuration");
+    }
+
+    // Create a new config object with default values
+    this.config = {
+      title: "My Vehicle",
+      image_url: "",
+      charging_image_url: "",
+      image_url_type: "image",
+      charging_image_url_type: "image",
+      vehicle_type: "EV",
+      unit_type: "mi",
+      battery_level_entity: "",
+      battery_range_entity: "",
+      fuel_level_entity: "",
+      fuel_range_entity: "",
+      charging_status_entity: "",
+      location_entity: "",
+      mileage_entity: "",
+      show_battery: true,
+      show_battery_range: true,
+      show_fuel: true,
+      show_fuel_range: true,
+      show_location: true,
+      show_mileage: true,
+      show_car_state: true,
+      show_charge_limit: true,
+      icon_grid_entities: [],
+      custom_icons: {},
+      hybrid_display_order: "fuel_first",
+      car_state_entity: "",
+      charge_limit_entity: "",
+      icon_size: 24,
+      icon_gap: 12,
+      mainImageHeight: '180px',
+      chargingImageHeight: '180px',
+      ...config  // Spread the provided config to override defaults
+    };
+
+    // Ensure mainImageHeight and chargingImageHeight are set
+    this.config.mainImageHeight = this.config.mainImageHeight || '180px';
+    this.config.chargingImageHeight = this.config.chargingImageHeight || '180px';
+
+    // Set CSS custom properties
+    this.style.setProperty('--vehicle-image-height', this.config.mainImageHeight);
+    this.style.setProperty('--vehicle-charging-image-height', this.config.chargingImageHeight);
+
+    // Handle image entities
+    if (this.config.image_url_type === "entity") {
+      this.config.image_entity = this.config.image_entity || this.config.image_url;
+      this.config.image_url = ""; // Clear image_url if using an entity
+    }
+    if (this.config.charging_image_url_type === "entity") {
+      this.config.charging_image_entity = this.config.charging_image_entity || this.config.charging_image_url;
+      this.config.charging_image_url = ""; // Clear charging_image_url if using an entity
+    }
+
+    this._updateStyles();
+    this._updateIconBackground();
+    this.requestUpdate();
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this._updateIconBackground();
+    window.addEventListener('theme-changed', this._updateIconBackground.bind(this));
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(this._updateIconBackground.bind(this));
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener('theme-changed', this._updateIconBackground.bind(this));
+    window.matchMedia('(prefers-color-scheme: dark)').removeListener(this._updateIconBackground.bind(this));
+  }
+
+  updated(changedProperties) {
+    super.updated(changedProperties);
+    if (changedProperties.has('hass')) {
+      this._updateIconBackground();
+    }
+  }
+
+  firstUpdated() {
+    this._updateIconBackground();
+  }
+
+  _updateIconBackground() {
+    const cardBackgroundColor = this.config.cardBackgroundColor || getComputedStyle(this).getPropertyValue('--card-background-color').trim();
+    const isDarkBackground = this._isColorDark(cardBackgroundColor);
+    
+    if (isDarkBackground) {
+      this.classList.add('dark-background');
+      this.classList.remove('light-background');
+    } else {
+      this.classList.add('light-background');
+      this.classList.remove('dark-background');
+    }
+    
+    this._updateIconBackgroundColor(isDarkBackground);
+    this.requestUpdate();
+  }
+
+  _updateIconBackgroundColor(isDarkBackground) {
+    const iconBackgroundColor = isDarkBackground ? 'rgb(255 255 255 / 10%)' : 'rgb(0 0 0 / 10%)';
+    this.style.setProperty('--uvc-icon-background', iconBackgroundColor);
+  }
+
+  _isColorDark(color) {
+    const rgb = this._hexToRgb(color);
+    if (!rgb) return false;
+    const [r, g, b] = rgb.split(',').map(Number);
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness < 128;
+  }
+
+  _hexToRgb(hex) {
+    if (!hex) return null;
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
+  }
+
+  updated(changedProperties) {
+    super.updated(changedProperties);
+    if (changedProperties.has('config')) {
+      this._updateIconBackground();
+    }
+  }
+
+  _updateIconBackground() {
+    const cardBackgroundColor = this.config.cardBackgroundColor || getComputedStyle(this).getPropertyValue('--card-background-color').trim();
+    const isDarkBackground = this._isColorDark(cardBackgroundColor);
+    this._updateIconBackgroundColor(isDarkBackground);
+  }
 }
 
 customElements.define("ultra-vehicle-card", UltraVehicleCard);
@@ -1515,15 +1639,3 @@ console.info(
   "background-color: #4299D9;color: #fff;padding: 3px 3px 3px 2px;border-radius: 0 14px 14px 0;font-family: DejaVu Sans,Verdana,Geneva,sans-serif;text-shadow: 0 1px 0 rgba(1, 1, 1, 0.3)"
 );
 
-// Add this code to style the card in the browser console
-const style = document.createElement("style");
-style.textContent = `
-  #current_version_ultra-vehicle-card {
-    background-color: #4299D9 !important;
-    color: white !important;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-left: 4px;
-  }
-`;
-document.head.appendChild(style);

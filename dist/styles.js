@@ -13,6 +13,13 @@ export const styles = css`
     --uvc-car-state-text-color: var(--primary-text-color);
     --uvc-range-text-color: var(--primary-text-color);
     --uvc-percentage-text-color: var(--primary-text-color);
+    --uvc-icon-background-light-color: rgba(255, 255, 255, 0.1);
+    --uvc-icon-background-dark-color: rgba(0, 0, 0, 0.1);
+    --uvc-icon-background: var(--uvc-icon-background-light);
+  }
+
+  :host([theme="dark"]) {
+    --uvc-icon-background: var(--uvc-icon-background-dark);
   }
 
   .progress {
@@ -109,14 +116,6 @@ textarea {
     border-radius: 12px;
   }
   
-  .vehicle-image {
-
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    max-width: 100%;
-  }
-  
   .vehicle-name {
     font-size: 1.5em;
     margin-bottom: 16px;
@@ -161,7 +160,7 @@ textarea {
   }
   
   .hybrid-separator {
-    height: 16px;
+    height: 8px;
   }
   
   .item_bar {
@@ -509,17 +508,6 @@ textarea {
   ha-icon-picker {
     flex-grow: 1;
   }
-  .icon-wrapper.round {
-    background-color: var(--uvc-icon-background, rgba(var(--rgb-primary-text-color, 255, 255, 255), 0.10));
-    border-radius: 50%;
-    padding: 8px;
-  }
-
-  .icon-wrapper.square {
-    background-color: var(--uvc-icon-background, rgba(var(--rgb-primary-text-color, 255, 255, 255), 0.10));
-    border-radius: 4px;
-    padding: 8px;
-  }
   .icon-grid {
     display: flex;
     flex-wrap: wrap;
@@ -549,16 +537,16 @@ textarea {
     color: var(--icon-color, var(--primary-text-color));
   }
 
-  .icon-item.round,
-  .icon-item.square {
-    width: calc(var(--uvc-icon-grid-size) * 1.5);
-    height: calc(var(--uvc-icon-grid-size) * 1.5);
-    background-color: var(--uvc-icon-background, rgba(var(--rgb-primary-text-color, 255, 255, 255), 0.10));
-  }
+ .icon-wrapper.round, .icon-wrapper.square {
+  border-radius: 50%;
+  padding: 8px;
+  transition: background-color 0.3s;
+  background-color: var(--uvc-icon-background);
+}
 
-  .icon-item.round {
-    border-radius: 50%;
-  }
+.icon-wrapper.square {
+  border-radius: 4px;
+}
 
   .icon-item.square {
     border-radius: 4px;
@@ -1087,4 +1075,116 @@ ha-icon-button[disabled] {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+.size-input-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.size-input {
+  width: 100%;
+  padding-right: 30px;
+  text-align: left;
+}
+
+.size-input-suffix {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary-text-color);
+  pointer-events: none;
+}
+
+.image-section {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid var(--divider-color);
+  border-radius: 4px;
+}
+
+.image-section-title {
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.entity-format-switch {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--divider-color);
+}
+  .formatted-entities-section {
+    margin-bottom: 32px;
+}
+    .switch-container {
+    margin-top: 12px;
+}
+    .size-input-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.size-input {
+  width: 100%;
+  padding-right: 30px;
+  text-align: left;
+}
+
+.size-input-suffix {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary-text-color);
+  pointer-events: none;
+}
+
+.image-section {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid var(--divider-color);
+  border-radius: 4px;
+}
+
+.image-section-title {
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+  .vehicle-charging-image {
+    width: 100%;
+    height: var(--vehicle-charging-image-height, 180px);
+    object-fit: contain;
+  }
+
+.editor-item select, .editor-item input[type="number"] {
+  width: 100%;
+  max-width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--divider-color, #e0e0e0);
+  background-color: var(--card-background-color);
+  color: var(--primary-text-color);
+  box-sizing: border-box;
+}
+
+  .vehicle-image {
+    width: 100%;
+    height: var(--vehicle-image-height, 180px);
+    object-fit: contain;
+  }
+    .vehicle-image-container[style*="display: none"] {
+  height: 0 !important;
+  overflow: hidden;
+}
+   .title-toggle-container {
+        display: flex;
+        align-items: center;
+      }
+      .title-toggle-container input[type="text"] {
+        flex-grow: 1;
+        margin-right: 10px;
+      }
+
 `;

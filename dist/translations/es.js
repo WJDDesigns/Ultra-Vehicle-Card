@@ -124,7 +124,17 @@ export default {
     fuel_level_description: "Seleccione la entidad que representa el nivel de combustible de su vehículo.",
     fuel_range_description: "Seleccione la entidad que representa la autonomía de combustible restante de su vehículo.",
     engine_on_description: "Seleccione la entidad que indica si el motor de su vehículo está actualmente en funcionamiento.",
-    top: "Arriba"
+    top: "Arriba",
+    left: "Izquierda",
+    right: "Derecha",
+    infoTextColor: "Color del texto de información",
+    carStateTextColor: "Color del texto del estado del vehículo",
+    rangeTextColor: "Color del texto de autonomía",
+    percentageTextColor: "Color del texto de porcentaje",
+    main_image_height: "Altura de la imagen principal",
+    charging_image_height: "Altura de la imagen de carga",
+    main_image_section: "Configuración de la imagen principal",
+    charging_image_section: "Configuración de la imagen de carga"
   },
   device_class: {
     battery: {

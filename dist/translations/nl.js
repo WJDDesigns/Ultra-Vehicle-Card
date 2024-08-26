@@ -128,7 +128,19 @@ export default {
     trigger: "Activeren",
     fuel_level_description: "Selecteer de entiteit die het brandstofniveau van uw voertuig weergeeft.",
     fuel_range_description: "Selecteer de entiteit die het resterende brandstofbereik van uw voertuig weergeeft.",
-    engine_on_description: "Selecteer de entiteit die aangeeft of de motor van uw voertuig momenteel draait."
+    engine_on_description: "Selecteer de entiteit die aangeeft of de motor van uw voertuig momenteel draait.",
+    left: "Links",
+    top: "Boven",
+    right: "Rechts",
+    bottom: "Onder",
+    infoTextColor: "Informatietekstkleur",
+    carStateTextColor: "Autostatus Tekstkleur",
+    rangeTextColor: "Bereik Tekstkleur",
+    percentageTextColor: "Percentage Tekstkleur",
+    main_image_height: "Hoofdafbeelding Hoogte",
+    charging_image_height: "Oplaadafbeelding Hoogte",
+    main_image_section: "Hoofdafbeelding Instellingen",
+    charging_image_section: "Oplaadafbeelding Instellingen"
   },
   device_class: {
     battery: {

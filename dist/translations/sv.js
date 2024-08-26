@@ -123,7 +123,19 @@ export default {
     fuel_range_description: "Välj enheten som representerar återstående bränsleräckvidd för ditt fordon.",
     engine_on_description: "Välj enheten som indikerar om motorn på ditt fordon för närvarande är igång.",
     select_entity: "Välj en enhet",
-    entity_provides_image: "Denna enhet tillhandahåller bilden för visningen."
+    entity_provides_image: "Denna enhet tillhandahåller bilden för visningen.",
+    left: "Vänster",
+    top: "Topp",
+    right: "Höger",
+    bottom: "Botten",
+    infoTextColor: "Informationstextfärg",
+    carStateTextColor: "Bilstatustextfärg",
+    rangeTextColor: "Räckviddstextfärg",
+    percentageTextColor: "Procenttextfärg",
+    main_image_height: "Huvudbildshöjd",
+    charging_image_height: "Laddningsbildshöjd",
+    main_image_section: "Huvudbildsinställningar",
+    charging_image_section: "Laddningsbildsinställningar"
   },
   device_class: {
     battery: {

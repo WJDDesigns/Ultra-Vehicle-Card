@@ -143,7 +143,11 @@ export default {
     formatted_entities_description: "Clean up entity values by rounding numbers, replacing underscores with spaces, capitalizing words, and adding commas to large numbers.",
     fuel_level_description: "Select the entity that represents the fuel level of your vehicle.",
     fuel_range_description: "Select the entity that represents the remaining fuel range of your vehicle.",
-    engine_on_description: "Select the entity that indicates whether your vehicle's engine is currently running."
+    engine_on_description: "Select the entity that indicates whether your vehicle's engine is currently running.",
+    main_image_height: "Main Image Height",
+    charging_image_height: "Charging Image Height",
+    main_image_section: "Main Image Settings",
+    charging_image_section: "Charging Image Settings"
   },
   device_class: {
     battery: {

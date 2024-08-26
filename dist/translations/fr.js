@@ -139,7 +139,19 @@ export default {
     formatted_entities_description: "Nettoyez les valeurs des entités en arrondissant les nombres, en remplaçant les underscores par des espaces, en capitalisant les mots et en ajoutant des virgules aux grands nombres.",
     fuel_level_description: "Sélectionnez l'entité qui représente le niveau de carburant de votre véhicule.",
     fuel_range_description: "Sélectionnez l'entité qui représente l'autonomie restante de votre véhicule à carburant.",
-    engine_on_description: "Sélectionnez l'entité qui indique si le moteur de votre véhicule est actuellement en marche."
+    engine_on_description: "Sélectionnez l'entité qui indique si le moteur de votre véhicule est actuellement en marche.",
+    left: "Gauche",
+    top: "Haut",
+    right: "Droite",
+    bottom: "Bas",
+    infoTextColor: "Couleur du texte d'information",
+    carStateTextColor: "Couleur du texte de l'état de la voiture",
+    rangeTextColor: "Couleur du texte de l'autonomie",
+    percentageTextColor: "Couleur du texte du pourcentage",
+    main_image_height: "Hauteur de l'image principale",
+    charging_image_height: "Hauteur de l'image de chargement",
+    main_image_section: "Paramètres de l'image principale",
+    charging_image_section: "Paramètres de l'image de chargement"
   },
   device_class: {
     battery: {

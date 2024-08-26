@@ -1,33 +1,37 @@
 export function formatEntityValue(entity, useFormattedEntities, hass, localize) {
   if (!entity || !hass) return null;
 
-  console.log('Formatting entity:', entity.entity_id, 'State:', entity.state);
 
   // If formatting is not enabled, return the state as-is
   if (!useFormattedEntities) {
-    console.log('Formatting disabled, returning:', entity.state);
     return entity.state;
   }
 
   // Use Home Assistant's built-in localization for state
   let translatedState = hass.formatEntityState(entity);
-  console.log('Translated state:', translatedState);
 
   // Special handling for device trackers and location entities
   if (entity.entity_id.split('.')[0] === 'device_tracker' || 
       entity.entity_id.split('.')[0] === 'person' ||
       entity.attributes.device_class === 'presence') {
     const lowerState = translatedState.toLowerCase();
-    console.log('Location entity detected, lower state:', lowerState);
     if (lowerState === 'home' || lowerState === 'not_home' || lowerState === 'away') {
       const formattedState = lowerState === 'home' ? 'Home' : 'Away';
-      console.log('Returning formatted location state:', formattedState);
       return formattedState;
     }
   }
 
+  // Handle numeric values with units
+  const numericMatch = translatedState.match(/^([\d,]+(?:\.\d+)?)\s*(.*)$/);
+  if (numericMatch) {
+    const numericValue = parseFloat(numericMatch[1].replace(/,/g, ''));
+    const unit = numericMatch[2];
+    const roundedValue = Math.round(numericValue);
+    const formattedValue = roundedValue.toLocaleString('en-US');
+    return `${formattedValue} ${unit}`.trim();
+  }
+
   // For all other entities, return the translated state
-  console.log('Returning translated state:', translatedState);
   return translatedState;
 }
 
@@ -56,7 +60,8 @@ function formatSensorState(state, attributes) {
     return formatChargingEndTime(state);
   }
   if (!isNaN(parseFloat(state))) {
-    return formatNumberWithCommas(Math.round(parseFloat(state)));
+    // Remove trailing zeros and decimal point if necessary
+    return formatNumberWithCommas(parseFloat(state).toFixed(0));
   }
   return formatGenericState(state);
 }
@@ -71,6 +76,11 @@ export function getIconActiveState(entityId, hass) {
   if (!state) return false;
   const stateStr = state.state.toLowerCase();
 
+  // Always consider mileage/odometer/range entities as inactive
+  if (entityId.includes('odometer') || entityId.includes('mileage') || entityId.includes('range')) {
+    return false;
+  }
+
   // Handle boolean entities
   if (["on", "off", "true", "false"].includes(stateStr)) {
     return ["on", "true"].includes(stateStr);
@@ -81,23 +91,28 @@ export function getIconActiveState(entityId, hass) {
     return stateStr === "on" || stateStr === "charging";
   }
 
-  // Handle specific cases
-  switch (state.attributes.device_class) {
-    case "battery":
-      return parseFloat(stateStr) > 0;
-    case "door":
-    case "window":
-      return stateStr === "open";
-    case "lock":
-      return stateStr === "unlocked";
-    case "plug":
-      return stateStr === "on" || stateStr === "in_use";
-    case "connectivity":
-      return stateStr === "connected";
-    default:
-      // For other cases, only consider explicitly active states
-      return ["on", "open", "unlocked", "charging", "connected"].includes(stateStr);
+  // Handle other types of entities
+  if (["open", "unlocked", "charging", "connected"].includes(stateStr)) {
+    return true;
   }
+
+  // Handle specific inactive states
+  if (["closed", "locked", "not_charging", "disconnected"].includes(stateStr)) {
+    return false;
+  }
+
+  // Handle numeric values (consider non-zero as active, except for range/mileage)
+  const numericValue = parseFloat(stateStr.replace(/,/g, ''));
+  if (!isNaN(numericValue)) {
+    // Check if the entity is related to range or mileage
+    if (entityId.includes('range') || entityId.includes('mileage')) {
+      return false;
+    }
+    return numericValue !== 0;
+  }
+
+  // For other cases, consider any non-empty state as active, except for specific inactive states
+  return stateStr !== "" && stateStr !== "unavailable" && stateStr !== "unknown" && stateStr !== "off";
 }
 
 export function formatBinarySensorState(state, attributes) {
