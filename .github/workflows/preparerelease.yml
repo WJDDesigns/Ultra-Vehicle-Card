@@ -26,7 +26,7 @@ jobs:
         VERSION=${{ github.event.inputs.version }}
         
         # Update ultra-vehicle-card.js in dist folder
-        sed -i "s/setVersion('.*')/setVersion('V$VERSION')/" dist/ultra-vehicle-card.js
+        sed -i "s/setVersion('V[0-9.]*-beta')/setVersion('V$VERSION-beta')/" dist/ultra-vehicle-card.js
         
         # Increment the import version
         IMPORT_VERSION=$(grep -oP "version\.js\?v=\K\d+" dist/ultra-vehicle-card.js)
