@@ -824,6 +824,7 @@ input[type="color"] {
 .editor-item {
   flex: 1;
   margin-right: 8px;
+  margin-top: 12px;
 }
 
 .editor-item:last-child {
@@ -1186,5 +1187,66 @@ ha-icon-button[disabled] {
         flex-grow: 1;
         margin-right: 10px;
       }
+  .editor-item select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid var(--divider-color, #e0e0e0);
+  background-color: var(--card-background-color, #fff);
+  color: var(--primary-text-color, #000);
+}
 
-`;
+.custom-select {
+  position: relative;
+  width: 100%;
+}
+
+.select-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background-color: var(--card-background-color, #fff);
+  border: 1px solid var(--divider-color, #e0e0e0);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: var(--card-background-color, #fff);
+  border: 1px solid var(--divider-color, #e0e0e0);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+}
+
+.custom-select.open .options {
+  display: block;
+}
+
+.option {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.option:hover {
+  background-color: var(--secondary-background-color, #f0f0f0);
+}
+
+.select-actions {
+  display: flex;
+  align-items: center;
+}
+
+.select-actions ha-icon {
+  margin-left: 8px;
+  cursor: pointer;
+}
+  `;

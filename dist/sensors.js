@@ -71,10 +71,33 @@ function formatGenericState(state) {
   return state.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
 
-export function getIconActiveState(entityId, hass) {
+export function getIconActiveState(entityId, hass, customIcons) {
   const state = hass.states[entityId];
   if (!state) return false;
   const stateStr = state.state.toLowerCase();
+
+  // Check custom icon states if defined
+  if (customIcons && customIcons[entityId]) {
+    const activeState = customIcons[entityId].activeState;
+    const inactiveState = customIcons[entityId].inactiveState;
+    
+    if (activeState) {
+      if (activeState.startsWith('attribute:')) {
+        const [, attrName, attrValue] = activeState.split(':');
+        return state.attributes[attrName]?.toString().toLowerCase() === attrValue.toLowerCase();
+      } else if (stateStr === activeState.toLowerCase()) {
+        return true;
+      }
+    }
+    if (inactiveState) {
+      if (inactiveState.startsWith('attribute:')) {
+        const [, attrName, attrValue] = inactiveState.split(':');
+        return state.attributes[attrName]?.toString().toLowerCase() !== attrValue.toLowerCase();
+      } else if (stateStr === inactiveState.toLowerCase()) {
+        return false;
+      }
+    }
+  }
 
   // Always consider mileage/odometer/range entities as inactive
   if (entityId.includes('odometer') || entityId.includes('mileage') || entityId.includes('range')) {

@@ -146,7 +146,9 @@ export default {
     main_image_height: "Main Image Height",
     charging_image_height: "Charging Image Height",
     main_image_section: "Main Image Settings",
-    charging_image_section: "Charging Image Settings"
+    charging_image_section: "Charging Image Settings",
+    active_state: "Active State",
+    inactive_state: "Inactive State"
   },
   device_class: {
     battery: {

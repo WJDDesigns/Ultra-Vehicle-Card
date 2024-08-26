@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=6";
+import { version } from "./version.js?v=7";
 
 const stl = await import("./styles.js?v=" + version);
 const loc = await import("./localize.js?v=" + version);
@@ -656,59 +656,18 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     `;
   }
 
-  _renderEntityPicker(configValue, labelText, description) {
-    const toggleName = this._getToggleName(configValue);
+  _renderEntityPicker(settingName, label) {
     return html`
-      <div class="input-group">
-        <label for="${configValue}">${labelText}</label>
-        <div class="entity-description">${description}</div>
-        <div class="entity-row">
-          <div class="entity-picker-wrapper">
-            <div class="entity-picker-container">
-              <input
-                type="text"
-                class="entity-picker-input"
-                .value="${this.config[configValue] || ""}"
-                @input="${(e) => this._entityFilterChanged(e, configValue)}"
-                placeholder="${this.localize("editor.search_entities")}"
-              />
-              ${this[`_${configValue}Filter`]
-                ? html`
-                    <div class="entity-picker-results">
-                      ${Object.keys(this.hass.states)
-                        .filter((eid) =>
-                          eid
-                            .toLowerCase()
-                            .includes(
-                              this[`_${configValue}Filter`].toLowerCase()
-                            )
-                        )
-                        .map(
-                          (eid) => html`
-                            <div
-                              class="entity-picker-result"
-                              @click="${() =>
-                                this._selectEntity(configValue, eid)}"
-                            >
-                              ${eid}
-                            </div>
-                          `
-                        )}
-                    </div>
-                  `
-                : ""}
-            </div>
-          </div>
-          <label class="switch">
-            <input
-              type="checkbox"
-              ?checked="${this.config[toggleName]}"
-              @change="${this._toggleChanged}"
-              .configValue="${toggleName}"
-            />
-            <span class="slider round"></span>
-          </label>
-        </div>
+      <div class="editor-item">
+        <ha-entity-picker
+          .hass=${this.hass}
+          .label=${label || this.localize(`editor.${settingName}`)}
+          .value=${this.config[settingName]}
+          .configValue=${settingName}
+          .includeDomains=${['sensor', 'binary_sensor', 'device_tracker']}
+          @value-changed=${this._valueChanged}
+          allow-custom-entity
+        ></ha-entity-picker>
       </div>
     `;
   }
@@ -833,6 +792,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 @value-changed=${(e) =>
                   this._handleIconChange(e, "inactive", entityId)}
               ></ha-icon-picker>
+              ${this._renderStateContentPicker(entityId, "inactive")}
               <mwc-button
                 @click=${() => this._setNoIcon(entityId, "inactive")}
                 .selected=${inactiveIcon === "no-icon"}
@@ -849,6 +809,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 @value-changed=${(e) =>
                   this._handleIconChange(e, "active", entityId)}
               ></ha-icon-picker>
+              ${this._renderStateContentPicker(entityId, "active")}
               <mwc-button
                 @click=${() => this._setNoIcon(entityId, "active")}
                 .selected=${activeIcon === "no-icon"}
@@ -1568,6 +1529,163 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
+  }
+
+  _renderStateContentPicker(entityId, iconType) {
+    const currentValue = this.config.custom_icons[entityId]?.[`${iconType}State`] || '';
+    const options = this._getEntityStates(entityId);
+
+    return html`
+      <div class="editor-item">
+        <label>${this.localize(`editor.${iconType}_state`)}</label>
+        <div class="custom-select" @click=${this._toggleDropdown} @keydown=${this._handleKeydown}>
+          <div class="select-trigger">
+            ${this._getDisplayLabel(currentValue) || 'Select a state'}
+            <div class="select-actions">
+              ${currentValue ? html`
+                <ha-icon
+                  icon="mdi:close"
+                  @click=${(e) => this._clearIconState(entityId, iconType)}
+                ></ha-icon>
+              ` : ''}
+              <ha-icon icon="mdi:menu-down"></ha-icon>
+            </div>
+          </div>
+          <div class="options">
+            ${options.map(option => html`
+              <div class="option" @click=${(e) => this._selectOption(e, entityId, iconType, option.value)}>
+                ${option.label}
+              </div>
+            `)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  _toggleDropdown(e) {
+    const dropdown = e.currentTarget;
+    dropdown.classList.toggle('open');
+    e.stopPropagation();
+  }
+
+  _handleKeydown(e) {
+    if (e.key === 'Escape') {
+      this._closeAllDropdowns();
+    }
+  }
+
+  _selectOption(e, entityId, iconType, value) {
+    e.stopPropagation();
+    if (!this.config.custom_icons[entityId]) {
+      this.config.custom_icons[entityId] = {};
+    }
+    this.config.custom_icons[entityId][`${iconType}State`] = value;
+    this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
+    this._closeAllDropdowns();
+  }
+
+  _clearIconState(entityId, iconType) {
+    if (this.config.custom_icons[entityId]) {
+      delete this.config.custom_icons[entityId][`${iconType}State`];
+      this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
+    }
+  }
+
+  _closeAllDropdowns() {
+    const dropdowns = this.shadowRoot.querySelectorAll('.custom-select');
+    dropdowns.forEach(dropdown => dropdown.classList.remove('open'));
+  }
+
+  _getEntityStates(entityId) {
+    const stateObj = this.hass.states[entityId];
+    if (!stateObj) return [];
+
+    const options = [];
+    const addedStates = new Set();
+
+    const addState = (value, label) => {
+      if (!addedStates.has(value)) {
+        options.push({ value, label });
+        addedStates.add(value);
+      }
+    };
+
+    // Helper function to add opposite states
+    const addOppositeState = (state) => {
+      const opposites = {
+        'on': 'off', 'off': 'on',
+        'open': 'closed', 'closed': 'open',
+        'locked': 'unlocked', 'unlocked': 'locked',
+        'true': 'false', 'false': 'true'
+      };
+      return opposites[state.toLowerCase()] || null;
+    };
+
+    // Add current state and its opposite
+    addState(stateObj.state, stateObj.state);
+    const oppositeState = addOppositeState(stateObj.state);
+    if (oppositeState) addState(oppositeState, oppositeState);
+
+    // Handle specific entity types
+    const domain = entityId.split('.')[0];
+    switch (domain) {
+      case 'light':
+      case 'switch':
+      case 'input_boolean':
+        addState('on', 'On');
+        addState('off', 'Off');
+        break;
+      case 'lock':
+        addState('locked', 'Locked');
+        addState('unlocked', 'Unlocked');
+        break;
+      case 'cover':
+      case 'door':
+        addState('open', 'Open');
+        addState('closed', 'Closed');
+        break;
+    }
+
+    // Define a list of relevant attributes to display
+    const relevantAttributes = [
+      'state', 'door', 'window', 'lock', 'battery', 'plug', 'temperature',
+      'humidity', 'pressure', 'illuminance', 'leftFront', 'leftRear',
+      'rightFront', 'rightRear', 'hood', 'trunk', 'brightness', 'rgb_color',
+      'color_temp', 'effect', 'position', 'tilt_position'
+    ];
+
+    // Add relevant attributes and their opposites
+    for (const attr of relevantAttributes) {
+      if (attr in stateObj.attributes) {
+        const value = stateObj.attributes[attr];
+        addState(`attribute:${attr}:${value}`, `${attr}: ${value}`);
+        
+        const oppositeValue = addOppositeState(value.toString());
+        if (oppositeValue) {
+          addState(`attribute:${attr}:${oppositeValue}`, `${attr}: ${oppositeValue}`);
+        }
+      }
+    }
+
+    return options;
+  }
+
+  _getDisplayLabel(value) {
+    if (value.startsWith('attribute:')) {
+      const [, attr, attrValue] = value.split(':');
+      return `${attr}: ${attrValue}`;
+    }
+    return value;
+  }
+
+  _stateContentChanged(e, entityId, iconType) {
+    const newValue = e.detail.value;
+    if (!this.config.custom_icons[entityId]) {
+      this.config.custom_icons[entityId] = {};
+    }
+    this.config.custom_icons[entityId][`${iconType}State`] = newValue;
+    this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
   }
 
   _toggleChanged(ev) {

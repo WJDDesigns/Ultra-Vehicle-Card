@@ -3,8 +3,8 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version, setVersion } from "./version.js?v=6";
-setVersion("V1.5.9-beta");
+import { version, setVersion } from "./version.js?v=7";
+setVersion("V1.5.9");
 
 const sensorModule = await import("./sensors.js?v=" + version);
 const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn } = sensorModule;
@@ -1051,7 +1051,7 @@ class UltraVehicleCard extends localize(LitElement) {
     if (!state) return html``;
 
     const customIcon = this.config.custom_icons?.[entityId] || {};
-    const isActive = getIconActiveState(entityId, this.hass);
+    const isActive = getIconActiveState(entityId, this.hass, this.config.custom_icons);
     const defaultIcon = "mdi:help-circle";
     
     // Determine which icon to use
