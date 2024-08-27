@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=7";
+import { version } from "./version.js?v=8";
 
 const stl = await import("./styles.js?v=" + version);
 const loc = await import("./localize.js?v=" + version);
@@ -72,7 +72,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   static get styles() {
-    return [styles];
+    return styles;
   }
 
   constructor() {
@@ -265,7 +265,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
 
     return html`
-      <div class="editor-container">
+      <div @click=${(e) => e.stopPropagation()} @keydown=${this._handleKeydown}>
         ${this._renderBasicConfig()}
         ${this._renderFormattedEntitiesToggle()}
         ${this._renderEntityInformation()}
@@ -1533,159 +1533,58 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   _renderStateContentPicker(entityId, iconType) {
     const currentValue = this.config.custom_icons[entityId]?.[`${iconType}State`] || '';
-    const options = this._getEntityStates(entityId);
+    const entity = this.hass.states[entityId];
+  
+    let options = [];
+  
+    if (entity) {
+      if (entity.attributes.options) {
+        // For input_select entities
+        options = entity.attributes.options.map(option => ({ value: option, label: option }));
+      } else if (entity.attributes.state_class !== "measurement") {
+        // For other entities, use the current state and some common states
+        const commonStates = ['on', 'off', 'unavailable', 'unknown'];
+        const states = [...new Set([entity.state, ...commonStates])];
+        options = states.map(state => ({ value: state, label: state }));
+      }
+    }
+
+    // Add 'Default' option at the beginning
+    options.unshift({ value: '__default__', label: 'Default' });
 
     return html`
-      <div class="editor-item">
-        <label>${this.localize(`editor.${iconType}_state`)}</label>
-        <div class="custom-select" @click=${this._toggleDropdown} @keydown=${this._handleKeydown}>
-          <div class="select-trigger">
-            ${this._getDisplayLabel(currentValue) || 'Select a state'}
-            <div class="select-actions">
-              ${currentValue ? html`
-                <ha-icon
-                  icon="mdi:close"
-                  @click=${(e) => this._clearIconState(entityId, iconType)}
-                ></ha-icon>
-              ` : ''}
-              <ha-icon icon="mdi:menu-down"></ha-icon>
-            </div>
-          </div>
-          <div class="options">
-            ${options.map(option => html`
-              <div class="option" @click=${(e) => this._selectOption(e, entityId, iconType, option.value)}>
-                ${option.label}
-              </div>
-            `)}
-          </div>
-        </div>
+      <div class="editor-item full-width">
+        <ha-select
+          naturalMenuWidth
+          fixedMenuPosition
+          label="${iconType === 'inactive' ? 'Inactive State' : 'Active State'}"
+          .value=${currentValue || '__default__'}
+          @selected=${(e) => this._selectOption(e, entityId, iconType)}
+          @closed=${(e) => e.stopPropagation()}
+        >
+          ${options.map(option => html`
+            <mwc-list-item .value=${option.value}>
+              ${option.label}
+            </mwc-list-item>
+          `)}
+        </ha-select>
       </div>
     `;
   }
 
-  _toggleDropdown(e) {
-    const dropdown = e.currentTarget;
-    dropdown.classList.toggle('open');
-    e.stopPropagation();
-  }
-
-  _handleKeydown(e) {
-    if (e.key === 'Escape') {
-      this._closeAllDropdowns();
-    }
-  }
-
-  _selectOption(e, entityId, iconType, value) {
-    e.stopPropagation();
+  _selectOption(e, entityId, iconType) {
+    const value = e.target.value;
     if (!this.config.custom_icons[entityId]) {
       this.config.custom_icons[entityId] = {};
     }
-    this.config.custom_icons[entityId][`${iconType}State`] = value;
-    this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
-    this._closeAllDropdowns();
-  }
-
-  _clearIconState(entityId, iconType) {
-    if (this.config.custom_icons[entityId]) {
+    if (value === '__default__') {
+      // If 'Default' is selected, remove the property
       delete this.config.custom_icons[entityId][`${iconType}State`];
-      this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
+    } else {
+      this.config.custom_icons[entityId][`${iconType}State`] = value;
     }
-  }
-
-  _closeAllDropdowns() {
-    const dropdowns = this.shadowRoot.querySelectorAll('.custom-select');
-    dropdowns.forEach(dropdown => dropdown.classList.remove('open'));
-  }
-
-  _getEntityStates(entityId) {
-    const stateObj = this.hass.states[entityId];
-    if (!stateObj) return [];
-
-    const options = [];
-    const addedStates = new Set();
-
-    const addState = (value, label) => {
-      if (!addedStates.has(value)) {
-        options.push({ value, label });
-        addedStates.add(value);
-      }
-    };
-
-    // Helper function to add opposite states
-    const addOppositeState = (state) => {
-      const opposites = {
-        'on': 'off', 'off': 'on',
-        'open': 'closed', 'closed': 'open',
-        'locked': 'unlocked', 'unlocked': 'locked',
-        'true': 'false', 'false': 'true'
-      };
-      return opposites[state.toLowerCase()] || null;
-    };
-
-    // Add current state and its opposite
-    addState(stateObj.state, stateObj.state);
-    const oppositeState = addOppositeState(stateObj.state);
-    if (oppositeState) addState(oppositeState, oppositeState);
-
-    // Handle specific entity types
-    const domain = entityId.split('.')[0];
-    switch (domain) {
-      case 'light':
-      case 'switch':
-      case 'input_boolean':
-        addState('on', 'On');
-        addState('off', 'Off');
-        break;
-      case 'lock':
-        addState('locked', 'Locked');
-        addState('unlocked', 'Unlocked');
-        break;
-      case 'cover':
-      case 'door':
-        addState('open', 'Open');
-        addState('closed', 'Closed');
-        break;
-    }
-
-    // Define a list of relevant attributes to display
-    const relevantAttributes = [
-      'state', 'door', 'window', 'lock', 'battery', 'plug', 'temperature',
-      'humidity', 'pressure', 'illuminance', 'leftFront', 'leftRear',
-      'rightFront', 'rightRear', 'hood', 'trunk', 'brightness', 'rgb_color',
-      'color_temp', 'effect', 'position', 'tilt_position'
-    ];
-
-    // Add relevant attributes and their opposites
-    for (const attr of relevantAttributes) {
-      if (attr in stateObj.attributes) {
-        const value = stateObj.attributes[attr];
-        addState(`attribute:${attr}:${value}`, `${attr}: ${value}`);
-        
-        const oppositeValue = addOppositeState(value.toString());
-        if (oppositeValue) {
-          addState(`attribute:${attr}:${oppositeValue}`, `${attr}: ${oppositeValue}`);
-        }
-      }
-    }
-
-    return options;
-  }
-
-  _getDisplayLabel(value) {
-    if (value.startsWith('attribute:')) {
-      const [, attr, attrValue] = value.split(':');
-      return `${attr}: ${attrValue}`;
-    }
-    return value;
-  }
-
-  _stateContentChanged(e, entityId, iconType) {
-    const newValue = e.detail.value;
-    if (!this.config.custom_icons[entityId]) {
-      this.config.custom_icons[entityId] = {};
-    }
-    this.config.custom_icons[entityId][`${iconType}State`] = newValue;
     this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
+    e.stopPropagation();
   }
 
   _toggleChanged(ev) {
@@ -2912,6 +2811,21 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   _updateIconBackgroundColor(isDarkBackground) {
     const iconBackgroundColor = isDarkBackground ? '#ffffff' : '#000000';
     this.style.setProperty('--uvc-icon-background', iconBackgroundColor);
+  }
+
+  _selectOption(e, entityId, iconType) {
+    const value = e.target.value;
+    if (!this.config.custom_icons[entityId]) {
+      this.config.custom_icons[entityId] = {};
+    }
+    if (value === '__default__') {
+      // If 'Default' is selected, remove the property
+      delete this.config.custom_icons[entityId][`${iconType}State`];
+    } else {
+      this.config.custom_icons[entityId][`${iconType}State`] = value;
+    }
+    this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
+    e.stopPropagation();
   }
 }
 customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);

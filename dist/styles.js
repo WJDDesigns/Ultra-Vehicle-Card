@@ -1249,4 +1249,108 @@ ha-icon-button[disabled] {
   margin-left: 8px;
   cursor: pointer;
 }
+
+.custom-select {
+  position: relative;
+}
+
+.select-trigger {
+  cursor: pointer;
+  padding: 8px;
+  border: 1px solid var(--divider-color, #e0e0e0);
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.options-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.options-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--card-background-color, #fff);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  padding: 16px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.close-button {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+}
+
+.option {
+  padding: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.option:hover, .option:focus {
+  background-color: var(--secondary-background-color, #f0f0f0);
+}
+
+@media (min-width: 601px) {
+  .options-overlay {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    bottom: auto;
+    background-color: transparent;
+  }
+
+  .options-container {
+    position: relative;
+    max-height: 300px;
+    border: 1px solid var(--divider-color, #e0e0e0);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .close-button {
+    display: none;
+  }
+}
+
+.custom-select.open .options-overlay {
+  display: block;
+}
+      .editor-item.full-width {
+      width: 100%;
+    }
+
+    .editor-item.full-width ha-select {
+      width: 100%;
+    }
+
+    /* Ensure the ha-select internal elements stretch full width */
+    .editor-item.full-width ha-select::part(combobox) {
+      width: 100%;
+    }
+
+    .editor-item.full-width ha-select::part(input) {
+      width: 100%;
+    }
   `;

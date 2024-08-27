@@ -124,14 +124,10 @@ export function getIconActiveState(entityId, hass, customIcons) {
     return false;
   }
 
-  // Handle numeric values (consider non-zero as active, except for range/mileage)
+  // Handle numeric values (consider all numeric states as inactive by default)
   const numericValue = parseFloat(stateStr.replace(/,/g, ''));
   if (!isNaN(numericValue)) {
-    // Check if the entity is related to range or mileage
-    if (entityId.includes('range') || entityId.includes('mileage')) {
-      return false;
-    }
-    return numericValue !== 0;
+    return false;
   }
 
   // For other cases, consider any non-empty state as active, except for specific inactive states
