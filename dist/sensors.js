@@ -26,8 +26,7 @@ export function formatEntityValue(entity, useFormattedEntities, hass, localize) 
   if (numericMatch) {
     const numericValue = parseFloat(numericMatch[1].replace(/,/g, ''));
     const unit = numericMatch[2];
-    const roundedValue = Math.round(numericValue);
-    const formattedValue = roundedValue.toLocaleString('en-US');
+    const formattedValue = formatNumberWithCommas(numericValue, hass.language);
     return `${formattedValue} ${unit}`.trim();
   }
 
@@ -55,13 +54,12 @@ function formatDeviceTrackerState(state, attributes) {
   }
 }
 
-function formatSensorState(state, attributes) {
+function formatSensorState(state, attributes, locale) {
   if (isISODateString(state)) {
     return formatChargingEndTime(state);
   }
   if (!isNaN(parseFloat(state))) {
-    // Remove trailing zeros and decimal point if necessary
-    return formatNumberWithCommas(parseFloat(state).toFixed(0));
+    return formatNumberWithCommas(parseFloat(state), locale);
   }
   return formatGenericState(state);
 }
@@ -142,8 +140,8 @@ export function isEngineOn(engineOnEntity) {
   return engineOnEntity && engineOnEntity.state.toLowerCase() === "on";
 }
 
-function formatNumberWithCommas(number) {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+function formatNumberWithCommas(number, locale) {
+  return new Intl.NumberFormat(locale).format(number);
 }
 
 function isISODateString(value) {

@@ -283,7 +283,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
           <input
             id="title"
             type="text"
-            .value="${this.config.title}"
+            .value="${this.config.title || ''}"
             @input="${this._valueChanged}"
             .configValue="${"title"}"
           />
@@ -383,7 +383,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               type="number"
               min="50"
               max="500"
-              .value="${parseInt(this.config.mainImageHeight) || 180}"
+              .value="${this._formatNumberWithCommas(parseInt(this.config.mainImageHeight) || 180)}"
               @input="${this._valueChanged}"
               .configValue="${"mainImageHeight"}"
             />
@@ -406,7 +406,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               type="number"
               min="50"
               max="500"
-              .value="${parseInt(this.config.chargingImageHeight) || 180}"
+              .value="${this._formatNumberWithCommas(parseInt(this.config.chargingImageHeight) || 180)}"
               @input="${this._valueChanged}"
               .configValue="${"chargingImageHeight"}"
             />
@@ -656,18 +656,59 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     `;
   }
 
-  _renderEntityPicker(settingName, label) {
+  _renderEntityPicker(configValue, labelText, description) {
+    const toggleName = this._getToggleName(configValue);
     return html`
-      <div class="editor-item">
-        <ha-entity-picker
-          .hass=${this.hass}
-          .label=${label || this.localize(`editor.${settingName}`)}
-          .value=${this.config[settingName]}
-          .configValue=${settingName}
-          .includeDomains=${['sensor', 'binary_sensor', 'device_tracker']}
-          @value-changed=${this._valueChanged}
-          allow-custom-entity
-        ></ha-entity-picker>
+      <div class="input-group">
+        <label for="${configValue}">${labelText}</label>
+        <div class="entity-description">${description}</div>
+        <div class="entity-row">
+          <div class="entity-picker-wrapper">
+            <div class="entity-picker-container">
+              <input
+                type="text"
+                class="entity-picker-input"
+                .value="${this.config[configValue] || ""}"
+                @input="${(e) => this._entityFilterChanged(e, configValue)}"
+                placeholder="${this.localize("editor.search_entities")}"
+              />
+              ${this[`_${configValue}Filter`]
+                ? html`
+                    <div class="entity-picker-results">
+                      ${Object.keys(this.hass.states)
+                        .filter((eid) =>
+                          eid
+                            .toLowerCase()
+                            .includes(
+                              this[`_${configValue}Filter`].toLowerCase()
+                            )
+                        )
+                        .map(
+                          (eid) => html`
+                            <div
+                              class="entity-picker-result"
+                              @click="${() =>
+                                this._selectEntity(configValue, eid)}"
+                            >
+                              ${eid}
+                            </div>
+                          `
+                        )}
+                    </div>
+                  `
+                : ""}
+            </div>
+          </div>
+          <label class="switch">
+            <input
+              type="checkbox"
+              ?checked="${this.config[toggleName]}"
+              @change="${this._toggleChanged}"
+              .configValue="${toggleName}"
+            />
+            <span class="slider round"></span>
+          </label>
+        </div>
       </div>
     `;
   }
@@ -2109,10 +2150,10 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         this._updateConfig(configValue, value.endsWith('px') ? value : `${value}px`);
       } else if (configValue === 'image_url' || configValue === 'charging_image_url') {
         this._updateConfig(configValue, value);
-      } else if (target.type === 'number') {
+      } else if (configValue === 'title') {
         this._updateConfig(configValue, value);
       } else {
-        this._updateConfig(configValue, value);
+        this._updateConfig(configValue, target.checked !== undefined ? target.checked : value);
       }
     }
     this.configChanged(this.config);
@@ -2273,7 +2314,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
             <div class="input-with-unit">
               <input
                 type="number"
-                .value="${separatorConfig.height || 1}"
+                .value="${this._formatNumberWithCommas(separatorConfig.height || 1)}"
                 @input="${(e) =>
                   this._updateRowSeparatorConfig(
                     index,
@@ -2291,7 +2332,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
             <div class="input-with-unit">
               <input
                 type="number"
-                .value="${separatorConfig.icon_gap || 20}"
+                .value="${this._formatNumberWithCommas(separatorConfig.icon_gap || 20)}"
                 @input="${(e) =>
                   this._updateRowSeparatorConfig(
                     index,
@@ -2732,6 +2773,8 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         this._updateConfig(configValue, value.endsWith('px') ? value : `${value}px`);
       } else if (configValue === 'image_url' || configValue === 'charging_image_url') {
         this._updateConfig(configValue, value);
+      } else if (configValue === 'title') {
+        this._updateConfig(configValue, value);
       } else {
         this._updateConfig(configValue, target.checked !== undefined ? target.checked : value);
       }
@@ -2826,6 +2869,10 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
     this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
     e.stopPropagation();
+  }
+
+  _formatNumberWithCommas(number) {
+    return new Intl.NumberFormat(this.hass.language).format(number);
   }
 }
 customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);

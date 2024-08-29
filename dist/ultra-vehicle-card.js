@@ -101,7 +101,7 @@ class UltraVehicleCard extends localize(LitElement) {
 
     // Create a new config object with default values
     this.config = {
-      title: "My Vehicle",
+      title: config.title || "My Vehicle",  // Use the provided title or default to "My Vehicle"
       image_url: "",
       charging_image_url: "",
       image_url_type: "image",
@@ -387,9 +387,16 @@ class UltraVehicleCard extends localize(LitElement) {
     return this._roundNumber(parseFloat(entity.state));
   }
 
-  _roundNumber(value) {
-    // Round to the nearest integer
-    return Math.round(value).toString();
+  _roundNumber(number) {
+    if (Number.isInteger(number)) {
+      return this._formatNumberWithCommas(number);
+    }
+    // Round to one decimal place and format
+    return this._formatNumberWithCommas(Math.round(number * 10) / 10);
+  }
+
+  _formatNumberWithCommas(number) {
+    return new Intl.NumberFormat(this.hass.language).format(number);
   }
 
   _isCharging(chargingStatusEntity) {
@@ -948,17 +955,6 @@ class UltraVehicleCard extends localize(LitElement) {
     );
   }
 
-  // Add this new method for rounding
-  _roundNumber(number) {
-    // Check if the number has decimal places
-    if (Number.isInteger(number)) {
-      return number;
-    }
-
-    // Round to one decimal place
-    return Math.round(number * 10) / 10;
-  }
-
   _renderIconGrid() {
     const { icon_grid_entities, row_separators } = this.config;
 
@@ -1406,23 +1402,21 @@ class UltraVehicleCard extends localize(LitElement) {
       }
       // Check if it's a numeric string
       if (!isNaN(parseFloat(value))) {
-        // Convert to number, round to nearest integer, and format
-        return this._formatNumberWithCommas(Math.round(parseFloat(value)));
+        return this._formatNumberWithCommas(parseFloat(value));
       }
       // Return other strings as-is
       return value;
     }
 
     if (typeof value === "number") {
-      // Round to whole number and format with commas
-      return this._formatNumberWithCommas(Math.round(value));
+      return this._formatNumberWithCommas(value);
     }
 
     return value;
   }
 
   _formatNumberWithCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return new Intl.NumberFormat(this.hass.language).format(number);
   }
 
   _isISODateString(value) {
@@ -1458,11 +1452,6 @@ class UltraVehicleCard extends localize(LitElement) {
   _formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString();
-  }
-
-  _roundNumber(value) {
-    // Round to the nearest integer
-    return Math.round(value).toString();
   }
 
   _getLocalizedState(state) {
