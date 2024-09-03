@@ -71,8 +71,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     };
   }
 
+  
   static get styles() {
-    return styles;
+    return [styles];
   }
 
   constructor() {
@@ -1412,6 +1413,17 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
   }
 
+  _updateInteractionOption(entityId, option, value) {
+    this._iconInteractions = {
+      ...this._iconInteractions,
+      [entityId]: {
+        ...this._iconInteractions[entityId],
+        [option]: value,
+      },
+    };
+    this._updateIconInteractionsConfig();
+  }
+
   _updateIconInteractionsConfig() {
     const newConfig = {
       ...this.config,
@@ -1574,42 +1586,57 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   _renderStateContentPicker(entityId, iconType) {
     const currentValue = this.config.custom_icons[entityId]?.[`${iconType}State`] || '';
+    const [currentState, encodedStateValue] = currentValue.split(':');
+    const currentStateValue = encodedStateValue ? JSON.parse(encodedStateValue) : '';
     const entity = this.hass.states[entityId];
-  
+
     let options = [];
-  
+    let selectedLabel = 'Default';
+
     if (entity) {
-      if (entity.attributes.options) {
-        // For input_select entities
-        options = entity.attributes.options.map(option => ({ value: option, label: option }));
-      } else if (entity.attributes.state_class !== "measurement") {
-        // For other entities, use the current state and some common states
-        const commonStates = ['on', 'off', 'unavailable', 'unknown'];
-        const states = [...new Set([entity.state, ...commonStates])];
-        options = states.map(state => ({ value: state, label: state }));
+      options = Object.keys(entity.attributes).map(attr => ({ value: attr, label: attr }));
+      options.unshift({ value: 'state', label: 'State' });
+
+      if (currentState && currentState !== '__default__') {
+        selectedLabel = currentState;
       }
     }
 
-    // Add 'Default' option at the beginning
     options.unshift({ value: '__default__', label: 'Default' });
 
     return html`
-      <div class="editor-item full-width">
+      <div class="editor-item">
         <ha-select
           naturalMenuWidth
           fixedMenuPosition
           label="${iconType === 'inactive' ? 'Inactive State' : 'Active State'}"
-          .value=${currentValue || '__default__'}
+          .value=${currentState || '__default__'}
           @selected=${(e) => this._selectOption(e, entityId, iconType)}
           @closed=${(e) => e.stopPropagation()}
         >
           ${options.map(option => html`
             <mwc-list-item .value=${option.value}>
-              ${option.label}
+              ${option.value === currentState ? selectedLabel : option.label}
             </mwc-list-item>
           `)}
         </ha-select>
       </div>
+      ${currentState && currentState !== '__default__' ? html`
+        <div class="editor-item">
+          <label for="${entityId}-${iconType}-value">Value</label>
+          <textarea
+            id="${entityId}-${iconType}-value"
+            .value=${currentStateValue || ''}
+            @input=${(e) => this._updateStateValue(e, entityId, iconType, currentState)}
+            rows="4"
+          ></textarea>
+          <div class="helper-text">
+            You can use Home Assistant template syntax here. 
+            Example: {% if value <= 70 %}Cool{% elif value > 70 %}Hot{% endif %}
+            Available variables: value, state, attributes
+          </div>
+        </div>
+      ` : ''}
     `;
   }
 
@@ -1619,13 +1646,24 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       this.config.custom_icons[entityId] = {};
     }
     if (value === '__default__') {
-      // If 'Default' is selected, remove the property
       delete this.config.custom_icons[entityId][`${iconType}State`];
     } else {
-      this.config.custom_icons[entityId][`${iconType}State`] = value;
+      const currentValue = this.config.custom_icons[entityId][`${iconType}State`] || '';
+      const [, currentStateValue] = currentValue.split(':');
+      this.config.custom_icons[entityId][`${iconType}State`] = `${value}:${currentStateValue || ''}`;
     }
     this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
-    e.stopPropagation();
+  }
+
+  _updateStateValue(e, entityId, iconType, currentState) {
+    const value = e.target.value;
+    console.log("Updating state value:", entityId, iconType, currentState, value);
+    if (!this.config.custom_icons[entityId]) {
+      this.config.custom_icons[entityId] = {};
+    }
+    this.config.custom_icons[entityId][`${iconType}State`] = `${currentState}:${JSON.stringify(value)}`;
+    console.log("Updated custom icons:", this.config.custom_icons);
+    this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
   }
 
   _toggleChanged(ev) {
@@ -1852,7 +1890,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               id="${configKey}_upload"
               @change="${(e) => this._handleImageUpload(e, configKey)}"
               accept="image/*"
-              style="display: none;"
+              style="display:none;"
             />
           </label>
         `;
@@ -2865,10 +2903,23 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       // If 'Default' is selected, remove the property
       delete this.config.custom_icons[entityId][`${iconType}State`];
     } else {
-      this.config.custom_icons[entityId][`${iconType}State`] = value;
+      const currentValue = this.config.custom_icons[entityId][`${iconType}State`] || '';
+      const [, currentStateValue] = currentValue.split(':');
+      this.config.custom_icons[entityId][`${iconType}State`] = `${value}:${currentStateValue || ''}`;
     }
     this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
     e.stopPropagation();
+  }
+
+  _updateStateValue(e, entityId, iconType, currentState) {
+    const value = e.target.value;
+    console.log("Updating state value:", entityId, iconType, currentState, value);
+    if (!this.config.custom_icons[entityId]) {
+      this.config.custom_icons[entityId] = {};
+    }
+    this.config.custom_icons[entityId][`${iconType}State`] = `${currentState}:${JSON.stringify(value)}`;
+    console.log("Updated custom icons:", this.config.custom_icons);
+    this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
   }
 
   _formatNumberWithCommas(number) {

@@ -52,11 +52,16 @@ export const styles = css`
       }
 textarea {
   width: 100%;
-  padding: 8px;
   border: 1px solid var(--divider-color);
   border-radius: 4px;
   background-color: var(--card-background-color);
   color: var(--primary-text-color);
+  font-family: monospace;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 100px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
   .divider {
   height: 1px;
@@ -817,18 +822,75 @@ input[type="color"] {
  .editor-row {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  gap: 16px;
   margin-bottom: 16px;
 }
 
 .editor-item {
   flex: 1;
-  margin-right: 8px;
-  margin-top: 12px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.editor-item:last-child {
-  margin-right: 0;
+ha-select, ha-textfield, input[type="text"], input[type="number"] {
+  width: 100%;
+  min-height: 56px; /* Ensure consistent height */
+}
+
+.mdc-text-field, .mdc-select {
+  width: 100%;
+  min-height: 56px; /* Ensure consistent height */
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+
+.input-group label {
+  margin-bottom: 8px;
+}
+
+.input-with-unit {
+  display: flex;
+  align-items: center;
+}
+
+.input-with-unit input {
+  flex-grow: 1;
+  margin-right: 8px;
+}
+
+.unit {
+  white-space: nowrap;
+}
+
+/* Ensure color pickers are aligned */
+.color-input-container {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+}
+
+.color-preview {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+/* Ensure icon pickers are aligned */
+.icon-picker {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+}
+
+/* Ensure all buttons have consistent height */
+.icon-button, .transparent-button {
+  min-height: 36px;
 }
 
   .editor-item label {
@@ -840,25 +902,25 @@ input[type="color"] {
   .editor-item select,
   .editor-item input[type="number"] {
     width: 100%;
-    max-width: 100%; /* Ensures the element doesn't exceed its container */
+    max-width: 100%;
     padding: 8px;
     border-radius: 4px;
     border: 1px solid var(--divider-color, #e0e0e0);
     background-color: var(--card-background-color);
     color: var(--primary-text-color);
-    box-sizing: border-box; /* Includes padding in the width calculation */
+    box-sizing: border-box;
   }
 
   .editor-item ha-icon-picker {
     width: 100%;
     max-width: 100%;
-    border: none !important; /* Explicitly remove border */
-    background: none !important; /* Remove any background */
-    padding: 0 !important; /* Remove any padding */
+    border: none !important;
+    background: none !important;
+    padding: 0 !important;
   }
 
   .editor-item input[type="number"] {
-    -moz-appearance: textfield; /* Removes spinner for Firefox */
+    -moz-appearance: textfield;
   }
 
   .editor-item input[type="number"]::-webkit-inner-spin-button,
@@ -1187,157 +1249,7 @@ ha-icon-button[disabled] {
         flex-grow: 1;
         margin-right: 10px;
       }
-  .editor-item select {
-  width: 100%;
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid var(--divider-color, #e0e0e0);
-  background-color: var(--card-background-color, #fff);
-  color: var(--primary-text-color, #000);
-}
-
-.custom-select {
-  position: relative;
-  width: 100%;
-}
-
-.select-trigger {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px;
-  background-color: var(--card-background-color, #fff);
-  border: 1px solid var(--divider-color, #e0e0e0);
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.options {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 1;
-  max-height: 200px;
-  overflow-y: auto;
-  background-color: var(--card-background-color, #fff);
-  border: 1px solid var(--divider-color, #e0e0e0);
-  border-top: none;
-  border-radius: 0 0 4px 4px;
-}
-
-.custom-select.open .options {
-  display: block;
-}
-
-.option {
-  padding: 8px;
-  cursor: pointer;
-}
-
-.option:hover {
-  background-color: var(--secondary-background-color, #f0f0f0);
-}
-
-.select-actions {
-  display: flex;
-  align-items: center;
-}
-
-.select-actions ha-icon {
-  margin-left: 8px;
-  cursor: pointer;
-}
-
-.custom-select {
-  position: relative;
-}
-
-.select-trigger {
-  cursor: pointer;
-  padding: 8px;
-  border: 1px solid var(--divider-color, #e0e0e0);
-  border-radius: 4px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.options-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-}
-
-.options-container {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: var(--card-background-color, #fff);
-  border-top-left-radius: 16px;
-  border-top-right-radius: 16px;
-  padding: 16px;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-.close-button {
-  position: sticky;
-  top: 0;
-  display: flex;
-  justify-content: flex-end;
-  padding-bottom: 8px;
-}
-
-.options {
-  display: flex;
-  flex-direction: column;
-}
-
-.option {
-  padding: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.option:hover, .option:focus {
-  background-color: var(--secondary-background-color, #f0f0f0);
-}
-
-@media (min-width: 601px) {
-  .options-overlay {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    bottom: auto;
-    background-color: transparent;
-  }
-
-  .options-container {
-    position: relative;
-    max-height: 300px;
-    border: 1px solid var(--divider-color, #e0e0e0);
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  }
-
-  .close-button {
-    display: none;
-  }
-}
-
-.custom-select.open .options-overlay {
-  display: block;
-}
-      .editor-item.full-width {
+  .editor-item.full-width {
       width: 100%;
     }
 
@@ -1353,4 +1265,37 @@ ha-icon-button[disabled] {
     .editor-item.full-width ha-select::part(input) {
       width: 100%;
     }
-  `;
+
+  .editor-item {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 8px;
+  }
+
+  .editor-item textarea {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 4px;
+    border: 1px solid var(--divider-color, #e0e0e0);
+    background-color: var(--card-background-color);
+    color: var(--primary-text-color);
+    font-family: monospace;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 100px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  .editor-item label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: bold;
+  }
+
+  .helper-text {
+    font-size: 12px;
+    color: var(--secondary-text-color);
+    margin-top: 4px;
+  }
+`;

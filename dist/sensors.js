@@ -1,10 +1,46 @@
-export function formatEntityValue(entity, useFormattedEntities, hass, localize) {
+export function formatEntityValue(entity, useFormattedEntities, hass, localize, numberFormat, customIcon) {
   if (!entity || !hass) return null;
-
 
   // If formatting is not enabled, return the state as-is
   if (!useFormattedEntities) {
     return entity.state;
+  }
+
+  // Handle binary sensors
+  if (entity.entity_id.startsWith('binary_sensor.')) {
+    return formatBinaryState(entity.state, entity.attributes, hass, localize);
+  }
+
+  // Use custom icon state if available
+  if (customIcon && (customIcon.activeState || customIcon.inactiveState)) {
+    const context = {
+      value: parseFloat(entity.state) || entity.state,
+      state: entity.state,
+      attributes: entity.attributes,
+    };
+    
+    const renderTemplate = (template) => {
+      if (!hass.templateEngine) {
+        console.warn('Template engine not available. Returning raw template.');
+        return template;
+      }
+      try {
+        return hass.templateEngine.renderTemplate(template, context);
+      } catch (error) {
+        console.error('Error rendering template:', error);
+        return '';
+      }
+    };
+    
+    if (customIcon.activeState) {
+      const activeResult = renderTemplate(customIcon.activeState);
+      if (activeResult) return activeResult;
+    }
+    
+    if (customIcon.inactiveState) {
+      const inactiveResult = renderTemplate(customIcon.inactiveState);
+      if (inactiveResult) return inactiveResult;
+    }
   }
 
   // Use Home Assistant's built-in localization for state
@@ -22,11 +58,25 @@ export function formatEntityValue(entity, useFormattedEntities, hass, localize) 
   }
 
   // Handle numeric values with units
-  const numericMatch = translatedState.match(/^([\d,]+(?:\.\d+)?)\s*(.*)$/);
+  const numericMatch = translatedState.match(/^([\d.,]+)\s*(.*)$/);
   if (numericMatch) {
-    const numericValue = parseFloat(numericMatch[1].replace(/,/g, ''));
+    const rawValue = numericMatch[1];
     const unit = numericMatch[2];
-    const formattedValue = formatNumberWithCommas(numericValue, hass.language);
+    
+    // Determine the decimal separator from the number format
+    const decimalSeparator = numberFormat && numberFormat.includes(',') ? ',' : '.';
+    const thousandsSeparator = decimalSeparator === ',' ? '.' : ',';
+
+    // Parse the number correctly based on the format
+    const numericValue = parseFloat(rawValue.replace(thousandsSeparator, '').replace(decimalSeparator, '.'));
+
+    // Format the number using the user's preferred format
+    const formattedValue = new Intl.NumberFormat(hass.language, {
+      style: 'decimal',
+      minimumFractionDigits: rawValue.split(decimalSeparator)[1]?.length || 0,
+      maximumFractionDigits: rawValue.split(decimalSeparator)[1]?.length || 0,
+    }).format(numericValue);
+
     return `${formattedValue} ${unit}`.trim();
   }
 
@@ -34,12 +84,33 @@ export function formatEntityValue(entity, useFormattedEntities, hass, localize) 
   return translatedState;
 }
 
-function formatBinaryState(state, attributes, hass, localize) {
+export function formatBinaryState(state, attributes, hass, localize) {
   const isOn = state.toLowerCase() === 'on';
-  if (attributes.device_class) {
-    const key = `state.${attributes.device_class}.${isOn ? 'on' : 'off'}`;
-    return hass.localize(`component.binary_sensor.${key}`) || localize(key) || (isOn ? 'On' : 'Off');
+  const deviceClass = attributes.device_class;
+
+  if (deviceClass) {
+    const key = `state.${deviceClass}.${isOn ? 'on' : 'off'}`;
+    const translatedState = hass.localize(`component.binary_sensor.${key}`) || localize(key);
+    if (translatedState && translatedState !== key) {
+      return translatedState;
+    }
+
+    // Fallback labels for common device classes
+    const fallbackLabels = {
+      window: isOn ? 'Open' : 'Closed',
+      door: isOn ? 'Open' : 'Closed',
+      opening: isOn ? 'Open' : 'Closed',
+      motion: isOn ? 'Detected' : 'Clear',
+      presence: isOn ? 'Home' : 'Away',
+      connectivity: isOn ? 'Connected' : 'Disconnected',
+    };
+
+    if (fallbackLabels[deviceClass]) {
+      return fallbackLabels[deviceClass];
+    }
   }
+  
+  // If no translation is found or no device class, use these default labels
   return isOn ? 'On' : 'Off';
 }
 
@@ -72,64 +143,27 @@ function formatGenericState(state) {
 export function getIconActiveState(entityId, hass, customIcons) {
   const state = hass.states[entityId];
   if (!state) return false;
-  const stateStr = state.state.toLowerCase();
+  const stateStr = state.state?.toLowerCase() || '';
 
   // Check custom icon states if defined
   if (customIcons && customIcons[entityId]) {
     const activeState = customIcons[entityId].activeState;
-    const inactiveState = customIcons[entityId].inactiveState;
     
     if (activeState) {
-      if (activeState.startsWith('attribute:')) {
-        const [, attrName, attrValue] = activeState.split(':');
-        return state.attributes[attrName]?.toString().toLowerCase() === attrValue.toLowerCase();
-      } else if (stateStr === activeState.toLowerCase()) {
-        return true;
-      }
-    }
-    if (inactiveState) {
-      if (inactiveState.startsWith('attribute:')) {
-        const [, attrName, attrValue] = inactiveState.split(':');
-        return state.attributes[attrName]?.toString().toLowerCase() !== attrValue.toLowerCase();
-      } else if (stateStr === inactiveState.toLowerCase()) {
-        return false;
+      const [attr, value] = activeState.split(':');
+      if (attr === 'state') {
+        return stateStr === (value || '').toLowerCase();
+      } else {
+        const attrValue = state.attributes[attr];
+        if (attrValue !== undefined) {
+          return attrValue.toString().toLowerCase() === (value || '').toLowerCase();
+        }
       }
     }
   }
 
-  // Always consider mileage/odometer/range entities as inactive
-  if (entityId.includes('odometer') || entityId.includes('mileage') || entityId.includes('range')) {
-    return false;
-  }
-
-  // Handle boolean entities
-  if (["on", "off", "true", "false"].includes(stateStr)) {
-    return ["on", "true"].includes(stateStr);
-  }
-
-  // Handle charging status specifically
-  if (state.attributes.device_class === "battery_charging") {
-    return stateStr === "on" || stateStr === "charging";
-  }
-
-  // Handle other types of entities
-  if (["open", "unlocked", "charging", "connected"].includes(stateStr)) {
-    return true;
-  }
-
-  // Handle specific inactive states
-  if (["closed", "locked", "not_charging", "disconnected"].includes(stateStr)) {
-    return false;
-  }
-
-  // Handle numeric values (consider all numeric states as inactive by default)
-  const numericValue = parseFloat(stateStr.replace(/,/g, ''));
-  if (!isNaN(numericValue)) {
-    return false;
-  }
-
-  // For other cases, consider any non-empty state as active, except for specific inactive states
-  return stateStr !== "" && stateStr !== "unavailable" && stateStr !== "unknown" && stateStr !== "off";
+  // Default behavior if no custom state is defined
+  return ["on", "home", "open", "active", "heating", "cooling"].includes(stateStr);
 }
 
 export function formatBinarySensorState(state, attributes) {

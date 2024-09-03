@@ -7,7 +7,7 @@ import { version, setVersion } from "./version.js?v=10";
 setVersion("V1.6.0-beta3");
 
 const sensorModule = await import("./sensors.js?v=" + version);
-const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn } = sensorModule;
+const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn, formatBinaryState } = sensorModule;
 
 const UltraVehicleCardEditor = await import(
   "./ultra-vehicle-card-editor.js?v=" + version
@@ -293,7 +293,8 @@ class UltraVehicleCard extends localize(LitElement) {
       batteryRangeEntity,
       this.config.useFormattedEntities,
       this.hass,
-      this.localize
+      this.localize,
+      this.hass.locale.number_format
     );
     const isCharging = this._isCharging(chargingStatusEntity);
     const chargeLimit = this.config.show_charge_limit
@@ -458,7 +459,8 @@ class UltraVehicleCard extends localize(LitElement) {
       fuelRangeEntity,
       this.config.useFormattedEntities,
       this.hass,
-      this.localize
+      this.localize,
+      this.hass.locale.number_format
     );
     const isEngineOn = sensorModule.isEngineOn(engineOnEntity);
 
@@ -550,7 +552,8 @@ class UltraVehicleCard extends localize(LitElement) {
       batteryRangeEntity,
       this.config.useFormattedEntities,
       this.hass,
-      this.localize
+      this.localize,
+      this.hass.locale.number_format
     );
     const fuelLevel = fuelLevelEntity
       ? parseFloat(fuelLevelEntity.state)
@@ -559,7 +562,8 @@ class UltraVehicleCard extends localize(LitElement) {
       fuelRangeEntity,
       this.config.useFormattedEntities,
       this.hass,
-      this.localize
+      this.localize,
+      this.hass.locale.number_format
     );
     const isCharging = this._isCharging(chargingStatusEntity);
     const chargeLimit =
@@ -736,7 +740,8 @@ class UltraVehicleCard extends localize(LitElement) {
       carStateEntity,
       this.config.useFormattedEntities,
       this.hass,
-      this.localize
+      this.localize,
+      this.hass.locale.number_format
     );
 
     return html`
@@ -800,7 +805,8 @@ class UltraVehicleCard extends localize(LitElement) {
         locationEntity,
         this.config.useFormattedEntities,
         this.hass,
-        this.localize
+        this.localize,
+        this.hass.locale.number_format
       );
     }
 
@@ -813,7 +819,8 @@ class UltraVehicleCard extends localize(LitElement) {
         mileageEntity,
         this.config.useFormattedEntities,
         this.hass,
-        this.localize
+        this.localize,
+        this.hass.locale.number_format
       );
     }
 
@@ -826,7 +833,8 @@ class UltraVehicleCard extends localize(LitElement) {
         carStateEntity,
         this.config.useFormattedEntities,
         this.hass,
-        this.localize
+        this.localize,
+        this.hass.locale.number_format
       );
     }
 
@@ -1047,36 +1055,34 @@ class UltraVehicleCard extends localize(LitElement) {
     if (!state) return html``;
 
     const customIcon = this.config.custom_icons?.[entityId] || {};
-    const isActive = getIconActiveState(entityId, this.hass, this.config.custom_icons);
+    const iconState = this._evaluateIconState(entityId, customIcon);
+    if (!iconState) return html``;
+
+    const { icon, color, label, isActive } = iconState;
     const defaultIcon = "mdi:help-circle";
     
     // Determine which icon to use
-    let icon;
-    if (isActive) {
-      icon = customIcon.active === "no-icon" ? "" : (customIcon.active || state.attributes.icon || defaultIcon);
-    } else {
-      icon = customIcon.inactive === "no-icon" ? "" : (customIcon.inactive || state.attributes.icon || defaultIcon);
-    }
+    let iconToRender = icon === "no-icon" ? "" : (icon || state.attributes.icon || defaultIcon);
 
-    const color = this._getIconColor(entityId, isActive);
     const iconSize = this.config.icon_sizes?.[entityId] || this.config.icon_size || 24;
     const buttonStyle = this.config.icon_styles?.[entityId] || "icon";
     const labelPosition = this.config.icon_labels?.[entityId] || "none";
 
-    // Format the label text and add unit of measurement
-    const formattedValue = formatEntityValue(
+    // Determine label text
+    let labelText = label || formatEntityValue(
       state,
       this.config.useFormattedEntities,
       this.hass,
-      this.localize
+      this.localize,
+      this.hass.locale.number_format,
+      customIcon
     );
-    const labelText = formattedValue;
 
     // Calculate label size based on icon size
     const labelSize = iconSize > 28 ? Math.round(iconSize * 0.5) : 14;
 
     // Determine if we should render anything
-    const shouldRender = icon !== "" || buttonStyle === "label";
+    const shouldRender = iconToRender !== "" || buttonStyle === "label";
 
     if (shouldRender) {
       return html`
@@ -1097,10 +1103,10 @@ class UltraVehicleCard extends localize(LitElement) {
             customIcon,
             buttonStyle
           )}
-          ${buttonStyle !== "label" && icon
+          ${buttonStyle !== "label" && iconToRender
             ? html`
                 <ha-icon
-                  icon="${icon}"
+                  icon="${iconToRender}"
                   style="--mdc-icon-size: ${iconSize}px; color: ${color};"
                 ></ha-icon>
               `
@@ -1117,6 +1123,148 @@ class UltraVehicleCard extends localize(LitElement) {
       `;
     }
     return html``;
+  }
+
+  _evaluateIconState(entityId, iconState) {
+    const state = this.hass.states[entityId];
+    if (!state) return null;
+
+    const context = this._getEntityStateContext(entityId);
+    console.log("Entity context:", context);
+
+    let isActive = false;
+    let icon = iconState.inactive;
+    let color = iconState.inactiveColor;
+    let label = '';
+
+    const isBinarySensor = state.entity_id.startsWith('binary_sensor.');
+    const stateIsOn = state.state.toLowerCase() === 'on';
+
+    if (isBinarySensor) {
+      isActive = stateIsOn;
+      
+      if (isActive && iconState.activeState) {
+        label = this._renderHATemplate(iconState.activeState, context);
+      } else if (!isActive && iconState.inactiveState) {
+        label = this._renderHATemplate(iconState.inactiveState, context);
+      }
+
+      if (!label) {
+        label = formatBinaryState(state.state, state.attributes, this.hass, this.localize);
+      }
+
+      // Remove any "state:" prefix and trim quotation marks
+      label = label.replace(/^state:\s*/, '').replace(/^["']|["']$/g, '').trim();
+    } else {
+      if (iconState.activeState) {
+        const activeStateResult = this._renderHATemplate(iconState.activeState, context);
+        if (activeStateResult) {
+          isActive = true;
+          label = activeStateResult;
+        }
+      }
+
+      if (!isActive && iconState.inactiveState) {
+        const inactiveStateResult = this._renderHATemplate(iconState.inactiveState, context);
+        if (inactiveStateResult) {
+          label = inactiveStateResult;
+        }
+      }
+    }
+
+    if (isActive) {
+      icon = iconState.active;
+      color = iconState.activeColor;
+    }
+
+    if (!label) {
+      label = formatEntityValue(state, true, this.hass, this.localize, this.hass.locale.number_format, iconState);
+    }
+
+    console.log("Final icon state:", { icon, color, label, isActive });
+    return { icon, color, label, isActive };
+  }
+
+  _getEntityStateContext(entityId) {
+    const state = this.hass.states[entityId];
+    if (!state) return {};
+
+    const context = {
+      state: state.state,
+      attributes: state.attributes,
+    };
+
+    // Add the 'value' property for temperature sensors
+    if (state.attributes.current_temperature !== undefined) {
+      context.value = state.attributes.current_temperature;
+    } else if (state.attributes.temperature !== undefined) {
+      context.value = state.attributes.temperature;
+    } else if (state.attributes.unit_of_measurement === '°F' || state.attributes.unit_of_measurement === '°C') {
+      context.value = parseFloat(state.state);
+    } else {
+      context.value = state.state;
+    }
+
+    return context;
+  }
+
+  _renderHATemplate(template, context) {
+    console.log("Rendering template:", template, "with context:", context);
+    try {
+      if (!template) return '';
+
+      // Remove surrounding quotes if present
+      let cleanTemplate = template.replace(/^["']|["']$/g, '').trim();
+      console.log("Clean template:", cleanTemplate);
+
+      // Handle Jinja2-style if statements
+      const ifRegex = /{%\s*if\s+(.+?)\s*%}(.+?)(?:{%\s*else\s*%}(.+?))?{%\s*endif\s*%}/g;
+      const renderedTemplate = cleanTemplate.replace(ifRegex, (match, condition, ifTrue, ifFalse) => {
+        const evalCondition = (cond) => {
+          return new Function('state', 'attributes', `return ${cond.replace(/state/g, 'state')};`)(context.state, context.attributes);
+        };
+
+        return evalCondition(condition) ? ifTrue.trim() : (ifFalse ? ifFalse.trim() : '');
+      });
+
+      console.log("Template result:", renderedTemplate);
+      // Remove any surrounding quotes from the final result
+      return renderedTemplate.replace(/^["']|["']$/g, '').trim();
+    } catch (error) {
+      console.error("Error rendering template:", error);
+      return '';
+    }
+  }
+
+  _evaluateCustomValue(entityId, customIcon, isActive) {
+    console.log("Evaluating custom value for:", entityId, customIcon, isActive);
+    const state = this.hass.states[entityId];
+    if (!state) return '';
+
+    const stateConfig = isActive ? customIcon.activeState : customIcon.inactiveState;
+    if (stateConfig) {
+      const [attr, encodedTemplate] = stateConfig.split(':');
+      const value = attr === 'state' ? state.state : state.attributes[attr];
+      const context = { value: parseFloat(value) || value, state: state.state, attributes: state.attributes };
+      console.log("Custom value context:", context);
+      
+      try {
+        const result = this._renderHATemplate(JSON.parse(encodedTemplate), context) || '';
+        console.log("Custom value result:", result);
+        return result;
+      } catch (error) {
+        console.error("Error evaluating template:", error, "Template:", encodedTemplate);
+        return '';
+      }
+    }
+
+    return formatEntityValue(
+      state,
+      this.config.useFormattedEntities,
+      this.hass,
+      this.localize,
+      this.hass.locale.number_format
+    );
   }
 
   _renderLabel(
@@ -1629,6 +1777,120 @@ class UltraVehicleCard extends localize(LitElement) {
       const dropdowns = this.shadowRoot.querySelectorAll('.custom-select');
       dropdowns.forEach(dropdown => dropdown.classList.remove('open'));
     }
+  }
+
+  _renderHATemplate(template, context) {
+    console.log("Rendering template:", template, "with context:", context);
+    try {
+      if (!template) return '';
+
+      // Remove surrounding quotes if present
+      let cleanTemplate = template.replace(/^["']|["']$/g, '').trim();
+      console.log("Clean template:", cleanTemplate);
+
+      // Handle Jinja2-style if statements
+      const ifRegex = /{%\s*if\s+(.+?)\s*%}(.+?)(?:{%\s*else\s*%}(.+?))?{%\s*endif\s*%}/g;
+      const renderedTemplate = cleanTemplate.replace(ifRegex, (match, condition, ifTrue, ifFalse) => {
+        const evalCondition = (cond) => {
+          return new Function('state', 'attributes', `return ${cond.replace(/state/g, 'state')};`)(context.state, context.attributes);
+        };
+
+        return evalCondition(condition) ? ifTrue.trim() : (ifFalse ? ifFalse.trim() : '');
+      });
+
+      console.log("Template result:", renderedTemplate);
+      // Remove any surrounding quotes from the final result
+      return renderedTemplate.replace(/^["']|["']$/g, '').trim();
+    } catch (error) {
+      console.error("Error rendering template:", error);
+      return '';
+    }
+  }
+
+  _evaluateIconState(entityId, iconState) {
+    const state = this.hass.states[entityId];
+    if (!state) return null;
+
+    const context = {
+      state: state.state,
+      attributes: state.attributes,
+    };
+    console.log("Entity context:", context);
+
+    let isActive = false;
+    let icon = iconState.inactive;
+    let color = iconState.inactiveColor;
+    let label = '';
+
+    const isBinarySensor = state.entity_id.startsWith('binary_sensor.');
+    const stateIsOn = state.state.toLowerCase() === 'on';
+
+    if (isBinarySensor) {
+      isActive = stateIsOn;
+      
+      if (isActive && iconState.activeState) {
+        label = this._renderHATemplate(iconState.activeState, context);
+      } else if (!isActive && iconState.inactiveState) {
+        label = this._renderHATemplate(iconState.inactiveState, context);
+      }
+
+      if (!label) {
+        label = formatBinaryState(state.state, state.attributes, this.hass, this.localize);
+      }
+
+      // Remove any "state:" prefix and trim quotation marks
+      label = label.replace(/^state:\s*/, '').replace(/^["']|["']$/g, '').trim();
+    } else {
+      if (iconState.activeState) {
+        const activeStateResult = this._renderHATemplate(iconState.activeState, context);
+        if (activeStateResult) {
+          isActive = true;
+          label = activeStateResult;
+        }
+      }
+
+      if (!isActive && iconState.inactiveState) {
+        const inactiveStateResult = this._renderHATemplate(iconState.inactiveState, context);
+        if (inactiveStateResult) {
+          label = inactiveStateResult;
+        }
+      }
+    }
+
+    if (isActive) {
+      icon = iconState.active;
+      color = iconState.activeColor;
+    }
+
+    if (!label) {
+      label = formatEntityValue(state, true, this.hass, this.localize, this.hass.locale.number_format, iconState);
+    }
+
+    console.log("Final icon state:", { icon, color, label, isActive });
+    return { icon, color, label, isActive };
+  }
+
+  _getEntityStateContext(entityId) {
+    const state = this.hass.states[entityId];
+    if (!state) return {};
+
+    const context = {
+      state: state.state,
+      attributes: state.attributes,
+    };
+
+    // Add the 'value' property for temperature sensors
+    if (state.attributes.current_temperature !== undefined) {
+      context.value = state.attributes.current_temperature;
+    } else if (state.attributes.temperature !== undefined) {
+      context.value = state.attributes.temperature;
+    } else if (state.attributes.unit_of_measurement === '°F' || state.attributes.unit_of_measurement === '°C') {
+      context.value = parseFloat(state.state);
+    } else {
+      context.value = state.state;
+    }
+
+    return context;
   }
 }
 
