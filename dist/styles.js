@@ -52,16 +52,11 @@ export const styles = css`
       }
 textarea {
   width: 100%;
+  padding: 8px;
   border: 1px solid var(--divider-color);
   border-radius: 4px;
   background-color: var(--card-background-color);
   color: var(--primary-text-color);
-  font-family: monospace;
-  font-size: 14px;
-  resize: vertical;
-  min-height: 100px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
 }
   .divider {
   height: 1px;
@@ -822,75 +817,17 @@ input[type="color"] {
  .editor-row {
   display: flex;
   justify-content: space-between;
-  gap: 16px;
+  align-items: flex-end;
   margin-bottom: 16px;
 }
 
 .editor-item {
   flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-ha-select, ha-textfield, input[type="text"], input[type="number"] {
-  width: 100%;
-  min-height: 56px; /* Ensure consistent height */
-}
-
-.mdc-text-field, .mdc-select {
-  width: 100%;
-  min-height: 56px; /* Ensure consistent height */
-}
-
-.input-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 16px;
-}
-
-.input-group label {
-  margin-bottom: 8px;
-}
-
-.input-with-unit {
-  display: flex;
-  align-items: center;
-}
-
-.input-with-unit input {
-  flex-grow: 1;
   margin-right: 8px;
 }
 
-.unit {
-  white-space: nowrap;
-}
-
-/* Ensure color pickers are aligned */
-.color-input-container {
-  display: flex;
-  align-items: center;
-  min-height: 56px;
-}
-
-.color-preview {
-  width: 40px;
-  height: 40px;
-  border-radius: 4px;
-  margin-right: 8px;
-}
-
-/* Ensure icon pickers are aligned */
-.icon-picker {
-  display: flex;
-  align-items: center;
-  min-height: 56px;
-}
-
-/* Ensure all buttons have consistent height */
-.icon-button, .transparent-button {
-  min-height: 36px;
+.editor-item:last-child {
+  margin-right: 0;
 }
 
   .editor-item label {
@@ -902,25 +839,25 @@ ha-select, ha-textfield, input[type="text"], input[type="number"] {
   .editor-item select,
   .editor-item input[type="number"] {
     width: 100%;
-    max-width: 100%;
+    max-width: 100%; /* Ensures the element doesn't exceed its container */
     padding: 8px;
     border-radius: 4px;
     border: 1px solid var(--divider-color, #e0e0e0);
     background-color: var(--card-background-color);
     color: var(--primary-text-color);
-    box-sizing: border-box;
+    box-sizing: border-box; /* Includes padding in the width calculation */
   }
 
   .editor-item ha-icon-picker {
     width: 100%;
     max-width: 100%;
-    border: none !important;
-    background: none !important;
-    padding: 0 !important;
+    border: none !important; /* Explicitly remove border */
+    background: none !important; /* Remove any background */
+    padding: 0 !important; /* Remove any padding */
   }
 
   .editor-item input[type="number"] {
-    -moz-appearance: textfield;
+    -moz-appearance: textfield; /* Removes spinner for Firefox */
   }
 
   .editor-item input[type="number"]::-webkit-inner-spin-button,
@@ -1249,53 +1186,5 @@ ha-icon-button[disabled] {
         flex-grow: 1;
         margin-right: 10px;
       }
-  .editor-item.full-width {
-      width: 100%;
-    }
 
-    .editor-item.full-width ha-select {
-      width: 100%;
-    }
-
-    /* Ensure the ha-select internal elements stretch full width */
-    .editor-item.full-width ha-select::part(combobox) {
-      width: 100%;
-    }
-
-    .editor-item.full-width ha-select::part(input) {
-      width: 100%;
-    }
-
-  .editor-item {
-    width: 100%;
-    max-width: 400px;
-    margin-bottom: 8px;
-  }
-
-  .editor-item textarea {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 4px;
-    border: 1px solid var(--divider-color, #e0e0e0);
-    background-color: var(--card-background-color);
-    color: var(--primary-text-color);
-    font-family: monospace;
-    font-size: 14px;
-    resize: vertical;
-    min-height: 100px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
-
-  .editor-item label {
-    display: block;
-    margin-bottom: 4px;
-    font-weight: bold;
-  }
-
-  .helper-text {
-    font-size: 12px;
-    color: var(--secondary-text-color);
-    margin-top: 4px;
-  }
 `;

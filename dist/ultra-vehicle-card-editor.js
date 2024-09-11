@@ -3,7 +3,8 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=11";
+import { version } from "./version.js?v=7";
+import './state-dropdown.js';
 
 const stl = await import("./styles.js?v=" + version);
 const loc = await import("./localize.js?v=" + version);
@@ -71,7 +72,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     };
   }
 
-  
   static get styles() {
     return [styles];
   }
@@ -83,6 +83,56 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       this._applyColorChange.bind(this),
       100
     );
+    this._dialogCloseHandler = this._dialogCloseHandler.bind(this);
+    this._preventDialogClose = this._preventDialogClose.bind(this);
+  }
+
+  firstUpdated() {
+    super.firstUpdated();
+    this._setupDialogCloseHandlers();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this._removeDialogCloseHandlers();
+  }
+
+  _setupDialogCloseHandlers() {
+    const dialog = this.closest('ha-dialog');
+    if (dialog) {
+      console.log("Dialog found, setting up close handlers");
+      dialog.addEventListener('close', this._dialogCloseHandler, true);
+      dialog.addEventListener('iron-overlay-closed', this._dialogCloseHandler, true);
+      window.addEventListener('dialog-closed', this._preventDialogClose, true);
+    } else {
+      console.log("Dialog not found");
+    }
+  }
+
+  _removeDialogCloseHandlers() {
+    const dialog = this.closest('ha-dialog');
+    if (dialog) {
+      dialog.removeEventListener('close', this._dialogCloseHandler, true);
+      dialog.removeEventListener('iron-overlay-closed', this._dialogCloseHandler, true);
+    }
+    window.removeEventListener('dialog-closed', this._preventDialogClose, true);
+  }
+
+  _dialogCloseHandler(e) {
+    console.log("Dialog close event intercepted", e.type);
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  }
+
+  _preventDialogClose(e) {
+    console.log("Preventing dialog from closing", e.type);
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.detail && e.detail.dialog) {
+      e.detail.dialog.open = true;
+    }
+    return false;
   }
 
   _initializeProperties() {
@@ -96,6 +146,8 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this._iconGridFilter = "";
     this._selectedIconGridEntities = [];
     this._customIcons = {};
+    this._iconInteractions = {};
+    this._iconStyles = {};
     this._iconSearchFilter = "";
     this._currentEditingEntity = null;
     this._currentEditingIconType = null;
@@ -266,7 +318,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
 
     return html`
-      <div @click=${(e) => e.stopPropagation()} @keydown=${this._handleKeydown}>
+      <div class="editor-container">
         ${this._renderBasicConfig()}
         ${this._renderFormattedEntitiesToggle()}
         ${this._renderEntityInformation()}
@@ -284,7 +336,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
           <input
             id="title"
             type="text"
-            .value="${this.config.title || ''}"
+            .value="${this.config.title}"
             @input="${this._valueChanged}"
             .configValue="${"title"}"
           />
@@ -384,7 +436,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               type="number"
               min="50"
               max="500"
-              .value="${this._formatNumberWithCommas(parseInt(this.config.mainImageHeight) || 180)}"
+              .value="${parseInt(this.config.mainImageHeight) || 180}"
               @input="${this._valueChanged}"
               .configValue="${"mainImageHeight"}"
             />
@@ -407,7 +459,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               type="number"
               min="50"
               max="500"
-              .value="${this._formatNumberWithCommas(parseInt(this.config.chargingImageHeight) || 180)}"
+              .value="${parseInt(this.config.chargingImageHeight) || 180}"
               @input="${this._valueChanged}"
               .configValue="${"chargingImageHeight"}"
             />
@@ -585,6 +637,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _fireEvent(type, detail) {
+    console.log(`Firing ${type} event with detail:`, detail);
     const event = new CustomEvent(type, {
       detail,
       bubbles: true,
@@ -834,7 +887,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 @value-changed=${(e) =>
                   this._handleIconChange(e, "inactive", entityId)}
               ></ha-icon-picker>
-              ${this._renderStateContentPicker(entityId, "inactive")}
               <mwc-button
                 @click=${() => this._setNoIcon(entityId, "inactive")}
                 .selected=${inactiveIcon === "no-icon"}
@@ -842,6 +894,13 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                   "editor.no_icon"
                 )}</mwc-button
               >
+              <state-dropdown
+                .hass=${this.hass}
+                .config=${this.config.custom_icons?.[entityId] || {}}
+                .entityId=${entityId}
+                .stateType=${'inactive'}
+                @state-dropdown-changed=${this._handleStateConfigChange}
+              ></state-dropdown>
             </div>
             <div class="editor-item">
               <label>${this.localize("editor.active_icon")}</label>
@@ -851,7 +910,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 @value-changed=${(e) =>
                   this._handleIconChange(e, "active", entityId)}
               ></ha-icon-picker>
-              ${this._renderStateContentPicker(entityId, "active")}
               <mwc-button
                 @click=${() => this._setNoIcon(entityId, "active")}
                 .selected=${activeIcon === "no-icon"}
@@ -859,6 +917,13 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                   "editor.no_icon"
                 )}</mwc-button
               >
+              <state-dropdown
+                .hass=${this.hass}
+                .config=${this.config.custom_icons?.[entityId] || {}}
+                .entityId=${entityId}
+                .stateType=${'active'}
+                @state-dropdown-changed=${this._handleStateConfigChange}
+              ></state-dropdown>
             </div>
           </div>
           <div class="editor-row">
@@ -1413,17 +1478,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
   }
 
-  _updateInteractionOption(entityId, option, value) {
-    this._iconInteractions = {
-      ...this._iconInteractions,
-      [entityId]: {
-        ...this._iconInteractions[entityId],
-        [option]: value,
-      },
-    };
-    this._updateIconInteractionsConfig();
-  }
-
   _updateIconInteractionsConfig() {
     const newConfig = {
       ...this.config,
@@ -1584,86 +1638,38 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
   }
 
-  _renderStateContentPicker(entityId, iconType) {
-    const currentValue = this.config.custom_icons[entityId]?.[`${iconType}State`] || '';
-    const [currentState, encodedStateValue] = currentValue.split(':');
-    const currentStateValue = encodedStateValue ? JSON.parse(encodedStateValue) : '';
-    const entity = this.hass.states[entityId];
-
-    let options = [];
-    let selectedLabel = 'Default';
-
-    if (entity) {
-      options = Object.keys(entity.attributes).map(attr => ({ value: attr, label: attr }));
-      options.unshift({ value: 'state', label: 'State' });
-
-      if (currentState && currentState !== '__default__') {
-        selectedLabel = currentState;
-      }
+  _handleStateConfigChange(e) {
+    const { config, entityId, stateType } = e.detail;
+    
+    // Create a deep copy of the current config
+    const newConfig = JSON.parse(JSON.stringify(this.config));
+    
+    // Ensure the custom_icons object exists
+    if (!newConfig.custom_icons) {
+      newConfig.custom_icons = {};
     }
-
-    options.unshift({ value: '__default__', label: 'Default' });
-
-    return html`
-      <div class="editor-item">
-        <ha-select
-          naturalMenuWidth
-          fixedMenuPosition
-          label="${iconType === 'inactive' ? 'Inactive State' : 'Active State'}"
-          .value=${currentState || '__default__'}
-          @selected=${(e) => this._selectOption(e, entityId, iconType)}
-          @closed=${(e) => e.stopPropagation()}
-        >
-          ${options.map(option => html`
-            <mwc-list-item .value=${option.value}>
-              ${option.value === currentState ? selectedLabel : option.label}
-            </mwc-list-item>
-          `)}
-        </ha-select>
-      </div>
-      ${currentState && currentState !== '__default__' ? html`
-        <div class="editor-item">
-          <label for="${entityId}-${iconType}-value">Value</label>
-          <textarea
-            id="${entityId}-${iconType}-value"
-            .value=${currentStateValue || ''}
-            @input=${(e) => this._updateStateValue(e, entityId, iconType, currentState)}
-            rows="4"
-          ></textarea>
-          <div class="helper-text">
-            You can use Home Assistant template syntax here. 
-            Example: {% if value <= 70 %}Cool{% elif value > 70 %}Hot{% endif %}
-            Available variables: value, state, attributes
-          </div>
-        </div>
-      ` : ''}
-    `;
+    
+    // Ensure the entity object exists within custom_icons
+    if (!newConfig.custom_icons[entityId]) {
+      newConfig.custom_icons[entityId] = {};
+    }
+    
+    // Update the specific state for this entity
+    newConfig.custom_icons[entityId][`${stateType}State`] = config[`${stateType}State`];
+    
+    // Update the config
+    this.config = newConfig;
+    this.configChanged(this.config);
   }
 
-  _selectOption(e, entityId, iconType) {
-    const value = e.target.value;
-    if (!this.config.custom_icons[entityId]) {
-      this.config.custom_icons[entityId] = {};
-    }
-    if (value === '__default__') {
-      delete this.config.custom_icons[entityId][`${iconType}State`];
-    } else {
-      const currentValue = this.config.custom_icons[entityId][`${iconType}State`] || '';
-      const [, currentStateValue] = currentValue.split(':');
-      this.config.custom_icons[entityId][`${iconType}State`] = `${value}:${currentStateValue || ''}`;
-    }
-    this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
-  }
-
-  _updateStateValue(e, entityId, iconType, currentState) {
-    const value = e.target.value;
-    console.log("Updating state value:", entityId, iconType, currentState, value);
-    if (!this.config.custom_icons[entityId]) {
-      this.config.custom_icons[entityId] = {};
-    }
-    this.config.custom_icons[entityId][`${iconType}State`] = `${currentState}:${JSON.stringify(value)}`;
-    console.log("Updated custom icons:", this.config.custom_icons);
-    this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
+  _fireEvent(type, detail) {
+    console.log(`Firing ${type} event with detail:`, detail);
+    const event = new CustomEvent(type, {
+      detail,
+      bubbles: true,
+      composed: true
+    });
+    this.dispatchEvent(event);
   }
 
   _toggleChanged(ev) {
@@ -1866,17 +1872,17 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         `;
       case "template":
         return html`
-          <textarea
+          <ha-textarea
             .value=${value}
             .configValue="${configKey}"
             @input="${this._templateChanged}"
             placeholder="${this.localize("editor.enter_template_code")}"
             rows="3"
-          ></textarea>
+          ></ha-textarea>
         `;
       default: // 'image'
         return html`
-          <input
+          <ha-textfield
             type="text"
             .value="${value}"
             .configValue="${configKey}"
@@ -1890,7 +1896,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               id="${configKey}_upload"
               @change="${(e) => this._handleImageUpload(e, configKey)}"
               accept="image/*"
-              style="display:none;"
+              style="display: none;"
             />
           </label>
         `;
@@ -1932,11 +1938,14 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _updateConfig(key, value) {
+    if (!this.config) {
+      return;
+    }
     this.config = {
       ...this.config,
       [key]: value,
     };
-    this.configChanged(this.config);
+    this._fireEvent('config-changed', { config: this.config });
   }
 
   _getTemplateHelpers() {
@@ -1978,12 +1987,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
   }
 
-  // Make sure to call this method when the component is first updated
-  firstUpdated(changedProps) {
-    super.firstUpdated(changedProps);
-    this._updateImageHeightVisibility();
-  }
-
   _handleImageUpload(e, configKey) {
     const file = e.target.files[0];
     if (file) {
@@ -1998,19 +2001,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       };
       reader.readAsDataURL(file);
     }
-  }
-
-  _fireEvent(type, detail, options) {
-    options = options || {};
-    detail = detail === null || detail === undefined ? {} : detail;
-    const event = new Event(type, {
-      bubbles: options.bubbles === undefined ? true : options.bubbles,
-      cancelable: Boolean(options.cancelable),
-      composed: options.composed === undefined ? true : options.composed,
-    });
-    event.detail = detail;
-    this.dispatchEvent(event);
-    return event;
   }
 
   _entityFilterChanged(e, configKey) {
@@ -2188,21 +2178,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         this._updateConfig(configValue, value.endsWith('px') ? value : `${value}px`);
       } else if (configValue === 'image_url' || configValue === 'charging_image_url') {
         this._updateConfig(configValue, value);
-      } else if (configValue === 'title') {
-        this._updateConfig(configValue, value);
       } else {
         this._updateConfig(configValue, target.checked !== undefined ? target.checked : value);
       }
-    }
-    this.configChanged(this.config);
-  }
-
-  _updateConfig(key, value) {
-    if (this.config) {
-      this.config = {
-        ...this.config,
-        [key]: value
-      };
     }
   }
 
@@ -2352,7 +2330,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
             <div class="input-with-unit">
               <input
                 type="number"
-                .value="${this._formatNumberWithCommas(separatorConfig.height || 1)}"
+                .value="${separatorConfig.height || 1}"
                 @input="${(e) =>
                   this._updateRowSeparatorConfig(
                     index,
@@ -2370,7 +2348,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
             <div class="input-with-unit">
               <input
                 type="number"
-                .value="${this._formatNumberWithCommas(separatorConfig.icon_gap || 20)}"
+                .value="${separatorConfig.icon_gap || 20}"
                 @input="${(e) =>
                   this._updateRowSeparatorConfig(
                     index,
@@ -2811,13 +2789,10 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         this._updateConfig(configValue, value.endsWith('px') ? value : `${value}px`);
       } else if (configValue === 'image_url' || configValue === 'charging_image_url') {
         this._updateConfig(configValue, value);
-      } else if (configValue === 'title') {
-        this._updateConfig(configValue, value);
       } else {
         this._updateConfig(configValue, target.checked !== undefined ? target.checked : value);
       }
     }
-    this.configChanged(this.config);
   }
 
   _handleImageUpload(e, configKey) {
@@ -2836,17 +2811,14 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
   }
 
-  _fireEvent(type, detail, options) {
-    options = options || {};
-    detail = detail === null || detail === undefined ? {} : detail;
-    const event = new Event(type, {
-      bubbles: options.bubbles === undefined ? true : options.bubbles,
-      cancelable: Boolean(options.cancelable),
-      composed: options.composed === undefined ? true : options.composed,
+  _fireEvent(type, detail) {
+    console.log(`Firing ${type} event with detail:`, detail);
+    const event = new CustomEvent(type, {
+      detail,
+      bubbles: true,
+      composed: true
     });
-    event.detail = detail;
     this.dispatchEvent(event);
-    return event;
   }
 
   _entityFilterChanged(e, configKey) {
@@ -2894,36 +2866,59 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this.style.setProperty('--uvc-icon-background', iconBackgroundColor);
   }
 
-  _selectOption(e, entityId, iconType) {
-    const value = e.target.value;
-    if (!this.config.custom_icons[entityId]) {
-      this.config.custom_icons[entityId] = {};
+  firstUpdated() {
+    super.firstUpdated();
+    this.addEventListener('click', this._handleEditorClick);
+    this._addDialogClosePrevention();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('click', this._handleEditorClick);
+    this._removeDialogClosePrevention();
+  }
+
+  _addDialogClosePrevention() {
+    window.addEventListener('dialog-closed', this._preventDialogClose, true);
+  }
+
+  _removeDialogClosePrevention() {
+    window.removeEventListener('dialog-closed', this._preventDialogClose, true);
+  }
+
+  _preventDialogClose(e) {
+    if (e.target.tagName === 'HA-DIALOG') {
+      e.preventDefault();
+      e.stopPropagation();
     }
-    if (value === '__default__') {
-      // If 'Default' is selected, remove the property
-      delete this.config.custom_icons[entityId][`${iconType}State`];
-    } else {
-      const currentValue = this.config.custom_icons[entityId][`${iconType}State`] || '';
-      const [, currentStateValue] = currentValue.split(':');
-      this.config.custom_icons[entityId][`${iconType}State`] = `${value}:${currentStateValue || ''}`;
-    }
-    this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
+  }
+
+  _handleEditorClick(e) {
     e.stopPropagation();
   }
 
-  _updateStateValue(e, entityId, iconType, currentState) {
-    const value = e.target.value;
-    console.log("Updating state value:", entityId, iconType, currentState, value);
-    if (!this.config.custom_icons[entityId]) {
-      this.config.custom_icons[entityId] = {};
+  _handleStateConfigChange(e) {
+    const { config, entityId, stateType } = e.detail;
+    
+    // Create a deep copy of the current config
+    const newConfig = JSON.parse(JSON.stringify(this.config));
+    
+    // Ensure the custom_icons object exists
+    if (!newConfig.custom_icons) {
+      newConfig.custom_icons = {};
     }
-    this.config.custom_icons[entityId][`${iconType}State`] = `${currentState}:${JSON.stringify(value)}`;
-    console.log("Updated custom icons:", this.config.custom_icons);
-    this._updateConfigAndRequestUpdate("custom_icons", this.config.custom_icons);
-  }
-
-  _formatNumberWithCommas(number) {
-    return new Intl.NumberFormat(this.hass.language).format(number);
+    
+    // Ensure the entity object exists within custom_icons
+    if (!newConfig.custom_icons[entityId]) {
+      newConfig.custom_icons[entityId] = {};
+    }
+    
+    // Update the specific state for this entity
+    newConfig.custom_icons[entityId][`${stateType}State`] = config[`${stateType}State`];
+    
+    // Update the config
+    this.config = newConfig;
+    this.configChanged(this.config);
   }
 }
 customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);

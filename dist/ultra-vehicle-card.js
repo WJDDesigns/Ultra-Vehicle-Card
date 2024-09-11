@@ -3,11 +3,11 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version, setVersion } from "./version.js?v=11";
-setVersion("V1.6.0-beta4");
+import { version, setVersion } from "./version.js?v=7";
+setVersion("V1.5.9");
 
 const sensorModule = await import("./sensors.js?v=" + version);
-const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn, formatBinaryState } = sensorModule;
+const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn } = sensorModule;
 
 const UltraVehicleCardEditor = await import(
   "./ultra-vehicle-card-editor.js?v=" + version
@@ -95,13 +95,13 @@ class UltraVehicleCard extends localize(LitElement) {
   }
 
   setConfig(config) {
+    console.log("UltraVehicleCard setConfig called with:", JSON.stringify(config, null, 2));
     if (!config) {
       throw new Error("Invalid configuration");
     }
-
     // Create a new config object with default values
     this.config = {
-      title: config.title || "My Vehicle",  // Use the provided title or default to "My Vehicle"
+      title: "My Vehicle",
       image_url: "",
       charging_image_url: "",
       image_url_type: "image",
@@ -132,77 +132,23 @@ class UltraVehicleCard extends localize(LitElement) {
       icon_gap: 12,
       mainImageHeight: '180px',
       chargingImageHeight: '180px',
-      ...config  // Spread the provided config to override defaults
-      
+      ...config,  // Spread the provided config to override defaults
+      activeState: config.activeState || '',
+      inactiveState: config.inactiveState || ''
     };
-
-    // Ensure mainImageHeight and chargingImageHeight are set
-    this.config.mainImageHeight = this.config.mainImageHeight || '180px';
-    this.config.chargingImageHeight = this.config.chargingImageHeight || '180px';
-
-    // Set CSS custom properties
-    this.style.setProperty('--vehicle-image-height', this.config.mainImageHeight);
-    this.style.setProperty('--vehicle-charging-image-height', this.config.chargingImageHeight);
-
-    // Handle backward compatibility for entity names
-    if (this.config.level_entity && !this.config.battery_level_entity) {
-      this.config.battery_level_entity = this.config.level_entity;
-    }
-    if (this.config.range_entity && !this.config.battery_range_entity) {
-      this.config.battery_range_entity = this.config.range_entity;
-    }
-
-    // Ensure image_url_type and charging_image_url_type are set correctly
-    this.config.image_url_type = this.config.image_url_type || "image";
-    this.config.charging_image_url_type =
-      this.config.charging_image_url_type || "image";
-
-    // Handle image entities
-    if (this.config.image_url_type === "entity") {
-      this.config.image_entity =
-        this.config.image_entity || this.config.image_url;
-      this.config.image_url = ""; // Clear image_url if using an entity
-    }
-    if (this.config.charging_image_url_type === "entity") {
-      this.config.charging_image_entity =
-        this.config.charging_image_entity || this.config.charging_image_url;
-      this.config.charging_image_url = ""; // Clear charging_image_url if using an entity
-    }
-
-    // Validate entity configurations
-    this._validateEntityConfig("image_entity", this.config.image_url_type);
-    this._validateEntityConfig(
-      "charging_image_entity",
-      this.config.charging_image_url_type
-    );
-
-    // Initialize row_separators if not present
-    if (!this.config.row_separators) {
-      this.config.row_separators = {};
-    }
-
-    // Ensure all row separators have proper default values
-    this.config.icon_grid_entities.forEach((entityId, index) => {
-      if (entityId === "row-separator" && !this.config.row_separators[index]) {
-        this.config.row_separators[index] = {
-          color: this._getDefaultColorAsHex(), // Use hex color instead of CSS variable
-          height: 1,
-          icon_gap: 20,
-          horizontalAlignment: "center",
-          verticalAlignment: "middle",
-        };
-      }
-    });
-
-    // Initialize icon_interactions
-    if (config.icon_interactions) {
-      this.config.icon_interactions = {...config.icon_interactions};
-    }
-
-    this.loadResources(this.config.language || navigator.language);
+    console.log("UltraVehicleCard config after setConfig:", JSON.stringify(this.config, null, 2));
     this._updateStyles();
     this._updateIconBackground();
     this.requestUpdate();
+  }
+
+  updated(changedProperties) {
+    super.updated(changedProperties);
+    if (changedProperties.has('config')) {
+      console.log("UltraVehicleCard config updated:", JSON.stringify(this.config, null, 2));
+      this._updateStyles();
+      this._updateIconBackground();
+    }
   }
 
   // Add this method to validate entity configurations
@@ -293,8 +239,7 @@ class UltraVehicleCard extends localize(LitElement) {
       batteryRangeEntity,
       this.config.useFormattedEntities,
       this.hass,
-      this.localize,
-      this.hass.locale.number_format
+      this.localize
     );
     const isCharging = this._isCharging(chargingStatusEntity);
     const chargeLimit = this.config.show_charge_limit
@@ -388,16 +333,9 @@ class UltraVehicleCard extends localize(LitElement) {
     return this._roundNumber(parseFloat(entity.state));
   }
 
-  _roundNumber(number) {
-    if (Number.isInteger(number)) {
-      return this._formatNumberWithCommas(number);
-    }
-    // Round to one decimal place and format
-    return this._formatNumberWithCommas(Math.round(number * 10) / 10);
-  }
-
-  _formatNumberWithCommas(number) {
-    return new Intl.NumberFormat(this.hass.language).format(number);
+  _roundNumber(value) {
+    // Round to the nearest integer
+    return Math.round(value).toString();
   }
 
   _isCharging(chargingStatusEntity) {
@@ -459,8 +397,7 @@ class UltraVehicleCard extends localize(LitElement) {
       fuelRangeEntity,
       this.config.useFormattedEntities,
       this.hass,
-      this.localize,
-      this.hass.locale.number_format
+      this.localize
     );
     const isEngineOn = sensorModule.isEngineOn(engineOnEntity);
 
@@ -552,8 +489,7 @@ class UltraVehicleCard extends localize(LitElement) {
       batteryRangeEntity,
       this.config.useFormattedEntities,
       this.hass,
-      this.localize,
-      this.hass.locale.number_format
+      this.localize
     );
     const fuelLevel = fuelLevelEntity
       ? parseFloat(fuelLevelEntity.state)
@@ -562,8 +498,7 @@ class UltraVehicleCard extends localize(LitElement) {
       fuelRangeEntity,
       this.config.useFormattedEntities,
       this.hass,
-      this.localize,
-      this.hass.locale.number_format
+      this.localize
     );
     const isCharging = this._isCharging(chargingStatusEntity);
     const chargeLimit =
@@ -740,8 +675,7 @@ class UltraVehicleCard extends localize(LitElement) {
       carStateEntity,
       this.config.useFormattedEntities,
       this.hass,
-      this.localize,
-      this.hass.locale.number_format
+      this.localize
     );
 
     return html`
@@ -805,8 +739,7 @@ class UltraVehicleCard extends localize(LitElement) {
         locationEntity,
         this.config.useFormattedEntities,
         this.hass,
-        this.localize,
-        this.hass.locale.number_format
+        this.localize
       );
     }
 
@@ -819,8 +752,7 @@ class UltraVehicleCard extends localize(LitElement) {
         mileageEntity,
         this.config.useFormattedEntities,
         this.hass,
-        this.localize,
-        this.hass.locale.number_format
+        this.localize
       );
     }
 
@@ -833,8 +765,7 @@ class UltraVehicleCard extends localize(LitElement) {
         carStateEntity,
         this.config.useFormattedEntities,
         this.hass,
-        this.localize,
-        this.hass.locale.number_format
+        this.localize
       );
     }
 
@@ -963,6 +894,17 @@ class UltraVehicleCard extends localize(LitElement) {
     );
   }
 
+  // Add this new method for rounding
+  _roundNumber(number) {
+    // Check if the number has decimal places
+    if (Number.isInteger(number)) {
+      return number;
+    }
+
+    // Round to one decimal place
+    return Math.round(number * 10) / 10;
+  }
+
   _renderIconGrid() {
     const { icon_grid_entities, row_separators } = this.config;
 
@@ -1054,35 +996,53 @@ class UltraVehicleCard extends localize(LitElement) {
     const state = this.hass.states[entityId];
     if (!state) return html``;
 
-    const customIcon = this.config.custom_icons?.[entityId] || {};
-    const iconState = this._evaluateIconState(entityId, customIcon);
-    if (!iconState) return html``;
+    console.log(`_renderIcon for ${entityId}:`, {
+      currentState: state.state,
+      config: this.config
+    });
 
-    const { icon, color, label, isActive } = iconState;
+    const customIcon = this.config.custom_icons?.[entityId] || {};
+    const isActive = getIconActiveState(entityId, this.hass, customIcon);
     const defaultIcon = "mdi:help-circle";
     
+    console.log(`Icon state for ${entityId}:`, { isActive, customIcon });
+
     // Determine which icon to use
-    let iconToRender = icon === "no-icon" ? "" : (icon || state.attributes.icon || defaultIcon);
+    let icon;
+    if (isActive) {
+      icon = customIcon.active || state.attributes.icon || defaultIcon;
+    } else {
+      icon = customIcon.inactive || state.attributes.icon || defaultIcon;
+    }
+
+    // Determine which color to use
+    let color;
+    if (isActive) {
+      color = customIcon.activeColor || this.config.iconActiveColor || "#03a9f4";
+    } else {
+      color = customIcon.inactiveColor || this.config.iconInactiveColor || "#e1e1e1";
+    }
+
+    console.log(`Final icon and color for ${entityId}:`, { icon, color });
 
     const iconSize = this.config.icon_sizes?.[entityId] || this.config.icon_size || 24;
     const buttonStyle = this.config.icon_styles?.[entityId] || "icon";
     const labelPosition = this.config.icon_labels?.[entityId] || "none";
 
-    // Determine label text
-    let labelText = label || formatEntityValue(
+    // Format the label text and add unit of measurement
+    const formattedValue = formatEntityValue(
       state,
       this.config.useFormattedEntities,
       this.hass,
-      this.localize,
-      this.hass.locale.number_format,
-      customIcon
+      this.localize
     );
+    const labelText = formattedValue;
 
     // Calculate label size based on icon size
     const labelSize = iconSize > 28 ? Math.round(iconSize * 0.5) : 14;
 
     // Determine if we should render anything
-    const shouldRender = iconToRender !== "" || buttonStyle === "label";
+    const shouldRender = icon !== "" || buttonStyle === "label";
 
     if (shouldRender) {
       return html`
@@ -1103,10 +1063,10 @@ class UltraVehicleCard extends localize(LitElement) {
             customIcon,
             buttonStyle
           )}
-          ${buttonStyle !== "label" && iconToRender
+          ${buttonStyle !== "label" && icon
             ? html`
                 <ha-icon
-                  icon="${iconToRender}"
+                  icon="${icon}"
                   style="--mdc-icon-size: ${iconSize}px; color: ${color};"
                 ></ha-icon>
               `
@@ -1123,148 +1083,6 @@ class UltraVehicleCard extends localize(LitElement) {
       `;
     }
     return html``;
-  }
-
-  _evaluateIconState(entityId, iconState) {
-    const state = this.hass.states[entityId];
-    if (!state) return null;
-
-    const context = this._getEntityStateContext(entityId);
-    console.log("Entity context:", context);
-
-    let isActive = false;
-    let icon = iconState.inactive;
-    let color = iconState.inactiveColor;
-    let label = '';
-
-    const isBinarySensor = state.entity_id.startsWith('binary_sensor.');
-    const stateIsOn = state.state.toLowerCase() === 'on';
-
-    if (isBinarySensor) {
-      isActive = stateIsOn;
-      
-      if (isActive && iconState.activeState) {
-        label = this._renderHATemplate(iconState.activeState, context);
-      } else if (!isActive && iconState.inactiveState) {
-        label = this._renderHATemplate(iconState.inactiveState, context);
-      }
-
-      if (!label) {
-        label = formatBinaryState(state.state, state.attributes, this.hass, this.localize);
-      }
-
-      // Remove any "state:" prefix and trim quotation marks
-      label = label.replace(/^state:\s*/, '').replace(/^["']|["']$/g, '').trim();
-    } else {
-      if (iconState.activeState) {
-        const activeStateResult = this._renderHATemplate(iconState.activeState, context);
-        if (activeStateResult) {
-          isActive = true;
-          label = activeStateResult;
-        }
-      }
-
-      if (!isActive && iconState.inactiveState) {
-        const inactiveStateResult = this._renderHATemplate(iconState.inactiveState, context);
-        if (inactiveStateResult) {
-          label = inactiveStateResult;
-        }
-      }
-    }
-
-    if (isActive) {
-      icon = iconState.active;
-      color = iconState.activeColor;
-    }
-
-    if (!label) {
-      label = formatEntityValue(state, true, this.hass, this.localize, this.hass.locale.number_format, iconState);
-    }
-
-    console.log("Final icon state:", { icon, color, label, isActive });
-    return { icon, color, label, isActive };
-  }
-
-  _getEntityStateContext(entityId) {
-    const state = this.hass.states[entityId];
-    if (!state) return {};
-
-    const context = {
-      state: state.state,
-      attributes: state.attributes,
-    };
-
-    // Add the 'value' property for temperature sensors
-    if (state.attributes.current_temperature !== undefined) {
-      context.value = state.attributes.current_temperature;
-    } else if (state.attributes.temperature !== undefined) {
-      context.value = state.attributes.temperature;
-    } else if (state.attributes.unit_of_measurement === '°F' || state.attributes.unit_of_measurement === '°C') {
-      context.value = parseFloat(state.state);
-    } else {
-      context.value = state.state;
-    }
-
-    return context;
-  }
-
-  _renderHATemplate(template, context) {
-    console.log("Rendering template:", template, "with context:", context);
-    try {
-      if (!template) return '';
-
-      // Remove surrounding quotes if present
-      let cleanTemplate = template.replace(/^["']|["']$/g, '').trim();
-      console.log("Clean template:", cleanTemplate);
-
-      // Handle Jinja2-style if statements
-      const ifRegex = /{%\s*if\s+(.+?)\s*%}(.+?)(?:{%\s*else\s*%}(.+?))?{%\s*endif\s*%}/g;
-      const renderedTemplate = cleanTemplate.replace(ifRegex, (match, condition, ifTrue, ifFalse) => {
-        const evalCondition = (cond) => {
-          return new Function('state', 'attributes', `return ${cond.replace(/state/g, 'state')};`)(context.state, context.attributes);
-        };
-
-        return evalCondition(condition) ? ifTrue.trim() : (ifFalse ? ifFalse.trim() : '');
-      });
-
-      console.log("Template result:", renderedTemplate);
-      // Remove any surrounding quotes from the final result
-      return renderedTemplate.replace(/^["']|["']$/g, '').trim();
-    } catch (error) {
-      console.error("Error rendering template:", error);
-      return '';
-    }
-  }
-
-  _evaluateCustomValue(entityId, customIcon, isActive) {
-    console.log("Evaluating custom value for:", entityId, customIcon, isActive);
-    const state = this.hass.states[entityId];
-    if (!state) return '';
-
-    const stateConfig = isActive ? customIcon.activeState : customIcon.inactiveState;
-    if (stateConfig) {
-      const [attr, encodedTemplate] = stateConfig.split(':');
-      const value = attr === 'state' ? state.state : state.attributes[attr];
-      const context = { value: parseFloat(value) || value, state: state.state, attributes: state.attributes };
-      console.log("Custom value context:", context);
-      
-      try {
-        const result = this._renderHATemplate(JSON.parse(encodedTemplate), context) || '';
-        console.log("Custom value result:", result);
-        return result;
-      } catch (error) {
-        console.error("Error evaluating template:", error, "Template:", encodedTemplate);
-        return '';
-      }
-    }
-
-    return formatEntityValue(
-      state,
-      this.config.useFormattedEntities,
-      this.hass,
-      this.localize,
-      this.hass.locale.number_format
-    );
   }
 
   _renderLabel(
@@ -1550,21 +1368,23 @@ class UltraVehicleCard extends localize(LitElement) {
       }
       // Check if it's a numeric string
       if (!isNaN(parseFloat(value))) {
-        return this._formatNumberWithCommas(parseFloat(value));
+        // Convert to number, round to nearest integer, and format
+        return this._formatNumberWithCommas(Math.round(parseFloat(value)));
       }
       // Return other strings as-is
       return value;
     }
 
     if (typeof value === "number") {
-      return this._formatNumberWithCommas(value);
+      // Round to whole number and format with commas
+      return this._formatNumberWithCommas(Math.round(value));
     }
 
     return value;
   }
 
   _formatNumberWithCommas(number) {
-    return new Intl.NumberFormat(this.hass.language).format(number);
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   _isISODateString(value) {
@@ -1602,6 +1422,11 @@ class UltraVehicleCard extends localize(LitElement) {
     return date.toLocaleDateString();
   }
 
+  _roundNumber(value) {
+    // Round to the nearest integer
+    return Math.round(value).toString();
+  }
+
   _getLocalizedState(state) {
     if (state === "not_home") {
       return this.hass.localize("state.device_tracker.not_home") || this.localize("common.away");
@@ -1618,6 +1443,7 @@ class UltraVehicleCard extends localize(LitElement) {
   }
 
   setConfig(config) {
+    console.log("UltraVehicleCard setConfig called with:", JSON.stringify(config, null, 2));
     if (!config) {
       throw new Error("Invalid configuration");
     }
@@ -1655,27 +1481,12 @@ class UltraVehicleCard extends localize(LitElement) {
       icon_gap: 12,
       mainImageHeight: '180px',
       chargingImageHeight: '180px',
-      ...config  // Spread the provided config to override defaults
+      ...config,  // Spread the provided config to override defaults
+      activeState: config.activeState || '',
+      inactiveState: config.inactiveState || ''
     };
 
-    // Ensure mainImageHeight and chargingImageHeight are set
-    this.config.mainImageHeight = this.config.mainImageHeight || '180px';
-    this.config.chargingImageHeight = this.config.chargingImageHeight || '180px';
-
-    // Set CSS custom properties
-    this.style.setProperty('--vehicle-image-height', this.config.mainImageHeight);
-    this.style.setProperty('--vehicle-charging-image-height', this.config.chargingImageHeight);
-
-    // Handle image entities
-    if (this.config.image_url_type === "entity") {
-      this.config.image_entity = this.config.image_entity || this.config.image_url;
-      this.config.image_url = ""; // Clear image_url if using an entity
-    }
-    if (this.config.charging_image_url_type === "entity") {
-      this.config.charging_image_entity = this.config.charging_image_entity || this.config.charging_image_url;
-      this.config.charging_image_url = ""; // Clear charging_image_url if using an entity
-    }
-
+    console.log("UltraVehicleCard config after setConfig:", JSON.stringify(this.config, null, 2));
     this._updateStyles();
     this._updateIconBackground();
     this.requestUpdate();
@@ -1686,14 +1497,12 @@ class UltraVehicleCard extends localize(LitElement) {
     this._updateIconBackground();
     window.addEventListener('theme-changed', this._updateIconBackground.bind(this));
     window.matchMedia('(prefers-color-scheme: dark)').addListener(this._updateIconBackground.bind(this));
-    document.addEventListener('click', this._handleOutsideClick);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     window.removeEventListener('theme-changed', this._updateIconBackground.bind(this));
     window.matchMedia('(prefers-color-scheme: dark)').removeListener(this._updateIconBackground.bind(this));
-    document.removeEventListener('click', this._handleOutsideClick);
   }
 
   updated(changedProperties) {
@@ -1755,142 +1564,6 @@ class UltraVehicleCard extends localize(LitElement) {
     const cardBackgroundColor = this.config.cardBackgroundColor || getComputedStyle(this).getPropertyValue('--card-background-color').trim();
     const isDarkBackground = this._isColorDark(cardBackgroundColor);
     this._updateIconBackgroundColor(isDarkBackground);
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-    this._updateIconBackground();
-    window.addEventListener('theme-changed', this._updateIconBackground.bind(this));
-    window.matchMedia('(prefers-color-scheme: dark)').addListener(this._updateIconBackground.bind(this));
-    document.addEventListener('click', this._handleOutsideClick);
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    window.removeEventListener('theme-changed', this._updateIconBackground.bind(this));
-    window.matchMedia('(prefers-color-scheme: dark)').removeListener(this._updateIconBackground.bind(this));
-    document.removeEventListener('click', this._handleOutsideClick);
-  }
-
-  _handleOutsideClick = (e) => {
-    if (!e.target.closest('.custom-select')) {
-      const dropdowns = this.shadowRoot.querySelectorAll('.custom-select');
-      dropdowns.forEach(dropdown => dropdown.classList.remove('open'));
-    }
-  }
-
-  _renderHATemplate(template, context) {
-    console.log("Rendering template:", template, "with context:", context);
-    try {
-      if (!template) return '';
-
-      // Remove surrounding quotes if present
-      let cleanTemplate = template.replace(/^["']|["']$/g, '').trim();
-      console.log("Clean template:", cleanTemplate);
-
-      // Handle Jinja2-style if statements
-      const ifRegex = /{%\s*if\s+(.+?)\s*%}(.+?)(?:{%\s*else\s*%}(.+?))?{%\s*endif\s*%}/g;
-      const renderedTemplate = cleanTemplate.replace(ifRegex, (match, condition, ifTrue, ifFalse) => {
-        const evalCondition = (cond) => {
-          return new Function('state', 'attributes', `return ${cond.replace(/state/g, 'state')};`)(context.state, context.attributes);
-        };
-
-        return evalCondition(condition) ? ifTrue.trim() : (ifFalse ? ifFalse.trim() : '');
-      });
-
-      console.log("Template result:", renderedTemplate);
-      // Remove any surrounding quotes from the final result
-      return renderedTemplate.replace(/^["']|["']$/g, '').trim();
-    } catch (error) {
-      console.error("Error rendering template:", error);
-      return '';
-    }
-  }
-
-  _evaluateIconState(entityId, iconState) {
-    const state = this.hass.states[entityId];
-    if (!state) return null;
-
-    const context = {
-      state: state.state,
-      attributes: state.attributes,
-    };
-    console.log("Entity context:", context);
-
-    let isActive = false;
-    let icon = iconState.inactive;
-    let color = iconState.inactiveColor;
-    let label = '';
-
-    const isBinarySensor = state.entity_id.startsWith('binary_sensor.');
-    const stateIsOn = state.state.toLowerCase() === 'on';
-
-    if (isBinarySensor) {
-      isActive = stateIsOn;
-      
-      if (isActive && iconState.activeState) {
-        label = this._renderHATemplate(iconState.activeState, context);
-      } else if (!isActive && iconState.inactiveState) {
-        label = this._renderHATemplate(iconState.inactiveState, context);
-      }
-
-      if (!label) {
-        label = formatBinaryState(state.state, state.attributes, this.hass, this.localize);
-      }
-
-      // Remove any "state:" prefix and trim quotation marks
-      label = label.replace(/^state:\s*/, '').replace(/^["']|["']$/g, '').trim();
-    } else {
-      if (iconState.activeState) {
-        const activeStateResult = this._renderHATemplate(iconState.activeState, context);
-        if (activeStateResult) {
-          isActive = true;
-          label = activeStateResult;
-        }
-      }
-
-      if (!isActive && iconState.inactiveState) {
-        const inactiveStateResult = this._renderHATemplate(iconState.inactiveState, context);
-        if (inactiveStateResult) {
-          label = inactiveStateResult;
-        }
-      }
-    }
-
-    if (isActive) {
-      icon = iconState.active;
-      color = iconState.activeColor;
-    }
-
-    if (!label) {
-      label = formatEntityValue(state, true, this.hass, this.localize, this.hass.locale.number_format, iconState);
-    }
-
-    console.log("Final icon state:", { icon, color, label, isActive });
-    return { icon, color, label, isActive };
-  }
-
-  _getEntityStateContext(entityId) {
-    const state = this.hass.states[entityId];
-    if (!state) return {};
-
-    const context = {
-      state: state.state,
-      attributes: state.attributes,
-    };
-
-    // Add the 'value' property for temperature sensors
-    if (state.attributes.current_temperature !== undefined) {
-      context.value = state.attributes.current_temperature;
-    } else if (state.attributes.temperature !== undefined) {
-      context.value = state.attributes.temperature;
-    } else if (state.attributes.unit_of_measurement === '°F' || state.attributes.unit_of_measurement === '°C') {
-      context.value = parseFloat(state.state);
-    } else {
-      context.value = state.state;
-    }
-
-    return context;
   }
 }
 
