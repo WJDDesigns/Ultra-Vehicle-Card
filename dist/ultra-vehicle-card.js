@@ -4,7 +4,7 @@ import {
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 import { version, setVersion } from "./version.js?v=12";
-setVersion("V1.6.0-beta4");
+setVersion("V1.6.0-beta5");
 
 const sensorModule = await import("./sensors.js?v=" + version);
 const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn } = sensorModule;
