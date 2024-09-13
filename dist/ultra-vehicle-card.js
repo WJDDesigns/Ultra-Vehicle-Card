@@ -3,8 +3,8 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version, setVersion } from "./version.js?v=12";
-setVersion("V1.6.0-beta5");
+import { version, setVersion } from "./version.js?v=13";
+setVersion("V1.6.0");
 
 const sensorModule = await import("./sensors.js?v=" + version);
 const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn } = sensorModule;
@@ -75,6 +75,7 @@ class UltraVehicleCard extends localize(LitElement) {
       useFormattedEntities: false,
       mainImageHeight: '180px',
       chargingImageHeight: '180px',
+      layoutType: "single",
     };
   }
 
@@ -100,8 +101,9 @@ class UltraVehicleCard extends localize(LitElement) {
       throw new Error("Invalid configuration");
     }
     // Create a new config object with default values
+    const defaultHeight = config.layoutType === 'double' ? '62px' : '180px';
     this.config = {
-      title: "My Vehicle",
+      title: config.title || "My Vehicle",
       image_url: "",
       charging_image_url: "",
       image_url_type: "image",
@@ -115,6 +117,7 @@ class UltraVehicleCard extends localize(LitElement) {
       charging_status_entity: "",
       location_entity: "",
       mileage_entity: "",
+      showTitle: config.showTitle !== false,
       show_battery: true,
       show_battery_range: true,
       show_fuel: true,
@@ -130,15 +133,17 @@ class UltraVehicleCard extends localize(LitElement) {
       charge_limit_entity: "",
       icon_size: 24,
       icon_gap: 12,
-      mainImageHeight: '180px',
-      chargingImageHeight: '180px',
+      mainImageHeight: config.mainImageHeight || defaultHeight,
+      chargingImageHeight: config.chargingImageHeight || defaultHeight,
+      layoutType: config.layoutType || "single",
       ...config,  // Spread the provided config to override defaults
       activeState: config.activeState || '',
-      inactiveState: config.inactiveState || ''
+      inactiveState: config.inactiveState || '',
     };
     console.log("UltraVehicleCard config after setConfig:", JSON.stringify(this.config, null, 2));
     this._updateStyles();
     this._updateIconBackground();
+    this._updateImageHeights();
     this.requestUpdate();
   }
 
@@ -148,6 +153,7 @@ class UltraVehicleCard extends localize(LitElement) {
       console.log("UltraVehicleCard config updated:", JSON.stringify(this.config, null, 2));
       this._updateStyles();
       this._updateIconBackground();
+      this._updateImageHeights();
     }
   }
 
@@ -183,20 +189,102 @@ class UltraVehicleCard extends localize(LitElement) {
     if (!this.hass || !this.config) {
       return html``;
     }
+    console.log("Rendering UltraVehicleCard with config:", JSON.stringify(this.config, null, 2));
 
     return html`
-      <ha-card style="background-color: var(--uvc-card-background);">
-        <div class="vehicle-card-content">
-          ${this._renderHeader()} ${this._renderCarState()}
-          ${this._renderVehicleImage()}
-          <div
-            style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;"
-          >
-            ${this._renderIconGrid()}
-          </div>
-          ${this._renderVehicleInfo()}
-        </div>
+      <ha-card
+        class="ultra-vehicle-card ${this.config.layoutType === 'double' ? 'double-column' : ''}"
+      >
+        ${this.config.layoutType === 'double' ? this._renderDoubleColumnLayout() : this._renderSingleColumnLayout()}
       </ha-card>
+    `;
+  }
+
+  _renderSingleColumnLayout() {
+    return html`
+      ${this._renderHeader()} ${this._renderCarState()}
+      ${this._renderVehicleImage()}
+      <div
+        style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;"
+      >
+        ${this._renderIconGrid()}
+      </div>
+      ${this._renderVehicleInfo()}
+    `;
+  }
+
+  _renderDoubleColumnLayout() {
+    return html`
+      <div class="ultra-vehicle-card">
+        <div class="double-column-container">
+          <div class="top-row">
+            <div class="left-column">
+              ${this._renderVehicleImage()}
+            </div>
+            <div class="right-column">
+              ${this._renderHeader()}
+              ${this._renderCarState()}
+            </div>
+          </div>
+          <div class="full-width-column">
+            ${this._renderIconGrid()}
+            ${this._renderVehicleInfo()}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  static get styles() {
+    return css`
+      ${styles}
+      .ultra-vehicle-card {
+        padding: 16px;
+      }
+      .double-column-container {
+        display: flex;
+        flex-direction: column;
+      }
+      .top-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center; /* Vertically center items */
+      }
+      .left-column {
+        flex: 1;
+        padding-right: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .right-column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; /* Horizontally center items */
+      }
+      .right-column > * {
+        width: 100%; /* Ensure child elements take full width */
+        text-align: center; /* Center text within child elements */
+      }
+      .full-width-column {
+        width: 100%;
+      }
+      .vehicle-image {
+        width: 100%;
+        height: var(--vehicle-image-height, 180px);
+        border-radius: var(--ha-card-border-radius, 4px);
+      }
+      .charging-image {
+        width: 100%;
+        height: var(--vehicle-charging-image-height, 180px);
+        border-radius: var(--ha-card-border-radius, 4px);
+      }
+      .double-column-container .vehicle-name {
+        margin-bottom: 12px;
+        margin-top: 0px;
+      }
     `;
   }
 
@@ -657,8 +745,9 @@ class UltraVehicleCard extends localize(LitElement) {
   }
 
   _renderHeader() {
+    const showTitle = this.config.showTitle !== false && this.config.showTitle !== 'false';
     return html`
-      ${this.config.showTitle !== false
+      ${showTitle
         ? html`<h2 class="vehicle-name">${this.config.title}</h2>`
         : ""}
       ${this._renderInfoLine()}
@@ -832,12 +921,12 @@ class UltraVehicleCard extends localize(LitElement) {
     }
 
     return html`
-      <div class="vehicle-image-container">
+      <div class="image-container">
         <img
           src="${imageUrl}"
-          alt="Vehicle"
-          class="${isCharging ? 'vehicle-charging-image' : 'vehicle-image'}"
-          @click="${() => this._handleImageClick(isCharging)}"
+          alt="Vehicle Image"
+          class="${isCharging ? 'charging-image' : 'vehicle-image'}"
+          style="height: ${isCharging ? this.config.chargingImageHeight : this.config.mainImageHeight};"
         />
       </div>
     `;
@@ -1295,6 +1384,7 @@ class UltraVehicleCard extends localize(LitElement) {
       icon_sizes: {},
       icon_labels: {},
       useFormattedEntities: false,
+      layoutType: "single",
     };
   }
 
@@ -1437,8 +1527,9 @@ class UltraVehicleCard extends localize(LitElement) {
   updated(changedProperties) {
     super.updated(changedProperties);
     if (changedProperties.has('config')) {
-      this.style.setProperty('--vehicle-image-height', this.config.mainImageHeight);
-      this.style.setProperty('--vehicle-charging-image-height', this.config.chargingImageHeight);
+      this._updateStyles();
+      this._updateIconBackground();
+      this._updateImageHeights();
     }
   }
 
@@ -1449,8 +1540,9 @@ class UltraVehicleCard extends localize(LitElement) {
     }
 
     // Create a new config object with default values
+    const defaultHeight = config.layoutType === 'double' ? '62px' : '180px';
     this.config = {
-      title: "My Vehicle",
+      title: config.title || "My Vehicle",
       image_url: "",
       charging_image_url: "",
       image_url_type: "image",
@@ -1479,16 +1571,19 @@ class UltraVehicleCard extends localize(LitElement) {
       charge_limit_entity: "",
       icon_size: 24,
       icon_gap: 12,
-      mainImageHeight: '180px',
-      chargingImageHeight: '180px',
+      mainImageHeight: config.mainImageHeight || defaultHeight,
+      chargingImageHeight: config.chargingImageHeight || defaultHeight,
+      layoutType: config.layoutType || "single",
       ...config,  // Spread the provided config to override defaults
       activeState: config.activeState || '',
-      inactiveState: config.inactiveState || ''
+      inactiveState: config.inactiveState || '',
+      showTitle: config.showTitle !== false,
     };
 
     console.log("UltraVehicleCard config after setConfig:", JSON.stringify(this.config, null, 2));
     this._updateStyles();
     this._updateIconBackground();
+    this._updateImageHeights();
     this.requestUpdate();
   }
 
@@ -1565,6 +1660,20 @@ class UltraVehicleCard extends localize(LitElement) {
     const isDarkBackground = this._isColorDark(cardBackgroundColor);
     this._updateIconBackgroundColor(isDarkBackground);
   }
+
+  _updateImageHeights() {
+    if (this.config.image_url_type !== "none") {
+      this.style.setProperty('--vehicle-image-height', this.config.mainImageHeight);
+    } else {
+      this.style.setProperty('--vehicle-image-height', '0px');
+    }
+
+    if (this.config.charging_image_url_type !== "none") {
+      this.style.setProperty('--vehicle-charging-image-height', this.config.chargingImageHeight);
+    } else {
+      this.style.setProperty('--vehicle-charging-image-height', '0px');
+    }
+  }
 }
 
 customElements.define("ultra-vehicle-card", UltraVehicleCard);
@@ -1586,4 +1695,5 @@ console.info(
   "background-color: #4299D9;color: #fff;padding: 3px 2px 3px 3px;border-radius: 14px 0 0 14px;font-family: DejaVu Sans,Verdana,Geneva,sans-serif;text-shadow: 0 1px 0 rgba(1, 1, 1, 0.3)",
   "background-color: #4299D9;color: #fff;padding: 3px 3px 3px 2px;border-radius: 0 14px 14px 0;font-family: DejaVu Sans,Verdana,Geneva,sans-serif;text-shadow: 0 1px 0 rgba(1, 1, 1, 0.3)"
 );
+
 

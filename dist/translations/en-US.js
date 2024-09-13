@@ -32,6 +32,9 @@ export default {
   },
   editor: {
     title: "Ultra Vehicle Card",
+    layout_type: "Layout Type",
+    single_column: "Single Column",
+    double_column: "Double Column",
     card_title: "Card Title",
     vehicle_type: "Vehicle Type",
     unit_type: "Unit Type",

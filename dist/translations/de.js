@@ -8,11 +8,11 @@ export default {
     location: "Standort",
     car_state: "Fahrzeugzustand",
     charge_limit: "Ladelimit",
-    engine_on: "Motor An",
+    engine_on: "Motor an",
     away: "Abwesend",
     charging_end_time: "Ladeende",
-    charging_ending_soon: "Laden endet bald",
-    charging_ending_in: "Laden endet in",
+    charging_ending_soon: "Ladevorgang endet bald",
+    charging_ending_in: "Ladevorgang endet in",
     charging_until: "Laden bis",
     minutes: "Minuten",
     minute: "Minute",
@@ -28,7 +28,7 @@ export default {
   vehicle_types: {
     ev: "Elektrofahrzeug",
     fuel: "Kraftstofffahrzeug",
-    hybrid: "Hybrid"
+    hybrid: "Hybridfahrzeug"
   },
   editor: {
     title: "Ultra Fahrzeugkarte",
@@ -43,7 +43,7 @@ export default {
     show_mileage: "Kilometerstand anzeigen",
     show_car_state: "Fahrzeugzustand anzeigen",
     show_charge_limit: "Ladelimit anzeigen",
-    hybrid_display_order: "Hybrid-Anzeigereihenfolge",
+    hybrid_display_order: "Hybridanzeige-Reihenfolge",
     fuel_first: "Kraftstoff zuerst",
     battery_first: "Batterie zuerst",
     images: "Bilder",
@@ -61,10 +61,10 @@ export default {
     mileage: "Kilometerstand",
     car_state: "Fahrzeugzustand",
     charge_limit: "Ladelimit",
-    engine_on: "Motor An",
+    engine_on: "Motor an",
     icon_grid: "Symbol-Raster",
     add_entity: "Entität hinzufügen",
-    add_row_separator: "Zeilentrenner hinzufügen",
+    add_row_separator: "Zeilentrennzeichen hinzufügen",
     custom_icons: "Benutzerdefinierte Symbole",
     inactive_icon: "Inaktives Symbol",
     active_icon: "Aktives Symbol",
@@ -75,67 +75,65 @@ export default {
     icon_size: "Symbolgröße",
     icon_size_description: "Größe des Symbols.",
     icon_label_position: "Position der Symbolbeschriftung",
-    interaction: "Interaktion",
-    colors: "Farben",
-    card_background: "Kartenhintergrund",
-    bar_background: "Balkenhintergrund",
-    bar_fill: "Balkenfüllung",
-    limit_indicator: "Limitanzeige",
-    icon_active: "Symbol Aktiv",
-    icon_inactive: "Symbol Inaktiv",
-    car_state_text: "Fahrzeugzustandstext",
-    range_text: "Reichweitentext",
-    percentage_text: "Prozenttext",
-    none: "Keine",
-    local_url: "Lokal/URL",
-    entity: "Entität",
-    search_entities: "Entitäten suchen",
-    battery_level_description: "Wählen Sie die Entität, die den Batteriestand Ihres Fahrzeugs darstellt.",
-    battery_range_description: "Wählen Sie die Entität, die die verbleibende Reichweite Ihres Elektrofahrzeugs darstellt.",
-    charging_status_description: "Wählen Sie die Entität, die anzeigt, ob Ihr Fahrzeug gerade geladen wird.",
-    charge_limit_description: "Wählen Sie die Entität, die das eingestellte Ladelimit für Ihr Fahrzeug darstellt.",
-    location_description: "Wählen Sie die Entität, die den aktuellen Standort Ihres Fahrzeugs angibt.",
-    mileage_description: "Wählen Sie die Entität, die den Gesamtkilometerstand oder die Tachoanzeige Ihres Fahrzeugs darstellt.",
-    car_state_description: "Wählen Sie die Entität, die den aktuellen Zustand Ihres Fahrzeugs darstellt (z.B. geparkt, fahrend, ladend).",
-    icon_grid_description: "Fügen Sie Entitäten zum Symbol-Raster hinzu. Suchen und wählen Sie Entitäten zum Hinzufügen. Verwenden Sie den Ziehgriff, um Entitäten neu anzuordnen. Klicken Sie auf das Symbol, um es zu ändern, und verwenden Sie (×), um eine Entität aus dem Raster zu entfernen.",
-    custom_colors_description: "Passen Sie die Farben verschiedener Elemente in der Karte an Ihren bevorzugten Stil oder Ihr Thema an.",
-    row_separator: "Zeilentrenner",
-    add_row_separator: "Zeilentrenner hinzufügen",
-    separator_color: "Trennfarbe",
-    separator_color_description: "Wählen Sie die Farbe für den Zeilentrenner.",
-    transparent: "Transparent",
-    set_color: "Farbe festlegen",
-    separator_height: "Trennerhöhe",
-    separator_height_description: "Legen Sie die Höhe des Zeilentrenners in Pixeln fest.",
-    icon_gap_size: "Symbolabstandsgröße",
-    icon_gap_description: "Legen Sie den Abstand zwischen Symbolen in Pixeln fest.",
-    horizontal_alignment: "Horizontale Ausrichtung",
-    vertical_alignment: "Vertikale Ausrichtung",
-    more_info: "Mehr Informationen",
-    bottom: "Unten",
-    select_entity: "Entität auswählen",
-    entity_provides_image: "Entität liefert Bild",
-    formatted_entities: "Formatierte Entitäten",
-    formatted_entities_description: "Bereinigen Sie Entitätswerte durch Runden von Zahlen, Ersetzen von Unterstrichen durch Leerzeichen, Großschreibung von Wörtern und Hinzufügen von Kommas zu großen Zahlen.",
-    toggle: "Umschalten",
-    navigate: "Navigieren",
-    url: "URL öffnen",
-    trigger: "Auslösen",
-    fuel_level_description: "Wählen Sie die Entität, die den Kraftstoffstand Ihres Fahrzeugs darstellt.",
-    fuel_range_description: "Wählen Sie die Entität, die die verbleibende Kraftstoffreichweite Ihres Fahrzeugs darstellt.",
-    engine_on_description: "Wählen Sie die Entität, die anzeigt, ob der Motor Ihres Fahrzeugs derzeit läuft.",
     left: "Links",
     top: "Oben",
     right: "Rechts",
     bottom: "Unten",
-    infoTextColor: "Informationstextfarbe",
-    carStateTextColor: "Fahrzeugzustandstextfarbe",
+    interaction: "Interaktion",
+    colors: "Farben",
+    cardBackgroundColor: "Kartenhintergrundfarbe",
+    barBackgroundColor: "Balkenhintergrundfarbe",
+    barBorderColor: "Balkenrahmenfarbe",
+    barFillColor: "Balkenfüllfarbe",
+    limitIndicatorColor: "Limitindikatorfarbe",
+    infoTextColor: "Infotextfarbe",
+    carStateTextColor: "Fahrzeugzustandtextfarbe",
     rangeTextColor: "Reichweitentextfarbe",
     percentageTextColor: "Prozenttextfarbe",
+    none: "Keine",
+    local_url: "Lokal/URL",
+    entity: "Entität",
+    search_entities: "Entitäten suchen",
+    battery_level_description: "Wählen Sie die Entität, die den Batteriestand Ihres Fahrzeugs repräsentiert.",
+    battery_range_description: "Wählen Sie die Entität, die die verbleibende Reichweite Ihres Elektrofahrzeugs repräsentiert.",
+    charging_status_description: "Wählen Sie die Entität, die anzeigt, ob Ihr Fahrzeug gerade lädt.",
+    charge_limit_description: "Wählen Sie die Entität, die das eingestellte Ladelimit für Ihr Fahrzeug repräsentiert.",
+    location_description: "Wählen Sie die Entität, die den aktuellen Standort Ihres Fahrzeugs angibt.",
+    mileage_description: "Wählen Sie die Entität, die den Gesamtkilometerstand oder die Tachoanzeige Ihres Fahrzeugs repräsentiert.",
+    car_state_description: "Wählen Sie die Entität, die den aktuellen Zustand Ihres Fahrzeugs repräsentiert (z.B. geparkt, fahrend, ladend).",
+    icon_grid_description: "Fügen Sie Entitäten zum Symbol-Raster hinzu. Suchen und wählen Sie Entitäten zum Hinzufügen. Verwenden Sie den Ziehgriff, um Entitäten neu anzuordnen. Klicken Sie auf das Symbol, um es zu ändern, und verwenden Sie (×), um eine Entität aus dem Raster zu entfernen.",
+    custom_colors_description: "Passen Sie die Farben verschiedener Elemente in der Karte an Ihren bevorzugten Stil oder Ihr Thema an.",
+    row_separator: "Zeilentrennzeichen",
+    add_row_separator: "Zeilentrennzeichen hinzufügen",
+    separator_color: "Trennzeichenfarbe",
+    separator_color_description: "Wählen Sie die Farbe für das Zeilentrennzeichen.",
+    transparent: "Transparent",
+    set_color: "Farbe festlegen",
+    separator_height: "Trennzeichenhöhe",
+    separator_height_description: "Legen Sie die Höhe des Zeilentrennzeichens in Pixeln fest.",
+    icon_gap_size: "Symbollückengrößen",
+    icon_gap_description: "Legen Sie den Abstand zwischen Symbolen in Pixeln fest.",
+    horizontal_alignment: "Horizontale Ausrichtung",
+    vertical_alignment: "Vertikale Ausrichtung",
+    more_info: "Mehr Informationen",
+    select_entity: "Entität auswählen",
+    entity_provides_image: "Diese Entität stellt das Bild für die Anzeige bereit.",
+    toggle: "Umschalten",
+    navigate: "Navigieren",
+    url: "URL öffnen",
+    trigger: "Auslösen",
+    formatted_entities: "Formatierte Entitäten",
+    formatted_entities_description: "Bereinigen Sie Entitätswerte, indem Sie Zahlen runden, Unterstriche durch Leerzeichen ersetzen, Wörter großschreiben und große Zahlen mit Kommas versehen.",
+    fuel_level_description: "Wählen Sie die Entität, die den Kraftstoffstand Ihres Fahrzeugs repräsentiert.",
+    fuel_range_description: "Wählen Sie die Entität, die die verbleibende Kraftstoffreichweite Ihres Fahrzeugs repräsentiert.",
+    engine_on_description: "Wählen Sie die Entität, die anzeigt, ob der Motor Ihres Fahrzeugs gerade läuft.",
     main_image_height: "Hauptbildhöhe",
     charging_image_height: "Ladebildhöhe",
-    main_image_section: "Haupteinstellungen für Bilder",
-    charging_image_section: "Ladebildeinstellungen"
+    main_image_section: "Hauptbild-Einstellungen",
+    charging_image_section: "Ladebild-Einstellungen",
+    layout_type: "Layout-Typ",
+    single_column: "Einzelspalte",
+    double_column: "Doppelspalte"
   },
   device_class: {
     battery: {
@@ -148,7 +146,7 @@ export default {
     },
     carbon_monoxide: {
       on: "Erkannt",
-      off: "Klar"
+      off: "Frei"
     },
     cold: {
       on: "Kalt",
@@ -168,7 +166,7 @@ export default {
     },
     gas: {
       on: "Erkannt",
-      off: "Klar"
+      off: "Frei"
     },
     heat: {
       on: "Heiß",
@@ -176,7 +174,7 @@ export default {
     },
     light: {
       on: "Erkannt",
-      off: "Klar"
+      off: "Frei"
     },
     lock: {
       on: "Entriegelt",
@@ -188,11 +186,11 @@ export default {
     },
     motion: {
       on: "Erkannt",
-      off: "Klar"
+      off: "Frei"
     },
     moving: {
       on: "Bewegt sich",
-      off: "Gestoppt"
+      off: "Steht"
     },
     occupancy: {
       on: "Belegt",
@@ -228,15 +226,15 @@ export default {
     },
     smoke: {
       on: "Erkannt",
-      off: "Klar"
+      off: "Frei"
     },
     sound: {
       on: "Erkannt",
-      off: "Klar"
+      off: "Frei"
     },
     tamper: {
       on: "Erkannt",
-      off: "Klar"
+      off: "Frei"
     },
     update: {
       on: "Verfügbar",
@@ -244,11 +242,11 @@ export default {
     },
     vibration: {
       on: "Erkannt",
-      off: "Klar"
+      off: "Frei"
     },
     window: {
       on: "Offen",
       off: "Geschlossen"
     }
   }
-};
+}

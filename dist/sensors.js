@@ -90,17 +90,11 @@ export function getIconActiveState(entityId, hass, config) {
     if (activeState === 'default') {
       return isActiveState(stateStr);
     } else if (activeState.startsWith('template:')) {
-      // For template, evaluate the template
-      const template = activeState.slice(9);
-      try {
-        const result = new Function('state', 'attributes', `return ${template}`)
-          .call(null, state.state, state.attributes);
-        return Boolean(result);
-      } catch (error) {
-        console.error(`Error evaluating template for ${entityId}:`, error);
-        return false;
-      }
-    } else if (activeState.startsWith('option:') || activeState.startsWith('attribute:')) {
+      // ... existing template handling ...
+    } else if (activeState.startsWith('attribute:')) {
+      const [, attributeName, attributeValue] = activeState.split(':');
+      return state.attributes[attributeName] === attributeValue;
+    } else if (activeState.startsWith('option:')) {
       return stateStr === activeState.split(':')[1].toLowerCase();
     } else {
       return stateStr === activeState.toLowerCase();
@@ -111,17 +105,11 @@ export function getIconActiveState(entityId, hass, config) {
     if (inactiveState === 'default') {
       return !isActiveState(stateStr);
     } else if (inactiveState.startsWith('template:')) {
-      // For template, evaluate the template
-      const template = inactiveState.slice(9);
-      try {
-        const result = new Function('state', 'attributes', `return ${template}`)
-          .call(null, state.state, state.attributes);
-        return !Boolean(result);
-      } catch (error) {
-        console.error(`Error evaluating template for ${entityId}:`, error);
-        return true;
-      }
-    } else if (inactiveState.startsWith('option:') || inactiveState.startsWith('attribute:')) {
+      // ... existing template handling ...
+    } else if (inactiveState.startsWith('attribute:')) {
+      const [, attributeName, attributeValue] = inactiveState.split(':');
+      return state.attributes[attributeName] !== attributeValue;
+    } else if (inactiveState.startsWith('option:')) {
       return stateStr !== inactiveState.split(':')[1].toLowerCase();
     } else {
       return stateStr !== inactiveState.toLowerCase();

@@ -9,6 +9,7 @@ class StateDropdown extends LitElement {
       stateType: { type: String }, // 'inactive' or 'active'
       value: { type: String },
       templateValue: { type: String },
+      attributeValue: { type: String },
     };
   }
 
@@ -16,6 +17,7 @@ class StateDropdown extends LitElement {
     super();
     this.value = 'default';
     this.templateValue = '';
+    this.attributeValue = '';
   }
 
   updated(changedProperties) {
@@ -28,8 +30,16 @@ class StateDropdown extends LitElement {
   _updateValueFromConfig() {
     const configValue = this.config[`${this.stateType}State`];
     if (configValue) {
-      this.value = configValue.startsWith('template:') ? 'template' : configValue;
-      this.templateValue = configValue.startsWith('template:') ? configValue.slice(9) : '';
+      if (configValue.startsWith('template:')) {
+        this.value = 'template';
+        this.templateValue = configValue.slice(9);
+      } else if (configValue.startsWith('attribute:')) {
+        const [, attributeName, attributeValue] = configValue.split(':');
+        this.value = `attribute:${attributeName}`;
+        this.attributeValue = attributeValue || '';
+      } else {
+        this.value = configValue;
+      }
     }
   }
 
@@ -45,9 +55,15 @@ class StateDropdown extends LitElement {
         ha-select {
           width: 100%;
         }
-        .template-input {
+        .template-input, .attribute-input {
           margin-top: 8px;
           max-width: 230px;
+        }
+        .beta-warning {
+          color: #ff9800;
+          font-weight: bold;
+          margin-top: 4px;
+          margin-bottom: 4px;
         }
       </style>
       <div @click="${this._handleContainerClick}">
@@ -61,8 +77,19 @@ class StateDropdown extends LitElement {
           `)}
         </ha-select>
         ${this.value === 'template' ? html`
+          <div class="beta-warning">BETA - USE AT OWN RISK</div>
           <div class="template-input">
             ${this._renderTemplateInput()}
+          </div>
+        ` : ''}
+        ${this.value.startsWith('attribute:') ? html`
+          <div class="attribute-input">
+            <ha-textfield
+              .value=${this.attributeValue}
+              @input=${this._attributeValueChanged}
+              placeholder="Enter attribute value"
+              style="width: 100%;"
+            ></ha-textfield>
           </div>
         ` : ''}
       </div>
@@ -122,12 +149,15 @@ class StateDropdown extends LitElement {
     e.stopPropagation();
     const newValue = e.target.value;
     this.value = newValue;
-    if (newValue !== 'template') {
-      this._updateConfig(newValue);
-    } else {
-      this.templateValue = this.config[`${this.stateType}State`]?.slice(9) || '';
+    
+    if (newValue === 'template') {
       this._updateConfig(`template:${this.templateValue}`);
+    } else if (newValue.startsWith('attribute:')) {
+      this._updateConfig(`${newValue}:${this.attributeValue}`);
+    } else {
+      this._updateConfig(newValue);
     }
+    
     this.requestUpdate();
   }
 
@@ -144,7 +174,12 @@ class StateDropdown extends LitElement {
     };
 
     const event = new CustomEvent('state-dropdown-changed', {
-      detail: { config: newConfig, entityId: this.entityId, stateType: this.stateType },
+      detail: { 
+        config: newConfig, 
+        entityId: this.entityId, 
+        stateType: this.stateType,
+        attributeValue: this.attributeValue 
+      },
       bubbles: true,
       composed: true
     });
@@ -155,6 +190,11 @@ class StateDropdown extends LitElement {
     e.stopPropagation();
     this.templateValue = e.detail.value;
     this._updateConfig(`template:${this.templateValue}`);
+  }
+
+  _attributeValueChanged(e) {
+    this.attributeValue = e.target.value;
+    this._updateConfig(`${this.value}:${this.attributeValue}`);
   }
 }
 
