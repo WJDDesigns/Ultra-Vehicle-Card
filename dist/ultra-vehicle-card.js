@@ -3,8 +3,8 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version, setVersion } from "./version.js?v=13";
-setVersion("V1.6.0");
+import { version, setVersion } from "./version.js?v=14";
+setVersion("V1.6.1-beta1");
 
 const sensorModule = await import("./sensors.js?v=" + version);
 const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn } = sensorModule;
@@ -280,6 +280,7 @@ class UltraVehicleCard extends localize(LitElement) {
         width: 100%;
         height: var(--vehicle-charging-image-height, 180px);
         border-radius: var(--ha-card-border-radius, 4px);
+        object-fit: contain;
       }
       .double-column-container .vehicle-name {
         margin-bottom: 12px;
@@ -1448,75 +1449,6 @@ class UltraVehicleCard extends localize(LitElement) {
       : null;
   }
 
-  _universalFormatValue(value, isFormatted) {
-    if (!isFormatted) return value;
-
-    if (typeof value === "string") {
-      // Check if it's a date string
-      if (this._isISODateString(value)) {
-        return this._formatChargingEndTime(value);
-      }
-      // Check if it's a numeric string
-      if (!isNaN(parseFloat(value))) {
-        // Convert to number, round to nearest integer, and format
-        return this._formatNumberWithCommas(Math.round(parseFloat(value)));
-      }
-      // Return other strings as-is
-      return value;
-    }
-
-    if (typeof value === "number") {
-      // Round to whole number and format with commas
-      return this._formatNumberWithCommas(Math.round(value));
-    }
-
-    return value;
-  }
-
-  _formatNumberWithCommas(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
-
-  _isISODateString(value) {
-    return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$/.test(value);
-  }
-
-  _formatChargingEndTime(isoDateString) {
-    const date = new Date(isoDateString);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const ampm = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12;
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-    return `${formattedHours}:${formattedMinutes} ${ampm}`;
-  }
-
-  _formatRange(value, unit) {
-    if (value === undefined || value === null) return "";
-
-    const formattedValue = this._universalFormatValue(
-      value,
-      this.config.useFormattedEntities
-    );
-
-    return `${formattedValue} ${unit || ""}`.trim();
-  }
-
-  _formatTimestamp(timestamp) {
-    const date = new Date(timestamp);
-    return date.toLocaleString();
-  }
-
-  _formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleDateString();
-  }
-
-  _roundNumber(value) {
-    // Round to the nearest integer
-    return Math.round(value).toString();
-  }
-
   _getLocalizedState(state) {
     if (state === "not_home") {
       return this.hass.localize("state.device_tracker.not_home") || this.localize("common.away");
@@ -1578,6 +1510,7 @@ class UltraVehicleCard extends localize(LitElement) {
       activeState: config.activeState || '',
       inactiveState: config.inactiveState || '',
       showTitle: config.showTitle !== false,
+      useFormattedEntities: config.useFormattedEntities || false,
     };
 
     console.log("UltraVehicleCard config after setConfig:", JSON.stringify(this.config, null, 2));

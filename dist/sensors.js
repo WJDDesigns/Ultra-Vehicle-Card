@@ -1,38 +1,18 @@
 export function formatEntityValue(entity, useFormattedEntities, hass, localize) {
   if (!entity || !hass) return null;
 
-
   // If formatting is not enabled, return the state as-is
   if (!useFormattedEntities) {
     return entity.state;
   }
 
-  // Use Home Assistant's built-in localization for state
-  let translatedState = hass.formatEntityState(entity);
-
-  // Special handling for device trackers and location entities
-  if (entity.entity_id.split('.')[0] === 'device_tracker' || 
-      entity.entity_id.split('.')[0] === 'person' ||
-      entity.attributes.device_class === 'presence') {
-    const lowerState = translatedState.toLowerCase();
-    if (lowerState === 'home' || lowerState === 'not_home' || lowerState === 'away') {
-      const formattedState = lowerState === 'home' ? 'Home' : 'Away';
-      return formattedState;
-    }
+  // Use Home Assistant's built-in formatting functions
+  if (typeof hass.formatEntityState === 'function') {
+    return hass.formatEntityState(entity);
   }
 
-  // Handle numeric values with units
-  const numericMatch = translatedState.match(/^([\d,]+(?:\.\d+)?)\s*(.*)$/);
-  if (numericMatch) {
-    const numericValue = parseFloat(numericMatch[1].replace(/,/g, ''));
-    const unit = numericMatch[2];
-    const roundedValue = Math.round(numericValue);
-    const formattedValue = roundedValue.toLocaleString('en-US');
-    return `${formattedValue} ${unit}`.trim();
-  }
-
-  // For all other entities, return the translated state
-  return translatedState;
+  // Fallback to basic formatting if Home Assistant functions are not available
+  return entity.state;
 }
 
 function formatBinaryState(state, attributes, hass, localize) {

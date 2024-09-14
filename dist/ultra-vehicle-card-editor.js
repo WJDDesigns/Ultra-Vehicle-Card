@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=13";
+import { version } from "./version.js?v=14";
 import './state-dropdown.js';
 
 const stl = await import("./styles.js?v=" + version);
@@ -2998,6 +2998,12 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       };
       this.configChanged(this.config);
     }
+  }
+
+  _toggleFormattedEntities(e) {
+    const useFormattedEntities = e.target.checked;
+    this._updateConfig("useFormattedEntities", useFormattedEntities);
+    this._fireEvent("config-changed", { config: this.config });
   }
 }
 customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);
