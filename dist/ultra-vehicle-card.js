@@ -1277,6 +1277,9 @@ class UltraVehicleCard extends localize(LitElement) {
       case "script":
         service = "turn_on";
         break;
+      case "button":
+        service = "press"
+        break;
       // Add more cases here for other entity types that might need special handling
     }
 
