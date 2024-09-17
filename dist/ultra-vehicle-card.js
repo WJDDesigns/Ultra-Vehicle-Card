@@ -96,7 +96,6 @@ class UltraVehicleCard extends localize(LitElement) {
   }
 
   setConfig(config) {
-    console.log("UltraVehicleCard setConfig called with:", JSON.stringify(config, null, 2));
     if (!config) {
       throw new Error("Invalid configuration");
     }
@@ -108,6 +107,10 @@ class UltraVehicleCard extends localize(LitElement) {
       charging_image_url: "",
       image_url_type: "image",
       charging_image_url_type: "image",
+      engine_on_image_url: "",
+      engine_on_image_url_type: "url",
+      engineOnImageHeight: config.engineOnImageHeight || defaultHeight,
+      engine_on_entity: "",
       vehicle_type: "EV",
       unit_type: "mi",
       battery_level_entity: "",
@@ -139,8 +142,22 @@ class UltraVehicleCard extends localize(LitElement) {
       ...config,  // Spread the provided config to override defaults
       activeState: config.activeState || '',
       inactiveState: config.inactiveState || '',
+      useBarGradient: config.useBarGradient || false,
+      barGradientStops: config.barGradientStops || [
+        { percentage: 0, color: '#ff0000' },
+        { percentage: 100, color: '#00ff00' }
+      ],
+      cardBackgroundColor: config.cardBackgroundColor || "#1c1c1c",
+      barBackgroundColor: config.barBackgroundColor || "#9b9b9b",
+      barBorderColor: config.barBorderColor || "#9b9b9b",
+      barFillColor: config.barFillColor || "#0da2d3",
+      limitIndicatorColor: config.limitIndicatorColor || "#e1e1e1",
+      infoTextColor: config.infoTextColor || "#9b9b9b",
+      carStateTextColor: config.carStateTextColor || "#e1e1e1",
+      rangeTextColor: config.rangeTextColor || "#e1e1e1",
+      percentageTextColor: config.percentageTextColor || "#e1e1e1",
+      cardTitleColor: config.cardTitleColor || 'var(--primary-text-color)',
     };
-    console.log("UltraVehicleCard config after setConfig:", JSON.stringify(this.config, null, 2));
     this._updateStyles();
     this._updateIconBackground();
     this._updateImageHeights();
@@ -150,7 +167,6 @@ class UltraVehicleCard extends localize(LitElement) {
   updated(changedProperties) {
     super.updated(changedProperties);
     if (changedProperties.has('config')) {
-      console.log("UltraVehicleCard config updated:", JSON.stringify(this.config, null, 2));
       this._updateStyles();
       this._updateIconBackground();
       this._updateImageHeights();
@@ -189,7 +205,6 @@ class UltraVehicleCard extends localize(LitElement) {
     if (!this.hass || !this.config) {
       return html``;
     }
-    console.log("Rendering UltraVehicleCard with config:", JSON.stringify(this.config, null, 2));
 
     return html`
       <ha-card
@@ -271,20 +286,67 @@ class UltraVehicleCard extends localize(LitElement) {
       .full-width-column {
         width: 100%;
       }
-      .vehicle-image {
-        width: 100%;
-        height: var(--vehicle-image-height, 180px);
-        border-radius: var(--ha-card-border-radius, 4px);
-      }
-      .charging-image {
-        width: 100%;
-        height: var(--vehicle-charging-image-height, 180px);
-        border-radius: var(--ha-card-border-radius, 4px);
-        object-fit: contain;
-      }
       .double-column-container .vehicle-name {
         margin-bottom: 12px;
         margin-top: 0px;
+      }
+
+      .progress {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 0;
+        height: 1.5rem;
+        margin: 0;
+        border-radius: 4px;
+      }
+
+      .progress.gradient {
+        background-image: var(--uvc-gradient-background);
+      }
+
+      .progress:not(.gradient) {
+        background-color: var(--uvc-primary-color);
+      }
+
+      .progress.charging::before,
+      .progress.engine-on::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.2) 25%,
+          transparent 25%,
+          transparent 50%,
+          rgba(255, 255, 255, 0.2) 50%,
+          rgba(255, 255, 255, 0.2) 75%,
+          transparent 75%,
+          transparent 100%
+        );
+        background-size: 50px 50px;
+        animation: move 2s linear infinite;
+        border-radius: 4px;
+      }
+
+      @keyframes move {
+        0% {
+          background-position: 0 0;
+        }
+        100% {
+          background-position: 50px 50px;
+        }
+      }
+
+      .percentage-text {
+        color: var(--uvc-percentage-text-color, #e1e1e1);
+      }
+      .level-text span {
+        color: var(--uvc-percentage-text-color, #e1e1e1);
       }
     `;
   }
@@ -331,6 +393,7 @@ class UltraVehicleCard extends localize(LitElement) {
       this.localize
     );
     const isCharging = this._isCharging(chargingStatusEntity);
+    const showChargingAnimation = this.config.show_charging_animation !== false;
     const chargeLimit = this.config.show_charge_limit
       ? this._getValueFromEntityOrAttributes(chargeLimitEntity, [
           "charge_limit",
@@ -347,8 +410,8 @@ class UltraVehicleCard extends localize(LitElement) {
                   this._handleMoreInfo(this.config.battery_level_entity)}"
               >
                 <div
-                  class="progress ${isCharging ? "charging" : ""}"
-                  style="width: ${batteryLevel}%;"
+                  class="progress ${isCharging ? "charging" : ""} ${this.config.useBarGradient ? "gradient" : ""}"
+                  style="${this._getBarStyle(batteryLevel)}"
                 ></div>
                 ${chargeLimit !== null
                   ? html`
@@ -365,11 +428,8 @@ class UltraVehicleCard extends localize(LitElement) {
                   @click="${() =>
                     this._handleMoreInfo(this.config.battery_level_entity)}"
                 >
-                  <span style="color: var(--uvc-percentage-text-color);"
-                    >${batteryLevel}%</span
-                  >
-                  <span
-                    >&nbsp;${isCharging
+                  <span class="percentage-text">${batteryLevel}%</span>
+                  <span class="percentage-text">&nbsp;${isCharging
                       ? this.localize("common.charging")
                       : this.localize("common.battery")}</span
                   >
@@ -408,6 +468,47 @@ class UltraVehicleCard extends localize(LitElement) {
     `;
   }
 
+  _getBarStyle(level) {
+    if (this.config.useBarGradient && this.config.barGradientStops) {
+      const gradient = this._calculateGradient(level);
+      return `width: ${level}%; --uvc-gradient-background: ${gradient};`;
+    } else {
+      return `width: ${level}%;`;
+    }
+  }
+
+  _calculateGradient(level) {
+    if (!this.config.barGradientStops || this.config.barGradientStops.length === 0) {
+      return `linear-gradient(to right, var(--uvc-primary-color) 0%, var(--uvc-primary-color) 100%)`;
+    }
+
+    // Create a new array and sort it
+    const stops = [...this.config.barGradientStops].sort((a, b) => a.percentage - b.percentage);
+
+    const currentStop = stops.find(stop => stop.percentage >= level) || stops[stops.length - 1];
+    const prevStop = stops[stops.findIndex(stop => stop.percentage >= level) - 1] || stops[0];
+
+    const startColor = prevStop.color;
+    const endColor = currentStop.color;
+    const startPercentage = prevStop.percentage;
+    const endPercentage = currentStop.percentage;
+
+    const ratio = (level - startPercentage) / (endPercentage - startPercentage);
+    const interpolatedColor = this._interpolateColor(startColor, endColor, ratio);
+
+    return `linear-gradient(to right, ${interpolatedColor} 0%, ${interpolatedColor} 100%)`;
+  }
+
+  _interpolateColor(color1, color2, factor) {
+    const result = color1.slice(1).match(/.{2}/g).map((hex, i) => {
+      const int1 = parseInt(hex, 16);
+      const int2 = parseInt(color2.slice(1).match(/.{2}/g)[i], 16);
+      const int = Math.round(int1 + (int2 - int1) * factor);
+      return `0${int.toString(16)}`.slice(-2);
+    });
+    return `#${result.join('')}`;
+  }
+
   _getValueFromEntityOrAttributes(entity, attributeNames) {
     if (!entity) return null;
 
@@ -437,34 +538,24 @@ class UltraVehicleCard extends localize(LitElement) {
     // Check attributes for 'charging' status
     if (attributes) {
       for (const [key, value] of Object.entries(attributes)) {
-        if (typeof value === "string" && value.toLowerCase() === "charging") {
+        if (typeof value === 'string' && value.toLowerCase() === 'charging') {
           return true;
         }
       }
     }
 
     // Special handling for 'none_charging' entities
-    if (entityId.includes("none_charging")) {
-      return state === "on"; // 'on' means charging for this specific entity
+    if (entityId.includes('none_charging')) {
+      return state === 'on'; // 'on' means charging for this specific entity
     }
 
     // Handle boolean entities
-    if (
-      chargingStatusEntity.attributes.device_class === "battery_charging" ||
-      ["on", "off"].includes(state)
-    ) {
-      return state === "on";
+    if (chargingStatusEntity.attributes.device_class === 'battery_charging' || ['on', 'off'].includes(state)) {
+      return state === 'on';
     }
 
     // Handle string-based entities
-    const chargingStates = [
-      "charging",
-      "in_charging",
-      "charge_start",
-      "in_progress",
-      "active",
-      "connected",
-    ];
+    const chargingStates = ['charging', 'in_charging', 'charge_start', 'in_progress', 'active', 'connected'];
     return chargingStates.includes(state);
   }
 
@@ -489,6 +580,7 @@ class UltraVehicleCard extends localize(LitElement) {
       this.localize
     );
     const isEngineOn = sensorModule.isEngineOn(engineOnEntity);
+    const showEngineAnimation = this.config.show_engine_animation !== false;
 
     return html`
       <div class="level-info">
@@ -500,8 +592,8 @@ class UltraVehicleCard extends localize(LitElement) {
                   this._handleMoreInfo(this.config.fuel_level_entity)}"
               >
                 <div
-                  class="progress ${isEngineOn ? "engine-on" : ""}"
-                  style="width: ${fuelLevel}%;"
+                  class="progress ${isEngineOn ? "engine-on" : ""} ${this.config.useBarGradient ? "gradient" : ""}"
+                  style="${this._getBarStyle(fuelLevel)}"
                 ></div>
               </div>
               <div class="level-text">
@@ -510,11 +602,8 @@ class UltraVehicleCard extends localize(LitElement) {
                   @click="${() =>
                     this._handleMoreInfo(this.config.fuel_level_entity)}"
                 >
-                  <span style="color: var(--uvc-percentage-text-color);"
-                    >${fuelLevel}%</span
-                  >
-                  <span
-                    >&nbsp;${isEngineOn
+                  <span class="percentage-text">${fuelLevel}%</span>
+                  <span class="percentage-text">&nbsp;${isEngineOn
                       ? this.localize("common.engine_on")
                       : this.localize("common.fuel")}</span
                   >
@@ -570,6 +659,9 @@ class UltraVehicleCard extends localize(LitElement) {
     const chargeLimitEntity = this.config.charge_limit_entity
       ? this.hass.states[this.config.charge_limit_entity]
       : null;
+    const engineOnEntity = this.config.engine_on_entity
+      ? this.hass.states[this.config.engine_on_entity]
+      : null;
 
     const batteryLevel = batteryLevelEntity
       ? parseFloat(batteryLevelEntity.state)
@@ -590,6 +682,7 @@ class UltraVehicleCard extends localize(LitElement) {
       this.localize
     );
     const isCharging = this._isCharging(chargingStatusEntity);
+    const isEngineOn = sensorModule.isEngineOn(engineOnEntity);
     const chargeLimit =
       chargeLimitEntity && this.config.show_charge_limit
         ? parseFloat(chargeLimitEntity.state)
@@ -608,10 +701,10 @@ class UltraVehicleCard extends localize(LitElement) {
                 chargeLimit
               )}
               <div class="hybrid-separator"></div>
-              ${this._renderFuelBar(fuelLevel, fuelRange)}
+              ${this._renderFuelBar(fuelLevel, fuelRange, isEngineOn)}
             `
           : html`
-              ${this._renderFuelBar(fuelLevel, fuelRange)}
+              ${this._renderFuelBar(fuelLevel, fuelRange, isEngineOn)}
               <div class="hybrid-separator"></div>
               ${this._renderBatteryBar(
                 batteryLevel,
@@ -634,8 +727,8 @@ class UltraVehicleCard extends localize(LitElement) {
                 this._handleMoreInfo(this.config.battery_level_entity)}"
             >
               <div
-                class="progress ${isCharging ? "charging" : ""}"
-                style="width: ${level}%;"
+                class="progress ${isCharging ? "charging" : ""} ${this.config.useBarGradient ? "gradient" : ""}"
+                style="${this._getBarStyle(level)}"
               ></div>
               ${chargeLimit !== null
                 ? html`
@@ -652,11 +745,8 @@ class UltraVehicleCard extends localize(LitElement) {
                 @click="${() =>
                   this._handleMoreInfo(this.config.battery_level_entity)}"
               >
-                <span style="color: var(--uvc-percentage-text-color);"
-                  >${level}%</span
-                >
-                <span
-                  >&nbsp;${isCharging
+                <span class="percentage-text">${level}%</span>
+                <span class="percentage-text">&nbsp;${isCharging
                     ? this.localize("common.charging")
                     : this.localize("common.battery")}</span
                 >
@@ -692,7 +782,7 @@ class UltraVehicleCard extends localize(LitElement) {
     `;
   }
 
-  _renderFuelBar(level, range) {
+  _renderFuelBar(level, range, isEngineOn) {
     return html`
       ${this.config.show_fuel && level !== null
         ? html`
@@ -701,7 +791,7 @@ class UltraVehicleCard extends localize(LitElement) {
               @click="${() =>
                 this._handleMoreInfo(this.config.fuel_level_entity)}"
             >
-              <div class="progress" style="width: ${level}%;"></div>
+              <div class="progress ${isEngineOn ? "engine-on" : ""} ${this.config.useBarGradient ? "gradient" : ""}" style="${this._getBarStyle(level)}"></div>
             </div>
             <div class="level-text">
               <span
@@ -709,10 +799,9 @@ class UltraVehicleCard extends localize(LitElement) {
                 @click="${() =>
                   this._handleMoreInfo(this.config.fuel_level_entity)}"
               >
-                <span style="color: var(--uvc-percentage-text-color);"
-                  >${level}%</span
+                <span class="percentage-text">${level}%</span
                 >
-                <span>&nbsp;${this.localize("common.fuel")}</span>
+                <span class="percentage-text">&nbsp;${this.localize("common.fuel")}</span>
               </span>
               ${this.config.show_fuel_range &&
               this.config.fuel_range_entity &&
@@ -761,12 +850,7 @@ class UltraVehicleCard extends localize(LitElement) {
     const carStateEntity = this.hass.states[this.config.car_state_entity];
     if (!carStateEntity) return "";
 
-    const state = formatEntityValue(
-      carStateEntity,
-      this.config.useFormattedEntities,
-      this.hass,
-      this.localize
-    );
+    const state = this.hass.formatEntityState(carStateEntity);
 
     return html`
       <div
@@ -907,42 +991,105 @@ class UltraVehicleCard extends localize(LitElement) {
 
   _renderVehicleImage() {
     const isCharging = this._isCharging(this.hass.states[this.config.charging_status_entity]);
-    const imageType = isCharging ? this.config.charging_image_url_type : this.config.image_url_type;
+    const isEngineOn = this._isEngineOn(this.hass.states[this.config.engine_on_entity]);
+    const vehicleType = this.config.vehicle_type;
+    const hybridDisplayOrder = this.config.hybrid_display_order;
     
+    let imageUrl;
+    let imageType;
+    let imageHeight;
+    let entityId;
+
+    if (vehicleType === "EV") {
+      if (isCharging && (this.config.charging_image_url || this.config.charging_image_entity)) {
+        imageUrl = this.config.charging_image_url;
+        imageType = this.config.charging_image_url_type;
+        imageHeight = this.config.chargingImageHeight;
+        entityId = this.config.charging_image_entity;
+      } else {
+        imageUrl = this.config.image_url;
+        imageType = this.config.image_url_type;
+        imageHeight = this.config.mainImageHeight;
+        entityId = this.config.image_entity;
+      }
+    } else if (vehicleType === "Fuel") {
+      if (isEngineOn && (this.config.engine_on_image_url || this.config.engine_on_image_entity)) {
+        imageUrl = this.config.engine_on_image_url;
+        imageType = this.config.engine_on_image_url_type;
+        imageHeight = this.config.engineOnImageHeight;
+        entityId = this.config.engine_on_image_entity;
+      } else {
+        imageUrl = this.config.image_url;
+        imageType = this.config.image_url_type;
+        imageHeight = this.config.mainImageHeight;
+        entityId = this.config.image_entity;
+      }
+    } else if (vehicleType === "Hybrid") {
+      if (hybridDisplayOrder === "battery_first") {
+        if (isCharging && (this.config.charging_image_url || this.config.charging_image_entity)) {
+          imageUrl = this.config.charging_image_url;
+          imageType = this.config.charging_image_url_type;
+          imageHeight = this.config.chargingImageHeight;
+          entityId = this.config.charging_image_entity;
+        } else if (isEngineOn && (this.config.engine_on_image_url || this.config.engine_on_image_entity)) {
+          imageUrl = this.config.engine_on_image_url;
+          imageType = this.config.engine_on_image_url_type;
+          imageHeight = this.config.engineOnImageHeight;
+          entityId = this.config.engine_on_image_entity;
+        } else {
+          imageUrl = this.config.image_url;
+          imageType = this.config.image_url_type;
+          imageHeight = this.config.mainImageHeight;
+          entityId = this.config.image_entity;
+        }
+      } else { // fuel_first
+        if (isEngineOn && (this.config.engine_on_image_url || this.config.engine_on_image_entity)) {
+          imageUrl = this.config.engine_on_image_url;
+          imageType = this.config.engine_on_image_url_type;
+          imageHeight = this.config.engineOnImageHeight;
+          entityId = this.config.engine_on_image_entity;
+        } else if (isCharging && (this.config.charging_image_url || this.config.charging_image_entity)) {
+          imageUrl = this.config.charging_image_url;
+          imageType = this.config.charging_image_url_type;
+          imageHeight = this.config.chargingImageHeight;
+          entityId = this.config.charging_image_entity;
+        } else {
+          imageUrl = this.config.image_url;
+          imageType = this.config.image_url_type;
+          imageHeight = this.config.mainImageHeight;
+          entityId = this.config.image_entity;
+        }
+      }
+    }
 
     if (imageType === 'none') {
       return html``;
     }
 
-    const imageUrl = this._getImageUrl(isCharging ? 'charging' : 'main');
-    
+    const finalImageUrl = this._getImageUrl(imageUrl, imageType, entityId);
 
-    if (!imageUrl) {
+    if (!finalImageUrl) {
       return html``;
     }
 
     return html`
       <div class="image-container">
         <img
-          src="${imageUrl}"
+          src="${finalImageUrl}"
           alt="Vehicle Image"
-          class="${isCharging ? 'charging-image' : 'vehicle-image'}"
-          style="height: ${isCharging ? this.config.chargingImageHeight : this.config.mainImageHeight};"
+          class="vehicle-image"
+          style="height: ${imageHeight};"
+          @error="${this._handleImageError}"
         />
       </div>
     `;
   }
 
-  _getImageUrl(type) {
-    const config = type === 'charging' ? this.config.charging_image_url_type : this.config.image_url_type;
-    const entity = type === 'charging' ? this.config.charging_image_entity : this.config.image_entity;
-    const url = type === 'charging' ? this.config.charging_image_url : this.config.image_url;
-
-
-    if (config === 'entity') {
-      return this._getImageUrlFromEntity(entity);
-    } else if (config === 'url' || config === 'image') {
-      return url || null;
+  _getImageUrl(imageConfig, imageType, entityId) {
+    if (imageType === 'entity') {
+      return this._getImageUrlFromEntity(entityId);
+    } else if (imageType === 'url' || imageType === 'image') {
+      return imageConfig || null;
     }
     return null;
   }
@@ -953,6 +1100,11 @@ class UltraVehicleCard extends localize(LitElement) {
       return stateObj.attributes.entity_picture;
     }
     return null;
+  }
+
+  _isEngineOn(engineOnEntity) {
+    if (!engineOnEntity) return false;
+    return engineOnEntity.state === 'on' || engineOnEntity.state === 'true' || engineOnEntity.state === 'running';
   }
 
   _handleImageError(e) {
@@ -1086,16 +1238,10 @@ class UltraVehicleCard extends localize(LitElement) {
     const state = this.hass.states[entityId];
     if (!state) return html``;
 
-    console.log(`_renderIcon for ${entityId}:`, {
-      currentState: state.state,
-      config: this.config
-    });
-
     const customIcon = this.config.custom_icons?.[entityId] || {};
     const isActive = getIconActiveState(entityId, this.hass, customIcon);
     const defaultIcon = "mdi:help-circle";
     
-    console.log(`Icon state for ${entityId}:`, { isActive, customIcon });
 
     // Determine which icon to use
     let icon;
@@ -1113,7 +1259,6 @@ class UltraVehicleCard extends localize(LitElement) {
       color = customIcon.inactiveColor || this.config.iconInactiveColor || "#e1e1e1";
     }
 
-    console.log(`Final icon and color for ${entityId}:`, { icon, color });
 
     const iconSize = this.config.icon_sizes?.[entityId] || this.config.icon_size || 24;
     const buttonStyle = this.config.icon_styles?.[entityId] || "icon";
@@ -1400,6 +1545,7 @@ class UltraVehicleCard extends localize(LitElement) {
     if (!this.config) return;
 
     const colorProps = [
+      { config: "cardTitleColor", css: "--uvc-card-title-color" },
       { config: "barFillColor", css: "--uvc-primary-color" },
       { config: "cardBackgroundColor", css: "--uvc-card-background" },
       { config: "barBackgroundColor", css: "--uvc-bar-background" },
@@ -1436,6 +1582,16 @@ class UltraVehicleCard extends localize(LitElement) {
       this.style.setProperty("--uvc-icon-background-dark", `rgba(${rgb}, 0.10)`);
     }
 
+    // Update card background color
+    if (this.config.cardBackgroundColor) {
+      this.style.setProperty('--ha-card-background', this.config.cardBackgroundColor);
+    }
+
+    // Update percentage text color
+    if (this.config.percentageTextColor) {
+      this.style.setProperty('--uvc-percentage-text-color', this.config.percentageTextColor);
+    }
+
     this.requestUpdate();
   }
 
@@ -1466,7 +1622,6 @@ class UltraVehicleCard extends localize(LitElement) {
   }
 
   setConfig(config) {
-    console.log("UltraVehicleCard setConfig called with:", JSON.stringify(config, null, 2));
     if (!config) {
       throw new Error("Invalid configuration");
     }
@@ -1479,6 +1634,10 @@ class UltraVehicleCard extends localize(LitElement) {
       charging_image_url: "",
       image_url_type: "image",
       charging_image_url_type: "image",
+      engine_on_image_url: "",
+      engine_on_image_url_type: "url",
+      engineOnImageHeight: config.engineOnImageHeight || defaultHeight,
+      engine_on_entity: "",
       vehicle_type: "EV",
       unit_type: "mi",
       battery_level_entity: "",
@@ -1511,9 +1670,25 @@ class UltraVehicleCard extends localize(LitElement) {
       inactiveState: config.inactiveState || '',
       showTitle: config.showTitle !== false,
       useFormattedEntities: config.useFormattedEntities || false,
+      useBarGradient: config.useBarGradient || false,
+      barGradientStops: config.barGradientStops || [
+        { percentage: 0, color: '#ff0000' },
+        { percentage: 100, color: '#00ff00' }
+      ],
+      cardBackgroundColor: config.cardBackgroundColor || "#1c1c1c",
+      barBackgroundColor: config.barBackgroundColor || "#9b9b9b",
+      barBorderColor: config.barBorderColor || "#9b9b9b",
+      barFillColor: config.barFillColor || "#0da2d3",
+      limitIndicatorColor: config.limitIndicatorColor || "#e1e1e1",
+      infoTextColor: config.infoTextColor || "#9b9b9b",
+      carStateTextColor: config.carStateTextColor || "#e1e1e1",
+      rangeTextColor: config.rangeTextColor || "#e1e1e1",
+      percentageTextColor: config.percentageTextColor || "#e1e1e1",
+      cardTitleColor: config.cardTitleColor || 'var(--primary-text-color)',
+      show_engine_animation: config.show_engine_animation !== false,
+      show_charging_animation: config.show_charging_animation !== false,
     };
 
-    console.log("UltraVehicleCard config after setConfig:", JSON.stringify(this.config, null, 2));
     this._updateStyles();
     this._updateIconBackground();
     this._updateImageHeights();
@@ -1605,6 +1780,12 @@ class UltraVehicleCard extends localize(LitElement) {
       this.style.setProperty('--vehicle-charging-image-height', this.config.chargingImageHeight);
     } else {
       this.style.setProperty('--vehicle-charging-image-height', '0px');
+    }
+
+    if (this.config.engine_on_image_url_type !== "none") {
+      this.style.setProperty('--vehicle-engine-on-image-height', this.config.engineOnImageHeight);
+    } else {
+      this.style.setProperty('--vehicle-engine-on-image-height', '0px');
     }
   }
 }

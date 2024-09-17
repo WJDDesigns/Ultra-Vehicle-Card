@@ -2,6 +2,7 @@ import { css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 
 export const styles = css`
   :host {
+    --uvc-card-title-color: var(--primary-text-color);
     --uvc-primary-color: var(--primary-color);
     --uvc-card-background: var(--card-background-color);
     --uvc-bar-background: var(--secondary-text-color);
@@ -32,6 +33,9 @@ export const styles = css`
     height: 1.5rem;
     margin: 0;
     border-radius: 4px;
+  }
+    .percentage-text {
+    color: var(--uvc-percentage-text-color);
   }
 
   .item_bar {
@@ -156,7 +160,7 @@ export const styles = css`
   .vehicle-name {
     font-size: 1.5em;
     margin-bottom: 16px;
-    color: var(--primary-text-color);
+    color: var(--uvc-card-title-color, var(--primary-text-color));
     text-align: center;
   }
 
@@ -237,7 +241,7 @@ export const styles = css`
   .input-group {
     display: flex;
     flex-direction: column;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
   }
 
   .input-group label {
@@ -690,22 +694,6 @@ export const styles = css`
     100% { background-position: 50px 0; }
   }
 
-  .progress.charging,
-  .progress.engine-on {
-    background-image: linear-gradient(
-      45deg,
-      rgba(255, 255, 255, 0.15) 25%,
-      transparent 25%,
-      transparent 50%,
-      rgba(255, 255, 255, 0.15) 50%,
-      rgba(255, 255, 255, 0.15) 75%,
-      transparent 75%,
-      transparent
-    );
-    background-size: 50px 50px;
-    animation: move-stripes 2s linear infinite;
-  }
-
   .entity-picker-results::-webkit-scrollbar {
     width: 8px;
   }
@@ -1047,10 +1035,13 @@ export const styles = css`
   }
 
   .vehicle-charging-image,
+.vehicle-engine-on-image,
   .vehicle-image {
     width: 100%;
     height: var(--vehicle-charging-image-height, 180px);
     object-fit: contain;
+    margin: auto;
+    display: block;
   }
 
   .vehicle-image-container[style*="display: none"] {
@@ -1081,4 +1072,38 @@ export const styles = css`
     flex-grow: 1;
     margin-right: 10px;
   }
+      .bar-gradient-section {
+      margin-top: 16px;
+    }
+
+    .switch-wrapper {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .switch-wrapper span {
+      margin-left: 8px;
+    }
+
+    .bar-gradient-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .gradient-stop {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    mwc-button {
+      margin-top: 8px;
+    }
+      .delete-icon {
+  cursor: pointer;
+  color: #ffffff;
+  margin-left: 8px;
+}
 `;

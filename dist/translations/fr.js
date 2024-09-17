@@ -133,7 +133,17 @@ export default {
     charging_image_section: "Paramètres de l'image de charge",
     layout_type: "Type de mise en page",
     single_column: "Colonne unique",
-    double_column: "Double colonne"
+    double_column: "Double colonne",
+    engine_on_image: "Image moteur en marche",
+    engine_on_image_height: "Hauteur de l'image moteur en marche",
+    engine_off_image: "Image moteur arrêté",
+    engine_off_image_height: "Hauteur de l'image moteur arrêté",
+    engine_on_image_section: "Paramètres de l'image moteur en marche",
+    use_bar_gradient: "Utiliser un dégradé pour la barre",
+    bar_gradient_description: "Activer un dégradé de couleur pour la barre de progression. Cela vous permet de définir plusieurs arrêts de couleur pour une représentation visuelle plus dynamique de l'état du véhicule.",
+    percentage: "Pourcentage",
+    color: "Couleur",
+    add_gradient_stop: "Ajouter un arrêt de dégradé"
   },
   device_class: {
     battery: {

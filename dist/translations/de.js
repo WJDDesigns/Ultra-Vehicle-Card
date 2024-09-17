@@ -133,7 +133,17 @@ export default {
     charging_image_section: "Ladebild-Einstellungen",
     layout_type: "Layout-Typ",
     single_column: "Einzelspalte",
-    double_column: "Doppelspalte"
+    double_column: "Doppelspalte",
+    engine_on_image: "Bild für Motor an",
+    engine_on_image_height: "Höhe des Bildes für Motor an",
+    engine_off_image: "Bild für Motor aus",
+    engine_off_image_height: "Höhe des Bildes für Motor aus",
+    engine_on_image_section: "Einstellungen für Bild mit Motor an",
+    use_bar_gradient: "Balkengradient verwenden",
+    bar_gradient_description: "Aktivieren Sie einen Farbverlauf für den Fortschrittsbalken. Dies ermöglicht es Ihnen, mehrere Farbstopps für eine dynamischere visuelle Darstellung des Fahrzeugstatus festzulegen.",
+    percentage: "Prozentsatz",
+    color: "Farbe",
+    add_gradient_stop: "Gradientenstopp hinzufügen"
   },
   device_class: {
     battery: {

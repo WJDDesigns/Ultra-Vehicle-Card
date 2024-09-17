@@ -130,7 +130,20 @@ export default {
     main_image_height: "Huvudbildhöjd",
     charging_image_height: "Laddningsbildhöjd",
     main_image_section: "Huvudbildinställningar",
-    charging_image_section: "Laddningsbildinställningar"
+    charging_image_section: "Laddningsbildinställningar",
+    layout_type: "Layouttyp",
+    single_column: "Enkel kolumn",
+    double_column: "Dubbel kolumn",
+    engine_on_image: "Bild för motor på",
+    engine_on_image_height: "Höjd på bild för motor på",
+    engine_off_image: "Bild för motor av",
+    engine_off_image_height: "Höjd på bild för motor av",
+    engine_on_image_section: "Inställningar för bild med motor på",
+    use_bar_gradient: "Använd gradientfält",
+    bar_gradient_description: "Aktivera en färggradient för förloppsfältet. Detta låter dig ställa in flera färgstopp för en mer dynamisk visuell representation av fordonets status.",
+    percentage: "Procent",
+    color: "Färg",
+    add_gradient_stop: "Lägg till gradientstop"
   },
   device_class: {
     battery: {

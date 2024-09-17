@@ -44,7 +44,6 @@ class StateDropdown extends LitElement {
   }
 
   render() {
-    console.log("StateDropdown render called");
     const options = this._getOptions();
     
     return html`
@@ -97,7 +96,6 @@ class StateDropdown extends LitElement {
   }
 
   _handleContainerClick(e) {
-    console.log("StateDropdown _handleContainerClick called");
     e.stopPropagation();
   }
 
@@ -145,7 +143,6 @@ class StateDropdown extends LitElement {
   }
 
   _valueChanged(e) {
-    console.log("StateDropdown _valueChanged called", e);
     e.stopPropagation();
     const newValue = e.target.value;
     this.value = newValue;
@@ -162,12 +159,10 @@ class StateDropdown extends LitElement {
   }
 
   _handleClick(e) {
-    console.log("StateDropdown _handleClick called", e);
     e.stopPropagation();
   }
 
   _updateConfig(newValue) {
-    console.log("StateDropdown _updateConfig called", newValue);
     const newConfig = {
       ...this.config,
       [`${this.stateType}State`]: newValue,

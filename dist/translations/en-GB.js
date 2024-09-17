@@ -133,7 +133,17 @@ export default {
     charging_image_section: "Charging Image Settings",
     layout_type: "Layout Type",
     single_column: "Single Column",
-    double_column: "Double Column"
+    double_column: "Double Column",
+    engine_on_image: "Engine On Image",
+    engine_on_image_height: "Engine On Image Height",
+    engine_off_image: "Engine Off Image",
+    engine_off_image_height: "Engine Off Image Height",
+    engine_on_image_section: "Engine On Image Settings",
+    use_bar_gradient: "Use Bar Gradient",
+    bar_gradient_description: "Enable a colour gradient for the progress bar. This allows you to set multiple colour stops for a more dynamic visual representation of the vehicle's status.",
+    percentage: "Percentage",
+    color: "Colour",
+    add_gradient_stop: "Add Gradient Stop"
   },
   device_class: {
     battery: {

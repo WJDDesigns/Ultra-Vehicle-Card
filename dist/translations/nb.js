@@ -133,7 +133,17 @@ export default {
     charging_image_section: "Ladebildeinnstillinger",
     layout_type: "Layouttype",
     single_column: "Enkeltkolonne",
-    double_column: "Dobbeltkolonne"
+    double_column: "Dobbeltkolonne",
+    engine_on_image: "Bilde for motor på",
+    engine_on_image_height: "Høyde på bilde for motor på",
+    engine_off_image: "Bilde for motor av",
+    engine_off_image_height: "Høyde på bilde for motor av",
+    engine_on_image_section: "Innstillinger for bilde med motor på",
+    use_bar_gradient: "Bruk gradientlinje",
+    bar_gradient_description: "Aktiver en fargegradient for fremdriftslinjen. Dette lar deg sette flere fargepunkter for en mer dynamisk visuell representasjon av kjøretøyets status.",
+    percentage: "Prosent",
+    color: "Farge",
+    add_gradient_stop: "Legg til gradientstoppunkt"
   },
   device_class: {
     battery: {

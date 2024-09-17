@@ -133,7 +133,17 @@ export default {
     charging_image_section: "Configuración de la imagen de carga",
     layout_type: "Tipo de diseño",
     single_column: "Columna única",
-    double_column: "Doble columna"
+    double_column: "Doble columna",
+    engine_on_image: "Imagen de motor encendido",
+    engine_on_image_height: "Altura de la imagen de motor encendido",
+    engine_off_image: "Imagen de motor apagado",
+    engine_off_image_height: "Altura de la imagen de motor apagado",
+    engine_on_image_section: "Configuración de la imagen de motor encendido",
+    use_bar_gradient: "Usar gradiente en la barra",
+    bar_gradient_description: "Habilita un gradiente de color para la barra de progreso. Esto te permite establecer múltiples puntos de color para una representación visual más dinámica del estado del vehículo.",
+    percentage: "Porcentaje",
+    color: "Color",
+    add_gradient_stop: "Añadir punto de gradiente"
   },
   device_class: {
     battery: {

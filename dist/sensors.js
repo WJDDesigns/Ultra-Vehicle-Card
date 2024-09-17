@@ -56,11 +56,6 @@ export function getIconActiveState(entityId, hass, config) {
   if (!state) return false;
   const stateStr = state.state.toLowerCase();
 
-  console.log(`getIconActiveState for ${entityId}:`, {
-    currentState: stateStr,
-    activeState: config.activeState,
-    inactiveState: config.inactiveState
-  });
 
   // Check custom active and inactive states from config
   const activeState = config.activeState;
@@ -114,7 +109,33 @@ export function formatBinarySensorState(state, attributes) {
 }
 
 export function isEngineOn(engineOnEntity) {
-  return engineOnEntity && engineOnEntity.state.toLowerCase() === "on";
+  if (!engineOnEntity) return false;
+
+  const state = engineOnEntity.state.toLowerCase();
+  const attributes = engineOnEntity.attributes;
+
+  // Check attributes for 'engine_on' status
+  if (attributes) {
+    for (const [key, value] of Object.entries(attributes)) {
+      if (typeof value === 'string' && value.toLowerCase() === 'on') {
+        return true;
+      }
+    }
+  }
+
+  // Handle boolean entities
+  if (['on', 'off', 'true', 'false'].includes(state)) {
+    return state === 'on' || state === 'true';
+  }
+
+  // Handle numeric entities
+  if (!isNaN(state)) {
+    return parseFloat(state) > 0;
+  }
+
+  // Handle string-based entities
+  const engineOnStates = ['on', 'running', 'active', 'true'];
+  return engineOnStates.includes(state);
 }
 
 function formatNumberWithCommas(number) {

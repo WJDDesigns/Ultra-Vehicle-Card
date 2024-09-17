@@ -130,7 +130,20 @@ export default {
     main_image_height: "Hovudbiletehøgd",
     charging_image_height: "Ladebiletehøgd",
     main_image_section: "Hovudbiletinnstillingar",
-    charging_image_section: "Ladebiletinnstillingar"
+    charging_image_section: "Ladebiletinnstillingar",
+    layout_type: "Layouttype",
+    single_column: "Enkelkolonne",
+    double_column: "Dobbeltkolonne",
+    engine_on_image: "Bilete for motor på",
+    engine_on_image_height: "Høgd på bilete for motor på",
+    engine_off_image: "Bilete for motor av",
+    engine_off_image_height: "Høgd på bilete for motor av",
+    engine_on_image_section: "Innstillingar for bilete med motor på",
+    use_bar_gradient: "Bruk gradientlinje",
+    bar_gradient_description: "Aktiver ein fargegradient for framdriftslinjen. Dette lar deg setje fleire fargepunkt for ein meir dynamisk visuell representasjon av køyretøyet sin status.",
+    percentage: "Prosent",
+    color: "Farge",
+    add_gradient_stop: "Legg til gradientstoppunkt"
   },
   device_class: {
     battery: {

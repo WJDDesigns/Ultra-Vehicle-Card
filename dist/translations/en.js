@@ -38,6 +38,11 @@ export default {
     card_title: "Card Title",
     vehicle_type: "Vehicle Type",
     unit_type: "Unit Type",
+    engine_on_image: "Engine On Image",
+    engine_on_image_height: "Engine On Image Height",
+    engine_off_image: "Engine Off Image",
+    engine_off_image_height: "Engine Off Image Height",
+    engine_on_image_section: "Engine On Image Settings",
     show_battery: "Show Battery",
     show_battery_range: "Show Battery Range",
     show_fuel: "Show Fuel",
@@ -150,7 +155,12 @@ export default {
     main_image_height: "Main Image Height",
     charging_image_height: "Charging Image Height",
     main_image_section: "Main Image Settings",
-    charging_image_section: "Charging Image Settings"
+    charging_image_section: "Charging Image Settings",
+    use_bar_gradient: "Use Bar Gradient",
+    bar_gradient_description: "Enable a color gradient for the progress bar. This allows you to set multiple color stops for a more dynamic visual representation of the vehicle's status.",
+    percentage: "Percentage",
+    color: "Color",
+    add_gradient_stop: "Add Gradient Stop"
   },
   device_class: {
     battery: {

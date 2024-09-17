@@ -133,7 +133,17 @@ export default {
     charging_image_section: "Oplaadafbeeldingsinstellingen",
     layout_type: "Lay-outtype",
     single_column: "Enkele kolom",
-    double_column: "Dubbele kolom"
+    double_column: "Dubbele kolom",
+    engine_on_image: "Afbeelding voor motor aan",
+    engine_on_image_height: "Hoogte van afbeelding voor motor aan",
+    engine_off_image: "Afbeelding voor motor uit",
+    engine_off_image_height: "Hoogte van afbeelding voor motor uit",
+    engine_on_image_section: "Instellingen voor afbeelding met motor aan",
+    use_bar_gradient: "Gebruik balkgradiënt",
+    bar_gradient_description: "Schakel een kleurgradiënt in voor de voortgangsbalk. Hiermee kunt u meerdere kleurstops instellen voor een meer dynamische visuele weergave van de voertuigstatus.",
+    percentage: "Percentage",
+    color: "Kleur",
+    add_gradient_stop: "Voeg gradiëntstop toe"
   },
   device_class: {
     battery: {
