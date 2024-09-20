@@ -143,7 +143,8 @@ export default {
     bar_gradient_description: "Aktiver en fargegradient for fremdriftslinjen. Dette lar deg sette flere fargepunkter for en mer dynamisk visuell representasjon av kjøretøyets status.",
     percentage: "Prosent",
     color: "Farge",
-    add_gradient_stop: "Legg til gradientstoppunkt"
+    add_gradient_stop: "Legg til gradientstoppunkt",
+    reset_all_colors: "Tilbakestill alle farger"
   },
   device_class: {
     battery: {

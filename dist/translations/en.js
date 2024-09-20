@@ -160,7 +160,8 @@ export default {
     bar_gradient_description: "Enable a color gradient for the progress bar. This allows you to set multiple color stops for a more dynamic visual representation of the vehicle's status.",
     percentage: "Percentage",
     color: "Color",
-    add_gradient_stop: "Add Gradient Stop"
+    add_gradient_stop: "Add Gradient Stop",
+    reset_all_colors: "Reset All Colors"
   },
   device_class: {
     battery: {

@@ -258,5 +258,6 @@ export default {
       on: "Open",
       off: "Lukka"
     }
-  }
+  },
+  reset_all_colors: "Tilbakestill alle fargar"
 }

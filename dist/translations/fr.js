@@ -143,7 +143,8 @@ export default {
     bar_gradient_description: "Activer un dégradé de couleur pour la barre de progression. Cela vous permet de définir plusieurs arrêts de couleur pour une représentation visuelle plus dynamique de l'état du véhicule.",
     percentage: "Pourcentage",
     color: "Couleur",
-    add_gradient_stop: "Ajouter un arrêt de dégradé"
+    add_gradient_stop: "Ajouter un arrêt de dégradé",
+    reset_all_colors: "Réinitialiser toutes les couleurs"
   },
   device_class: {
     battery: {

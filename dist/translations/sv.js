@@ -143,7 +143,8 @@ export default {
     bar_gradient_description: "Aktivera en färggradient för förloppsfältet. Detta låter dig ställa in flera färgstopp för en mer dynamisk visuell representation av fordonets status.",
     percentage: "Procent",
     color: "Färg",
-    add_gradient_stop: "Lägg till gradientstop"
+    add_gradient_stop: "Lägg till gradientstop",
+    reset_all_colors: "Återställ alla färger"
   },
   device_class: {
     battery: {

@@ -143,7 +143,8 @@ export default {
     bar_gradient_description: "Schakel een kleurgradiënt in voor de voortgangsbalk. Hiermee kunt u meerdere kleurstops instellen voor een meer dynamische visuele weergave van de voertuigstatus.",
     percentage: "Percentage",
     color: "Kleur",
-    add_gradient_stop: "Voeg gradiëntstop toe"
+    add_gradient_stop: "Voeg gradiëntstop toe",
+    reset_all_colors: "Alle kleuren herstellen"
   },
   device_class: {
     battery: {

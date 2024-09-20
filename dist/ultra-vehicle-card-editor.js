@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=15";
+import { version } from "./version.js?v=16";
 import './state-dropdown.js';
 
 const stl = await import("./styles.js?v=" + version);
@@ -182,6 +182,21 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
           color: #ffffff;
           margin-left: 8px;
         }
+
+        .reset-all-colors {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          margin-bottom: 16px;
+        }
+
+        .reset-all-colors span {
+          margin-right: 8px;
+        }
+
+        .reset-all-colors ha-icon {
+          color: var(--primary-text-color);
+        }
       `
     ];
   }
@@ -195,16 +210,16 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     );
     this._dialogCloseHandler = this._dialogCloseHandler.bind(this);
     this._preventDialogClose = this._preventDialogClose.bind(this);
+    this._defaultColors = {
+
+    };
+    this._userChangedColors = {};
+    this._themeChangeListener = this._onThemeChange.bind(this);
   }
 
   firstUpdated() {
     super.firstUpdated();
     this._setupDialogCloseHandlers();
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this._removeDialogCloseHandlers();
   }
 
   _setupDialogCloseHandlers() {
@@ -325,21 +340,21 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       chargingImageHeight: config.charging_image_url_type !== "none" ? (config.chargingImageHeight || '140px') : '0px',
       showTitle: config.showTitle !== false,
       layoutType: config.layoutType || "single",
-      cardBackgroundColor: config.cardBackgroundColor || "#1c1c1c",
-      barBackgroundColor: config.barBackgroundColor || "#9b9b9b",
-      barBorderColor: config.barBorderColor || "#9b9b9b",
-      barFillColor: config.barFillColor || "#0da2d3",
-      limitIndicatorColor: config.limitIndicatorColor || "#e1e1e1",
-      infoTextColor: config.infoTextColor || "#9b9b9b",
-      carStateTextColor: config.carStateTextColor || "#e1e1e1",
-      rangeTextColor: config.rangeTextColor || "#e1e1e1",
-      percentageTextColor: config.percentageTextColor || "#e1e1e1",
       useBarGradient: config.useBarGradient || false,
       barGradientStops: config.barGradientStops || [
         { percentage: 0, color: '#ff0000' },
         { percentage: 100, color: '#00ff00' }
       ],
-      cardTitleColor: config.cardTitleColor || UltraVehicleCardEditor._getComputedColor("--primary-text-color"),
+      carStateTextColor: config.carStateTextColor || "",
+      rangeTextColor: config.rangeTextColor || "",
+      percentageTextColor: config.percentageTextColor || "",
+      cardTitleColor: config.cardTitleColor || "",
+      cardBackgroundColor: config.cardBackgroundColor || "",
+      barBackgroundColor: config.barBackgroundColor || "",
+      barBorderColor: config.barBorderColor || "",
+      barFillColor: config.barFillColor || "",
+      limitIndicatorColor: config.limitIndicatorColor || "",
+      infoTextColor: config.infoTextColor || "",
       show_engine_animation: config.show_engine_animation || false,
       show_charging_animation: config.show_charging_animation || false,
       ...config,
@@ -408,13 +423,11 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       barBackgroundColor: "",
       barFillColor: "",
       limitIndicatorColor: "",
-      iconActiveColor:
-        UltraVehicleCardEditor._getComputedColor("--primary-color"),
-      iconInactiveColor: UltraVehicleCardEditor._getComputedColor(
-        "--primary-text-color"
-      ),
+      iconActiveColor: UltraVehicleCardEditor._getComputedColor("--primary-color"),
+      iconInactiveColor: UltraVehicleCardEditor._getComputedColor("--primary-text-color"),
       carStateTextColor: "",
       rangeTextColor: "",
+      cardTitleColor: "",
       percentageTextColor: "",
       icon_sizes: {},
       icon_labels: {},
@@ -428,26 +441,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         { percentage: 0, color: '#ff0000' },
         { percentage: 100, color: '#00ff00' }
       ],
-      cardTitleColor: UltraVehicleCardEditor._getComputedColor("--primary-text-color"),
       show_engine_animation: false,
       show_charging_animation: false,
     };
-  }
-
-  static _getComputedColor(variable) {
-    const style = getComputedStyle(document.documentElement);
-    const value = style.getPropertyValue(variable).trim();
-    if (value.startsWith("#")) {
-      return value;
-    } else if (value.startsWith("rgb")) {
-      const rgb = value.match(/\d+/g);
-      return `#${parseInt(rgb[0]).toString(16).padStart(2, "0")}${parseInt(
-        rgb[1]
-      )
-        .toString(16)
-        .padStart(2, "0")}${parseInt(rgb[2]).toString(16).padStart(2, "0")}`;
-    }
-    return "#808080"; // Fallback color if unable to determine
   }
 
   render() {
@@ -690,129 +686,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     `;
   }
 
-  _renderImageUploadField(label, configKey, placeholder) {
-    const imageTypeKey = `${configKey}_type`;
-    const entityKey = configKey === 'image_url' ? 'image_entity' : 
-                      configKey === 'charging_image_url' ? 'charging_image_entity' : 
-                      'engine_on_image_entity';
-    const value = this.config[configKey] || "";
-    const currentType = this.config[imageTypeKey] || "default";
-
-    return html`
-      <div class="image-input-container">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <label style="margin-right: 16px; font-size: 1.2em; font-weight: bold;">${label}</label>
-          <div class="radio-group" style="justify-content: flex-end;">
-            <label>
-              <input type="radio" name="${imageTypeKey}" value="none"
-                ?checked="${currentType === "none"}"
-                @change="${(e) => this._handleImageSourceChange(configKey, "none")}"
-              />
-              ${this.localize("editor.none")}
-            </label>
-            <label>
-              <input type="radio" name="${imageTypeKey}" value="image"
-                ?checked="${currentType === "image"}"
-                @change="${(e) => this._handleImageSourceChange(configKey, "image")}"
-              />
-              ${this.localize("editor.local_url")}
-            </label>
-            <label>
-              <input type="radio" name="${imageTypeKey}" value="entity"
-                ?checked="${currentType === "entity"}"
-                @change="${(e) => this._handleImageSourceChange(configKey, "entity")}"
-              />
-              ${this.localize("editor.entity")}
-            </label>
-          </div>
-        </div>
-
-        ${currentType === "image"
-          ? html`
-              <div class="image-upload-container">
-                <input
-                  type="text"
-                  .value="${value}"
-                  placeholder="${placeholder}"
-                  @input="${(e) => this._handleImageUrlInput(e, configKey)}"
-                />
-                <label class="file-upload-label" for="${configKey}-upload"
-                  >${this.localize("editor.upload_image")}</label
-                >
-                <input
-                  type="file"
-                  id="${configKey}-upload"
-                  style="display:none"
-                  @change="${(e) => this._handleImageUpload(e, configKey)}"
-                />
-              </div>
-            `
-          : currentType === "entity"
-            ? html`
-                <div class="entity-picker-wrapper">
-                  <div class="entity-picker-container">
-                    <input
-                      type="text"
-                      class="entity-picker-input"
-                      .value="${this.config[entityKey] || ""}"
-                      @input="${(e) => this._entityFilterChanged(e, entityKey)}"
-                      placeholder="${this.localize("editor.search_entities")}"
-                    />
-                    ${this[`_${entityKey}Filter`]
-                      ? html`
-                          <div class="entity-picker-results">
-                            ${Object.keys(this.hass.states)
-                              .filter((eid) =>
-                                eid
-                                  .toLowerCase()
-                                  .includes(
-                                    this[`_${entityKey}Filter`].toLowerCase()
-                                  )
-                              )
-                              .map(
-                                (eid) => html`
-                                  <div
-                                    class="entity-picker-result"
-                                    @click="${() =>
-                                      this._selectEntity(entityKey, eid)}"
-                                  >
-                                    ${eid}
-                                  </div>
-                                `
-                              )}
-                          </div>
-                        `
-                      : ""}
-                  </div>
-                </div>
-              `
-            : ""}
-      </div>
-    `;
-  }
-
   _handleImageUrlInput(e, configKey) {
     const newValue = e.target.value;
     this._updateConfig(configKey, newValue);
-    this._fireEvent('config-changed', { config: this.config });
-  }
-
-  _handleImageSourceChange(configKey, newType) {
-    this._updateConfig(`${configKey}_type`, newType);
-    if (newType === 'none') {
-      this._updateConfig(configKey, '');
-      this._updateConfig(`${configKey.replace('_url', '_entity')}`, '');
-    } else if (newType === 'entity') {
-      this._updateConfig(configKey, '');
-    } else if (newType === 'image') {
-      this._updateConfig(`${configKey.replace('_url', '_entity')}`, '');
-      if (this.config[configKey] === DEFAULT_IMAGE_URL) {
-        this._updateConfig(configKey, '');
-      }
-    }
-    this._updateImageHeightVisibility();
-    
-    // Force a full update of the card
     this._fireEvent('config-changed', { config: this.config });
   }
 
@@ -873,15 +749,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
     // Force a re-render of the card
     this._fireEvent("config-changed", { config: this.config });
-  }
-
-  _fireEvent(type, detail) {
-    const event = new CustomEvent(type, {
-      detail,
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(event);
   }
 
   _renderEntityPickers() {
@@ -1240,47 +1107,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     `;
   }
 
-  _renderRowSeparatorEditor(index) {
-    return html`
-      <div
-        class="selected-entity row-separator"
-        draggable="true"
-        @dragstart="${(e) => this._onDragStart(e, index)}"
-        data-entity-id="row-separator"
-      >
-        <div class="entity-header">
-          <div
-            class="handle"
-            @mousedown="${(e) => this._onDragStart(e, index)}"
-            @touchstart="${(e) => this._onDragStart(e, index)}"
-          >
-            <ha-icon icon="mdi:drag"></ha-icon>
-          </div>
-          <ha-icon
-            class="toggle-details"
-            icon="mdi:chevron-down"
-            @click="${() => this._toggleRowSeparatorDetails(index)}"
-          ></ha-icon>
-          <span class="entity-name"
-            >${this.localize("editor.row_separator")}</span
-          >
-          <ha-icon
-            class="remove-entity"
-            icon="mdi:close"
-            @click="${() => this._removeIconGridEntity(index)}"
-          ></ha-icon>
-        </div>
-        <div
-          class="entity-details"
-          id="row-separator-details-${index}"
-          style="display: none;"
-        >
-          ${this._renderRowSeparatorDetails(index)}
-        </div>
-      </div>
-    `;
-  }
-
   _toggleRowSeparatorDetails(index) {
     const detailsElement = this.shadowRoot.querySelector(
       `#row-separator-details-${index}`
@@ -1314,25 +1140,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
     this.configChanged(this.config);
     this.requestUpdate();
-  }
-
-  _addRowSeparator() {
-    const newIndex = this._selectedIconGridEntities.length;
-    this._selectedIconGridEntities.push("row-separator");
-    if (
-      !this.config.row_separators ||
-      Object.isFrozen(this.config.row_separators)
-    ) {
-      this.config.row_separators = { ...this.config.row_separators };
-    }
-    this.config.row_separators[newIndex] = {
-      color: this._getDefaultColorAsHex(),
-      height: 1,
-      icon_gap: 20,
-      horizontalAlignment: "center",
-      verticalAlignment: "middle",
-    };
-    this._updateIconGridConfig();
   }
 
   _onDrop(e) {
@@ -1374,48 +1181,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this.configChanged(this.config);
   }
 
-  _renderIconColorPicker(label, entityId, iconType) {
-    const isActive = iconType === "active";
-    const defaultColor = isActive
-      ? UltraVehicleCardEditor._getComputedColor("--primary-color")
-      : UltraVehicleCardEditor._getComputedColor("--primary-text-color");
-    const currentColor =
-      this.config.custom_icons[entityId]?.[`${iconType}Color`] || defaultColor;
-
-    return html`
-      <div class="color-picker">
-        <label>${label}</label>
-        <div class="icon-grid-color-picker-wrapper">
-          <input
-            type="text"
-            .value="${currentColor}"
-            @input="${(e) => this._iconColorChanged(e, entityId, iconType)}"
-            class="hex-input"
-            style="background-color: ${currentColor}; color: ${this._getContrastYIQ(
-              currentColor
-            )};"
-          />
-          <div class="color-preview" style="background-color: ${currentColor};">
-            <ha-icon
-              icon="mdi:palette"
-              style="color: ${this._getContrastYIQ(currentColor)};"
-            ></ha-icon>
-            <input
-              type="color"
-              .value="${currentColor}"
-              @input="${(e) => this._iconColorChanged(e, entityId, iconType)}"
-              class="color-input"
-            />
-          </div>
-          <ha-icon
-            class="reset-icon"
-            icon="mdi:refresh"
-            @click="${(e) => this._resetIconColor(e, entityId, iconType)}"
-          ></ha-icon>
-        </div>
-      </div>
-    `;
-  }
 
   _getDefaultColor(colorType) {
     const style = getComputedStyle(this);
@@ -1424,32 +1189,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       : style.getPropertyValue("--primary-text-color").trim();
   }
 
-  _getIconColor(entityId, colorType) {
-    const customIcon = this._customIcons[entityId];
-    if (customIcon && customIcon[`${colorType}Color`]) {
-      return customIcon[`${colorType}Color`];
-    }
-    if (colorType === "active") {
-      return UltraVehicleCardEditor._getComputedColor("--primary-color");
-    }
-    return UltraVehicleCardEditor._getComputedColor("--primary-text-color");
-  }
-
-  static _getComputedColor(variable) {
-    const style = getComputedStyle(document.documentElement);
-    const value = style.getPropertyValue(variable).trim();
-    if (value.startsWith("#")) {
-      return value;
-    } else if (value.startsWith("rgb")) {
-      const rgb = value.match(/\d+/g);
-      return `#${parseInt(rgb[0]).toString(16).padStart(2, "0")}${parseInt(
-        rgb[1]
-      )
-        .toString(16)
-        .padStart(2, "0")}${parseInt(rgb[2]).toString(16).padStart(2, "0")}`;
-    }
-    return "#808080"; // Fallback color if unable to determine
-  }
 
   _iconColorChanged(e, entityId, iconType) {
     const color = e.target.value;
@@ -1729,18 +1468,26 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _renderColorPickers() {
-    const colorConfigs = [
-      { key: 'cardTitleColor', label: 'Card Title Color', default: UltraVehicleCardEditor._getComputedColor("--primary-text-color") },
-      { key: 'cardBackgroundColor', label: 'Card Background Color', default: '#1c1c1c' },
-      { key: 'barBackgroundColor', label: 'Bar Background Color', default: '#9b9b9b' },
-      { key: 'barBorderColor', label: 'Bar Border Color', default: '#9b9b9b' },
-      { key: 'barFillColor', label: 'Bar Fill Color', default: '#0da2d3' },
-      { key: 'limitIndicatorColor', label: 'Limit Indicator Color', default: '#e1e1e1' },
-      { key: 'infoTextColor', label: 'Info Text Color', default: '#9b9b9b' },
-      { key: 'carStateTextColor', label: 'Car State Text Color', default: '#e1e1e1' },
-      { key: 'rangeTextColor', label: 'Range Text Color', default: '#e1e1e1' },
-      { key: 'percentageTextColor', label: 'Percentage Text Color', default: '#e1e1e1' },
-    ];
+    const getDefaultColor = (property) => {
+      const style = getComputedStyle(this);
+      return (
+        style.getPropertyValue(property).trim() ||
+        style.getPropertyValue(`--${property}`).trim()
+      );
+    };
+
+    const defaultColors = {
+      cardTitleColor: getDefaultColor("--primary-text-color"),
+      cardBackgroundColor: getDefaultColor("--ha-card-background") || getDefaultColor("--card-background-color"),
+      barBackgroundColor: getDefaultColor("--secondary-text-color"),
+      barBorderColor: getDefaultColor("--secondary-text-color"),
+      barFillColor: getDefaultColor("--primary-color"),
+      limitIndicatorColor: getDefaultColor("--primary-text-color"),
+      infoTextColor: getDefaultColor("--secondary-text-color"),
+      carStateTextColor: getDefaultColor("--primary-text-color"),
+      rangeTextColor: getDefaultColor("--primary-text-color"),
+      percentageTextColor: getDefaultColor("--primary-text-color"),
+    };
 
     return html`
       <div class="color-pickers">
@@ -1748,14 +1495,28 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         <div class="entity-description">
           ${this.localize("editor.custom_colors_description")}
         </div>
+        <div class="reset-all-colors">
+        <span>${this.localize("editor.reset_all_colors")}</span>
+        <ha-icon
+          class="reset-icon clickable"
+          icon="mdi:refresh"
+          @click="${this._resetAllColors}"
+          title="${this.localize("editor.reset_all_colors")}"
+        ></ha-icon>
+      </div>
         <div class="color-pickers-grid">
-          ${colorConfigs.map(config => html`
-            <div class="color-picker-item">
-              ${this._renderColorPicker(config.label, config.key, config.default)}
-            </div>
-          `)}
+          ${Object.entries(defaultColors).map(
+            ([key, defaultValue]) => html`
+              <div class="color-picker-item">
+                ${this._renderColorPicker(
+                  this.localize(`editor.${key}`),
+                  key,
+                  defaultValue
+                )}
+              </div>
+            `
+          )}
         </div>
-        ${this._renderBarGradientToggle()}
       </div>
     `;
   }
@@ -1892,7 +1653,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _renderColorPicker(label, configKey, defaultValue) {
-    const currentValue = this.config[configKey] || UltraVehicleCardEditor._getComputedColor(defaultValue);
+    const currentValue = UltraVehicleCardEditor._expandHexColor(this.config[configKey] || UltraVehicleCardEditor._getComputedColor(defaultValue));
     const textColor = this._getContrastYIQ(currentValue);
 
     return html`
@@ -1915,50 +1676,25 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               class="color-input"
             />
           </div>
-          <ha-icon
-            class="reset-icon"
-            icon="mdi:refresh"
-            @click="${(e) => this._resetColor(e, configKey, defaultValue)}"
-          ></ha-icon>
+           <ha-icon
+          class="reset-icon"
+          icon="mdi:refresh"
+          @click="${(e) => this._resetColor(configKey, defaultValue, e)}"
+        ></ha-icon>
         </div>
       </div>
     `;
   }
-
-  _colorChanged(e, configKey) {
-    const color = e.target.value;
-    this._applyColorChange(configKey, color);
-  }
-
-  _applyColorChange(configKey, color) {
-    if (configKey === 'cardTitleColor') {
-      this.config = {
-        ...this.config,
-        [configKey]: color,
-      };
-      this._updateCardTitleColor(color);
-    } else {
-      if (configKey.includes("_")) {
-        // This is an icon-specific color
-        const [entityId, colorType] = configKey.split("_");
-        this._customIcons = {
-          ...this._customIcons,
-          [entityId]: {
-            ...this._customIcons[entityId],
-            [colorType]: color,
-          },
-        };
-        this._updateCustomIconsConfig();
-      } else {
-        // This is a global color
-        this.config = {
-          ...this.config,
-          [configKey]: color,
-        };
-        this._updateSingleColor(configKey, color);
-      }
+  static _expandHexColor(color) {
+    if (color && color.charAt(0) === '#' && color.length === 4) {
+      return color.replace(/([0-9A-F])/gi, '$1$1');
     }
-    this.requestUpdate();
+    return color;
+  }
+  _colorChanged(e, configKey) {
+    const color = UltraVehicleCardEditor._expandHexColor(e.target.value);
+    this._userChangedColors[configKey] = color !== this._defaultColors[configKey];
+    this._applyColorChange(configKey, color);
   }
 
   _updateCardTitleColor(color) {
@@ -1979,39 +1715,19 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this.dispatchEvent(event);
   }
 
-  _resetColor(e, configKey, defaultValue) {
-    e.stopPropagation();
-    this.config = {
-      ...this.config,
-      [configKey]: defaultValue,
-    };
-    this.configChanged(this.config);
-    this.requestUpdate();
-    if (configKey === 'cardBackgroundColor') {
-      this._updateIconBackground();
+  _resetColor(configKey, defaultValue, e) {
+    if (e && typeof e.stopPropagation === 'function') {
+      e.stopPropagation();
     }
+    const expandedDefaultColor = UltraVehicleCardEditor._expandHexColor(defaultValue);
+    this._userChangedColors[configKey] = false;
+    this._applyColorChange(configKey, expandedDefaultColor);
   }
 
   _updateIconBackground() {
     const cardBackgroundColor = this.config.cardBackgroundColor || getComputedStyle(this).getPropertyValue('--card-background-color').trim();
     const isDarkBackground = this._isColorDark(cardBackgroundColor);
     this._updateIconBackgroundColor(isDarkBackground);
-  }
-
-  _isColorDark(color) {
-    const rgb = this._hexToRgb(color);
-    if (!rgb) return false;
-    const [r, g, b] = rgb.split(',').map(Number);
-    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-    return brightness < 128;
-  }
-
-  _hexToRgb(hex) {
-    if (!hex) return null;
-    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-    hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
   }
 
   _handleStateConfigChange(e) {
@@ -2152,22 +1868,18 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                     ${this[`_${entityKey}Filter`]
                       ? html`
                           <div class="entity-picker-results">
-                            ${Object.keys(this.hass.states)
-                              .filter((eid) =>
-                                eid
-                                  .toLowerCase()
-                                  .includes(
-                                    this[`_${entityKey}Filter`].toLowerCase()
-                                  )
+                            ${Object.entries(this.hass.states)
+                              .filter(([eid, state]) =>
+                                eid.toLowerCase().includes(this[`_${entityKey}Filter`].toLowerCase()) ||
+                                this._entityHasImage(state)
                               )
                               .map(
-                                (eid) => html`
+                                ([eid, state]) => html`
                                   <div
                                     class="entity-picker-result"
-                                    @click="${() =>
-                                      this._selectEntity(entityKey, eid)}"
+                                    @click="${() => this._selectEntity(entityKey, eid)}"
                                   >
-                                    ${eid}
+                                    ${eid}${this._entityHasImage(state) ? ' (has image)' : ''}
                                   </div>
                                 `
                               )}
@@ -2180,6 +1892,18 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
             : ""}
       </div>
     `;
+  }
+
+  _entityHasImage(state) {
+    if (typeof state.state === 'string' && state.state.startsWith('http')) {
+      return true;
+    }
+    for (const [key, value] of Object.entries(state.attributes)) {
+      if (typeof value === 'string' && value.startsWith('http')) {
+        return true;
+      }
+    }
+    return false;
   }
 
   _renderEntityPickerWithoutToggle(configValue, labelText, description) {
@@ -2331,25 +2055,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       }));
   }
 
-  _handleImageSourceChange(configKey, newType) {
-    this._updateConfig(`${configKey}_type`, newType);
-    if (newType === 'none') {
-      this._updateConfig(configKey, '');
-      this._updateConfig(`${configKey.replace('_url', '_entity')}`, '');
-    } else if (newType === 'entity') {
-      this._updateConfig(configKey, '');
-    } else if (newType === 'image') {
-      this._updateConfig(`${configKey.replace('_url', '_entity')}`, '');
-      if (this.config[configKey] === DEFAULT_IMAGE_URL) {
-        this._updateConfig(configKey, '');
-      }
-    }
-    this._updateImageHeightVisibility();
-    
-    // Force a full update of the card
-    this._fireEvent('config-changed', { config: this.config });
-  }
-
   _entityPicked(e, configKey) {
     const newValue = e.detail.value;
     if (newValue) {
@@ -2373,15 +2078,18 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
   }
 
-  _entityFilterChanged(e, configKey) {
-    this[`_${configKey}Filter`] = e.target.value;
-    this.requestUpdate();
-  }
-
   _selectEntity(configValue, entityId) {
+    const entity = this.hass.states[entityId];
+    let imageUrl = entity.state;
+
+    if (!imageUrl.startsWith('http')) {
+      imageUrl = Object.values(entity.attributes).find(attr => typeof attr === 'string' && attr.startsWith('http')) || '';
+    }
+
     this.config = {
       ...this.config,
       [configValue]: entityId,
+      [`${configValue.replace('_entity', '_url')}`]: imageUrl,
     };
     this[`_${configValue}Filter`] = "";
     this.configChanged(this.config);
@@ -2458,30 +2166,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
   }
 
-  _updateCustomIconsConfig() {
-    const cleanedCustomIcons = Object.entries(this._customIcons).reduce(
-      (acc, [key, value]) => {
-        const cleanedValue = {
-          active: value.active === "" ? undefined : value.active,
-          inactive: value.inactive === "" ? undefined : value.inactive,
-          activeColor: value.activeColor,
-          inactiveColor: value.inactiveColor,
-        };
-        if (cleanedValue.active || cleanedValue.inactive) {
-          acc[key] = cleanedValue;
-        }
-        return acc;
-      },
-      {}
-    );
-
-    this.config = {
-      ...this.config,
-      custom_icons: cleanedCustomIcons,
-    };
-
-    this.configChanged(this.config);
-  }
 
   _getToggleName(configValue) {
     switch (configValue) {
@@ -2518,11 +2202,28 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _getContrastYIQ(hexcolor) {
-    const r = parseInt(hexcolor.substr(1, 2), 16);
-    const g = parseInt(hexcolor.substr(3, 2), 16);
-    const b = parseInt(hexcolor.substr(5, 2), 16);
-    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-    return yiq >= 128 ? "black" : "white";
+    if (!hexcolor || typeof hexcolor !== 'string') {
+      return 'black'; // Default to black text if no valid color is provided
+    }
+  
+    // Remove the '#' if it's there
+    hexcolor = hexcolor.replace(/^#/, '');
+  
+    // If it's a 3-digit hex, convert it to 6-digit
+    if (hexcolor.length === 3) {
+      hexcolor = hexcolor[0] + hexcolor[0] + hexcolor[1] + hexcolor[1] + hexcolor[2] + hexcolor[2];
+    }
+  
+    // If it's not a valid 6-digit hex, return a default
+    if (hexcolor.length !== 6) {
+      return 'black';
+    }
+  
+    const r = parseInt(hexcolor.substr(0, 2), 16);
+    const g = parseInt(hexcolor.substr(2, 2), 16);
+    const b = parseInt(hexcolor.substr(4, 2), 16);
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    return (yiq >= 128) ? 'black' : 'white';
   }
 
   configChanged(newConfig) {
@@ -2532,35 +2233,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       composed: true
     });
     this.dispatchEvent(event);
-  }
-
-  _valueChanged(ev) {
-    if (!this.config) {
-      return;
-    }
-    const target = ev.target;
-    const value = target.value;
-    const configValue = target.configValue;
-
-    if (configValue) {
-      if (configValue === 'show_engine_animation') {
-        this._showEngineAnimation = target.checked;
-        this._updateConfig(configValue, this._showEngineAnimation);
-      } else if (configValue === 'show_charging_animation') {
-        this._showChargingAnimation = target.checked;
-        this._updateConfig(configValue, this._showChargingAnimation);
-      } else if (configValue === 'mainImageHeight' || configValue === 'chargingImageHeight' || configValue === 'engineOnImageHeight') {
-        // For image height inputs, append 'px' to the value if it's not already there
-        const newValue = value.endsWith('px') ? value : `${value}px`;
-        this._updateConfig(configValue, newValue);
-        // Force a full update of the card
-        this._fireEvent('config-changed', { config: this.config });
-      } else if (configValue === 'image_url' || configValue === 'charging_image_url' || configValue === 'engine_on_image_url') {
-        this._updateConfig(configValue, value);
-      } else {
-        this._updateConfig(configValue, target.checked !== undefined ? target.checked : value);
-      }
-    }
   }
 
   _evaluateTemplate(template) {
@@ -2594,48 +2266,12 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this._updateIconSizesConfig();
   }
 
-  _updateIconSizesConfig() {
-    this.config = {
-      ...this.config,
-      icon_sizes: this._iconSizes,
-    };
-    this.configChanged(this.config);
-  }
-
   _updateIconLabel(entityId, value) {
     if (!this.config.icon_labels) {
       this.config.icon_labels = {};
     }
     this.config.icon_labels[entityId] = value;
     this.configChanged(this.config);
-  }
-
-  _setNoIcon(entityId, iconType) {
-    this._customIcons = {
-      ...this._customIcons,
-      [entityId]: {
-        ...this._customIcons[entityId],
-        [iconType]: "no-icon",
-      },
-    };
-    this._updateCustomIconsConfig();
-    this.requestUpdate();
-  }
-
-  _clearIcon(entityId, iconType) {
-    if (this._customIcons[entityId]) {
-      const { [iconType]: _, ...rest } = this._customIcons[entityId];
-      if (Object.keys(rest).length === 0) {
-        const { [entityId]: __, ...restIcons } = this._customIcons;
-        this._customIcons = restIcons;
-      } else {
-        this._customIcons = {
-          ...this._customIcons,
-          [entityId]: rest,
-        };
-      }
-      this._updateCustomIconsConfig();
-    }
   }
 
   _addRowSeparator() {
@@ -2932,48 +2568,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
   }
 
-  _updateRowSeparatorConfig(index, property, value) {
-    if (!this.config.row_separators) {
-      this.config.row_separators = {};
-    }
-    if (!this.config.row_separators[index]) {
-      this.config.row_separators[index] = {};
-    }
-    if (value === '') {
-      delete this.config.row_separators[index][property];
-    } else {
-      this.config.row_separators[index][property] = value;
-    }
-    this.configChanged(this.config);
-    this.requestUpdate();
-  }
-
-  _getDefaultColorAsHex() {
-    const defaultColor = getComputedStyle(document.documentElement)
-      .getPropertyValue("--uvc-info-text-color")
-      .trim();
-    if (defaultColor.startsWith("#")) {
-      return defaultColor;
-    } else if (defaultColor.startsWith("rgb")) {
-      const rgb = defaultColor.match(/\d+/g);
-      return `#${parseInt(rgb[0]).toString(16).padStart(2, "0")}${parseInt(
-        rgb[1]
-      )
-        .toString(16)
-        .padStart(2, "0")}${parseInt(rgb[2]).toString(16).padStart(2, "0")}`;
-    }
-    return "#808080"; // Fallback color if unable to determine
-  }
-
-  setDefaultValues() {
-    if (!this.config.image) {
-      this._updateConfig("image", DEFAULT_IMAGE_URL);
-    }
-    if (!this.config.charging_image) {
-      this._updateConfig("charging_image", DEFAULT_IMAGE_URL);
-    }
-  }
-
   firstUpdated(changedProps) {
     super.firstUpdated(changedProps);
     this.setDefaultValues();
@@ -3002,12 +2596,8 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this._updateRowSeparatorConfig(index, "color", color);
   }
 
-  _colorChanged(e, configKey) {
-    const color = e.target.value;
-    this._applyColorChange(configKey, color);
-  }
-
   _applyColorChange(configKey, color) {
+    const expandedColor = UltraVehicleCardEditor._expandHexColor(color);
     if (configKey === 'cardTitleColor') {
       this.config = {
         ...this.config,
@@ -3038,24 +2628,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this.requestUpdate();
   }
 
-  _updateCardTitleColor(color) {
-    const event = new CustomEvent("config-changed", {
-      detail: { config: { ...this.config, cardTitleColor: color } },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(event);
-  }
-
-  _updateSingleColor(configKey, color) {
-    const event = new CustomEvent("config-changed", {
-      detail: { config: { ...this.config, [configKey]: color } },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(event);
-  }
-
   _getIconColor(entityId, colorType) {
     const customIcon = this._customIcons[entityId];
     if (customIcon && customIcon[`${colorType}Color`]) {
@@ -3067,64 +2639,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     return UltraVehicleCardEditor._getComputedColor("--primary-text-color");
   }
 
-  static _getComputedColor(variable) {
-    const style = getComputedStyle(document.documentElement);
-    const value = style.getPropertyValue(variable).trim();
-    if (value.startsWith("#")) {
-      return value;
-    } else if (value.startsWith("rgb")) {
-      const rgb = value.match(/\d+/g);
-      return `#${parseInt(rgb[0]).toString(16).padStart(2, "0")}${parseInt(
-        rgb[1]
-      )
-        .toString(16)
-        .padStart(2, "0")}${parseInt(rgb[2]).toString(16).padStart(2, "0")}`;
-    }
-    return "#808080"; // Fallback color if unable to determine
-  }
-
-  _renderIconColorPicker(label, entityId, iconType) {
-    const isActive = iconType === "active";
-    const defaultColor = isActive
-      ? UltraVehicleCardEditor._getComputedColor("--primary-color")
-      : UltraVehicleCardEditor._getComputedColor("--primary-text-color");
-    const currentColor =
-      this.config.custom_icons[entityId]?.[`${iconType}Color`] || defaultColor;
-
-    return html`
-      <div class="color-picker">
-        <label>${label}</label>
-        <div class="icon-grid-color-picker-wrapper">
-          <input
-            type="text"
-            .value="${currentColor}"
-            @input="${(e) => this._iconColorChanged(e, entityId, iconType)}"
-            class="hex-input"
-            style="background-color: ${currentColor}; color: ${this._getContrastYIQ(
-              currentColor
-            )};"
-          />
-          <div class="color-preview" style="background-color: ${currentColor};">
-            <ha-icon
-              icon="mdi:palette"
-              style="color: ${this._getContrastYIQ(currentColor)};"
-            ></ha-icon>
-            <input
-              type="color"
-              .value="${currentColor}"
-              @input="${(e) => this._iconColorChanged(e, entityId, iconType)}"
-              class="color-input"
-            />
-          </div>
-          <ha-icon
-            class="reset-icon"
-            icon="mdi:refresh"
-            @click="${(e) => this._resetIconColor(e, entityId, iconType)}"
-          ></ha-icon>
-        </div>
-      </div>
-    `;
-  }
 
   // Add this method to hide/show image height inputs
   _updateImageHeightVisibility() {
@@ -3212,53 +2726,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
   }
 
-  _handleImageUpload(e, configKey) {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const imageData = e.target.result;
-        this._updateConfig(configKey, imageData);
-        this._updateConfig(`${configKey}_type`, 'image');
-        this.requestUpdate();
-        // Force a full update of the card
-        this._fireEvent('config-changed', { config: this.config });
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  _fireEvent(type, detail) {
-    const event = new CustomEvent(type, {
-      detail,
-      bubbles: true,
-      composed: true
-    });
-    this.dispatchEvent(event);
-  }
-
   _entityFilterChanged(e, configKey) {
     this[`_${configKey}Filter`] = e.target.value;
     this.requestUpdate();
-  }
-
-  _resetColor(e, configKey, defaultValue) {
-    e.stopPropagation();
-    this.config = {
-      ...this.config,
-      [configKey]: defaultValue,
-    };
-    this.configChanged(this.config);
-    this.requestUpdate();
-    if (configKey === 'cardBackgroundColor') {
-      this._updateIconBackground();
-    }
-  }
-
-  _updateIconBackground() {
-    const cardBackgroundColor = this.config.cardBackgroundColor || getComputedStyle(this).getPropertyValue('--card-background-color').trim();
-    const isDarkBackground = this._isColorDark(cardBackgroundColor);
-    this._updateIconBackgroundColor(isDarkBackground);
   }
 
   _isColorDark(color) {
@@ -3286,12 +2756,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     super.firstUpdated();
     this.addEventListener('click', this._handleEditorClick);
     this._addDialogClosePrevention();
-  }
-
-  disconnectedCallback() {
-    super.disconnectedCallback();
-    this.removeEventListener('click', this._handleEditorClick);
-    this._removeDialogClosePrevention();
   }
 
   _addDialogClosePrevention() {
@@ -3360,160 +2824,11 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this._fireEvent("config-changed", { config: this.config });
   }
 
-  _renderColorPickers() {
-    const colorConfigs = [
-      { key: 'cardTitleColor', label: 'Card Title Color', default: UltraVehicleCardEditor._getComputedColor("--primary-text-color") },
-      { key: 'cardBackgroundColor', label: 'Card Background Color', default: '#1c1c1c' },
-      { key: 'barBackgroundColor', label: 'Bar Background Color', default: '#9b9b9b' },
-      { key: 'barBorderColor', label: 'Bar Border Color', default: '#9b9b9b' },
-      { key: 'barFillColor', label: 'Bar Fill Color', default: '#0da2d3' },
-      { key: 'limitIndicatorColor', label: 'Limit Indicator Color', default: '#e1e1e1' },
-      { key: 'infoTextColor', label: 'Info Text Color', default: '#9b9b9b' },
-      { key: 'carStateTextColor', label: 'Car State Text Color', default: '#e1e1e1' },
-      { key: 'rangeTextColor', label: 'Range Text Color', default: '#e1e1e1' },
-      { key: 'percentageTextColor', label: 'Percentage Text Color', default: '#e1e1e1' },
-    ];
-
-    return html`
-      <div class="color-pickers">
-        <h3>${this.localize("editor.colors")}</h3>
-        <div class="entity-description">
-          ${this.localize("editor.custom_colors_description")}
-        </div>
-        <div class="color-pickers-grid">
-          ${colorConfigs.map(config => html`
-            <div class="color-picker-item">
-              ${this._renderColorPicker(config.label, config.key, config.default)}
-            </div>
-          `)}
-        </div>
-        ${this._renderBarGradientToggle()}
-      </div>
-    `;
-  }
-
-  _renderBarGradientToggle() {
-    return html`
-      <div class="bar-gradient-section">
-        <div class="input-group">
-          <label for="useBarGradient">${this.localize("editor.use_bar_gradient")}</label>
-          <label class="switch">
-            <input
-              type="checkbox"
-              id="useBarGradient"
-              .checked=${this.config.useBarGradient || false}
-              @change=${this._handleUseBarGradientChange}
-            />
-            <span class="slider round"></span>
-          </label>
-        </div>
-        <div class="description">
-          ${this.localize("editor.bar_gradient_description")}
-        </div>
-        ${this.config.useBarGradient ? this._renderBarGradientOptions() : ''}
-      </div>
-    `;
-  }
-
-  _renderBarGradientOptions() {
-    const defaultStops = [
-      { percentage: 0, color: '#ff0000' },
-      { percentage: 100, color: '#00ff00' }
-    ];
-    const gradientStops = this.config.barGradientStops || defaultStops;
-
-    return html`
-      <div class="bar-gradient-options">
-        ${gradientStops.map((stop, index) => html`
-          <div class="gradient-stop">
-            <ha-textfield
-              type="number"
-              min="0"
-              max="100"
-              .value=${stop.percentage}
-              @input=${(e) => this._updateGradientStop(index, 'percentage', parseInt(e.target.value))}
-              label="${this.localize("editor.percentage")}"
-            ></ha-textfield>
-            <div class="color-picker">
-              <label>${this.localize("editor.color")}</label>
-              <div class="icon-grid-color-picker-wrapper">
-                <input
-                  type="text"
-                  .value="${stop.color}"
-                  @input="${(e) => this._updateGradientStop(index, 'color', e.target.value)}"
-                  class="hex-input"
-                  style="background-color: ${stop.color}; color: ${this._getContrastYIQ(stop.color)};"
-                />
-                <div class="color-preview" style="background-color: ${stop.color};">
-                  <ha-icon
-                    icon="mdi:palette"
-                    style="color: ${this._getContrastYIQ(stop.color)};"
-                  ></ha-icon>
-                  <input
-                    type="color"
-                    .value="${stop.color}"
-                    @input="${(e) => this._updateGradientStop(index, 'color', e.target.value)}"
-                    class="color-input"
-                  />
-                </div>
-                <ha-icon
-                  class="reset-icon"
-                  icon="mdi:refresh"
-                  @click="${(e) => this._resetGradientStopColor(e, index)}"
-                ></ha-icon>
-              </div>
-            </div>
-            <ha-icon
-              class="delete-icon"
-              icon="mdi:close"
-              @click="${() => this._deleteGradientStop(index)}"
-              title="${this.localize("editor.delete_gradient_stop")}"
-            ></ha-icon>
-          </div>
-        `)}
-        ${gradientStops.length < 5 ? html`
-          <mwc-button @click=${this._addGradientStop}>
-            ${this.localize("editor.add_gradient_stop")}
-          </mwc-button>
-        ` : ''}
-      </div>
-    `;
-  }
-
-  _handleUseBarGradientChange(e) {
-    const useBarGradient = e.target.checked;
-    if (useBarGradient && (!this.config.barGradientStops || this.config.barGradientStops.length === 0)) {
-      // Set default gradient stops when first enabled
-      this._updateConfig('barGradientStops', [
-        { percentage: 0, color: '#ff0000' },  // Red at 0%
-        { percentage: 100, color: '#00ff00' } // Green at 100%
-      ]);
-    }
-    this._updateConfig('useBarGradient', useBarGradient);
-  }
-
-  _iconSizeChanged(e, entityId) {
-    const newSize = parseInt(e.target.value);
-    this._iconSizes = {
-      ...this._iconSizes,
-      [entityId]: newSize,
-    };
-    this._updateIconSizesConfig();
-  }
-
   _updateIconSizesConfig() {
     this.config = {
       ...this.config,
       icon_sizes: this._iconSizes,
     };
-    this.configChanged(this.config);
-  }
-
-  _updateIconLabel(entityId, value) {
-    if (!this.config.icon_labels) {
-      this.config.icon_labels = {};
-    }
-    this.config.icon_labels[entityId] = value;
     this.configChanged(this.config);
   }
 
@@ -3545,316 +2860,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
   }
 
-  _addRowSeparator() {
-    const newIndex = this._selectedIconGridEntities.length;
-    this._selectedIconGridEntities.push("row-separator");
-    if (
-      !this.config.row_separators ||
-      Object.isFrozen(this.config.row_separators)
-    ) {
-      this.config.row_separators = { ...this.config.row_separators };
-    }
-    this.config.row_separators[newIndex] = {
-      color: "transparent",
-      height: 1,
-      icon_gap: 20,
-      horizontalAlignment: "center",
-      verticalAlignment: "middle",
-    };
-    this._updateIconGridConfig();
-  }
-
-  _renderRowSeparatorEditor(index) {
-    return html`
-      <div
-        class="selected-entity row-separator"
-        draggable="true"
-        @dragstart="${(e) => this._onDragStart(e, index)}"
-        data-entity-id="row-separator"
-      >
-        <div class="entity-header">
-          <div
-            class="handle"
-            @mousedown="${(e) => this._onDragStart(e, index)}"
-            @touchstart="${(e) => this._onDragStart(e, index)}"
-          >
-            <ha-icon icon="mdi:drag"></ha-icon>
-          </div>
-          <ha-icon
-            class="toggle-details"
-            icon="mdi:chevron-down"
-            @click="${() => this._toggleRowSeparatorDetails(index)}"
-          ></ha-icon>
-          <span class="entity-name"
-            >${this.localize("editor.row_separator")}</span
-          >
-          <ha-icon
-            class="remove-entity"
-            icon="mdi:close"
-            @click="${() => this._removeIconGridEntity(index)}"
-          ></ha-icon>
-        </div>
-        <div
-          class="entity-details"
-          id="row-separator-details-${index}"
-          style="display: none;"
-        >
-          ${this._renderRowSeparatorDetails(index)}
-        </div>
-      </div>
-    `;
-  }
-
-  _renderRowSeparatorDetails(index) {
-    const separatorConfig = this.config.row_separators?.[index] || {};
-    return html`
-      <div class="row-separator-details">
-        ${this._renderRowSeparatorColorPicker(index)}
-        <div class="editor-row">
-          <div class="editor-item">
-            <label>${this.localize("editor.separator_height")}</label>
-            <div class="input-with-unit">
-              <input
-                type="number"
-                .value="${separatorConfig.height || ''}"
-                @input="${(e) =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "height",
-                    e.target.value === '' ? '' : parseInt(e.target.value)
-                  )}"
-                min="0"
-                max="100"
-              />
-              <span class="unit">px</span>
-            </div>
-          </div>
-          <div class="editor-item">
-            <label>${this.localize("editor.icon_gap_size")}</label>
-            <div class="input-with-unit">
-              <input
-                type="number"
-                .value="${separatorConfig.icon_gap || ''}"
-                @input="${(e) =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "icon_gap",
-                    e.target.value === '' ? '' : parseInt(e.target.value)
-                  )}"
-                min="0"
-                max="100"
-              />
-              <span class="unit">px</span>
-            </div>
-          </div>
-        </div>
-        <div class="editor-row">
-          <div class="editor-item">
-            <label>${this.localize("editor.horizontal_alignment")}</label>
-            <div class="alignment-buttons">
-              <button
-                class="icon-button"
-                @click="${() =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "horizontalAlignment",
-                    "left"
-                  )}"
-                ?disabled="${separatorConfig.horizontalAlignment === "left"}"
-                title="${this.localize("editor.align_left")}"
-              >
-                ◀
-              </button>
-              <button
-                class="icon-button"
-                @click="${() =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "horizontalAlignment",
-                    "center"
-                  )}"
-                ?disabled="${separatorConfig.horizontalAlignment === "center" ||
-                separatorConfig.horizontalAlignment === undefined}"
-                title="${this.localize("editor.align_center")}"
-              >
-                ⬤
-              </button>
-              <button
-                class="icon-button"
-                @click="${() =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "horizontalAlignment",
-                    "right"
-                  )}"
-                ?disabled="${separatorConfig.horizontalAlignment === "right"}"
-                title="${this.localize("editor.align_right")}"
-              >
-                ▶
-              </button>
-            </div>
-          </div>
-          <div class="editor-item">
-            <label>${this.localize("editor.vertical_alignment")}</label>
-            <div class="alignment-buttons">
-              <button
-                class="icon-button"
-                @click="${() =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "verticalAlignment",
-                    "top"
-                  )}"
-                ?disabled="${separatorConfig.verticalAlignment === "top"}"
-                title="${this.localize("editor.align_top")}"
-              >
-                ▲
-              </button>
-              <button
-                class="icon-button"
-                @click="${() =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "verticalAlignment",
-                    "middle"
-                  )}"
-                ?disabled="${separatorConfig.verticalAlignment === "middle" ||
-                separatorConfig.verticalAlignment === undefined}"
-                title="${this.localize("editor.align_middle")}"
-              >
-                
-              </button>
-              <button
-                class="icon-button"
-                @click="${() =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "verticalAlignment",
-                    "bottom"
-                  )}"
-                ?disabled="${separatorConfig.verticalAlignment === "bottom"}"
-                title="${this.localize("editor.align_bottom")}"
-              >
-                ▼
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  _renderRowSeparatorColorPicker(index) {
-    const currentColor =
-      this.config.row_separators?.[index]?.color ||
-      this._getDefaultColorAsHex();
-    const textColor = this._getContrastYIQ(currentColor);
-    const isTransparent = currentColor === "transparent";
-
-    return html`
-      <div class="row-separator-color-row">
-        <div class="color-picker row-separator-color-picker">
-          <label>${this.localize("editor.separator_color")}</label>
-          <div class="icon-grid-color-picker-wrapper">
-            <input
-              type="text"
-              .value="${isTransparent
-                ? this.localize("editor.transparent")
-                : currentColor}"
-              @input="${(e) => this._rowSeparatorColorChanged(e, index)}"
-              class="hex-input"
-              style="background-color: ${isTransparent
-                ? "transparent"
-                : currentColor}; color: ${textColor};"
-            />
-            <div
-              class="color-preview"
-              style="background-color: ${isTransparent
-                ? "transparent"
-                : currentColor};"
-            >
-              <ha-icon
-                icon="mdi:palette"
-                style="color: ${textColor};"
-              ></ha-icon>
-              <input
-                type="color"
-                .value="${isTransparent ? "#ffffff" : currentColor}"
-                @input="${(e) => this._rowSeparatorColorChanged(e, index)}"
-                class="color-input"
-              />
-            </div>
-            <ha-icon
-              class="reset-icon"
-              icon="mdi:refresh"
-              @click="${(e) => this._resetRowSeparatorColor(e, index)}"
-            ></ha-icon>
-          </div>
-        </div>
-        <div class="transparent-button-wrapper">
-          <button
-            class="transparent-button"
-            @click="${() => this._toggleTransparentSeparator(index)}"
-          >
-            ${isTransparent
-              ? this.localize("editor.set_color")
-              : this.localize("editor.transparent")}
-          </button>
-        </div>
-      </div>
-    `;
-  }
-
-  _toggleTransparentSeparator(index) {
-    const currentColor = this.config.row_separators?.[index]?.color;
-    const defaultColor = this._getDefaultColorAsHex();
-    const newColor =
-      currentColor === "transparent" ? defaultColor : "transparent";
-    this._updateRowSeparatorConfig(index, "color", newColor);
-    this.requestUpdate();
-  }
-
-  _resetRowSeparatorColor(e, index) {
-    e.stopPropagation();
-    const defaultColor = this._getDefaultColorAsHex();
-    this._updateRowSeparatorConfig(index, "color", defaultColor);
-  }
-
-  _toggleRowSeparatorDetails(index) {
-    const detailsElement = this.shadowRoot.querySelector(
-      `#row-separator-details-${index}`
-    );
-    const toggleIcon = this.shadowRoot.querySelector(
-      `.selected-entity[data-entity-id="row-separator"]:nth-child(${
-        index + 1
-      }) .toggle-details`
-    );
-
-    if (detailsElement && toggleIcon) {
-      const isHidden =
-        detailsElement.style.display === "none" ||
-        !detailsElement.style.display;
-      detailsElement.style.display = isHidden ? "block" : "none";
-      toggleIcon.icon = isHidden ? "mdi:chevron-up" : "mdi:chevron-down";
-    }
-  }
-
-  _updateRowSeparatorConfig(index, property, value) {
-    if (!this.config.row_separators) {
-      this.config.row_separators = {};
-    }
-    if (!this.config.row_separators[index]) {
-      this.config.row_separators[index] = {};
-    }
-    if (value === '') {
-      delete this.config.row_separators[index][property];
-    } else {
-      this.config.row_separators[index][property] = value;
-    }
-    this.configChanged(this.config);
-    this.requestUpdate();
-  }
-
   _getDefaultColorAsHex() {
     const defaultColor = getComputedStyle(document.documentElement)
       .getPropertyValue("--uvc-info-text-color")
@@ -3869,7 +2874,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         .toString(16)
         .padStart(2, "0")}${parseInt(rgb[2]).toString(16).padStart(2, "0")}`;
     }
-    return "#808080"; // Fallback color if unable to determine
+    return "Default"; // Fallback color if unable to determine
   }
 
   setDefaultValues() {
@@ -3881,79 +2886,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
   }
 
-  firstUpdated(changedProps) {
-    super.firstUpdated(changedProps);
-    this.setDefaultValues();
-    this.loadResources(this.config.language || navigator.language).then(() => {
-      this.requestUpdate();
-    });
-  }
-
-  _camelToKebab(string) {
-    return string
-      .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2")
-      .toLowerCase();
-  }
-
-  _updateConfigAndRequestUpdate(key, value) {
-    this.config = {
-      ...this.config,
-      [key]: value,
-    };
-    this.configChanged(this.config);
-    this.requestUpdate();
-  }
-
-  _rowSeparatorColorChanged(e, index) {
-    const color = e.target.value;
-    this._updateRowSeparatorConfig(index, "color", color);
-  }
-
-  _colorChanged(e, configKey) {
-    const color = e.target.value;
-    this._applyColorChange(configKey, color);
-  }
-
-  _applyColorChange(configKey, color) {
-    if (configKey === 'cardTitleColor') {
-      this.config = {
-        ...this.config,
-        [configKey]: color,
-      };
-      this._updateCardTitleColor(color);
-    } else {
-      if (configKey.includes("_")) {
-        // This is an icon-specific color
-        const [entityId, colorType] = configKey.split("_");
-        this._customIcons = {
-          ...this._customIcons,
-          [entityId]: {
-            ...this._customIcons[entityId],
-            [colorType]: color,
-          },
-        };
-        this._updateCustomIconsConfig();
-      } else {
-        // This is a global color
-        this.config = {
-          ...this.config,
-          [configKey]: color,
-        };
-        this._updateSingleColor(configKey, color);
-      }
-    }
-    this.requestUpdate();
-  }
-
-  _updateCardTitleColor(color) {
-    const event = new CustomEvent("config-changed", {
-      detail: { config: { ...this.config, cardTitleColor: color } },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(event);
-  }
-
   _updateSingleColor(configKey, color) {
     const event = new CustomEvent("config-changed", {
       detail: { config: { ...this.config, [configKey]: color } },
@@ -3963,22 +2895,11 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this.dispatchEvent(event);
   }
 
-  _getIconColor(entityId, colorType) {
-    const customIcon = this._customIcons[entityId];
-    if (customIcon && customIcon[`${colorType}Color`]) {
-      return customIcon[`${colorType}Color`];
-    }
-    if (colorType === "active") {
-      return UltraVehicleCardEditor._getComputedColor("--primary-color");
-    }
-    return UltraVehicleCardEditor._getComputedColor("--primary-text-color");
-  }
-
   static _getComputedColor(variable) {
     const style = getComputedStyle(document.documentElement);
-    const value = style.getPropertyValue(variable).trim();
+    let value = style.getPropertyValue(variable).trim();
     if (value.startsWith("#")) {
-      return value;
+      return UltraVehicleCardEditor._expandHexColor(value);
     } else if (value.startsWith("rgb")) {
       const rgb = value.match(/\d+/g);
       return `#${parseInt(rgb[0]).toString(16).padStart(2, "0")}${parseInt(
@@ -3989,14 +2910,23 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
     return "#808080"; // Fallback color if unable to determine
   }
+  
+  static _getComputedColor(variable) {
+    const style = getComputedStyle(document.documentElement);
+    let value = style.getPropertyValue(variable).trim();
+    if (value.startsWith("#")) {
+      return this._expandHexColor(value);
+    }
+  }
 
   _renderIconColorPicker(label, entityId, iconType) {
     const isActive = iconType === "active";
     const defaultColor = isActive
       ? UltraVehicleCardEditor._getComputedColor("--primary-color")
       : UltraVehicleCardEditor._getComputedColor("--primary-text-color");
-    const currentColor =
-      this.config.custom_icons[entityId]?.[`${iconType}Color`] || defaultColor;
+    const currentColor = UltraVehicleCardEditor._expandHexColor(
+      this.config.custom_icons[entityId]?.[`${iconType}Color`] || defaultColor
+    );
 
     return html`
       <div class="color-picker">
@@ -4032,31 +2962,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       </div>
     `;
   }
-
-  // Add this method to hide/show image height inputs
-  _updateImageHeightVisibility() {
-    const mainImageHeightInput = this.shadowRoot.querySelector('#main-image-height');
-    const chargingImageHeightInput = this.shadowRoot.querySelector('#charging-image-height');
-    const engineOnImageHeightInput = this.shadowRoot.querySelector('#engine-on-image-height');
-
-    if (mainImageHeightInput) {
-      mainImageHeightInput.style.display = this.config.image_url_type === 'none' ? 'none' : 'block';
-    }
-    if (chargingImageHeightInput) {
-      chargingImageHeightInput.style.display = this.config.charging_image_url_type === 'none' ? 'none' : 'block';
-    }
-    if (engineOnImageHeightInput) {
-      engineOnImageHeightInput.style.display = this.config.engine_on_image_url_type === 'none' ? 'none' : 'block';
-    }
-  }
-
-  // Call this method in the updated lifecycle method
-  updated(changedProperties) {
-    super.updated(changedProperties);
-    if (changedProperties.has('config')) {
-      this._updateImageHeightVisibility();
-    }
-  }
+  
 
   // Update the image type change handlers
   _onMainImageTypeChange(e) {
@@ -4071,211 +2977,42 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this._handleImageSourceChange('engine_on_image_url', e.target.value);
   }
 
-  _handleImageSourceChange(configKey, newType) {
-    this._updateConfig(`${configKey}_type`, newType);
-    if (newType === 'none') {
-      this._updateConfig(configKey, '');
-      this._updateConfig(`${configKey.replace('_url', '_entity')}`, '');
-    } else if (newType === 'entity') {
-      this._updateConfig(configKey, '');
-    } else if (newType === 'image') {
-      this._updateConfig(`${configKey.replace('_url', '_entity')}`, '');
-      if (this.config[configKey] === DEFAULT_IMAGE_URL) {
-        this._updateConfig(configKey, '');
-      }
-    }
-    this._updateImageHeightVisibility();
-    
-    // Force a full update of the card
-    this._fireEvent('config-changed', { config: this.config });
-  }
-
-  _valueChanged(ev) {
-    if (!this.config) {
-      return;
-    }
-    const target = ev.target;
-    const value = target.value;
-    const configValue = target.configValue;
-
-    if (configValue) {
-      if (configValue === 'show_engine_animation') {
-        this._showEngineAnimation = target.checked;
-        this._updateConfig(configValue, this._showEngineAnimation);
-      } else if (configValue === 'show_charging_animation') {
-        this._showChargingAnimation = target.checked;
-        this._updateConfig(configValue, this._showChargingAnimation);
-      } else if (configValue === 'mainImageHeight' || configValue === 'chargingImageHeight' || configValue === 'engineOnImageHeight') {
-        // For image height inputs, append 'px' to the value if it's not already there
-        const newValue = value.endsWith('px') ? value : `${value}px`;
-        this._updateConfig(configValue, newValue);
-        // Force a full update of the card
-        this._fireEvent('config-changed', { config: this.config });
-      } else if (configValue === 'image_url' || configValue === 'charging_image_url' || configValue === 'engine_on_image_url') {
-        this._updateConfig(configValue, value);
-      } else {
-        this._updateConfig(configValue, target.checked !== undefined ? target.checked : value);
-      }
-    }
-  }
-
-  _handleImageUpload(e, configKey) {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const imageData = e.target.result;
-        this._updateConfig(configKey, imageData);
-        this._updateConfig(`${configKey}_type`, 'image');
-        this.requestUpdate();
-        // Force a full update of the card
-        this._fireEvent('config-changed', { config: this.config });
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  _fireEvent(type, detail) {
-    const event = new CustomEvent(type, {
-      detail,
-      bubbles: true,
-      composed: true
-    });
-    this.dispatchEvent(event);
-  }
-
-  _entityFilterChanged(e, configKey) {
-    this[`_${configKey}Filter`] = e.target.value;
-    this.requestUpdate();
-  }
-
-  _resetColor(e, configKey, defaultValue) {
-    e.stopPropagation();
-    this.config = {
-      ...this.config,
-      [configKey]: defaultValue,
-    };
-    this.configChanged(this.config);
-    this.requestUpdate();
-    if (configKey === 'cardBackgroundColor') {
-      this._updateIconBackground();
-    }
-  }
-
-  _updateIconBackground() {
-    const cardBackgroundColor = this.config.cardBackgroundColor || getComputedStyle(this).getPropertyValue('--card-background-color').trim();
-    const isDarkBackground = this._isColorDark(cardBackgroundColor);
-    this._updateIconBackgroundColor(isDarkBackground);
-  }
-
-  _isColorDark(color) {
-    const rgb = this._hexToRgb(color);
-    if (!rgb) return false;
-    const [r, g, b] = rgb.split(',').map(Number);
-    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-    return brightness < 128;
-  }
-
-  _hexToRgb(hex) {
-    if (!hex) return null;
-    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-    hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
-  }
-
-  _updateIconBackgroundColor(isDarkBackground) {
-    const iconBackgroundColor = isDarkBackground ? '#ffffff' : '#000000';
-    this.style.setProperty('--uvc-icon-background', iconBackgroundColor);
-  }
-
-  firstUpdated() {
-    super.firstUpdated();
-    this.addEventListener('click', this._handleEditorClick);
-    this._addDialogClosePrevention();
-  }
-
   disconnectedCallback() {
     super.disconnectedCallback();
     this.removeEventListener('click', this._handleEditorClick);
     this._removeDialogClosePrevention();
+    window.removeEventListener('set-theme', this._themeChangeListener);
   }
 
-  _addDialogClosePrevention() {
-    window.addEventListener('dialog-closed', this._preventDialogClose, true);
-  }
 
-  _removeDialogClosePrevention() {
-    window.removeEventListener('dialog-closed', this._preventDialogClose, true);
-  }
-
-  _preventDialogClose(e) {
-    if (e.target.tagName === 'HA-DIALOG') {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  }
-
-  _handleEditorClick(e) {
-    e.stopPropagation();
-  }
-
-  _handleStateConfigChange(e) {
-    const { config, entityId, stateType, attributeValue } = e.detail;
-    let newConfig = { ...this.config };
-    
-    if (!newConfig.custom_icons) {
-      newConfig.custom_icons = {};
-    }
-    if (!newConfig.custom_icons[entityId]) {
-      newConfig.custom_icons[entityId] = {};
-    }
-    
-    newConfig.custom_icons[entityId][`${stateType}State`] = config[`${stateType}State`];
-    
-    if (config[`${stateType}State`].startsWith('attribute:') && attributeValue) {
-      newConfig.custom_icons[entityId][`${stateType}State`] += `:${attributeValue}`;
-    }
-    
-    this.config = newConfig;
-    this.configChanged(this.config);
-  }
-
-  _titleChanged(ev) {
-    const newTitle = ev.target.value;
-    this._updateConfig("title", newTitle);
-  }
-
-  _showTitleToggleChanged(ev) {
-    const showTitle = ev.target.checked;
-    this._updateConfig("showTitle", showTitle);
-  }
-
-  _updateConfig(key, value) {
-    if (typeof key === 'object') {
-      this.config = { ...this.config, ...key };
-    } else {
-      this.config = { ...this.config, [key]: value };
-    }
-    this.configChanged(this.config);
+  _onThemeChange() {
+    Object.keys(this._defaultColors).forEach((key) => {
+      if (!this._userChangedColors[key]) {
+        this._updateConfig(key, this._defaultColors[key]);
+      }
+    });
     this.requestUpdate();
   }
 
-  _toggleFormattedEntities(e) {
-    const useFormattedEntities = e.target.checked;
-    this._updateConfig("useFormattedEntities", useFormattedEntities);
-    this._fireEvent("config-changed", { config: this.config });
-  }
-
-  _deleteGradientStop(index) {
-    const gradientStops = [...(this.config.barGradientStops || [])];
-    if (gradientStops.length > 2) {  // Ensure we always have at least 2 stops
-      gradientStops.splice(index, 1);
-      this._updateConfig('barGradientStops', gradientStops);
-    } else {
-      // Optionally, show a message that at least 2 stops are required
-      console.warn("At least 2 gradient stops are required");
-    }
+  _resetAllColors() {
+    const defaultColors = {
+      cardTitleColor: UltraVehicleCardEditor._getComputedColor("--primary-text-color"),
+      cardBackgroundColor: UltraVehicleCardEditor._getComputedColor("--ha-card-background") || UltraVehicleCardEditor._getComputedColor("--card-background-color"),
+      barBackgroundColor: UltraVehicleCardEditor._getComputedColor("--secondary-text-color"),
+      barBorderColor: UltraVehicleCardEditor._getComputedColor("--secondary-text-color"),
+      barFillColor: UltraVehicleCardEditor._getComputedColor("--primary-color"),
+      limitIndicatorColor: UltraVehicleCardEditor._getComputedColor("--primary-text-color"),
+      infoTextColor: UltraVehicleCardEditor._getComputedColor("--secondary-text-color"),
+      carStateTextColor: UltraVehicleCardEditor._getComputedColor("--primary-text-color"),
+      rangeTextColor: UltraVehicleCardEditor._getComputedColor("--primary-text-color"),
+      percentageTextColor: UltraVehicleCardEditor._getComputedColor("--primary-text-color"),
+    };
+  
+    Object.entries(defaultColors).forEach(([key, defaultValue]) => {
+      this._resetColor(key, defaultValue);
+    });
+  
+    this.requestUpdate();
   }
 }
 customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);
