@@ -97,8 +97,8 @@ export function getIconActiveState(entityId, hass, config) {
 
 function isActiveState(state) {
   const activeStates = [
-    "on", "active", "open", "connected", "running", "true", "1", "home", 
-    "locked", "above_horizon", "charging", "full", "yes", "online", "present", 
+    "on", "active", "open", "connected", "running", "true", "1", "home", "above_horizon", 
+    "charging", "full", "yes", "online", "present", 
     "armed", "occupied", "unlocked", "playing", "motion", "engaged", "awake", "detected"
   ];
   return activeStates.includes(state);
