@@ -144,7 +144,10 @@ export default {
     percentage: "Prosent",
     color: "Farge",
     add_gradient_stop: "Legg til gradientstoppunkt",
-    reset_all_colors: "Tilbakestill alle farger"
+    reset_all_colors: "Tilbakestill alle farger",
+    reset_all_icon_colors: "Tilbakestill alle ikonfarger",
+    settings: "Innstillinger",
+    customize: "Tilpass"
   },
   device_class: {
     battery: {

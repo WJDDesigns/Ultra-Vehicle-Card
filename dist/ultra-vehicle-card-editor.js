@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=16";
+import { version } from "./version.js?v=17";
 import './state-dropdown.js';
 
 const stl = await import("./styles.js?v=" + version);
@@ -197,6 +197,31 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         .reset-all-colors ha-icon {
           color: var(--primary-text-color);
         }
+
+        mwc-tab-bar {
+          border-bottom: 1px solid var(--divider-color);
+        }
+
+        .tab-content {
+          padding: 16px;
+        }
+
+        .reset-all-colors {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          margin-top: 8px;
+        }
+
+        .reset-all-colors span {
+          margin-right: 8px;
+          font-size: 14px;
+        }
+
+        .reset-icon.clickable {
+          cursor: pointer;
+          color: var(--primary-text-color);
+        }
       `
     ];
   }
@@ -215,6 +240,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     };
     this._userChangedColors = {};
     this._themeChangeListener = this._onThemeChange.bind(this);
+    this._activeTab = "settings";
   }
 
   firstUpdated() {
@@ -453,14 +479,36 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
     return html`
       <div class="editor-container">
-        ${this._renderBasicConfig()}
-        ${this._renderLayoutChooser()}
-        ${this._renderFormattedEntitiesToggle()}
-        ${this._renderEntityInformation()}
-        ${this._renderIconGridConfig()}
-        ${this._renderColorPickers()}
+        <mwc-tab-bar @MDCTabBar:activated=${this._handleTabChange}>
+          <mwc-tab id="tab-settings" label="${this.localize("editor.settings")}"></mwc-tab>
+          <mwc-tab id="tab-icon-grid" label="${this.localize("editor.icon_grid")}"></mwc-tab>
+          <mwc-tab id="tab-customize" label="${this.localize("editor.customize")}"></mwc-tab>
+        </mwc-tab-bar>
+
+        <div class="tab-content">
+          ${this._activeTab === "settings" ? html`
+            ${this._renderBasicConfig()}
+            ${this._renderLayoutChooser()}
+            ${this._renderFormattedEntitiesToggle()}
+            ${this._renderEntityInformation()}
+          ` : ""}
+
+          ${this._activeTab === "icon-grid" ? html`
+            ${this._renderIconGridConfig()}
+          ` : ""}
+
+          ${this._activeTab === "customize" ? html`
+            ${this._renderColorPickers()}
+          ` : ""}
+        </div>
       </div>
     `;
+  }
+
+  _handleTabChange(e) {
+    const tabIds = ["tab-settings", "tab-icon-grid", "tab-customize"];
+    this._activeTab = tabIds[e.detail.index].replace("tab-", "");
+    this.requestUpdate();
   }
 
   _renderLayoutChooser() {
@@ -916,6 +964,15 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
           <button class="add-row-button" @click="${this._addRowSeparator}">
             ${this.localize("editor.add_row_separator")}
           </button>
+          <div class="reset-all-colors">
+            <span>${this.localize("editor.reset_all_icon_colors")}</span>
+            <ha-icon
+              class="reset-icon clickable"
+              icon="mdi:refresh"
+              title="${this.localize("editor.reset_all_icon_colors")}"
+              @click="${this._resetAllIconColors}"
+            ></ha-icon>
+          </div>
         </div>
         <div
           class="selected-entities"
@@ -1192,29 +1249,32 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   _iconColorChanged(e, entityId, iconType) {
     const color = e.target.value;
-    if (!this.config.custom_icons[entityId]) {
-      this.config.custom_icons[entityId] = {};
+    if (!this._customIcons[entityId]) {
+      this._customIcons[entityId] = {};
     }
-    this.config.custom_icons[entityId][`${iconType}Color`] = color;
-    this._updateConfigAndRequestUpdate(
-      "custom_icons",
-      this.config.custom_icons
-    );
+    this._customIcons[entityId][`${iconType}Color`] = color;
+    this._updateCustomIconsConfig();
+    
+    // Update the CSS variable directly
+    this.style.setProperty(`--uvc-icon-${iconType}`, color);
+    
+    // Force a re-render of the card
+    this._fireEvent('config-changed', { config: this.config });
   }
 
   _resetIconColor(e, entityId, iconType) {
     e.stopPropagation();
-    const defaultColor =
-      iconType === "active"
-        ? UltraVehicleCardEditor._getComputedColor("--primary-color")
-        : UltraVehicleCardEditor._getComputedColor("--primary-text-color");
-    if (this.config.custom_icons[entityId]) {
-      this.config.custom_icons[entityId][`${iconType}Color`] = defaultColor;
+    if (this._customIcons[entityId]) {
+      delete this._customIcons[entityId][`${iconType}Color`];
     }
-    this._updateConfigAndRequestUpdate(
-      "custom_icons",
-      this.config.custom_icons
-    );
+    this._updateCustomIconsConfig();
+    
+    // Reset the CSS variable to its default
+    const defaultColor = iconType === 'active' ? 'var(--primary-color)' : 'var(--primary-text-color)';
+    this.style.removeProperty(`--uvc-icon-${iconType}`);
+    
+    // Force a re-render of the card
+    this._fireEvent('config-changed', { config: this.config });
   }
 
   _updateCustomIconsConfig() {
@@ -1478,7 +1538,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
     const defaultColors = {
       cardTitleColor: getDefaultColor("--primary-text-color"),
-      cardBackgroundColor: getDefaultColor("--ha-card-background") || getDefaultColor("--card-background-color"),
+      cardBackgroundColor: UltraVehicleCardEditor._getComputedColor("--ha-card-background") || UltraVehicleCardEditor._getComputedColor("--card-background-color"),
       barBackgroundColor: getDefaultColor("--secondary-text-color"),
       barBorderColor: getDefaultColor("--secondary-text-color"),
       barFillColor: getDefaultColor("--primary-color"),
@@ -1653,8 +1713,8 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _renderColorPicker(label, configKey, defaultValue) {
-    const currentValue = UltraVehicleCardEditor._expandHexColor(this.config[configKey] || UltraVehicleCardEditor._getComputedColor(defaultValue));
-    const textColor = this._getContrastYIQ(currentValue);
+    const currentValue = this.config[configKey] || UltraVehicleCardEditor._getComputedColor(defaultValue);
+    const textColor = currentValue.startsWith('rgba') ? '#808080' : this._getContrastYIQ(currentValue);
 
     return html`
       <div class="color-picker">
@@ -1668,10 +1728,13 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
             style="background-color: ${currentValue}; color: ${textColor};"
           />
           <div class="color-preview" style="background-color: ${currentValue};">
-            <ha-icon icon="mdi:palette" style="color: ${textColor};"></ha-icon>
+            <ha-icon
+              icon="mdi:palette"
+              style="color: ${textColor};"
+            ></ha-icon>
             <input
               type="color"
-              .value="${currentValue}"
+              .value="${currentValue.startsWith('rgba') ? this._rgbaToHex(currentValue) : currentValue}"
               @input="${(e) => this._colorChanged(e, configKey)}"
               class="color-input"
             />
@@ -1685,12 +1748,19 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       </div>
     `;
   }
+
+  _rgbaToHex(rgba) {
+    const [r, g, b] = rgba.match(/\d+/g).map(Number);
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+  }
+
   static _expandHexColor(color) {
     if (color && color.charAt(0) === '#' && color.length === 4) {
       return color.replace(/([0-9A-F])/gi, '$1$1');
     }
     return color;
   }
+
   _colorChanged(e, configKey) {
     const color = UltraVehicleCardEditor._expandHexColor(e.target.value);
     this._userChangedColors[configKey] = color !== this._defaultColors[configKey];
@@ -2201,27 +2271,27 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       .replace(/^\w/, (c) => c.toUpperCase());
   }
 
-  _getContrastYIQ(hexcolor) {
-    if (!hexcolor || typeof hexcolor !== 'string') {
-      return 'black'; // Default to black text if no valid color is provided
+  _getContrastYIQ(color) {
+    let r, g, b, a = 1;
+    
+    if (color.startsWith('rgba')) {
+      [r, g, b, a] = color.match(/[\d.]+/g).map(Number);
+    } else if (color.startsWith('rgb')) {
+      [r, g, b] = color.match(/\d+/g).map(Number);
+    } else if (color.startsWith('#')) {
+      const hex = color.replace('#', '');
+      r = parseInt(hex.substr(0, 2), 16);
+      g = parseInt(hex.substr(2, 2), 16);
+      b = parseInt(hex.substr(4, 2), 16);
+    } else {
+      return '#808080'; // Default to black text if color format is unknown
     }
-  
-    // Remove the '#' if it's there
-    hexcolor = hexcolor.replace(/^#/, '');
-  
-    // If it's a 3-digit hex, convert it to 6-digit
-    if (hexcolor.length === 3) {
-      hexcolor = hexcolor[0] + hexcolor[0] + hexcolor[1] + hexcolor[1] + hexcolor[2] + hexcolor[2];
-    }
-  
-    // If it's not a valid 6-digit hex, return a default
-    if (hexcolor.length !== 6) {
-      return 'black';
-    }
-  
-    const r = parseInt(hexcolor.substr(0, 2), 16);
-    const g = parseInt(hexcolor.substr(2, 2), 16);
-    const b = parseInt(hexcolor.substr(4, 2), 16);
+
+    // Adjust for transparency by blending with a white background
+    r = Math.round(r * a + 255 * (1 - a));
+    g = Math.round(g * a + 255 * (1 - a));
+    b = Math.round(b * a + 255 * (1 - a));
+
     const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
     return (yiq >= 128) ? 'black' : 'white';
   }
@@ -2447,11 +2517,10 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                     "verticalAlignment",
                     "middle"
                   )}"
-                ?disabled="${separatorConfig.verticalAlignment === "middle" ||
-                separatorConfig.verticalAlignment === undefined}"
+                ?disabled="${separatorConfig.verticalAlignment === "middle"}"
                 title="${this.localize("editor.align_middle")}"
               >
-                
+              ⬤
               </button>
               <button
                 class="icon-button"
@@ -2898,25 +2967,59 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   static _getComputedColor(variable) {
     const style = getComputedStyle(document.documentElement);
     let value = style.getPropertyValue(variable).trim();
+    
     if (value.startsWith("#")) {
-      return UltraVehicleCardEditor._expandHexColor(value);
+      return this._expandHexColor(value);
     } else if (value.startsWith("rgb")) {
-      const rgb = value.match(/\d+/g);
-      return `#${parseInt(rgb[0]).toString(16).padStart(2, "0")}${parseInt(
-        rgb[1]
-      )
-        .toString(16)
-        .padStart(2, "0")}${parseInt(rgb[2]).toString(16).padStart(2, "0")}`;
+      // Handle both rgb and rgba
+      const parts = value.match(/[\d.]+/g);
+      if (parts.length >= 3) {
+        const r = parseInt(parts[0]);
+        const g = parseInt(parts[1]);
+        const b = parseInt(parts[2]);
+        const a = parts.length === 4 ? parseFloat(parts[3]) : 1;
+        
+        if (a < 1) {
+          // Return rgba for transparent colors
+          return `rgba(${r}, ${g}, ${b}, ${a})`;
+        } else {
+          // Convert to hex for opaque colors
+          return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+        }
+      }
     }
-    return "#808080"; // Fallback color if unable to determine
+    
+    // Return the original value if it's not a recognized format
+    return value;
   }
   
   static _getComputedColor(variable) {
     const style = getComputedStyle(document.documentElement);
     let value = style.getPropertyValue(variable).trim();
+    
     if (value.startsWith("#")) {
       return this._expandHexColor(value);
+    } else if (value.startsWith("rgb")) {
+      // Handle both rgb and rgba
+      const parts = value.match(/[\d.]+/g);
+      if (parts.length >= 3) {
+        const r = parseInt(parts[0]);
+        const g = parseInt(parts[1]);
+        const b = parseInt(parts[2]);
+        const a = parts.length === 4 ? parseFloat(parts[3]) : 1;
+        
+        if (a < 1) {
+          // Return rgba for transparent colors
+          return `rgba(${r}, ${g}, ${b}, ${a})`;
+        } else {
+          // Convert to hex for opaque colors
+          return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+        }
+      }
     }
+    
+    // Return the original value if it's not a recognized format
+    return value;
   }
 
   _renderIconColorPicker(label, entityId, iconType) {
@@ -3012,6 +3115,37 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       this._resetColor(key, defaultValue);
     });
   
+    this.requestUpdate();
+  }
+
+  _resetAllIconColors() {
+    // Reset all icon colors to default
+    this._customIcons = Object.keys(this._customIcons).reduce((acc, entityId) => {
+      acc[entityId] = {
+        ...this._customIcons[entityId],
+        activeColor: undefined,
+        inactiveColor: undefined
+      };
+      return acc;
+    }, {});
+
+    // Update the config
+    this._updateCustomIconsConfig();
+
+    // Remove the custom CSS properties
+    this.style.removeProperty('--uvc-icon-active');
+    this.style.removeProperty('--uvc-icon-inactive');
+
+    // Update the config to remove global icon colors
+    this.config = {
+      ...this.config,
+      iconActiveColor: undefined,
+      iconInactiveColor: undefined
+    };
+
+    // Force a re-render of the card
+    this._fireEvent('config-changed', { config: this.config });
+
     this.requestUpdate();
   }
 }

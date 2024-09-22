@@ -8,8 +8,6 @@ export const styles = css`
     --uvc-bar-background: var(--secondary-text-color);
     --uvc-bar-border-color: var(--secondary-text-color);
     --uvc-limit-indicator: var(--primary-text-color);
-    --uvc-icon-active: var(--primary-color);
-    --uvc-icon-inactive: var(--primary-text-color);
     --uvc-info-text-color: var(--secondary-text-color);
     --uvc-car-state-text-color: var(--primary-text-color);
     --uvc-range-text-color: var(--primary-text-color);
@@ -573,7 +571,6 @@ export const styles = css`
   .icon-item ha-icon {
     width: var(--uvc-icon-size, 24px);
     height: var(--uvc-icon-size, 24px);
-    color: var(--icon-color, var(--uvc-icon-active)) !important;
   }
 
   .interaction-select,
@@ -804,7 +801,13 @@ export const styles = css`
     border: 1px solid var(--divider-color);
     border-radius: 4px;
   }
+.icon-wrapper.active {
+  color: var(--uvc-icon-active, var(--primary-color));
+}
 
+.icon-wrapper.inactive {
+  color: var(--uvc-icon-inactive, var(--primary-text-color));
+}
   .selected-entity.row-separator .entity-header {
     display: flex;
     align-items: center;

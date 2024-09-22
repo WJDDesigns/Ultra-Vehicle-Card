@@ -70,7 +70,6 @@ export default {
     car_state: "Car State",
     charge_limit: "Charge Limit",
     engine_on: "Engine On",
-    icon_grid: "Icon Grid",
     add_entity: "Add Entity",
     add_row_separator: "Add Row Separator",
     custom_icons: "Custom Icons",
@@ -160,8 +159,13 @@ export default {
     bar_gradient_description: "Enable a color gradient for the progress bar. This allows you to set multiple color stops for a more dynamic visual representation of the vehicle's status.",
     percentage: "Percentage",
     color: "Color",
+    cardTitleColor: "Card Title Color",
     add_gradient_stop: "Add Gradient Stop",
-    reset_all_colors: "Reset All Colors"
+    reset_all_colors: "Reset All Colors",
+    reset_all_icon_colors: "Reset All Icon Colors",
+    settings: "Settings",
+    icon_grid: "Icon Grid",
+    customize: "Customize",
   },
   device_class: {
     battery: {

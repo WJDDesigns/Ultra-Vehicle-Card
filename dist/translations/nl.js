@@ -144,7 +144,10 @@ export default {
     percentage: "Percentage",
     color: "Kleur",
     add_gradient_stop: "Voeg gradiëntstop toe",
-    reset_all_colors: "Alle kleuren herstellen"
+    reset_all_colors: "Alle kleuren resetten",
+    reset_all_icon_colors: "Alle icoonkleuren resetten",
+    settings: "Instellingen",
+    customize: "Aanpassen"
   },
   device_class: {
     battery: {

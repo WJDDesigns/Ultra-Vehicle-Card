@@ -144,7 +144,10 @@ export default {
     percentage: "Percentage",
     color: "Colour",
     add_gradient_stop: "Add Gradient Stop",
-    reset_all_colors: "Reset All Colours"
+    reset_all_colors: "Reset All Colours",
+    reset_all_icon_colors: "Reset All Icon Colours",
+    settings: "Settings",
+    customize: "Customise"
   },
   device_class: {
     battery: {

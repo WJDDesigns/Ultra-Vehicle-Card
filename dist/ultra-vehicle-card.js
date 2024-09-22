@@ -3,8 +3,8 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version, setVersion } from "./version.js?v=16";
-setVersion("V1.6.2-beta1");
+import { version, setVersion } from "./version.js?v=17";
+setVersion("V1.6.2");
 
 const sensorModule = await import("./sensors.js?v=" + version);
 const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn } = sensorModule;
@@ -1114,13 +1114,15 @@ class UltraVehicleCard extends localize(LitElement) {
     }
 
     // Determine which color to use
+    const activeColor = 'var(--uvc-icon-active, var(--primary-color))';
+    const inactiveColor = 'var(--uvc-icon-inactive, var(--primary-text-color))';
+
     let color;
     if (isActive) {
-      color = customIcon.activeColor || this.config.iconActiveColor || "#03a9f4";
+      color = customIcon.activeColor || this.config.iconActiveColor || activeColor;
     } else {
-      color = customIcon.inactiveColor || this.config.iconInactiveColor || "#e1e1e1";
+      color = customIcon.inactiveColor || this.config.iconInactiveColor || inactiveColor;
     }
-
 
     const iconSize = this.config.icon_sizes?.[entityId] || this.config.icon_size || 24;
     const buttonStyle = this.config.icon_styles?.[entityId] || "icon";
@@ -1454,6 +1456,18 @@ class UltraVehicleCard extends localize(LitElement) {
     // Update percentage text color
     if (this.config.percentageTextColor) {
       this.style.setProperty('--uvc-percentage-text-color', this.config.percentageTextColor);
+    }
+
+    if (this.config.iconActiveColor) {
+      this.style.setProperty('--uvc-icon-active', this.config.iconActiveColor);
+    } else {
+      this.style.removeProperty('--uvc-icon-active');
+    }
+
+    if (this.config.iconInactiveColor) {
+      this.style.setProperty('--uvc-icon-inactive', this.config.iconInactiveColor);
+    } else {
+      this.style.removeProperty('--uvc-icon-inactive');
     }
 
     this.requestUpdate();
