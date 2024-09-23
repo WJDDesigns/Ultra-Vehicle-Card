@@ -958,8 +958,15 @@ class UltraVehicleCard extends localize(LitElement) {
 
   _getImageUrlFromEntity(entityId) {
     const stateObj = this.hass.states[entityId];
-    if (stateObj && stateObj.attributes && stateObj.attributes.entity_picture) {
-      return stateObj.attributes.entity_picture;
+    if (stateObj) {
+      // Check if the entity has an entity_picture attribute
+      if (stateObj.attributes && stateObj.attributes.entity_picture) {
+        return stateObj.attributes.entity_picture;
+      }
+      // Check if the state itself is a valid URL
+      if (stateObj.state && stateObj.state.startsWith('http')) {
+        return stateObj.state;
+      }
     }
     return null;
   }

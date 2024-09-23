@@ -499,6 +499,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
           ${this._activeTab === "customize" ? html`
             ${this._renderColorPickers()}
+            ${this._renderBarGradientToggle()}
           ` : ""}
         </div>
       </div>
