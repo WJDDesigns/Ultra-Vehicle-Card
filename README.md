@@ -142,3 +142,6 @@ The card will display your vehicle's information, including its charge/fuel leve
 
 <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4JVCZ46FZPUTG" target="_blank"> <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" style="width: 150px; height: auto;" />
 </a>
+
+
+Join our Discord: https://discord.gg/6xVgHxzzBV
