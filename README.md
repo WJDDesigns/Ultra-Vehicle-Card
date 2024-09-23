@@ -144,4 +144,4 @@ The card will display your vehicle's information, including its charge/fuel leve
 </a>
 
 
-Jopin our Discord: https://discord.gg/6xVgHxzzBV
+Join our Discord: https://discord.gg/6xVgHxzzBV
