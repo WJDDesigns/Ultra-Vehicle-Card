@@ -3,8 +3,8 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version, setVersion } from "./version.js?v=19";
-setVersion("V1.6.4");
+import { version, setVersion } from "./version.js?v=20";
+setVersion("V1.6.5");
 
 const sensorModule = await import("./sensors.js?v=" + version);
 const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn } = sensorModule;
@@ -1257,9 +1257,7 @@ class UltraVehicleCard extends localize(LitElement) {
         this._handleMoreInfo(entityId);
         break;
       case "toggle":
-        this.hass.callService("homeassistant", "toggle", {
-          entity_id: entityId,
-        });
+        this._toggleEntity(entityId);
         break;
       case "navigate":
         this._navigate(interaction.path);
@@ -1282,6 +1280,21 @@ class UltraVehicleCard extends localize(LitElement) {
     }
   }
 
+  _toggleEntity(entityId) {
+    const domain = entityId.split('.')[0];
+    let service;
+
+    switch (domain) {
+      case 'lock':
+        service = this.hass.states[entityId].state === 'locked' ? 'unlock' : 'lock';
+        break;
+      default:
+        service = 'toggle';
+    }
+
+    this.hass.callService(domain, service, { entity_id: entityId });
+  }
+
   _triggerEntity(entityId) {
     const domain = entityId.split(".")[0];
     let service = "turn_on";
@@ -1296,6 +1309,7 @@ class UltraVehicleCard extends localize(LitElement) {
       case "button":
         service = "press"
         break;
+        
       // Add more cases here for other entity types that might need special handling
     }
 
@@ -1348,12 +1362,6 @@ class UltraVehicleCard extends localize(LitElement) {
       detail: { entityId }
     });
     this.dispatchEvent(event);
-  }
-
-  _toggleEntity(entityId) {
-    this.hass.callService("homeassistant", "toggle", {
-      entity_id: entityId,
-    });
   }
 
   _capitalizeFirstLetter(string) {

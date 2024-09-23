@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=19";
+import { version } from "./version.js?v=20";
 import './state-dropdown.js';
 
 const stl = await import("./styles.js?v=" + version);
@@ -221,6 +221,36 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         .reset-icon.clickable {
           cursor: pointer;
           color: var(--primary-text-color);
+        }
+
+        .gradient-preview-container {
+          margin-bottom: 16px;
+        }
+
+        .gradient-preview {
+          height: 30px;
+          border-radius: 5px;
+          position: relative;
+        }
+
+        .percentage-marker {
+          position: absolute;
+          top: 9%;
+          transform: translateX(-50%);
+        }
+
+        .marker-line {
+          width: 2px;
+          height: 25px;
+          background-color: var(--uvc-card-background);
+          margin: 0 auto;
+        }
+
+        .marker-label {
+          font-size: 10px;
+          color: var(--primary-text-color);
+          text-align: center;
+          margin-top: 2px;
         }
       `
     ];
@@ -1606,14 +1636,11 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _renderBarGradientOptions() {
-    const defaultStops = [
-      { percentage: 0, color: '#ff0000' },
-      { percentage: 100, color: '#00ff00' }
-    ];
-    const gradientStops = this.config.barGradientStops || defaultStops;
+    const gradientStops = this.config.barGradientStops || this._getDefaultGradientStops();
 
     return html`
       <div class="bar-gradient-options">
+        ${this._renderGradientPreview(gradientStops)}
         ${gradientStops.map((stop, index) => html`
           <div class="gradient-stop">
             <ha-textfield
@@ -1661,11 +1688,29 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
             ></ha-icon>
           </div>
         `)}
-        ${gradientStops.length < 5 ? html`
+        ${gradientStops.length < 11 ? html`
           <mwc-button @click=${this._addGradientStop}>
             ${this.localize("editor.add_gradient_stop")}
           </mwc-button>
         ` : ''}
+      </div>
+    `;
+  }
+
+  _renderGradientPreview(stops) {
+    const sortedStops = stops.slice().sort((a, b) => a.percentage - b.percentage);
+    const gradientString = sortedStops.map(stop => `${stop.color} ${stop.percentage}%`).join(', ');
+
+    return html`
+      <div class="gradient-preview-container">
+        <div class="gradient-preview" style="background: linear-gradient(to right, ${gradientString});">
+          ${[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map(percentage => html`
+            <div class="percentage-marker" style="left: ${percentage}%;">
+              <div class="marker-line"></div>
+              <span class="marker-label">${percentage}%</span>
+            </div>
+          `)}
+        </div>
       </div>
     `;
   }
@@ -1675,8 +1720,8 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     if (useBarGradient && (!this.config.barGradientStops || this.config.barGradientStops.length === 0)) {
       // Set default gradient stops when first enabled
       this._updateConfig('barGradientStops', [
-        { percentage: 0, color: '#ff0000' },  // Red at 0%
-        { percentage: 100, color: '#00ff00' } // Green at 100%
+        { percentage: 0, color: '#FF0000' },  // Red at 0%
+        { percentage: 100, color: '#00FF00' } // Green at 100%
       ]);
     }
     this._updateConfig('useBarGradient', useBarGradient);
@@ -1697,20 +1742,54 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _deleteGradientStop(index) {
-    const gradientStops = [...(this.config.barGradientStops || [])];
-    if (gradientStops.length > 2) {  // Ensure we always have at least 2 stops
+    let gradientStops = [...(this.config.barGradientStops || this._getDefaultGradientStops())];
+    
+    if (gradientStops.length > 2) {
       gradientStops.splice(index, 1);
-      this._updateConfig('barGradientStops', gradientStops);
     } else {
-      // Optionally, show a message that at least 2 stops are required
-      console.warn("At least 2 gradient stops are required");
+      // If we're trying to delete when only 2 stops remain, reset to default
+      gradientStops = this._getDefaultGradientStops();
     }
+    
+    this._updateConfig('barGradientStops', gradientStops);
+  }
+
+  _getDefaultGradientStops() {
+    return [
+      { percentage: 0, color: '#FF0000' },
+      { percentage: 100, color: '#00FF00' }
+    ];
+  }
+
+  _getFullGradientStops() {
+    return [
+      { percentage: 0, color: '#FF0000' },
+      { percentage: 10, color: '#FF1A00' },
+      { percentage: 20, color: '#FF3300' },
+      { percentage: 30, color: '#FF4D00' },
+      { percentage: 40, color: '#FF6600' },
+      { percentage: 50, color: '#FFFF00' },
+      { percentage: 60, color: '#CCFF00' },
+      { percentage: 70, color: '#99FF00' },
+      { percentage: 80, color: '#66FF00' },
+      { percentage: 90, color: '#33FF00' },
+      { percentage: 100, color: '#00FF00' }
+    ];
   }
 
   _addGradientStop() {
-    const gradientStops = [...(this.config.barGradientStops || [])];
-    gradientStops.push({ percentage: 50, color: '#ffff00' });
-    this._updateConfig('barGradientStops', gradientStops);
+    const gradientStops = [...(this.config.barGradientStops || this._getDefaultGradientStops())];
+    if (gradientStops.length < 11) {
+      const fullStops = this._getFullGradientStops();
+      const newStop = fullStops.find(stop => !gradientStops.some(existing => existing.percentage === stop.percentage));
+      if (newStop) {
+        gradientStops.push(newStop);
+        gradientStops.sort((a, b) => a.percentage - b.percentage);
+        this._updateConfig('barGradientStops', gradientStops);
+      }
+    } else {
+      console.warn("Maximum of 11 gradient stops reached");
+    }
   }
 
   _renderColorPicker(label, configKey, defaultValue) {
