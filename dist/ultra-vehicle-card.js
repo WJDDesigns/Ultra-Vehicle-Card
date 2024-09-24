@@ -3,8 +3,8 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version, setVersion } from "./version.js?v=19";
-setVersion("V1.6.4");
+import { version, setVersion } from "./version.js?v=21";
+setVersion("V1.6.6-beta1");
 
 const sensorModule = await import("./sensors.js?v=" + version);
 const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn } = sensorModule;
