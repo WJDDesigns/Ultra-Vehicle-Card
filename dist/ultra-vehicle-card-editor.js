@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=20";
+import { version } from "./version.js?v=17";
 import './state-dropdown.js';
 
 const stl = await import("./styles.js?v=" + version);
@@ -1280,32 +1280,29 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   _iconColorChanged(e, entityId, iconType) {
     const color = e.target.value;
-    if (!this._customIcons[entityId]) {
-      this._customIcons[entityId] = {};
+    if (!this.config.custom_icons[entityId]) {
+      this.config.custom_icons[entityId] = {};
     }
-    this._customIcons[entityId][`${iconType}Color`] = color;
-    this._updateCustomIconsConfig();
-    
-    // Update the CSS variable directly
-    this.style.setProperty(`--uvc-icon-${iconType}`, color);
-    
-    // Force a re-render of the card
-    this._fireEvent('config-changed', { config: this.config });
+    this.config.custom_icons[entityId][`${iconType}Color`] = color;
+    this._updateConfigAndRequestUpdate(
+      "custom_icons",
+      this.config.custom_icons
+    );
   }
 
   _resetIconColor(e, entityId, iconType) {
     e.stopPropagation();
-    if (this._customIcons[entityId]) {
-      delete this._customIcons[entityId][`${iconType}Color`];
+    const defaultColor =
+      iconType === "active"
+        ? UltraVehicleCardEditor._getComputedColor("--primary-color")
+        : UltraVehicleCardEditor._getComputedColor("--primary-text-color");
+    if (this.config.custom_icons[entityId]) {
+      this.config.custom_icons[entityId][`${iconType}Color`] = defaultColor;
     }
-    this._updateCustomIconsConfig();
-    
-    // Reset the CSS variable to its default
-    const defaultColor = iconType === 'active' ? 'var(--primary-color)' : 'var(--primary-text-color)';
-    this.style.removeProperty(`--uvc-icon-${iconType}`);
-    
-    // Force a re-render of the card
-    this._fireEvent('config-changed', { config: this.config });
+    this._updateConfigAndRequestUpdate(
+      "custom_icons",
+      this.config.custom_icons
+    );
   }
 
   _updateCustomIconsConfig() {
@@ -1792,9 +1789,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
   }
 
-  _renderColorPicker(label, configKey, defaultValue) {
-    const currentValue = this.config[configKey] || UltraVehicleCardEditor._getComputedColor(defaultValue);
-    const textColor = currentValue.startsWith('rgba') ? '#808080' : this._getContrastYIQ(currentValue);
+ _renderColorPicker(label, configKey, defaultValue) {
+    const currentValue = UltraVehicleCardEditor._expandHexColor(this.config[configKey] || UltraVehicleCardEditor._getComputedColor(defaultValue));
+    const textColor = this._getContrastYIQ(currentValue);
 
     return html`
       <div class="color-picker">
