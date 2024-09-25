@@ -98,7 +98,7 @@ export const styles = css`
 
   .radio-group,
   .checkbox-group {
-    display: flex;
+    display: inline-flex;
     justify-content: flex-end;
     gap: 16px;
     align-items: center;
@@ -813,13 +813,19 @@ export const styles = css`
     align-items: center;
     justify-content: space-between;
   }
+     @media (max-width: 768px) {
+          .editor-row {
+            flex-direction: column;
+                align-items: stretch;
+          }
+}
 
   .selected-entity.row-separator .entity-details {
     margin-top: 8px;
   }
 
   .row-separator .entity-header {
-    background-color: var(--uvc-bar-background, rgba(0, 0, 0, 0));
+    background-color: #3b3b3b;
   }
 
   .add-row-button {

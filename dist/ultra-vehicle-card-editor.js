@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=21";
+import { version } from "./version.js?v=22";
 import './state-dropdown.js';
 
 const stl = await import("./styles.js?v=" + version);
@@ -202,9 +202,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
           border-bottom: 1px solid var(--divider-color);
         }
 
-        .tab-content {
-          padding: 16px;
-        }
 
         .reset-all-colors {
           display: flex;
@@ -391,7 +388,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       iconActiveColor: config.iconActiveColor || "var(--primary-color)",
       iconInactiveColor:
         config.iconInactiveColor || "var(--primary-text-color)",
-      useFormattedEntities: config.useFormattedEntities || false,
+      useFormattedEntities: config.useFormattedEntities !== undefined
+        ? config.useFormattedEntities
+        : true, // Default to true
       mainImageHeight: config.image_url_type !== "none" ? (config.mainImageHeight || '140px') : '0px',
       chargingImageHeight: config.charging_image_url_type !== "none" ? (config.chargingImageHeight || '140px') : '0px',
       showTitle: config.showTitle !== false,
@@ -411,8 +410,11 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       barFillColor: config.barFillColor || "",
       limitIndicatorColor: config.limitIndicatorColor || "",
       infoTextColor: config.infoTextColor || "",
-      show_engine_animation: config.show_engine_animation || false,
-      show_charging_animation: config.show_charging_animation || false,
+      show_engine_animation: config.show_engine_animation !== false,
+      show_charging_animation: config.show_charging_animation !== false,
+      show_charging_status: config.show_charging_status !== false, // Default to true
+      show_engine_on: config.show_engine_on !== false, // Default to true
+      engine_on_image_url_type: config.engine_on_image_url_type || "none",
       ...config,
     };
 
@@ -539,6 +541,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   _handleTabChange(e) {
     const tabIds = ["tab-settings", "tab-icon-grid", "tab-customize"];
     this._activeTab = tabIds[e.detail.index].replace("tab-", "");
+    this._refreshConfig(); // Refresh the configuration
     this.requestUpdate();
   }
 
@@ -782,7 +785,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
           <input
             type="checkbox"
             id="useFormattedEntities"
-            .checked=${this.config.useFormattedEntities || false}
+            .checked=${this.config.useFormattedEntities || true}
             @change=${this._toggleFormattedEntities}
           />
           <span class="slider round"></span>
@@ -1608,6 +1611,11 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       </div>
     `;
   }
+  _refreshConfig() {
+    // Refresh the configuration values
+    this.config = { ...this.config };
+    this.requestUpdate();
+  }
 
   _renderBarGradientToggle() {
     return html`
@@ -1789,10 +1797,12 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
   }
 
- _renderColorPicker(label, configKey, defaultValue) {
-    const currentValue = UltraVehicleCardEditor._expandHexColor(this.config[configKey] || UltraVehicleCardEditor._getComputedColor(defaultValue));
+  _renderColorPicker(label, configKey, defaultValue) {
+    // Fetch the default color value from the theme
+    const themeColor = UltraVehicleCardEditor._getComputedColor(defaultValue);
+    const currentValue = UltraVehicleCardEditor._expandHexColor(this.config[configKey] || themeColor);
     const textColor = this._getContrastYIQ(currentValue);
-
+  
     return html`
       <div class="color-picker">
         <label>${label}</label>
@@ -1816,11 +1826,11 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               class="color-input"
             />
           </div>
-           <ha-icon
-          class="reset-icon"
-          icon="mdi:refresh"
-          @click="${(e) => this._resetColor(configKey, defaultValue, e)}"
-        ></ha-icon>
+          <ha-icon
+            class="reset-icon"
+            icon="mdi:refresh"
+            @click="${(e) => this._resetColor(configKey, defaultValue, e)}"
+          ></ha-icon>
         </div>
       </div>
     `;
@@ -1869,6 +1879,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     const expandedDefaultColor = UltraVehicleCardEditor._expandHexColor(defaultValue);
     this._userChangedColors[configKey] = false;
     this._applyColorChange(configKey, expandedDefaultColor);
+    this.requestUpdate();
   }
 
   _updateIconBackground() {
@@ -1954,9 +1965,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
     return html`
       <div class="image-input-container">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: content; justify-content: space-between; align-items: center;">
           <label style="margin-right: 16px; font-size: 1.2em; font-weight: bold;">${label}</label>
-          <div class="radio-group" style="justify-content: flex-end;">
+          <div class="radio-group">
             <label>
               <input type="radio" name="${imageTypeKey}" value="none"
                 ?checked="${currentType === "none"}"
@@ -2146,10 +2157,10 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     }
   }
 
-  _templateChanged(ev, configKey) {
+  async _templateChanged(ev, configKey) {
     const newValue = ev.target.value;
     try {
-      const result = this._evaluateTemplate(newValue);
+      const result = await this._evaluateTemplate(newValue);
       if (result) {
         this._updateConfig(configKey, newValue);
       }
@@ -2336,6 +2347,10 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         return "show_car_state";
       case "charge_limit_entity":
         return "show_charge_limit";
+      case "charging_status_entity":
+          return "show_charging_status";
+      case "engine_on_entity":
+        return "show_engine_on";
       default:
         return `show_${configValue.split("_")[0]}`;
     }
@@ -2382,18 +2397,19 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this.dispatchEvent(event);
   }
 
-  _evaluateTemplate(template) {
+  async _evaluateTemplate(template) {
     try {
-      // Use Function constructor to create a function from the template string
-      const templateFunction = new Function(
-        "states",
-        "user",
-        `return \`${template}\`;`
-      );
-      // Call the function with the hass states and user object
-      const result = templateFunction(this.hass.states, this.hass.user);
+      if (!this.hass) {
+        console.error("Home Assistant instance not available");
+        return null;
+      }
 
-      return result;
+      // Use Home Assistant's template rendering system
+      return this.hass.callWS({
+        type: "render_template",
+        template: template,
+        entity_ids: [],
+      });
     } catch (error) {
       console.error("Error evaluating template:", error);
       return null;
@@ -3039,35 +3055,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       composed: true,
     });
     this.dispatchEvent(event);
-  }
-
-  static _getComputedColor(variable) {
-    const style = getComputedStyle(document.documentElement);
-    let value = style.getPropertyValue(variable).trim();
-    
-    if (value.startsWith("#")) {
-      return this._expandHexColor(value);
-    } else if (value.startsWith("rgb")) {
-      // Handle both rgb and rgba
-      const parts = value.match(/[\d.]+/g);
-      if (parts.length >= 3) {
-        const r = parseInt(parts[0]);
-        const g = parseInt(parts[1]);
-        const b = parseInt(parts[2]);
-        const a = parts.length === 4 ? parseFloat(parts[3]) : 1;
-        
-        if (a < 1) {
-          // Return rgba for transparent colors
-          return `rgba(${r}, ${g}, ${b}, ${a})`;
-        } else {
-          // Convert to hex for opaque colors
-          return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
-        }
-      }
-    }
-    
-    // Return the original value if it's not a recognized format
-    return value;
   }
   
   static _getComputedColor(variable) {

@@ -3,8 +3,8 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version, setVersion } from "./version.js?v=21";
-setVersion("V1.6.6-beta1");
+import { version, setVersion } from "./version.js?v=22";
+setVersion("V1.6.6-beta2");
 
 const sensorModule = await import("./sensors.js?v=" + version);
 const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn } = sensorModule;
@@ -1120,6 +1120,14 @@ class UltraVehicleCard extends localize(LitElement) {
       icon = customIcon.inactive || state.attributes.icon || defaultIcon;
     }
 
+    // Check if the icon is a template
+    if (this.isTemplateString(icon)) {
+      this.getIconFromTemplate(icon).then(renderedIcon => {
+        icon = renderedIcon || defaultIcon;
+        this.requestUpdate();
+      });
+    }
+
     // Determine which color to use
     const activeColor = 'var(--uvc-icon-active, var(--primary-color))';
     const inactiveColor = 'var(--uvc-icon-inactive, var(--primary-text-color))';
@@ -1398,20 +1406,21 @@ class UltraVehicleCard extends localize(LitElement) {
       charge_limit_entity: "",
       show_car_state: true,
       show_charge_limit: true,
-      cardBackgroundColor: "",
-      barBackgroundColor: "",
-      barFillColor: "",
-      limitIndicatorColor: "",
+      cardBackgroundColor: UltraVehicleCard._getComputedColor("--card-background-color"),
+      barBackgroundColor: UltraVehicleCard._getComputedColor("--card-background-color"),
+      barFillColor: UltraVehicleCard._getComputedColor("--primary-color"),
+      limitIndicatorColor: UltraVehicleCard._getComputedColor("--primary-text-color"),
       iconActiveColor: UltraVehicleCard._getComputedColor("--primary-color"),
-      iconInactiveColor: UltraVehicleCard._getComputedColor(
-        "--primary-text-color"
-      ),
-      carStateTextColor: "",
-      rangeTextColor: "",
-      percentageTextColor: "",
+      iconInactiveColor: UltraVehicleCard._getComputedColor("--primary-text-color"),
+      carStateTextColor: UltraVehicleCard._getComputedColor("--primary-text-color"),
+      rangeTextColor: UltraVehicleCard._getComputedColor("--primary-text-color"),
+      percentageTextColor: UltraVehicleCard._getComputedColor("--primary-text-color"),
+      cardTitleColor: UltraVehicleCard._getComputedColor("--primary-text-color"),
+      infoTextColor: UltraVehicleCard._getComputedColor("--secondary-text-color"),
+      barBorderColor: UltraVehicleCard._getComputedColor("--secondary-text-color"),
       icon_sizes: {},
       icon_labels: {},
-      useFormattedEntities: false,
+      useFormattedEntities: true,
       layoutType: "single",
     };
   }
@@ -1632,6 +1641,25 @@ class UltraVehicleCard extends localize(LitElement) {
     } else {
       this.style.setProperty('--vehicle-engine-on-image-height', '0px');
     }
+  }
+
+  async getIconFromTemplate(template) {
+    if (!template) return null;
+    try {
+      const renderedTemplate = await this.hass.callWS({
+        type: "render_template",
+        template: template,
+        entity_ids: [],
+      });
+      return renderedTemplate;
+    } catch (error) {
+      console.error("Error rendering icon template:", error);
+      return null;
+    }
+  }
+
+  isTemplateString(str) {
+    return str && (str.includes('{{') || str.includes('{%'));
   }
 }
 
