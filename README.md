@@ -56,6 +56,8 @@ If this card has made your dashboard a little more awesome or saved you from the
 
 ## Settings Tab
 
+<img width="300" alt="Screenshot 2024-09-26 at 1 19 37 PM" src="https://github.com/user-attachments/assets/79b43138-17c4-44d4-8fac-80966b47323b">
+
 The Settings tab allows you to configure the basic layout and appearance of your Ultra Vehicle Card. Here's a comprehensive guide to each option:
 
 ### Card Title
@@ -143,8 +145,9 @@ Available entities:
 - Ensure that the entities you select provide the correct type of data (e.g., percentage for battery level).
 - Use the visibility toggles to customize which information is displayed on your card.
 
-
 ## Icon Grid Configuration
+
+<img width="300" alt="Screenshot 2024-09-26 at 1 21 01 PM" src="https://github.com/user-attachments/assets/1927f5c0-977c-4ff4-9bbf-90f83e554e73">
 
 The icon grid allows you to add custom icons representing various entities related to your vehicle. Here's a detailed explanation of each option:
 
@@ -154,6 +157,9 @@ The icon grid allows you to add custom icons representing various entities relat
 3. The entity will appear in the grid with default settings.
 
 ### Row Separators
+
+<img width="300" alt="Screenshot 2024-09-26 at 1 21 12 PM" src="https://github.com/user-attachments/assets/718f5280-e462-4d84-b1a3-9761b4a2b6ca">
+
 Row separators help organize your icons into distinct groups.
 
 1. Click "Add Row Separator" to insert a separator.
@@ -165,6 +171,9 @@ Row separators help organize your icons into distinct groups.
    - **Vertical Alignment**: Set how icons align vertically within their row (top, middle, bottom).
 
 ### Icon Configuration
+
+<img width="300" alt="Screenshot 2024-09-26 at 1 21 26 PM" src="https://github.com/user-attachments/assets/62362632-ea5c-4ae4-a54b-0bc901a6c9c6">
+
 For each icon in the grid, you can customize its appearance and behavior:
 
 #### Icon Selection
@@ -237,8 +246,9 @@ Let's say you're adding an icon for your car's climate control:
 6. Add a label at the bottom showing "Climate".
 7. In state configuration, you might use an attribute like "hvac_action" to determine when it's truly active, rather than just being on but not actively cooling/heating.
 
-
 ## Customize Tab
+
+<img width="300" alt="Screenshot 2024-09-26 at 1 21 42 PM" src="https://github.com/user-attachments/assets/46780552-c508-4380-8a9e-cefb52c8f4a8">
 
 The Customize tab allows you to fine-tune the visual aspects of your Ultra Vehicle Card. Here's a comprehensive guide to each option:
 
@@ -302,6 +312,8 @@ This section lets you customize the colors of various elements in the card to ma
   - You can define multiple color stops for a dynamic visual representation.
 
 #### Gradient Configuration (when enabled):
+
+<img width="300" alt="Screenshot 2024-09-26 at 1 21 58 PM" src="https://github.com/user-attachments/assets/f5644915-4fac-4ed4-8aa1-76c0e535f0d4">
 
 1. **Adding Gradient Stops**
    - Click "Add Gradient Stop" to insert a new color point.
