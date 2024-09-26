@@ -364,4 +364,4 @@ By carefully customizing these visual elements, you can create a card that not o
 
 **Note**: All configuration is done through the graphical interface - no manual code editing is required! You can of course use code if needed.
 
-[<img alt="Discord" width="320px" src="https://github.com/user-attachments/assets/d924143e-e6fd-48f0-82f0-9bbd85e0235c" />](https://www.discord.gg/6xVgHxzzBV/)
+[<img alt="Discord" width="320px" src="https://github.com/user-attachments/assets/d924143e-e6fd-48f0-82f0-9bbd85e0235c" />](https://www.discord.gg/6xVgHxzzBV)
