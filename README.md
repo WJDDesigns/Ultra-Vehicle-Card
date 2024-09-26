@@ -10,6 +10,14 @@ This custom card allows you to display vehicle information in your Home Assistan
 
 ### HACS (Recommended)
 
+UVC is available in HACS (Home Assistant Community Store).
+
+Use this link to directly go to the repository in HACS
+
+[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)]([https://my.home-assistant.io/redirect/hacs_repository/?owner=piitaya&repository=lovelace-mushroom](https://my.home-assistant.io/redirect/hacs_repository/?owner=wjddesigns&repository=ultra-vehicle-card&category=plugin))
+
+### Alternate HACS Install method
+
 1. Make sure you have [HACS](https://hacs.xyz/) installed in your Home Assistant instance.
 2. Go to HACS > Frontend
 3. Click on the three dots in the top right corner and select "Custom repositories."
@@ -31,8 +39,6 @@ lovelace:
     - url: /local/ultra-vehicle-card.js
       type: module
 ```     
-
-[![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)]([https://my.home-assistant.io/redirect/hacs_repository/?owner=piitaya&repository=lovelace-mushroom](https://my.home-assistant.io/redirect/hacs_repository/?owner=wjddesigns&repository=ultra-vehicle-card&category=plugin))
 
     
 ### Cool Tip
