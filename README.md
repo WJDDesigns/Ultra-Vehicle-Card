@@ -108,12 +108,14 @@ The Settings tab allows you to configure the basic layout and appearance of your
 ### Layout Type
 - **Purpose**: Determines the overall layout of the card.
 - **Options**:
-
-<img width="300" alt="Layout 1" src="[https://github.com/user-attachments/assets/79b43138-17c4-44d4-8fac-80966b47323b](https://github.com/user-attachments/assets/00a3bdf5-a943-4a4e-a03e-779b87c9b315)"><img width="300" alt="Layout 2" src="[https://github.com/user-attachments/assets/ed96680d-3bcb-44a3-bef4-5b3b5b5a754d]
-
+  Single Column: Vertical layout with image on top
+    
+    <img width="300" alt="Layout 1" src="https://github.com/user-attachments/assets/fa741fa2-428f-463b-a004-bbea96a55323">
+    
+  Double Column: Side-by-side layout with image on left
   
-  - Single Column: Vertical layout with image on top
-  - Double Column: Side-by-side layout with image on left
+    <img width="300" alt="Layout 2" src="https://github.com/user-attachments/assets/ed96680d-3bcb-44a3-bef4-5b3b5b5a754d">
+    
 - **Usage**: Choose based on your preferred aesthetic and available space.
 - **Note**: Double Column may work better for wider screens or sidebars.
 
@@ -360,21 +362,6 @@ This section lets you customize the colors of various elements in the card to ma
 
 By carefully customizing these visual elements, you can create a card that not only provides valuable information about your vehicle but also integrates beautifully with your Home Assistant dashboard's look and feel.
 
-## Using the Card
-
-1. Add the Ultra Vehicle Card to your dashboard
-2. Click to configure the card
-3. Fill in all the relevant information in the GUI
-4. Customize the appearance using the color pickers and style options
-5. Add and customize icons for additional functionality
-6. Save your configuration
-
-The card will display your vehicle's information, including its charge/fuel level, range, location, and any custom icons you've added. The appearance will update based on your color and style choices. This card works for both Dark and Light mode, which switching make sure you default all colors needed and it will use the default for that mode.
-
 **Note**: All configuration is done through the graphical interface - no manual code editing is required! You can of course use code if needed.
 
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4JVCZ46FZPUTG" target="_blank"> <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" style="width: 150px; height: auto;" />
-</a>
-
-
-Join our Discord: https://discord.gg/6xVgHxzzBV
+[<img alt="Discord" width="320px" src="https://github.com/user-attachments/assets/d924143e-e6fd-48f0-82f0-9bbd85e0235c" />](https://www.discord.gg/6xVgHxzzBV/)
