@@ -56,7 +56,7 @@ If this card has made your dashboard a little more awesome or saved you from the
 
 ## Settings Tab
 
-<img width="300" alt="Screenshot 2024-09-26 at 1 19 37 PM" src="https://github.com/user-attachments/assets/79b43138-17c4-44d4-8fac-80966b47323b">
+<img width="300" alt="Settings Tab" src="https://github.com/user-attachments/assets/79b43138-17c4-44d4-8fac-80966b47323b">
 
 The Settings tab allows you to configure the basic layout and appearance of your Ultra Vehicle Card. Here's a comprehensive guide to each option:
 
@@ -108,6 +108,10 @@ The Settings tab allows you to configure the basic layout and appearance of your
 ### Layout Type
 - **Purpose**: Determines the overall layout of the card.
 - **Options**:
+
+<img width="300" alt="Layout 1" src="[https://github.com/user-attachments/assets/79b43138-17c4-44d4-8fac-80966b47323b](https://github.com/user-attachments/assets/00a3bdf5-a943-4a4e-a03e-779b87c9b315)"><img width="300" alt="Layout 2" src="[https://github.com/user-attachments/assets/ed96680d-3bcb-44a3-bef4-5b3b5b5a754d]
+
+  
   - Single Column: Vertical layout with image on top
   - Double Column: Side-by-side layout with image on left
 - **Usage**: Choose based on your preferred aesthetic and available space.
@@ -147,7 +151,7 @@ Available entities:
 
 ## Icon Grid Configuration
 
-<img width="300" alt="Screenshot 2024-09-26 at 1 21 01 PM" src="https://github.com/user-attachments/assets/1927f5c0-977c-4ff4-9bbf-90f83e554e73">
+<img width="300" alt="Icon Grid Tab" src="https://github.com/user-attachments/assets/1927f5c0-977c-4ff4-9bbf-90f83e554e73">
 
 The icon grid allows you to add custom icons representing various entities related to your vehicle. Here's a detailed explanation of each option:
 
@@ -158,7 +162,7 @@ The icon grid allows you to add custom icons representing various entities relat
 
 ### Row Separators
 
-<img width="300" alt="Screenshot 2024-09-26 at 1 21 12 PM" src="https://github.com/user-attachments/assets/718f5280-e462-4d84-b1a3-9761b4a2b6ca">
+<img width="300" alt="Separator Options" src="https://github.com/user-attachments/assets/718f5280-e462-4d84-b1a3-9761b4a2b6ca">
 
 Row separators help organize your icons into distinct groups.
 
@@ -172,7 +176,7 @@ Row separators help organize your icons into distinct groups.
 
 ### Icon Configuration
 
-<img width="300" alt="Screenshot 2024-09-26 at 1 21 26 PM" src="https://github.com/user-attachments/assets/62362632-ea5c-4ae4-a54b-0bc901a6c9c6">
+<img width="300" alt="Icon Config" src="https://github.com/user-attachments/assets/62362632-ea5c-4ae4-a54b-0bc901a6c9c6">
 
 For each icon in the grid, you can customize its appearance and behavior:
 
@@ -248,7 +252,7 @@ Let's say you're adding an icon for your car's climate control:
 
 ## Customize Tab
 
-<img width="300" alt="Screenshot 2024-09-26 at 1 21 42 PM" src="https://github.com/user-attachments/assets/46780552-c508-4380-8a9e-cefb52c8f4a8">
+<img width="300" alt="Customize Tab" src="https://github.com/user-attachments/assets/46780552-c508-4380-8a9e-cefb52c8f4a8">
 
 The Customize tab allows you to fine-tune the visual aspects of your Ultra Vehicle Card. Here's a comprehensive guide to each option:
 
@@ -313,7 +317,7 @@ This section lets you customize the colors of various elements in the card to ma
 
 #### Gradient Configuration (when enabled):
 
-<img width="300" alt="Screenshot 2024-09-26 at 1 21 58 PM" src="https://github.com/user-attachments/assets/f5644915-4fac-4ed4-8aa1-76c0e535f0d4">
+<img width="300" alt="Gradient Bar" src="https://github.com/user-attachments/assets/f5644915-4fac-4ed4-8aa1-76c0e535f0d4">
 
 1. **Adding Gradient Stops**
    - Click "Add Gradient Stop" to insert a new color point.
