@@ -160,7 +160,7 @@ export default {
     percentage: "Procent",
     color: "Farve",
     cardTitleColor: "Kort Titelfarve",
-    add_gradient_stop: "Tilføj Gradient Stop"
+    add_gradient_stop: "Tilføj Gradient Stop",
     reset_all_colors: "Nulstil Alle Farver",
     reset_all_icon_colors: "Nulstil Alle Ikonfarver",
     settings: "Indstillinger",
