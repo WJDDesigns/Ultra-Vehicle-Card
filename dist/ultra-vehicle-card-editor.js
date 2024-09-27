@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=22";
+import { version } from "./version.js?v=23";
 import './state-dropdown.js';
 
 const stl = await import("./styles.js?v=" + version);
