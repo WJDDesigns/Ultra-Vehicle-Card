@@ -534,8 +534,12 @@ class UltraVehicleCard extends localize(LitElement) {
       : null;
 
     const batteryLevel = batteryLevelEntity
-      ? parseFloat(batteryLevelEntity.state)
-      : null;
+	  ? parseFloat(formatEntityValue(
+        batteryLevelEntity,
+        this.config.useFormattedEntities,
+        this.hass,
+        this.localize))
+	  : null;
     const batteryRange = formatEntityValue(
       batteryRangeEntity,
       this.config.useFormattedEntities,
@@ -543,8 +547,12 @@ class UltraVehicleCard extends localize(LitElement) {
       this.localize
     );
     const fuelLevel = fuelLevelEntity
-      ? parseFloat(fuelLevelEntity.state)
-      : null;
+	  ? parseFloat(formatEntityValue(
+        fuelLevelEntity,
+        this.config.useFormattedEntities,
+        this.hass,
+        this.localize))
+	  : null;
     const fuelRange = formatEntityValue(
       fuelRangeEntity,
       this.config.useFormattedEntities,
@@ -1685,5 +1693,3 @@ console.info(
   "background-color: #4299D9;color: #fff;padding: 3px 2px 3px 3px;border-radius: 14px 0 0 14px;font-family: DejaVu Sans,Verdana,Geneva,sans-serif;text-shadow: 0 1px 0 rgba(1, 1, 1, 0.3)",
   "background-color: #4299D9;color: #fff;padding: 3px 3px 3px 2px;border-radius: 0 14px 14px 0;font-family: DejaVu Sans,Verdana,Geneva,sans-serif;text-shadow: 0 1px 0 rgba(1, 1, 1, 0.3)"
 );
-
-
