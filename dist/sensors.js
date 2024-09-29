@@ -51,7 +51,7 @@ function formatGenericState(state) {
   return state.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
 
-export function getIconActiveState(entityId, hass, config) {
+export async function getIconActiveState(entityId, hass, config) {
   const state = hass.states[entityId];
   if (!state) return false;
   const stateStr = state.state.toLowerCase();
@@ -65,7 +65,8 @@ export function getIconActiveState(entityId, hass, config) {
     if (activeState === 'default') {
       return isActiveState(stateStr);
     } else if (activeState.startsWith('template:')) {
-      // ... existing template handling ...
+      const renderResult = await hass.callApi("post", "template", {template: activeState.slice(9)});
+      return renderResult === "True" ? true : false;
     } else if (activeState.startsWith('attribute:')) {
       const [, attributeName, attributeValue] = activeState.split(':');
       return state.attributes[attributeName] === attributeValue;
@@ -80,7 +81,8 @@ export function getIconActiveState(entityId, hass, config) {
     if (inactiveState === 'default') {
       return !isActiveState(stateStr);
     } else if (inactiveState.startsWith('template:')) {
-      // ... existing template handling ...
+      const renderResult = await hass.callApi("post", "template", {template: inactiveState.slice(9)});
+      return renderResult === "True" ? true : false;
     } else if (inactiveState.startsWith('attribute:')) {
       const [, attributeName, attributeValue] = inactiveState.split(':');
       return state.attributes[attributeName] !== attributeValue;
