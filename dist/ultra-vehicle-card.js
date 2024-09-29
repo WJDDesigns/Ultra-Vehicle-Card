@@ -1,4 +1,4 @@
-aimport {
+import {
   LitElement,
   html,
   css,
