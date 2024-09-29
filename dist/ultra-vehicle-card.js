@@ -3,6 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
+import { until } from "https://unpkg.com/lit-html@1.4.1/directives/until.js?module";
 import { version, setVersion } from "./version.js?v=23";
 setVersion("V1.6.6");
 
@@ -1048,7 +1049,7 @@ class UltraVehicleCard extends localize(LitElement) {
                 : "center"};
             "
             >
-              ${currentRow.map((entityId) => this._renderIcon(entityId))}
+              ${currentRow.map((entityId) => until(this._renderIcon(entityId), html`<span>/span>`))}
             </div>
           `);
           currentRow = [];
@@ -1095,7 +1096,7 @@ class UltraVehicleCard extends localize(LitElement) {
             : "center"};
         "
         >
-          ${currentRow.map((entityId) => this._renderIcon(entityId))}
+          ${currentRow.map((entityId) => until(this._renderIcon(entityId), html`<span></span>`))}
         </div>
       `);
     }
@@ -1103,12 +1104,12 @@ class UltraVehicleCard extends localize(LitElement) {
     return html`${rows}`;
   }
 
-  _renderIcon(entityId) {
+  async _renderIcon(entityId) {
     const state = this.hass.states[entityId];
     if (!state) return html``;
 
     const customIcon = this.config.custom_icons?.[entityId] || {};
-    const isActive = getIconActiveState(entityId, this.hass, customIcon);
+    const isActive = await getIconActiveState(entityId, this.hass, customIcon);
     const defaultIcon = "mdi:help-circle";
     
 
@@ -1121,13 +1122,15 @@ class UltraVehicleCard extends localize(LitElement) {
     }
 
     // Check if the icon is a template
+    /*
     if (this.isTemplateString(icon)) {
       this.getIconFromTemplate(icon).then(renderedIcon => {
         icon = renderedIcon || defaultIcon;
         this.requestUpdate();
       });
     }
-
+    */
+   
     // Determine which color to use
     const activeColor = 'var(--uvc-icon-active, var(--primary-color))';
     const inactiveColor = 'var(--uvc-icon-inactive, var(--primary-text-color))';
