@@ -1890,14 +1890,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   _handleStateConfigChange(e) {
     const { config, entityId, stateType, attributeValue } = e.detail;
-    let newConfig = { ...this.config };
-    
-    if (!newConfig.custom_icons) {
-      newConfig.custom_icons = {};
-    }
-    if (!newConfig.custom_icons[entityId]) {
-      newConfig.custom_icons[entityId] = {};
-    }
+    let newConfig = { ...this.config, custom_icons: {...this.config?.custom_icons, [entityId]: {...this.config?.custom_icons?.[entityId]} }};
     
     newConfig.custom_icons[entityId][`${stateType}State`] = config[`${stateType}State`];
     
@@ -2941,14 +2934,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   _handleStateConfigChange(e) {
     const { config, entityId, stateType, attributeValue } = e.detail;
-    let newConfig = { ...this.config };
-    
-    if (!newConfig.custom_icons) {
-      newConfig.custom_icons = {};
-    }
-    if (!newConfig.custom_icons[entityId]) {
-      newConfig.custom_icons[entityId] = {};
-    }
+    let newConfig = { ...this.config, custom_icons: {...this.config?.custom_icons, [entityId]: {...this.config?.custom_icons?.[entityId]} }};
     
     newConfig.custom_icons[entityId][`${stateType}State`] = config[`${stateType}State`];
     
