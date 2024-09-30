@@ -1161,7 +1161,8 @@ class UltraVehicleCard extends localize(LitElement) {
       this.hass,
       this.localize
     );
-    const labelText = formattedValue;
+    const customLabel = this.config.custom_labels?.[entityId]?.[isActive ? 'active' : 'inactive'];
+    const labelText = customLabel || formattedValue;
 
     // Calculate label size based on icon size
     const labelSize = iconSize > 28 ? Math.round(iconSize * 0.5) : 14;
@@ -1431,6 +1432,7 @@ class UltraVehicleCard extends localize(LitElement) {
       barBorderColor: UltraVehicleCard._getComputedColor("--secondary-text-color"),
       icon_sizes: {},
       icon_labels: {},
+      custom_labels: {},
       useFormattedEntities: true,
       layoutType: "single",
     };

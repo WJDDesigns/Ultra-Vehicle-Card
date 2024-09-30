@@ -166,6 +166,9 @@ export default {
     settings: "Settings",
     icon_grid: "Icon Grid",
     customize: "Customize",
+    inactive_custom_label: "Inactive Custom Label",
+    active_custom_label: "Active Custom Label",
+    custom_label_placeholder: "Enter custom label"
   },
   device_class: {
     battery: {

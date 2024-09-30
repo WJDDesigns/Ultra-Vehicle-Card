@@ -283,6 +283,21 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       window.addEventListener('dialog-closed', this._preventDialogClose, true);
     } 
   }
+  _getCustomLabel(entityId, state) {
+    return this.config.custom_labels?.[entityId]?.[state] || '';
+  }
+
+  _customLabelChanged(e, entityId, state) {
+    const value = e.target.value;
+    if (!this.config.custom_labels) {
+      this.config.custom_labels = {};
+    }
+    if (!this.config.custom_labels[entityId]) {
+      this.config.custom_labels[entityId] = {};
+    }
+    this.config.custom_labels[entityId][state] = value;
+    this._updateConfigAndRequestUpdate('custom_labels', this.config.custom_labels);
+  }
 
   _removeDialogCloseHandlers() {
     const dialog = this.closest('ha-dialog');
@@ -1130,6 +1145,13 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 "inactive",
                 inactiveColor
               )}
+              <label>${this.localize("editor.inactive_custom_label")}</label>
+               <input
+                 type="text"
+                 .value="${this._getCustomLabel(entityId, 'inactive')}"
+                 @input="${(e) => this._customLabelChanged(e, entityId, 'inactive')}"
+                 placeholder="${this.localize("editor.custom_label_placeholder")}"
+               />
             </div>
             <div class="editor-item">
               ${this._renderIconColorPicker(
@@ -1138,8 +1160,16 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 "active",
                 activeColor
               )}
+                <label>${this.localize("editor.active_custom_label")}</label>
+               <input
+                 type="text"
+                 .value="${this._getCustomLabel(entityId, 'active')}"
+                 @input="${(e) => this._customLabelChanged(e, entityId, 'active')}"
+                 placeholder="${this.localize("editor.custom_label_placeholder")}"
+               />
             </div>
           </div>
+          <div class="divider"></div>
           <div class="editor-row">
             <div class="editor-item">
               <label>${this.localize("editor.icon_style")}</label>
