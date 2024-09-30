@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=25";
+import { version } from "./version.js?v=26";
 import './state-dropdown.js';
 
 const stl = await import("./styles.js?v=" + version);
@@ -1798,9 +1798,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _renderColorPicker(label, configKey, defaultValue) {
-    // Fetch the default color value from the theme
-    const themeColor = UltraVehicleCardEditor._getComputedColor(defaultValue);
-    const currentValue = UltraVehicleCardEditor._expandHexColor(this.config[configKey] || themeColor);
+    const currentValue = this.config[configKey] || defaultValue;
     const textColor = this._getContrastYIQ(currentValue);
   
     return html`
@@ -1821,7 +1819,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
             ></ha-icon>
             <input
               type="color"
-              .value="${currentValue.startsWith('rgba') ? this._rgbaToHex(currentValue) : currentValue}"
+              .value="${currentValue}"
               @input="${(e) => this._colorChanged(e, configKey)}"
               class="color-input"
             />
@@ -1836,40 +1834,46 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     `;
   }
 
+  _colorChanged(e, configKey) {
+    const color = e.target.value;
+    this._userChangedColors[configKey] = color !== this._defaultColors[configKey];
+    this._debouncedColorChanged(configKey, color);
+  }
+
+  _debouncedColorChanged(configKey, color) {
+    // Clean up and potentially expand the color before applying
+    const cleanedColor = this._cleanAndExpandColor(color);
+    this.config = { ...this.config, [configKey]: cleanedColor };
+    this.configChanged(this.config);
+  }
+
+  _cleanAndExpandColor(color) {
+    // Remove any non-hex characters
+    color = color.replace(/[^0-9A-Fa-f#]/g, '');
+
+    // Ensure only one '#' at the start
+    color = color.replace(/#+/g, '#');
+    if (color.includes('#') && !color.startsWith('#')) {
+      color = '#' + color.replace('#', '');
+    }
+
+    return color;
+  }
+
+  _expandHexColor(color) {
+    return '#' + color.slice(1).split('').map(char => char + char).join('');
+  }
+
   _rgbaToHex(rgba) {
     const [r, g, b] = rgba.match(/\d+/g).map(Number);
     return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
   }
 
   static _expandHexColor(color) {
-    if (color && color.charAt(0) === '#' && color.length === 4) {
+    if (color && color.charAt(0) === '#' && color.length === 0) {
       return color.replace(/([0-9A-F])/gi, '$1$1');
     }
     return color;
-  }
-
-  _colorChanged(e, configKey) {
-    const color = UltraVehicleCardEditor._expandHexColor(e.target.value);
-    this._userChangedColors[configKey] = color !== this._defaultColors[configKey];
-    this._applyColorChange(configKey, color);
-  }
-
-  _updateCardTitleColor(color) {
-    const event = new CustomEvent("config-changed", {
-      detail: { config: { ...this.config, cardTitleColor: color } },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(event);
-  }
-
-  _updateSingleColor(configKey, color) {
-    const event = new CustomEvent("config-changed", {
-      detail: { config: { ...this.config, [configKey]: color } },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(event);
   }
 
   _resetColor(configKey, defaultValue, e) {

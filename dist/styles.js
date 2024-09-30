@@ -20,6 +20,9 @@ export const styles = css`
   :host([theme="dark"]) {
     --uvc-icon-background: var(--uvc-icon-background-dark);
   }
+    .color-preview:active, .reset-icon:active {
+  opacity: 0.7;
+}
 
   .progress {
     background-color: var(--uvc-primary-color);
