@@ -166,6 +166,9 @@ export default {
     settings: "Indstillinger",
     icon_grid: "Ikongitter",
     customize: "Tilpas",
+    inactive_custom_label: "Inaktiv brugerdefineret etiket",
+    active_custom_label: "Aktiv brugerdefineret etiket",
+    custom_label_placeholder: "Indtast brugerdefineret etiket"
   },
   device_class: {
     battery: {

@@ -147,7 +147,11 @@ export default {
     reset_all_colors: "Tilbakestill alle farger",
     reset_all_icon_colors: "Tilbakestill alle ikonfarger",
     settings: "Innstillinger",
-    customize: "Tilpass"
+    icon_grid: "Ikonrutenett",
+    customize: "Tilpass",
+    inactive_custom_label: "Inaktiv tilpassa etikett",
+   active_custom_label: "Aktiv tilpassa etikett",
+    custom_label_placeholder: "Skriv inn tilpassa etikett"
   },
   device_class: {
     battery: {

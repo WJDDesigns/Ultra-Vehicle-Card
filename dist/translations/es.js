@@ -143,7 +143,11 @@ export default {
     bar_gradient_description: "Habilita un gradiente de color para la barra de progreso. Esto te permite establecer múltiples puntos de color para una representación visual más dinámica del estado del vehículo.",
     percentage: "Porcentaje",
     color: "Color",
-    add_gradient_stop: "Añadir punto de gradiente"
+    add_gradient_stop: "Añadir punto de gradiente",
+    customize: "Personalizar",
+    inactive_custom_label: "Etiqueta personalizada inactiva",
+    active_custom_label: "Etiqueta personalizada activa",
+    custom_label_placeholder: "Ingrese etiqueta personalizada"
   },
   device_class: {
     battery: {

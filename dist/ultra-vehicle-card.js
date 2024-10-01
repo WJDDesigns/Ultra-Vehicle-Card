@@ -1057,7 +1057,7 @@ class UltraVehicleCard extends localize(LitElement) {
                 : "center"};
             "
             >
-              ${currentRow.map((entityId) => until(this._renderIcon(entityId), html`<span>/span>`))}
+              ${currentRow.map((entityId) => until(this._renderIcon(entityId)))}
             </div>
           `);
           currentRow = [];
@@ -1104,7 +1104,7 @@ class UltraVehicleCard extends localize(LitElement) {
             : "center"};
         "
         >
-          ${currentRow.map((entityId) => until(this._renderIcon(entityId), html`<span></span>`))}
+          ${currentRow.map((entityId) => until(this._renderIcon(entityId)))}
         </div>
       `);
     }

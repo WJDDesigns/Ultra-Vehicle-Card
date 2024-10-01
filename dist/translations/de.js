@@ -143,7 +143,10 @@ export default {
     bar_gradient_description: "Aktivieren Sie einen Farbverlauf für den Fortschrittsbalken. Dies ermöglicht es Ihnen, mehrere Farbstopps für eine dynamischere visuelle Darstellung des Fahrzeugstatus festzulegen.",
     percentage: "Prozentsatz",
     color: "Farbe",
-    add_gradient_stop: "Gradientenstopp hinzufügen"
+    add_gradient_stop: "Gradientenstopp hinzufügen",
+    inactive_custom_label: "Inaktives benutzerdefiniertes Label",
+active_custom_label: "Aktives benutzerdefiniertes Label",
+custom_label_placeholder: "Benutzerdefiniertes Label eingeben"
   },
   device_class: {
     battery: {

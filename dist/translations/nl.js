@@ -147,7 +147,11 @@ export default {
     reset_all_colors: "Alle kleuren resetten",
     reset_all_icon_colors: "Alle icoonkleuren resetten",
     settings: "Instellingen",
-    customize: "Aanpassen"
+    icon_grid: "Iconenraster",
+    customize: "Aanpassen",
+    inactive_custom_label: "Inactief aangepast label",
+    active_custom_label: "Actief aangepast label",
+    custom_label_placeholder: "Voer aangepast label in"
   },
   device_class: {
     battery: {

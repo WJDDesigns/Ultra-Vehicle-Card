@@ -147,7 +147,11 @@ export default {
     reset_all_colors: "Återställ alla färger",
     reset_all_icon_colors: "Återställ alla ikonfärger",
     settings: "Inställningar",
-    customize: "Anpassa"
+    icon_grid: "Ikonrutnät", // This entry already exists
+    customize: "Anpassa", // This entry already exists
+    inactive_custom_label: "Inaktiv anpassad etikett",
+    active_custom_label: "Aktiv anpassad etikett",
+    custom_label_placeholder: "Ange anpassad etikett"
   },
   device_class: {
     battery: {
