@@ -150,8 +150,10 @@ export default {
     icon_grid: "Ikonrutenett",
     customize: "Tilpass",
     inactive_custom_label: "Inaktiv tilpassa etikett",
-   active_custom_label: "Aktiv tilpassa etikett",
-    custom_label_placeholder: "Skriv inn tilpassa etikett"
+    active_custom_label: "Aktiv tilpassa etikett",
+    custom_label_placeholder: "Skriv inn tilpassa etikett",
+    template_mode: "Malskildringsmodus",
+    template_mode_description: "Skriv inn malskildringa di nedanfor. For å gå ut av malskildringsmodus, vel ein annan tilstand frå nedtrekkslista ovanfor. Bruk {{ true }} og {{ false }} som uttrykk for å representere på- og av-tilstandar."
   },
   device_class: {
     battery: {

@@ -151,7 +151,9 @@ export default {
     customize: "Aanpassen",
     inactive_custom_label: "Inactief aangepast label",
     active_custom_label: "Actief aangepast label",
-    custom_label_placeholder: "Voer aangepast label in"
+    custom_label_placeholder: "Voer aangepast label in",
+    template_mode: "Sjabloonmodus",
+    template_mode_description: "Voer hieronder uw sjablooncode in. Om de sjabloonmodus te verlaten, selecteert u een andere status uit de bovenstaande vervolgkeuzelijst. Gebruik {{ true }} en {{ false }} als uitdrukkingen om aan- en uit-toestanden weer te geven."
   },
   device_class: {
     battery: {

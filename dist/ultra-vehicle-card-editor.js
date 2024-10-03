@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=29";
+import { version } from "./version.js?v=30";
 import './state-dropdown.js';
 
 const stl = await import("./styles.js?v=" + version);
@@ -1136,8 +1136,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       customIcon.inactiveColor ||
       UltraVehicleCardEditor._getComputedColor("--primary-text-color");
 
-    console.log(`Rendering entity: ${entityId}, isActiveTemplate: ${isActiveTemplate}, isInactiveTemplate: ${isInactiveTemplate}`);
-
     return html`
       <div
         class="selected-entity"
@@ -1186,6 +1184,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
           const inactiveColor = customIcon.inactiveColor || UltraVehicleCardEditor._getComputedColor("--primary-text-color");
           const isActiveTemplate = this._isTemplateSelected(entityId, 'active');
           const isInactiveTemplate = this._isTemplateSelected(entityId, 'inactive');
+          const iconLabelPosition = (this.config.icon_labels && this.config.icon_labels[entityId]) || "none";
           
           return html`
         <div
@@ -1210,6 +1209,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 .config=${this.config.custom_icons?.[entityId] || {}}
                 .entityId=${entityId}
                 .stateType=${'inactive'}
+                .localize=${this.localize}
                 @state-dropdown-changed=${this._handleStateConfigChange}
                 @template-selected=${(e) => this._handleTemplateSelected(e, entityId, 'inactive')}
                 ?disableDropdown=${isActiveTemplate}
@@ -1231,6 +1231,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 .config=${this.config.custom_icons?.[entityId] || {}}
                 .entityId=${entityId}
                 .stateType=${'active'}
+                .localize=${this.localize}
                 @state-dropdown-changed=${this._handleStateConfigChange}
                 @template-selected=${(e) => this._handleTemplateSelected(e, entityId, 'active')}
                 ?disableDropdown=${isInactiveTemplate}
@@ -1245,13 +1246,15 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 "inactive",
                 inactiveColor
               )}
-              <label>${this.localize("editor.inactive_custom_label")}</label>
-               <input
-                 type="text"
-                 .value="${this._getCustomLabel(entityId, 'inactive')}"
-                 @input="${(e) => this._customLabelChanged(e, entityId, 'inactive')}"
-                 placeholder="${this.localize("editor.custom_label_placeholder")}"
-               />
+              ${iconLabelPosition !== "none" ? html`
+                <label>${this.localize("editor.inactive_custom_label")}</label>
+                <input
+                  type="text"
+                  .value="${this._getCustomLabel(entityId, 'inactive')}"
+                  @input="${(e) => this._customLabelChanged(e, entityId, 'inactive')}"
+                  placeholder="${this.localize("editor.custom_label_placeholder")}"
+                />
+              ` : ''}
             </div>
             <div class="editor-item">
               ${this._renderIconColorPicker(
@@ -1260,13 +1263,15 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 "active",
                 activeColor
               )}
+              ${iconLabelPosition !== "none" ? html`
                 <label>${this.localize("editor.active_custom_label")}</label>
-               <input
-                 type="text"
-                 .value="${this._getCustomLabel(entityId, 'active')}"
-                 @input="${(e) => this._customLabelChanged(e, entityId, 'active')}"
-                 placeholder="${this.localize("editor.custom_label_placeholder")}"
-               />
+                <input
+                  type="text"
+                  .value="${this._getCustomLabel(entityId, 'active')}"
+                  @input="${(e) => this._customLabelChanged(e, entityId, 'active')}"
+                  placeholder="${this.localize("editor.custom_label_placeholder")}"
+                />
+              ` : ''}
             </div>
           </div>
           <div class="divider"></div>
@@ -1307,9 +1312,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
             <div class="editor-item">
               <label>${this.localize("editor.icon_label_position")}</label>
               <select
-                .value=${(this.config.icon_labels &&
-                  this.config.icon_labels[entityId]) ||
-                "none"}
+                .value=${iconLabelPosition}
                 @change=${(e) =>
                   this._updateIconLabel(entityId, e.target.value)}
               >
@@ -1499,15 +1502,11 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     // Stop propagation to prevent conflicts with drag events
     event.stopPropagation();
     
-    console.log(`Toggling entity details for ${entityId}`);
-    console.log(`Before toggle: ${JSON.stringify(this._expandedEntities)}`);
     
     this._expandedEntities = {
       ...this._expandedEntities,
       [entityId]: !this._expandedEntities[entityId]
     };
-    
-    console.log(`After toggle: ${JSON.stringify(this._expandedEntities)}`);
     
     this.requestUpdate();
   }

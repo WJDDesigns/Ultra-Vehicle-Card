@@ -4,8 +4,8 @@ import {
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 import { until } from "https://unpkg.com/lit-html@1.4.1/directives/until.js?module";
-import { version, setVersion } from "./version.js?v=29";
-setVersion("V1.6.7-beta6");
+import { version, setVersion } from "./version.js?v=30";
+setVersion("V1.6.7");
 
 const sensorModule = await import("./sensors.js?v=" + version);
 const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn } = sensorModule;
@@ -125,6 +125,9 @@ class UltraVehicleCard extends localize(LitElement) {
       ${styles}
       .ultra-vehicle-card {
         padding: 16px;
+      }
+      .ultra-vehicle-card.double-column {
+        padding: 0;
       }
       .double-column-container {
         display: flex;

@@ -151,7 +151,9 @@ export default {
     customize: "Anpassa", // This entry already exists
     inactive_custom_label: "Inaktiv anpassad etikett",
     active_custom_label: "Aktiv anpassad etikett",
-    custom_label_placeholder: "Ange anpassad etikett"
+    custom_label_placeholder: "Ange anpassad etikett",
+    template_mode: "Mallläge",
+    template_mode_description: "Ange din mallkod nedan. För att avsluta mallläget, välj ett annat tillstånd från rullgardinsmenyn ovan. Använd {{ true }} och {{ false }} som uttryck för att representera på- och av-tillstånd."
   },
   device_class: {
     battery: {

@@ -147,7 +147,9 @@ export default {
     reset_all_colors: "Reset All Colours",
     reset_all_icon_colors: "Reset All Icon Colours",
     settings: "Settings",
-    customize: "Customise"
+    customize: "Customise",
+    template_mode: "Template Mode",
+    template_mode_description: "Enter your template code below. To exit template mode, select a different state from the dropdown above. Use {{ true }} and {{ false }} like statements to represent on and off states."
   },
   device_class: {
     battery: {

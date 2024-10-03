@@ -11,6 +11,7 @@ class StateDropdown extends LitElement {
       templateValue: { type: String },
       attributeValue: { type: String },
       disableDropdown: { type: Boolean },
+      localize: { type: Function },
     };
   }
 
@@ -20,6 +21,7 @@ class StateDropdown extends LitElement {
     this.templateValue = '';
     this.attributeValue = '';
     this.disableDropdown = false;
+    this.localize = (key) => key; // Default to returning the key if no localize function is provided
   }
 
   updated(changedProperties) {
@@ -46,7 +48,6 @@ class StateDropdown extends LitElement {
   }
 
   render() {
-    console.log(`Rendering state-dropdown for ${this.entityId}, stateType: ${this.stateType}, value: ${this.value}`);
     const options = this._getOptions();
     const isTemplateSelected = this.value === 'template';
     
@@ -84,6 +85,10 @@ class StateDropdown extends LitElement {
           `)}
         </ha-select>
         ${this.value === 'template' ? html`
+          <div class="template-info">
+            <h4>${this.localize("editor.template_mode")}</h4>
+            <p>${this.localize("editor.template_mode_description")}</p>
+          </div>
           <div class="template-input">
             ${this._renderTemplateInput()}
           </div>

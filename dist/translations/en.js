@@ -168,7 +168,9 @@ export default {
     customize: "Customize",
     inactive_custom_label: "Inactive Custom Label",
     active_custom_label: "Active Custom Label",
-    custom_label_placeholder: "Enter custom label"
+    custom_label_placeholder: "Enter custom label",
+    template_mode: "Template Mode",
+    template_mode_description: "Enter your template code below. To exit template mode, select a different state from the dropdown above. Use {{ true }} and {{ false }} like statements to represent on and off states."
   },
   device_class: {
     battery: {

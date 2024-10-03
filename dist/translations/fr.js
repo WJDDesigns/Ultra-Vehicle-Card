@@ -147,7 +147,9 @@ export default {
     customize: "Personnaliser",
     inactive_custom_label: "Étiquette personnalisée inactive",
     active_custom_label: "Étiquette personnalisée active",
-    custom_label_placeholder: "Entrez une étiquette personnalisée"
+    custom_label_placeholder: "Entrez une étiquette personnalisée",
+    template_mode: "Mode modèle",
+    template_mode_description: "Entrez votre code de modèle ci-dessous. Pour quitter le mode modèle, sélectionnez un état différent dans la liste déroulante ci-dessus. Utilisez {{ true }} et {{ false }} comme expressions pour représenter les états activé et désactivé."
   },
   device_class: {
     battery: {

@@ -100,7 +100,7 @@ export default {
     charge_limit_description: "Velg enheten som representerer ladelimiten satt for kjøretøyet ditt.",
     location_description: "Velg enheten som gir den nåværende plasseringen til kjøretøyet ditt.",
     mileage_description: "Velg enheten som representerer total kjørelengde eller kilometerstand for kjøretøyet ditt.",
-    car_state_description: "Velg enheten som representerer den nåværende tilstanden til kjøretøyet ditt (f.eks. parkert, kj��rer, lader).",
+    car_state_description: "Velg enheten som representerer den nåværende tilstanden til kjøretøyet ditt (f.eks. parkert, kjrer, lader).",
     icon_grid_description: "Legg til enheter i ikonrutenettet. Søk og velg enheter å legge til. Bruk drahåndtaket for å omorganisere enheter. Klikk på ikonet for å endre det, og bruk (×) for å fjerne en enhet fra rutenettet.",
     custom_colors_description: "Tilpass fargene på ulike elementer i kortet for å matche din foretrukne stil eller tema.",
     row_separator: "Radskiller",
@@ -152,7 +152,9 @@ export default {
     customize: "Tilpass",
     inactive_custom_label: "Inaktiv tilpasset etikett",
     active_custom_label: "Aktiv tilpasset etikett",
-    custom_label_placeholder: "Skriv inn tilpasset etikett"
+    custom_label_placeholder: "Skriv inn tilpasset etikett",
+    template_mode: "Mal-modus",
+    template_mode_description: "Skriv inn malkoden din nedenfor. For å avslutte mal-modus, velg en annen tilstand fra rullegardinmenyen ovenfor. Bruk {{ true }} og {{ false }} som uttrykk for å representere på- og av-tilstander."
   },
   device_class: {
     battery: {

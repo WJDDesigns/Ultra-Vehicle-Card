@@ -147,7 +147,9 @@ export default {
     customize: "Personalizar",
     inactive_custom_label: "Etiqueta personalizada inactiva",
     active_custom_label: "Etiqueta personalizada activa",
-    custom_label_placeholder: "Ingrese etiqueta personalizada"
+    custom_label_placeholder: "Ingrese etiqueta personalizada",
+    template_mode: "Modo plantilla",
+    template_mode_description: "Ingrese su código de plantilla a continuación. Para salir del modo plantilla, seleccione un estado diferente del menú desplegable de arriba. Use {{ true }} y {{ false }} como expresiones para representar los estados de encendido y apagado."
   },
   device_class: {
     battery: {
