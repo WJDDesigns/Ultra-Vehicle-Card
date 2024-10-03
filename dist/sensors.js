@@ -65,8 +65,16 @@ export async function getIconActiveState(entityId, hass, config) {
     if (activeState === 'default') {
       return isActiveState(stateStr);
     } else if (activeState.startsWith('template:')) {
-      const renderResult = await hass.callApi("post", "template", {template: activeState.slice(9)});
-      return renderResult === "True" ? true : false;
+      const templateResp = await (new Promise((resolve, reject) => {
+        hass.connection.subscribeMessage(
+          (msg) => resolve(msg),
+          {
+            type: "render_template",
+            template: activeState.slice(9),
+          }
+        )
+      }));
+      return templateResp.result === true ? true : false;
     } else if (activeState.startsWith('attribute:')) {
       const [, attributeName, attributeValue] = activeState.split(':');
       return state.attributes[attributeName] === attributeValue;
