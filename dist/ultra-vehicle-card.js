@@ -126,6 +126,9 @@ class UltraVehicleCard extends localize(LitElement) {
       .ultra-vehicle-card {
         padding: 16px;
       }
+      .ultra-vehicle-card.double-column {
+        padding: 0;
+      }
       .double-column-container {
         display: flex;
         flex-direction: column;
