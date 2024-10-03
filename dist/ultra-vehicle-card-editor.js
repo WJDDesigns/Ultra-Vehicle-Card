@@ -1312,14 +1312,12 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
 
   _iconColorChanged(e, entityId, iconType) {
+    const newConfig = {...this.config, custom_icons: {...this.config?.custom_icons, [entityId]: {...this.config?.custom_icons?.[entityId]}}};
     const color = e.target.value;
-    if (!this.config.custom_icons[entityId]) {
-      this.config.custom_icons[entityId] = {};
-    }
-    this.config.custom_icons[entityId][`${iconType}Color`] = color;
+    newConfig.custom_icons[entityId][`${iconType}Color`] = color;
     this._updateConfigAndRequestUpdate(
       "custom_icons",
-      this.config.custom_icons
+      newConfig.custom_icons
     );
   }
 
