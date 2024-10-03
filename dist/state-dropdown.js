@@ -10,6 +10,7 @@ class StateDropdown extends LitElement {
       value: { type: String },
       templateValue: { type: String },
       attributeValue: { type: String },
+      disableDropdown: { type: Boolean },
     };
   }
 
@@ -18,6 +19,7 @@ class StateDropdown extends LitElement {
     this.value = 'default';
     this.templateValue = '';
     this.attributeValue = '';
+    this.disableDropdown = false;
   }
 
   updated(changedProperties) {
@@ -44,7 +46,9 @@ class StateDropdown extends LitElement {
   }
 
   render() {
+    console.log(`Rendering state-dropdown for ${this.entityId}, stateType: ${this.stateType}, value: ${this.value}`);
     const options = this._getOptions();
+    const isTemplateSelected = this.value === 'template';
     
     return html`
       <style>
@@ -56,7 +60,6 @@ class StateDropdown extends LitElement {
         }
         .template-input, .attribute-input {
           margin-top: 8px;
-          max-width: 230px;
         }
         .beta-warning {
           color: #ff9800;
@@ -64,19 +67,23 @@ class StateDropdown extends LitElement {
           margin-top: 4px;
           margin-bottom: 4px;
         }
+        ha-select[disabled] {
+          opacity: 0.5;
+          pointer-events: none;
+        }
       </style>
-      <div @click="${this._handleContainerClick}">
+      <div @click="${this._handleContainerClick}" class="${isTemplateSelected ? 'template-selected' : ''}" data-state-type="${this.stateType}">
         <ha-select
           .value=${this.value}
           @selected=${this._valueChanged}
           @closed=${this._handleClick}
+          ?disabled=${this.disableDropdown}
         >
           ${options.map(option => html`
             <mwc-list-item .value=${option.value}>${option.label}</mwc-list-item>
           `)}
         </ha-select>
         ${this.value === 'template' ? html`
-          <div class="beta-warning">BETA - USE AT OWN RISK</div>
           <div class="template-input">
             ${this._renderTemplateInput()}
           </div>
@@ -134,10 +141,7 @@ class StateDropdown extends LitElement {
         autocomplete-entities
         autocomplete-icons
         .hass=${this.hass}
-        style="width: 100%;
-        overflow: hidden;
-        resize: vertical;
-        max-width: 230px;"
+        style="width: 100%; overflow: hidden; resize: vertical;"
       ></ha-code-editor>
     `;
   }
@@ -156,6 +160,14 @@ class StateDropdown extends LitElement {
     }
     
     this.requestUpdate();
+
+    // Dispatch an event to notify the parent component about the template selection
+    const event = new CustomEvent('template-selected', {
+      detail: { selected: newValue === 'template', stateType: this.stateType },
+      bubbles: true,
+      composed: true
+    });
+    this.dispatchEvent(event);
   }
 
   _handleClick(e) {

@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=28";
+import { version } from "./version.js?v=29";
 import './state-dropdown.js';
 
 const stl = await import("./styles.js?v=" + version);
@@ -72,6 +72,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       _layoutType: { type: String },
       _showEngineAnimation: { type: Boolean },
       _showChargingAnimation: { type: Boolean },
+      _expandedEntities: { type: Object },
     };
   }
 
@@ -79,6 +80,27 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     return [
       styles,
       css`
+        .entity-header {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .entity-header .handle {
+      cursor: move;
+      padding-right: 8px;
+    }
+
+    .entity-header .remove-entity {
+      margin-left: auto;
+    }
+
+    .entity-name {
+      flex-grow: 1;
+      margin: 0 8px;
+    }
         .bar-gradient-section {
           margin-top: 16px;
         }
@@ -200,6 +222,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
         mwc-tab-bar {
           border-bottom: 1px solid var(--divider-color);
+          margin-bottom: 16px;
         }
 
 
@@ -249,6 +272,49 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
           text-align: center;
           margin-top: 2px;
         }
+           .editor-row.template-selected {
+      display: block;
+    }
+
+    .editor-row.template-selected .editor-item {
+      flex: 1 1 100%;
+      width: 100%;
+    }
+
+    state-dropdown {
+      display: block !important;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    ha-select {
+      width: 100%;
+    }
+
+    .template-input {
+      margin-top: 8px;
+      width: 100%;
+    }
+
+    .tab-bar {
+    display: flex;
+    margin-bottom: 16px;
+    justify-content: space-around;
+    flex-direction: row;
+    }
+    .tab {
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    .tab.active {
+      border-bottom-color: var(--primary-color);
+    }
+    .tab ha-icon {
+      margin-right: 8px;
+    }
       `
     ];
   }
@@ -268,6 +334,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this._userChangedColors = {};
     this._themeChangeListener = this._onThemeChange.bind(this);
     this._activeTab = "settings";
+    this._expandedEntities = {};
   }
 
   firstUpdated() {
@@ -526,11 +593,20 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
     return html`
       <div class="editor-container">
-        <mwc-tab-bar @MDCTabBar:activated=${this._handleTabChange}>
-          <mwc-tab id="tab-settings" label="${this.localize("editor.settings")}"></mwc-tab>
-          <mwc-tab id="tab-icon-grid" label="${this.localize("editor.icon_grid")}"></mwc-tab>
-          <mwc-tab id="tab-customize" label="${this.localize("editor.customize")}"></mwc-tab>
-        </mwc-tab-bar>
+        <div class="tab-bar">
+          <div class="tab ${this._activeTab === "settings" ? "active" : ""}" @click=${() => this._handleTabChange(0)}>
+            <ha-icon icon="mdi:cog"></ha-icon>
+            <span>${this.localize("editor.settings")}</span>
+          </div>
+          <div class="tab ${this._activeTab === "icon-grid" ? "active" : ""}" @click=${() => this._handleTabChange(1)}>
+            <ha-icon icon="mdi:apps"></ha-icon>
+            <span>${this.localize("editor.icon_grid")}</span>
+          </div>
+          <div class="tab ${this._activeTab === "customize" ? "active" : ""}" @click=${() => this._handleTabChange(2)}>
+            <ha-icon icon="mdi:palette"></ha-icon>
+            <span>${this.localize("editor.customize")}</span>
+          </div>
+        </div>
 
         <div class="tab-content">
           ${this._activeTab === "settings" ? html`
@@ -553,10 +629,10 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     `;
   }
 
-  _handleTabChange(e) {
-    const tabIds = ["tab-settings", "tab-icon-grid", "tab-customize"];
-    this._activeTab = tabIds[e.detail.index].replace("tab-", "");
-    this._refreshConfig(); // Refresh the configuration
+  _handleTabChange(index) {
+    const tabIds = ["settings", "icon-grid", "customize"];
+    this._activeTab = tabIds[index];
+    this._refreshConfig();
     this.requestUpdate();
   }
 
@@ -1040,6 +1116,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     if (entityId === "row-separator") {
       return this._renderRowSeparatorEditor(index);
     }
+    const isExpanded = this._expandedEntities[entityId] || false;
+    const isActiveTemplate = this._isTemplateSelected(entityId, 'active');
+    const isInactiveTemplate = this._isTemplateSelected(entityId, 'inactive');
     const sanitizedEntityId = entityId.replace(/\./g, "_");
     const entity = this.hass.states[entityId];
     const friendlyName = entity.attributes.friendly_name || entityId;
@@ -1048,7 +1127,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     const activeIcon = customIcon.active || defaultIcon || "mdi:help-circle";
     const inactiveIcon =
       customIcon.inactive || defaultIcon || "mdi:help-circle";
-    const interaction = this._iconInteractions[entityId] || { type: "none" };
+    const interaction = this._iconInteractions[entityId] || { type: "none"  };
     const buttonStyle = this._iconStyles[entityId] || "icon";
     const activeColor =
       customIcon.activeColor ||
@@ -1057,6 +1136,8 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       customIcon.inactiveColor ||
       UltraVehicleCardEditor._getComputedColor("--primary-text-color");
 
+    console.log(`Rendering entity: ${entityId}, isActiveTemplate: ${isActiveTemplate}, isInactiveTemplate: ${isInactiveTemplate}`);
+
     return html`
       <div
         class="selected-entity"
@@ -1064,7 +1145,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         @dragstart="${(e) => this._onDragStart(e, index)}"
         data-entity-id="${entityId}"
       >
-        <div class="entity-header">
+        <div class="entity-header" @click=${(e) => this._toggleEntityDetails(entityId, e)}>
           <div
             class="handle"
             @mousedown="${(e) => this._onDragStart(e, index)}"
@@ -1072,45 +1153,66 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
           >
             <ha-icon icon="mdi:drag"></ha-icon>
           </div>
-          <ha-icon
-            class="toggle-details"
-            icon="mdi:chevron-down"
-            @click="${() => this._toggleEntityDetails(entityId)}"
-          ></ha-icon>
+          <ha-icon icon=${isExpanded ? "mdi:chevron-up" : "mdi:chevron-down"}></ha-icon>
           <span class="entity-name">${friendlyName}</span>
           <ha-icon
             class="remove-entity"
             icon="mdi:close"
             @click="${() => this._removeIconGridEntity(index)}"
           ></ha-icon>
+          
         </div>
+        ${this._expandedEntities[entityId] ? html`
+          <div class="entity-details">
+            <!-- Existing entity details content -->
+            ${this._renderEntityDetails(entityId)}
+          </div>
+              ` : ''}
+      </div>
+    `;
+  }
+
+         
+        _renderEntityDetails(entityId) {
+          const sanitizedEntityId = entityId.replace(/\./g, "_");
+          const entity = this.hass.states[entityId];
+          const customIcon = this._customIcons[entityId] || {};
+          const defaultIcon = entity.attributes.icon;
+          const activeIcon = customIcon.active || defaultIcon || "mdi:help-circle";
+          const inactiveIcon = customIcon.inactive || defaultIcon || "mdi:help-circle";
+          const interaction = this._iconInteractions[entityId] || { type: "none" };
+          const buttonStyle = this._iconStyles[entityId] || "icon";
+          const activeColor = customIcon.activeColor || UltraVehicleCardEditor._getComputedColor("--primary-color");
+          const inactiveColor = customIcon.inactiveColor || UltraVehicleCardEditor._getComputedColor("--primary-text-color");
+          const isActiveTemplate = this._isTemplateSelected(entityId, 'active');
+          const isInactiveTemplate = this._isTemplateSelected(entityId, 'inactive');
+          
+          return html`
         <div
           class="entity-details"
           id="entity-details-${sanitizedEntityId}"
-          style="display: none;"
+          style="display: block;"
         >
-          <div class="editor-row">
+          <div class="editor-row ${isActiveTemplate || isInactiveTemplate ? 'template-selected' : ''}">
             <div class="editor-item">
               <label>${this.localize("editor.inactive_icon")}</label>
               <ha-icon-picker
                 .hass=${this.hass}
                 .value=${inactiveIcon === "no-icon" ? "" : inactiveIcon}
-                @value-changed=${(e) =>
-                  this._handleIconChange(e, "inactive", entityId)}
+                @value-changed=${(e) => this._handleIconChange(e, "inactive", entityId)}
               ></ha-icon-picker>
               <mwc-button
                 @click=${() => this._setNoIcon(entityId, "inactive")}
                 .selected=${inactiveIcon === "no-icon"}
-                >${inactiveIcon === "no-icon" ? "✓ " : ""}${this.localize(
-                  "editor.no_icon"
-                )}</mwc-button
-              >
+              >${inactiveIcon === "no-icon" ? "✓ " : ""}${this.localize("editor.no_icon")}</mwc-button>
               <state-dropdown
                 .hass=${this.hass}
                 .config=${this.config.custom_icons?.[entityId] || {}}
                 .entityId=${entityId}
                 .stateType=${'inactive'}
                 @state-dropdown-changed=${this._handleStateConfigChange}
+                @template-selected=${(e) => this._handleTemplateSelected(e, entityId, 'inactive')}
+                ?disableDropdown=${isActiveTemplate}
               ></state-dropdown>
             </div>
             <div class="editor-item">
@@ -1118,22 +1220,20 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               <ha-icon-picker
                 .hass=${this.hass}
                 .value=${activeIcon === "no-icon" ? "" : activeIcon}
-                @value-changed=${(e) =>
-                  this._handleIconChange(e, "active", entityId)}
+                @value-changed=${(e) => this._handleIconChange(e, "active", entityId)}
               ></ha-icon-picker>
               <mwc-button
                 @click=${() => this._setNoIcon(entityId, "active")}
                 .selected=${activeIcon === "no-icon"}
-                >${activeIcon === "no-icon" ? "✓ " : ""}${this.localize(
-                  "editor.no_icon"
-                )}</mwc-button
-              >
+              >${activeIcon === "no-icon" ? "✓ " : ""}${this.localize("editor.no_icon")}</mwc-button>
               <state-dropdown
                 .hass=${this.hass}
                 .config=${this.config.custom_icons?.[entityId] || {}}
                 .entityId=${entityId}
                 .stateType=${'active'}
                 @state-dropdown-changed=${this._handleStateConfigChange}
+                @template-selected=${(e) => this._handleTemplateSelected(e, entityId, 'active')}
+                ?disableDropdown=${isInactiveTemplate}
               ></state-dropdown>
             </div>
           </div>
@@ -1226,6 +1326,39 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         </div>
       </div>
     `;
+  }
+
+  _handleTemplateSelected(e, entityId, stateType) {
+    const otherStateType = stateType === 'active' ? 'inactive' : 'active';
+    const otherDropdown = this.shadowRoot.querySelector(`state-dropdown[data-entity-id="${entityId}"][data-state-type="${otherStateType}"]`);
+    
+    if (otherDropdown) {
+      otherDropdown.disableDropdown = e.detail.selected;
+      if (e.detail.selected) {
+        // Reset the other dropdown to 'default' if a template is selected
+        otherDropdown.value = 'default';
+        this._updateStateConfig(entityId, otherStateType, 'default');
+      }
+    }
+  
+    // Force a re-render of the entire entity details
+    this.requestUpdate();
+  }
+
+  _isTemplateSelected(entityId, stateType) {
+    const config = this.config.custom_icons?.[entityId] || {};
+    return config[`${stateType}State`]?.startsWith('template:') || false;
+  }
+
+  _updateStateConfig(entityId, stateType, value) {
+    if (!this.config.custom_icons) {
+      this.config.custom_icons = {};
+    }
+    if (!this.config.custom_icons[entityId]) {
+      this.config.custom_icons[entityId] = {};
+    }
+    this.config.custom_icons[entityId][`${stateType}State`] = value;
+    this.configChanged(this.config);
   }
 
   _toggleRowSeparatorDetails(index) {
@@ -1362,31 +1495,21 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this.configChanged(this.config);
   }
 
-  _toggleEntityDetails(entityId) {
-    // Sanitize the entity ID for use in the element ID
-    const sanitizedEntityId = entityId.replace(/\./g, "_");
-
-    // Find the details element using the sanitized ID
-    const detailsElement = this.shadowRoot.querySelector(
-      `#entity-details-${sanitizedEntityId}`
-    );
-
-    // Find the toggle icon within the correct entity's row
-    const entityRow = this.shadowRoot.querySelector(
-      `.selected-entity[data-entity-id="${entityId}"]`
-    );
-    const toggleIcon = entityRow
-      ? entityRow.querySelector(".toggle-details")
-      : null;
-
-    if (detailsElement && toggleIcon) {
-      const isHidden =
-        detailsElement.style.display === "none" ||
-        !detailsElement.style.display;
-      detailsElement.style.display = isHidden ? "block" : "none";
-      toggleIcon.icon = isHidden ? "mdi:chevron-up" : "mdi:chevron-down";
-    } else {
-    }
+  _toggleEntityDetails(entityId, event) {
+    // Stop propagation to prevent conflicts with drag events
+    event.stopPropagation();
+    
+    console.log(`Toggling entity details for ${entityId}`);
+    console.log(`Before toggle: ${JSON.stringify(this._expandedEntities)}`);
+    
+    this._expandedEntities = {
+      ...this._expandedEntities,
+      [entityId]: !this._expandedEntities[entityId]
+    };
+    
+    console.log(`After toggle: ${JSON.stringify(this._expandedEntities)}`);
+    
+    this.requestUpdate();
   }
 
   _getNavigationPaths() {

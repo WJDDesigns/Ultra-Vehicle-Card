@@ -353,7 +353,6 @@ export const styles = css`
   }
 
   .icon-grid-container {
-    margin-top: 32px;
     margin-bottom: 32px;
   }
 
@@ -362,7 +361,6 @@ export const styles = css`
   }
 
   .selected-entity {
-    border: 1px solid var(--divider-color);
     margin-bottom: 8px;
     transition: all 0.3s ease;
   }
@@ -413,9 +411,11 @@ export const styles = css`
   }
 
   .entity-details {
-    background-color: var(--card-background-color);
+    background-color: var(--secondary-background-color);
     border-top: none;
     padding: 8px;
+    border-radius: 0 0 4px 4px;
+    margin-top: -2px;
   }
 
   .icon-row,
@@ -610,6 +610,9 @@ export const styles = css`
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
+    background-color: var(--secondary-background-color);
+    padding: 16px;
+    border-radius: 4px;
   }
 
   @media (max-width: 600px) {
@@ -662,6 +665,7 @@ export const styles = css`
     border: 1px solid var(--divider-color);
     padding: 0 16px;
     margin-bottom: 16px;
+    background-color: var(--secondary-background-color);
   }
 
   .entity-information-header {
@@ -746,7 +750,6 @@ export const styles = css`
   .editor-row {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
     margin-bottom: 16px;
   }
 
@@ -801,7 +804,6 @@ export const styles = css`
 
   .selected-entity.row-separator {
     background-color: var(--card-background-color);
-    border: 1px solid var(--divider-color);
     border-radius: 4px;
   }
 .icon-wrapper.active {
@@ -824,7 +826,7 @@ export const styles = css`
 }
 
   .selected-entity.row-separator .entity-details {
-    margin-top: 8px;
+    margin-top: -2px;
   }
 
   .row-separator .entity-header {
@@ -1025,6 +1027,7 @@ export const styles = css`
     padding: 16px;
     border: 1px solid var(--divider-color);
     border-radius: 4px;
+    background-color: var(--secondary-background-color);
   }
 
   .image-section-title {

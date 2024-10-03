@@ -4,8 +4,8 @@ import {
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 import { until } from "https://unpkg.com/lit-html@1.4.1/directives/until.js?module";
-import { version, setVersion } from "./version.js?v=28";
-setVersion("V1.6.7-beta5");
+import { version, setVersion } from "./version.js?v=29";
+setVersion("V1.6.7-beta6");
 
 const sensorModule = await import("./sensors.js?v=" + version);
 const { formatEntityValue, getIconActiveState, formatBinarySensorState, isEngineOn } = sensorModule;
@@ -1127,6 +1127,11 @@ class UltraVehicleCard extends localize(LitElement) {
       icon = customIcon.active || state.attributes.icon || defaultIcon;
     } else {
       icon = customIcon.inactive || state.attributes.icon || defaultIcon;
+    }
+
+    // If the icon is set to "no-icon", return an empty string
+    if (icon === "no-icon") {
+      return html``;
     }
 
     // Check if the icon is a template
