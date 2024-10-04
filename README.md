@@ -29,18 +29,23 @@ Use this link to directly go to the repository in HACS
 7. Click Install
 8. Restart Home Assistant
 
-### Manual Installation
+## Manual Installation (Using the Resource Tab)
 
-1. Download all the files from this repository.
-2. Copy the files to your `config/www` folder in your Home Assistant configuration directory.
-3. Add the following to your `configuration.yaml` file:
+1. **Download the Files**  
+   Download all the files from this repository.
 
-```yaml
-lovelace:
-  resources:
-    - url: /local/ultra-vehicle-card.js
-      type: module
-```     
+2. **Copy the Files**  
+   Copy the downloaded files to the `config/www` folder in your Home Assistant configuration directory.
+
+3. **Add the Resource in Home Assistant**  
+   - Go to **Settings** > **Lovelace Dashboards** > **Resources**.
+   - Click the **+ Add Resource** button in the bottom right corner.
+   - In the URL field, enter:  
+     `/local/ultra-vehicle-card.js`
+   - Set the **Resource Type** to **JavaScript Module**.
+   - Click **Create**.
+
+Your Ultra Vehicle Card is now installed and ready for use in Home Assistant.
 
     
 ### Cool Tip
