@@ -21,14 +21,14 @@ export default {
     state: {
       default: {
         on: "Allumé",
-        off: "Éteint"
-      }
-    }
+        off: "Éteint",
+      },
+    },
   },
   vehicle_types: {
     ev: "Véhicule électrique",
     fuel: "Véhicule à carburant",
-    hybrid: "Hybride"
+    hybrid: "Hybride",
   },
   editor: {
     title: "Carte Ultra Véhicule",
@@ -94,23 +94,34 @@ export default {
     local_url: "Local/URL",
     entity: "Entité",
     search_entities: "Rechercher des entités",
-    battery_level_description: "Sélectionnez l'entité qui représente le niveau de batterie de votre véhicule.",
-    battery_range_description: "Sélectionnez l'entité qui représente l'autonomie restante de votre véhicule électrique.",
-    charging_status_description: "Sélectionnez l'entité qui indique si votre véhicule est actuellement en charge.",
-    charge_limit_description: "Sélectionnez l'entité qui représente la limite de charge définie pour votre véhicule.",
-    location_description: "Sélectionnez l'entité qui fournit l'emplacement actuel de votre véhicule.",
-    mileage_description: "Sélectionnez l'entité qui représente le kilométrage total ou la lecture de l'odomètre de votre véhicule.",
-    car_state_description: "Sélectionnez l'entité qui représente l'état actuel de votre véhicule (par exemple, stationné, en mouvement, en charge).",
-    icon_grid_description: "Ajoutez des entités à la grille d'icônes. Recherchez et sélectionnez des entités à ajouter. Utilisez la poignée de glissement pour réorganiser les entités. Cliquez sur l'icône pour la modifier et utilisez (×) pour supprimer une entité de la grille.",
-    custom_colors_description: "Personnalisez les couleurs de divers éléments de la carte pour correspondre à votre style ou thème préféré.",
+    battery_level_description:
+      "Sélectionnez l'entité qui représente le niveau de batterie de votre véhicule.",
+    battery_range_description:
+      "Sélectionnez l'entité qui représente l'autonomie restante de votre véhicule électrique.",
+    charging_status_description:
+      "Sélectionnez l'entité qui indique si votre véhicule est actuellement en charge.",
+    charge_limit_description:
+      "Sélectionnez l'entité qui représente la limite de charge définie pour votre véhicule.",
+    location_description:
+      "Sélectionnez l'entité qui fournit l'emplacement actuel de votre véhicule.",
+    mileage_description:
+      "Sélectionnez l'entité qui représente le kilométrage total ou la lecture de l'odomètre de votre véhicule.",
+    car_state_description:
+      "Sélectionnez l'entité qui représente l'état actuel de votre véhicule (par exemple, stationné, en mouvement, en charge).",
+    icon_grid_description:
+      "Ajoutez des entités à la grille d'icônes. Recherchez et sélectionnez des entités à ajouter. Utilisez la poignée de glissement pour réorganiser les entités. Cliquez sur l'icône pour la modifier et utilisez (×) pour supprimer une entité de la grille.",
+    custom_colors_description:
+      "Personnalisez les couleurs de divers éléments de la carte pour correspondre à votre style ou thème préféré.",
     row_separator: "Séparateur de ligne",
     add_row_separator: "Ajouter un séparateur de ligne",
     separator_color: "Couleur du séparateur",
-    separator_color_description: "Choisissez la couleur du séparateur de ligne.",
+    separator_color_description:
+      "Choisissez la couleur du séparateur de ligne.",
     transparent: "Transparent",
     set_color: "Définir la couleur",
     separator_height: "Hauteur du séparateur",
-    separator_height_description: "Définissez la hauteur du séparateur de ligne en pixels.",
+    separator_height_description:
+      "Définissez la hauteur du séparateur de ligne en pixels.",
     icon_gap_size: "Taille de l'espace entre les icônes",
     icon_gap_description: "Définissez l'espace entre les icônes en pixels.",
     horizontal_alignment: "Alignement horizontal",
@@ -123,10 +134,14 @@ export default {
     url: "Ouvrir l'URL",
     trigger: "Déclencher",
     formatted_entities: "Entités formatées",
-    formatted_entities_description: "Nettoyez les valeurs des entités en arrondissant les nombres, en remplaçant les tirets bas par des espaces, en mettant les mots en majuscules et en ajoutant des virgules aux grands nombres.",
-    fuel_level_description: "Sélectionnez l'entité qui représente le niveau de carburant de votre véhicule.",
-    fuel_range_description: "Sélectionnez l'entité qui représente l'autonomie de carburant restante de votre véhicule.",
-    engine_on_description: "Sélectionnez l'entité qui indique si le moteur de votre véhicule est actuellement en marche.",
+    formatted_entities_description:
+      "Nettoyez les valeurs des entités en arrondissant les nombres, en remplaçant les tirets bas par des espaces, en mettant les mots en majuscules et en ajoutant des virgules aux grands nombres.",
+    fuel_level_description:
+      "Sélectionnez l'entité qui représente le niveau de carburant de votre véhicule.",
+    fuel_range_description:
+      "Sélectionnez l'entité qui représente l'autonomie de carburant restante de votre véhicule.",
+    engine_on_description:
+      "Sélectionnez l'entité qui indique si le moteur de votre véhicule est actuellement en marche.",
     main_image_height: "Hauteur de l'image principale",
     charging_image_height: "Hauteur de l'image de charge",
     main_image_section: "Paramètres de l'image principale",
@@ -140,7 +155,8 @@ export default {
     engine_off_image_height: "Hauteur de l'image moteur arrêté",
     engine_on_image_section: "Paramètres de l'image moteur en marche",
     use_bar_gradient: "Utiliser un dégradé pour la barre",
-    bar_gradient_description: "Activer un dégradé de couleur pour la barre de progression. Cela vous permet de définir plusieurs arrêts de couleur pour une représentation visuelle plus dynamique de l'état du véhicule.",
+    bar_gradient_description:
+      "Activer un dégradé de couleur pour la barre de progression. Cela vous permet de définir plusieurs arrêts de couleur pour une représentation visuelle plus dynamique de l'état du véhicule.",
     percentage: "Pourcentage",
     color: "Couleur",
     add_gradient_stop: "Ajouter un arrêt de dégradé",
@@ -149,120 +165,121 @@ export default {
     active_custom_label: "Étiquette personnalisée active",
     custom_label_placeholder: "Entrez une étiquette personnalisée",
     template_mode: "Mode modèle",
-    template_mode_description: "Entrez votre code de modèle ci-dessous. Pour quitter le mode modèle, sélectionnez un état différent dans la liste déroulante ci-dessus. Utilisez {{ true }} et {{ false }} comme expressions pour représenter les états activé et désactivé."
+    template_mode_description:
+      "Entrez votre code de modèle ci-dessous. Pour quitter le mode modèle, sélectionnez un état différent dans la liste déroulante ci-dessus. Utilisez {{ true }} et {{ false }} comme expressions pour représenter les états activé et désactivé.",
   },
   device_class: {
     battery: {
       on: "Faible",
-      off: "Normal"
+      off: "Normal",
     },
     battery_charging: {
       on: "En charge",
-      off: "Pas en charge"
+      off: "Pas en charge",
     },
     carbon_monoxide: {
       on: "Détecté",
-      off: "Aucun"
+      off: "Aucun",
     },
     cold: {
       on: "Froid",
-      off: "Normal"
+      off: "Normal",
     },
     connectivity: {
       on: "Connecté",
-      off: "Déconnecté"
+      off: "Déconnecté",
     },
     door: {
       on: "Ouverte",
-      off: "Fermée"
+      off: "Fermée",
     },
     garage_door: {
       on: "Ouverte",
-      off: "Fermée"
+      off: "Fermée",
     },
     gas: {
       on: "Détecté",
-      off: "Aucun"
+      off: "Aucun",
     },
     heat: {
       on: "Chaud",
-      off: "Normal"
+      off: "Normal",
     },
     light: {
       on: "Détectée",
-      off: "Aucune"
+      off: "Aucune",
     },
     lock: {
       on: "Déverrouillé",
-      off: "Verrouillé"
+      off: "Verrouillé",
     },
     moisture: {
       on: "Humide",
-      off: "Sec"
+      off: "Sec",
     },
     motion: {
       on: "Détecté",
-      off: "Aucun"
+      off: "Aucun",
     },
     moving: {
       on: "En mouvement",
-      off: "Arrêté"
+      off: "Arrêté",
     },
     occupancy: {
       on: "Occupé",
-      off: "Libre"
+      off: "Libre",
     },
     opening: {
       on: "Ouvert",
-      off: "Fermé"
+      off: "Fermé",
     },
     plug: {
       on: "Branché",
-      off: "Débranché"
+      off: "Débranché",
     },
     power: {
       on: "Détectée",
-      off: "Pas d'alimentation"
+      off: "Pas d'alimentation",
     },
     presence: {
       on: "Présent",
-      off: "Absent"
+      off: "Absent",
     },
     problem: {
       on: "Problème",
-      off: "OK"
+      off: "OK",
     },
     running: {
       on: "En marche",
-      off: "Arrêté"
+      off: "Arrêté",
     },
     safety: {
       on: "Dangereux",
-      off: "Sûr"
+      off: "Sûr",
     },
     smoke: {
       on: "Détectée",
-      off: "Aucune"
+      off: "Aucune",
     },
     sound: {
       on: "Détecté",
-      off: "Aucun"
+      off: "Aucun",
     },
     tamper: {
       on: "Détectée",
-      off: "Aucune"
+      off: "Aucune",
     },
     update: {
       on: "Disponible",
-      off: "À jour"
+      off: "À jour",
     },
     vibration: {
       on: "Détectée",
-      off: "Aucune"
+      off: "Aucune",
     },
     window: {
       on: "Ouverte",
-      off: "Fermée"
-    }
-  }
-}
+      off: "Fermée",
+    },
+  },
+};

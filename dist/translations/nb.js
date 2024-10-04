@@ -21,14 +21,14 @@ export default {
     state: {
       default: {
         on: "På",
-        off: "Av"
-      }
-    }
+        off: "Av",
+      },
+    },
   },
   vehicle_types: {
     ev: "Elektrisk kjøretøy",
     fuel: "Drivstoffkjøretøy",
-    hybrid: "Hybrid"
+    hybrid: "Hybrid",
   },
   editor: {
     title: "Ultra Kjøretøykort",
@@ -94,15 +94,24 @@ export default {
     local_url: "Lokal/URL",
     entity: "Enhet",
     search_entities: "Søk enheter",
-    battery_level_description: "Velg enheten som representerer batterinivået til kjøretøyet ditt.",
-    battery_range_description: "Velg enheten som representerer gjenværende rekkevidde for ditt elektriske kjøretøy.",
-    charging_status_description: "Velg enheten som indikerer om kjøretøyet ditt lader for øyeblikket.",
-    charge_limit_description: "Velg enheten som representerer ladelimiten satt for kjøretøyet ditt.",
-    location_description: "Velg enheten som gir den nåværende plasseringen til kjøretøyet ditt.",
-    mileage_description: "Velg enheten som representerer total kjørelengde eller kilometerstand for kjøretøyet ditt.",
-    car_state_description: "Velg enheten som representerer den nåværende tilstanden til kjøretøyet ditt (f.eks. parkert, kjrer, lader).",
-    icon_grid_description: "Legg til enheter i ikonrutenettet. Søk og velg enheter å legge til. Bruk drahåndtaket for å omorganisere enheter. Klikk på ikonet for å endre det, og bruk (×) for å fjerne en enhet fra rutenettet.",
-    custom_colors_description: "Tilpass fargene på ulike elementer i kortet for å matche din foretrukne stil eller tema.",
+    battery_level_description:
+      "Velg enheten som representerer batterinivået til kjøretøyet ditt.",
+    battery_range_description:
+      "Velg enheten som representerer gjenværende rekkevidde for ditt elektriske kjøretøy.",
+    charging_status_description:
+      "Velg enheten som indikerer om kjøretøyet ditt lader for øyeblikket.",
+    charge_limit_description:
+      "Velg enheten som representerer ladelimiten satt for kjøretøyet ditt.",
+    location_description:
+      "Velg enheten som gir den nåværende plasseringen til kjøretøyet ditt.",
+    mileage_description:
+      "Velg enheten som representerer total kjørelengde eller kilometerstand for kjøretøyet ditt.",
+    car_state_description:
+      "Velg enheten som representerer den nåværende tilstanden til kjøretøyet ditt (f.eks. parkert, kjrer, lader).",
+    icon_grid_description:
+      "Legg til enheter i ikonrutenettet. Søk og velg enheter å legge til. Bruk drahåndtaket for å omorganisere enheter. Klikk på ikonet for å endre det, og bruk (×) for å fjerne en enhet fra rutenettet.",
+    custom_colors_description:
+      "Tilpass fargene på ulike elementer i kortet for å matche din foretrukne stil eller tema.",
     row_separator: "Radskiller",
     add_row_separator: "Legg til radskiller",
     separator_color: "Skillefarge",
@@ -123,10 +132,14 @@ export default {
     url: "Åpne URL",
     trigger: "Utløs",
     formatted_entities: "Formaterte enheter",
-    formatted_entities_description: "Rens enhetsverdier ved å runde av tall, erstatte understreker med mellomrom, kapitalisere ord og legge til komma i store tall.",
-    fuel_level_description: "Velg enheten som representerer drivstoffnivået til kjøretøyet ditt.",
-    fuel_range_description: "Velg enheten som representerer gjenværende drivstoffrekkevidde for kjøretøyet ditt.",
-    engine_on_description: "Velg enheten som indikerer om motoren til kjøretøyet ditt er i gang.",
+    formatted_entities_description:
+      "Rens enhetsverdier ved å runde av tall, erstatte understreker med mellomrom, kapitalisere ord og legge til komma i store tall.",
+    fuel_level_description:
+      "Velg enheten som representerer drivstoffnivået til kjøretøyet ditt.",
+    fuel_range_description:
+      "Velg enheten som representerer gjenværende drivstoffrekkevidde for kjøretøyet ditt.",
+    engine_on_description:
+      "Velg enheten som indikerer om motoren til kjøretøyet ditt er i gang.",
     main_image_height: "Hovedbildehøyde",
     charging_image_height: "Ladebildehøyde",
     main_image_section: "Hovedbildeinnstillinger",
@@ -140,7 +153,8 @@ export default {
     engine_off_image_height: "Høyde på bilde for motor av",
     engine_on_image_section: "Innstillinger for bilde med motor på",
     use_bar_gradient: "Bruk gradientlinje",
-    bar_gradient_description: "Aktiver en fargegradient for fremdriftslinjen. Dette lar deg sette flere fargepunkter for en mer dynamisk visuell representasjon av kjøretøyets status.",
+    bar_gradient_description:
+      "Aktiver en fargegradient for fremdriftslinjen. Dette lar deg sette flere fargepunkter for en mer dynamisk visuell representasjon av kjøretøyets status.",
     percentage: "Prosent",
     color: "Farge",
     add_gradient_stop: "Legg til gradientstoppunkt",
@@ -154,120 +168,121 @@ export default {
     active_custom_label: "Aktiv tilpasset etikett",
     custom_label_placeholder: "Skriv inn tilpasset etikett",
     template_mode: "Mal-modus",
-    template_mode_description: "Skriv inn malkoden din nedenfor. For å avslutte mal-modus, velg en annen tilstand fra rullegardinmenyen ovenfor. Bruk {{ true }} og {{ false }} som uttrykk for å representere på- og av-tilstander."
+    template_mode_description:
+      "Skriv inn malkoden din nedenfor. For å avslutte mal-modus, velg en annen tilstand fra rullegardinmenyen ovenfor. Bruk {{ true }} og {{ false }} som uttrykk for å representere på- og av-tilstander.",
   },
   device_class: {
     battery: {
       on: "Lav",
-      off: "Normal"
+      off: "Normal",
     },
     battery_charging: {
       on: "Lader",
-      off: "Lader ikke"
+      off: "Lader ikke",
     },
     carbon_monoxide: {
       on: "Oppdaget",
-      off: "Klar"
+      off: "Klar",
     },
     cold: {
       on: "Kald",
-      off: "Normal"
+      off: "Normal",
     },
     connectivity: {
       on: "Tilkoblet",
-      off: "Frakoblet"
+      off: "Frakoblet",
     },
     door: {
       on: "Åpen",
-      off: "Lukket"
+      off: "Lukket",
     },
     garage_door: {
       on: "Åpen",
-      off: "Lukket"
+      off: "Lukket",
     },
     gas: {
       on: "Oppdaget",
-      off: "Klar"
+      off: "Klar",
     },
     heat: {
       on: "Varm",
-      off: "Normal"
+      off: "Normal",
     },
     light: {
       on: "Oppdaget",
-      off: "Klar"
+      off: "Klar",
     },
     lock: {
       on: "Ulåst",
-      off: "Låst"
+      off: "Låst",
     },
     moisture: {
       on: "Fuktig",
-      off: "Tørr"
+      off: "Tørr",
     },
     motion: {
       on: "Oppdaget",
-      off: "Klar"
+      off: "Klar",
     },
     moving: {
       on: "Beveger seg",
-      off: "Stoppet"
+      off: "Stoppet",
     },
     occupancy: {
       on: "Opptatt",
-      off: "Klar"
+      off: "Klar",
     },
     opening: {
       on: "Åpen",
-      off: "Lukket"
+      off: "Lukket",
     },
     plug: {
       on: "Tilkoblet",
-      off: "Frakoblet"
+      off: "Frakoblet",
     },
     power: {
       on: "Oppdaget",
-      off: "Ingen strøm"
+      off: "Ingen strøm",
     },
     presence: {
       on: "Hjemme",
-      off: "Borte"
+      off: "Borte",
     },
     problem: {
       on: "Problem",
-      off: "OK"
+      off: "OK",
     },
     running: {
       on: "Kjører",
-      off: "Kjører ikke"
+      off: "Kjører ikke",
     },
     safety: {
       on: "Usikker",
-      off: "Sikker"
+      off: "Sikker",
     },
     smoke: {
       on: "Oppdaget",
-      off: "Klar"
+      off: "Klar",
     },
     sound: {
       on: "Oppdaget",
-      off: "Klar"
+      off: "Klar",
     },
     tamper: {
       on: "Oppdaget",
-      off: "Klar"
+      off: "Klar",
     },
     update: {
       on: "Tilgjengelig",
-      off: "Oppdatert"
+      off: "Oppdatert",
     },
     vibration: {
       on: "Oppdaget",
-      off: "Klar"
+      off: "Klar",
     },
     window: {
       on: "Åpen",
-      off: "Lukket"
-    }
-  }
-}
+      off: "Lukket",
+    },
+  },
+};

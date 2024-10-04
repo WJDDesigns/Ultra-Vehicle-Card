@@ -21,14 +21,14 @@ export default {
     state: {
       default: {
         on: "Tændt",
-        off: "Slukket"
-      }
-    }
+        off: "Slukket",
+      },
+    },
   },
   vehicle_types: {
     ev: "Elbil",
     fuel: "Benzin-/Dieselbil",
-    hybrid: "Hybridbil"
+    hybrid: "Hybridbil",
   },
   editor: {
     title: "Ultra Vehicle Card",
@@ -101,15 +101,24 @@ export default {
     local_url: "local/url",
     entity: "Entitet",
     search_entities: "Søg Entiteter",
-    battery_level_description: "Vælg den entitet, der repræsenterer batteriniveauet i dit køretøj.",
-    battery_range_description: "Vælg den entitet, der repræsenterer den resterende rækkevidde af din elbil.",
-    charging_status_description: "Vælg den entitet, der angiver, om dit køretøj oplader.",
-    charge_limit_description: "Vælg den entitet, der repræsenterer opladningsgrænsen for dit køretøj.",
-    location_description: "Vælg den entitet, der angiver køretøjets nuværende placering.",
-    mileage_description: "Vælg den entitet, der repræsenterer den samlede kilometerstand eller kilometertæller for dit køretøj.",
-    car_state_description: "Vælg den entitet, der repræsenterer køretøjets aktuelle tilstand (f.eks. parkeret, kører, oplader).",
-    icon_grid_description: "Tilføj entiteter til ikongitteret. Søg og vælg entiteter for at tilføje dem. Brug trækgrebet for at ændre rækkefølgen på entiteterne. Klik på ikonet for at ændre det, og brug (×) for at fjerne en entitet fra gitteret.",
-    custom_colors_description: "Tilpas farverne på forskellige elementer for at matche din foretrukne stil eller tema.",
+    battery_level_description:
+      "Vælg den entitet, der repræsenterer batteriniveauet i dit køretøj.",
+    battery_range_description:
+      "Vælg den entitet, der repræsenterer den resterende rækkevidde af din elbil.",
+    charging_status_description:
+      "Vælg den entitet, der angiver, om dit køretøj oplader.",
+    charge_limit_description:
+      "Vælg den entitet, der repræsenterer opladningsgrænsen for dit køretøj.",
+    location_description:
+      "Vælg den entitet, der angiver køretøjets nuværende placering.",
+    mileage_description:
+      "Vælg den entitet, der repræsenterer den samlede kilometerstand eller kilometertæller for dit køretøj.",
+    car_state_description:
+      "Vælg den entitet, der repræsenterer køretøjets aktuelle tilstand (f.eks. parkeret, kører, oplader).",
+    icon_grid_description:
+      "Tilføj entiteter til ikongitteret. Søg og vælg entiteter for at tilføje dem. Brug trækgrebet for at ændre rækkefølgen på entiteterne. Klik på ikonet for at ændre det, og brug (×) for at fjerne en entitet fra gitteret.",
+    custom_colors_description:
+      "Tilpas farverne på forskellige elementer for at matche din foretrukne stil eller tema.",
     row_separator: "Rækkeseparator",
     add_row_separator: "Tilføj Rækkeseparator",
     separator_color: "Separator Farve",
@@ -117,7 +126,8 @@ export default {
     transparent: "Transparent",
     set_color: "Indstil Farve",
     separator_height: "Separator Højde",
-    separator_height_description: "Indstil højden på rækkeseparatoren i pixels.",
+    separator_height_description:
+      "Indstil højden på rækkeseparatoren i pixels.",
     icon_gap_size: "Ikonafstand",
     icon_gap_description: "Indstil afstanden mellem ikoner i pixels.",
     horizontal_alignment: "Horisontal Justering",
@@ -140,23 +150,29 @@ export default {
     separator_color_description: "Vælg farven til rækkeseparatoren.",
     inactive_icon_color: "Inaktiv Ikonfarve",
     active_icon_color: "Aktiv Ikonfarve",
-    custom_colors_description: "Tilpas farverne på forskellige elementer for at matche din foretrukne stil eller tema.",
+    custom_colors_description:
+      "Tilpas farverne på forskellige elementer for at matche din foretrukne stil eller tema.",
     toggle: "Skift",
     navigate: "Naviger",
     url: "Åbn URL",
     trigger: "Trigger",
     none: "Ingen",
     formatted_entities: "Formaterede Entiteter",
-    formatted_entities_description: "Ryd op i entitetsværdier ved at afrunde tal, erstatte understregninger med mellemrum, kapitalisere ord og tilføje kommaer til store tal.",
-    fuel_level_description: "Vælg den entitet, der repræsenterer brændstofniveauet i dit køretøj.",
-    fuel_range_description: "Vælg den entitet, der repræsenterer den resterende brændstofrækkevidde i dit køretøj.",
-    engine_on_description: "Vælg den entitet, der angiver, om køretøjets motor er tændt.",
+    formatted_entities_description:
+      "Ryd op i entitetsværdier ved at afrunde tal, erstatte understregninger med mellemrum, kapitalisere ord og tilføje kommaer til store tal.",
+    fuel_level_description:
+      "Vælg den entitet, der repræsenterer brændstofniveauet i dit køretøj.",
+    fuel_range_description:
+      "Vælg den entitet, der repræsenterer den resterende brændstofrækkevidde i dit køretøj.",
+    engine_on_description:
+      "Vælg den entitet, der angiver, om køretøjets motor er tændt.",
     main_image_height: "Hovedbilledhøjde",
     charging_image_height: "Opladningsbilledhøjde",
     main_image_section: "Hovedbilledindstillinger",
     charging_image_section: "Opladningsbilledindstillinger",
     use_bar_gradient: "Brug Bar Gradient",
-    bar_gradient_description: "Aktiver en farvegradient for statusbjælken. Dette giver dig mulighed for at indstille flere farvestop for en mere dynamisk visuel repræsentation af køretøjets status.",
+    bar_gradient_description:
+      "Aktiver en farvegradient for statusbjælken. Dette giver dig mulighed for at indstille flere farvestop for en mere dynamisk visuel repræsentation af køretøjets status.",
     percentage: "Procent",
     color: "Farve",
     cardTitleColor: "Kort Titelfarve",
@@ -168,120 +184,120 @@ export default {
     customize: "Tilpas",
     inactive_custom_label: "Inaktiv brugerdefineret etiket",
     active_custom_label: "Aktiv brugerdefineret etiket",
-    custom_label_placeholder: "Indtast brugerdefineret etiket"
+    custom_label_placeholder: "Indtast brugerdefineret etiket",
   },
   device_class: {
     battery: {
       on: "Lav",
-      off: "Normal"
+      off: "Normal",
     },
     battery_charging: {
       on: "Oplader",
-      off: "Oplader Ikke"
+      off: "Oplader Ikke",
     },
     carbon_monoxide: {
       on: "Registreret",
-      off: "Intet Registreret"
+      off: "Intet Registreret",
     },
     cold: {
       on: "Koldt",
-      off: "Normal"
+      off: "Normal",
     },
     connectivity: {
       on: "Forbundet",
-      off: "Ikke Forbundet"
+      off: "Ikke Forbundet",
     },
     door: {
       on: "Åben",
-      off: "Lukket"
+      off: "Lukket",
     },
     garage_door: {
       on: "Åben",
-      off: "Lukket"
+      off: "Lukket",
     },
     gas: {
       on: "Registreret",
-      off: "Ikke Registreret"
+      off: "Ikke Registreret",
     },
     heat: {
       on: "Varmt",
-      off: "Normal"
+      off: "Normal",
     },
     light: {
       on: "Registreret",
-      off: "Ikke Registreret"
+      off: "Ikke Registreret",
     },
     lock: {
       on: "Ulåst",
-      off: "Låst"
+      off: "Låst",
     },
     moisture: {
       on: "Vådt",
-      off: "Tørt"
+      off: "Tørt",
     },
     motion: {
       on: "Registreret",
-      off: "Ikke Registreret"
+      off: "Ikke Registreret",
     },
     moving: {
       on: "I Bevægelse",
-      off: "Standset"
+      off: "Standset",
     },
     occupancy: {
       on: "Optaget",
-      off: "Ledig"
+      off: "Ledig",
     },
     opening: {
       on: "Åben",
-      off: "Lukket"
+      off: "Lukket",
     },
     plug: {
       on: "Tilsluttet",
-      off: "Frakoblet"
+      off: "Frakoblet",
     },
     power: {
       on: "Registreret",
-      off: "Ingen Strøm"
+      off: "Ingen Strøm",
     },
     presence: {
       on: "Hjemme",
-      off: "Ikke Hjemme"
+      off: "Ikke Hjemme",
     },
     problem: {
       on: "Problem",
-      off: "OK"
+      off: "OK",
     },
     running: {
       on: "Kører",
-      off: "Standset"
+      off: "Standset",
     },
     safety: {
       on: "Usikkert",
-      off: "Sikkert"
+      off: "Sikkert",
     },
     smoke: {
       on: "Registreret",
-      off: "Ikke Registreret"
+      off: "Ikke Registreret",
     },
     sound: {
       on: "Registreret",
-      off: "Ikke Registreret"
+      off: "Ikke Registreret",
     },
     tamper: {
       on: "Registreret",
-      off: "Ikke Registreret"
+      off: "Ikke Registreret",
     },
     update: {
       on: "Tilgængelig",
-      off: "Opdateret"
+      off: "Opdateret",
     },
     vibration: {
       on: "Registreret",
-      off: "Ikke Registreret"
+      off: "Ikke Registreret",
     },
     window: {
       on: "Åben",
-      off: "Lukket"
-    }
-  }
-}
+      off: "Lukket",
+    },
+  },
+};

@@ -20,9 +20,10 @@ export const styles = css`
   :host([theme="dark"]) {
     --uvc-icon-background: var(--uvc-icon-background-dark);
   }
-    .color-preview:active, .reset-icon:active {
-  opacity: 0.7;
-}
+  .color-preview:active,
+  .reset-icon:active {
+    opacity: 0.7;
+  }
 
   .progress {
     background-color: var(--uvc-primary-color);
@@ -35,7 +36,7 @@ export const styles = css`
     margin: 0;
     border-radius: 4px;
   }
-    .percentage-text {
+  .percentage-text {
     color: var(--uvc-percentage-text-color);
   }
 
@@ -278,7 +279,7 @@ export const styles = css`
     border-top: none;
     z-index: 1000;
     border-radius: 0 0 4px 4px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     margin-top: -1px;
     width: calc(100% + 2px);
     padding: 4px 0;
@@ -328,7 +329,7 @@ export const styles = css`
     right: 0;
     bottom: 0;
     background-color: #ccc;
-    transition: .4s;
+    transition: 0.4s;
     border-radius: 24px;
   }
 
@@ -340,7 +341,7 @@ export const styles = css`
     left: 4px;
     bottom: 3px;
     background-color: white;
-    transition: .4s;
+    transition: 0.4s;
     border-radius: 50%;
   }
 
@@ -550,7 +551,7 @@ export const styles = css`
     background-color: var(--uvc-icon-background);
   }
 
-   .icon-wrapper.square,
+  .icon-wrapper.square,
   .icon-item.square {
     border-radius: 4px;
   }
@@ -694,8 +695,12 @@ export const styles = css`
   }
 
   @keyframes move-stripes {
-    0% { background-position: 0 0; }
-    100% { background-position: 50px 0; }
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 50px 0;
+    }
   }
 
   .entity-picker-results::-webkit-scrollbar {
@@ -806,24 +811,24 @@ export const styles = css`
     background-color: var(--card-background-color);
     border-radius: 4px;
   }
-.icon-wrapper.active {
-  color: var(--uvc-icon-active, var(--primary-color));
-}
+  .icon-wrapper.active {
+    color: var(--uvc-icon-active, var(--primary-color));
+  }
 
-.icon-wrapper.inactive {
-  color: var(--uvc-icon-inactive, var(--primary-text-color));
-}
+  .icon-wrapper.inactive {
+    color: var(--uvc-icon-inactive, var(--primary-text-color));
+  }
   .selected-entity.row-separator .entity-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-     @media (max-width: 768px) {
-          .editor-row {
-            flex-direction: column;
-                align-items: stretch;
-          }
-}
+  @media (max-width: 768px) {
+    .editor-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
 
   .selected-entity.row-separator .entity-details {
     margin-top: -2px;
@@ -997,8 +1002,12 @@ export const styles = css`
   }
 
   @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
   .size-input-container {
@@ -1050,7 +1059,7 @@ export const styles = css`
   }
 
   .vehicle-charging-image,
-.vehicle-engine-on-image,
+  .vehicle-engine-on-image,
   .vehicle-image {
     width: 100%;
     height: var(--vehicle-charging-image-height, 180px);
@@ -1087,38 +1096,38 @@ export const styles = css`
     flex-grow: 1;
     margin-right: 10px;
   }
-      .bar-gradient-section {
-      margin-top: 16px;
-    }
+  .bar-gradient-section {
+    margin-top: 16px;
+  }
 
-    .switch-wrapper {
-      display: flex;
-      align-items: center;
-      margin-bottom: 8px;
-    }
+  .switch-wrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
 
-    .switch-wrapper span {
-      margin-left: 8px;
-    }
+  .switch-wrapper span {
+    margin-left: 8px;
+  }
 
-    .bar-gradient-options {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+  .bar-gradient-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 
-    .gradient-stop {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+  .gradient-stop {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 
-    mwc-button {
-      margin-top: 8px;
-    }
-      .delete-icon {
-  cursor: pointer;
-  color: #ffffff;
-  margin-left: 8px;
-}
+  mwc-button {
+    margin-top: 8px;
+  }
+  .delete-icon {
+    cursor: pointer;
+    color: #ffffff;
+    margin-left: 8px;
+  }
 `;

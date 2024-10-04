@@ -1,4 +1,7 @@
-import { html, LitElement } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
+import {
+  html,
+  LitElement,
+} from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 
 class StateDropdown extends LitElement {
   static get properties() {
@@ -17,16 +20,16 @@ class StateDropdown extends LitElement {
 
   constructor() {
     super();
-    this.value = 'default';
-    this.templateValue = '';
-    this.attributeValue = '';
+    this.value = "default";
+    this.templateValue = "";
+    this.attributeValue = "";
     this.disableDropdown = false;
     this.localize = (key) => key; // Default to returning the key if no localize function is provided
   }
 
   updated(changedProperties) {
     super.updated(changedProperties);
-    if (changedProperties.has('config') || changedProperties.has('stateType')) {
+    if (changedProperties.has("config") || changedProperties.has("stateType")) {
       this._updateValueFromConfig();
     }
   }
@@ -34,13 +37,13 @@ class StateDropdown extends LitElement {
   _updateValueFromConfig() {
     const configValue = this.config[`${this.stateType}State`];
     if (configValue) {
-      if (configValue.startsWith('template:')) {
-        this.value = 'template';
+      if (configValue.startsWith("template:")) {
+        this.value = "template";
         this.templateValue = configValue.slice(9);
-      } else if (configValue.startsWith('attribute:')) {
-        const [, attributeName, attributeValue] = configValue.split(':');
+      } else if (configValue.startsWith("attribute:")) {
+        const [, attributeName, attributeValue] = configValue.split(":");
         this.value = `attribute:${attributeName}`;
-        this.attributeValue = attributeValue || '';
+        this.attributeValue = attributeValue || "";
       } else {
         this.value = configValue;
       }
@@ -49,8 +52,8 @@ class StateDropdown extends LitElement {
 
   render() {
     const options = this._getOptions();
-    const isTemplateSelected = this.value === 'template';
-    
+    const isTemplateSelected = this.value === "template";
+
     return html`
       <style>
         :host {
@@ -59,7 +62,8 @@ class StateDropdown extends LitElement {
         ha-select {
           width: 100%;
         }
-        .template-input, .attribute-input {
+        .template-input,
+        .attribute-input {
           margin-top: 8px;
         }
         .beta-warning {
@@ -73,36 +77,46 @@ class StateDropdown extends LitElement {
           pointer-events: none;
         }
       </style>
-      <div @click="${this._handleContainerClick}" class="${isTemplateSelected ? 'template-selected' : ''}" data-state-type="${this.stateType}">
+      <div
+        @click="${this._handleContainerClick}"
+        class="${isTemplateSelected ? "template-selected" : ""}"
+        data-state-type="${this.stateType}"
+      >
         <ha-select
           .value=${this.value}
           @selected=${this._valueChanged}
           @closed=${this._handleClick}
           ?disabled=${this.disableDropdown}
         >
-          ${options.map(option => html`
-            <mwc-list-item .value=${option.value}>${option.label}</mwc-list-item>
-          `)}
+          ${options.map(
+            (option) => html`
+              <mwc-list-item .value=${option.value}
+                >${option.label}</mwc-list-item
+              >
+            `
+          )}
         </ha-select>
-        ${this.value === 'template' ? html`
-          <div class="template-info">
-            <h4>${this.localize("editor.template_mode")}</h4>
-            <p>${this.localize("editor.template_mode_description")}</p>
-          </div>
-          <div class="template-input">
-            ${this._renderTemplateInput()}
-          </div>
-        ` : ''}
-        ${this.value.startsWith('attribute:') ? html`
-          <div class="attribute-input">
-            <ha-textfield
-              .value=${this.attributeValue}
-              @input=${this._attributeValueChanged}
-              placeholder="Enter attribute value"
-              style="width: 100%;"
-            ></ha-textfield>
-          </div>
-        ` : ''}
+        ${this.value === "template"
+          ? html`
+              <div class="template-info">
+                <h4>${this.localize("editor.template_mode")}</h4>
+                <p>${this.localize("editor.template_mode_description")}</p>
+              </div>
+              <div class="template-input">${this._renderTemplateInput()}</div>
+            `
+          : ""}
+        ${this.value.startsWith("attribute:")
+          ? html`
+              <div class="attribute-input">
+                <ha-textfield
+                  .value=${this.attributeValue}
+                  @input=${this._attributeValueChanged}
+                  placeholder="Enter attribute value"
+                  style="width: 100%;"
+                ></ha-textfield>
+              </div>
+            `
+          : ""}
       </div>
     `;
   }
@@ -113,22 +127,28 @@ class StateDropdown extends LitElement {
 
   _getOptions() {
     const options = [
-      { value: 'default', label: 'Default' },
-      { value: 'template', label: 'Template' },
+      { value: "default", label: "Default" },
+      { value: "template", label: "Template" },
     ];
 
     if (this.entityId && this.hass.states[this.entityId]) {
       const entity = this.hass.states[this.entityId];
-      
+
       if (entity.attributes.options) {
-        entity.attributes.options.forEach(option => {
-          options.push({ value: `option:${option}`, label: `Option: ${option}` });
+        entity.attributes.options.forEach((option) => {
+          options.push({
+            value: `option:${option}`,
+            label: `Option: ${option}`,
+          });
         });
       }
-      
-      Object.keys(entity.attributes).forEach(attr => {
-        if (attr !== 'options' && attr !== 'friendly_name' && attr !== 'icon') {
-          options.push({ value: `attribute:${attr}`, label: `Attribute: ${attr}` });
+
+      Object.keys(entity.attributes).forEach((attr) => {
+        if (attr !== "options" && attr !== "friendly_name" && attr !== "icon") {
+          options.push({
+            value: `attribute:${attr}`,
+            label: `Attribute: ${attr}`,
+          });
         }
       });
     }
@@ -155,22 +175,22 @@ class StateDropdown extends LitElement {
     e.stopPropagation();
     const newValue = e.target.value;
     this.value = newValue;
-    
-    if (newValue === 'template') {
+
+    if (newValue === "template") {
       this._updateConfig(`template:${this.templateValue}`);
-    } else if (newValue.startsWith('attribute:')) {
+    } else if (newValue.startsWith("attribute:")) {
       this._updateConfig(`${newValue}:${this.attributeValue}`);
     } else {
       this._updateConfig(newValue);
     }
-    
+
     this.requestUpdate();
 
     // Dispatch an event to notify the parent component about the template selection
-    const event = new CustomEvent('template-selected', {
-      detail: { selected: newValue === 'template', stateType: this.stateType },
+    const event = new CustomEvent("template-selected", {
+      detail: { selected: newValue === "template", stateType: this.stateType },
       bubbles: true,
-      composed: true
+      composed: true,
     });
     this.dispatchEvent(event);
   }
@@ -185,15 +205,15 @@ class StateDropdown extends LitElement {
       [`${this.stateType}State`]: newValue,
     };
 
-    const event = new CustomEvent('state-dropdown-changed', {
-      detail: { 
-        config: newConfig, 
-        entityId: this.entityId, 
+    const event = new CustomEvent("state-dropdown-changed", {
+      detail: {
+        config: newConfig,
+        entityId: this.entityId,
         stateType: this.stateType,
-        attributeValue: this.attributeValue 
+        attributeValue: this.attributeValue,
       },
       bubbles: true,
-      composed: true
+      composed: true,
     });
     this.dispatchEvent(event);
   }
@@ -210,4 +230,4 @@ class StateDropdown extends LitElement {
   }
 }
 
-customElements.define('state-dropdown', StateDropdown);
+customElements.define("state-dropdown", StateDropdown);

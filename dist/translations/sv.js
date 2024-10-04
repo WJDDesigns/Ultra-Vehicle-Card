@@ -21,14 +21,14 @@ export default {
     state: {
       default: {
         on: "På",
-        off: "Av"
-      }
-    }
+        off: "Av",
+      },
+    },
   },
   vehicle_types: {
     ev: "Elfordon",
     fuel: "Bränslefordon",
-    hybrid: "Hybrid"
+    hybrid: "Hybrid",
   },
   editor: {
     title: "Ultra Fordonskort",
@@ -94,15 +94,24 @@ export default {
     local_url: "Lokal/URL",
     entity: "Enhet",
     search_entities: "Sök enheter",
-    battery_level_description: "Välj enheten som representerar batterinivån för ditt fordon.",
-    battery_range_description: "Välj enheten som representerar återstående räckvidd för ditt elfordon.",
-    charging_status_description: "Välj enheten som indikerar om ditt fordon för närvarande laddas.",
-    charge_limit_description: "Välj enheten som representerar laddgränsen inställd för ditt fordon.",
-    location_description: "Välj enheten som ger den aktuella platsen för ditt fordon.",
-    mileage_description: "Välj enheten som representerar total körsträcka eller vägmätarställning för ditt fordon.",
-    car_state_description: "Välj enheten som representerar det aktuella tillståndet för ditt fordon (t.ex. parkerad, kör, laddar).",
-    icon_grid_description: "Lägg till enheter i ikonrutnätet. Sök och välj enheter att lägga till. Använd draghandtaget för att omorganisera enheter. Klicka på ikonen för att ändra den och använd (×) för att ta bort en enhet från rutnätet.",
-    custom_colors_description: "Anpassa färgerna på olika element i kortet för att matcha din föredragna stil eller tema.",
+    battery_level_description:
+      "Välj enheten som representerar batterinivån för ditt fordon.",
+    battery_range_description:
+      "Välj enheten som representerar återstående räckvidd för ditt elfordon.",
+    charging_status_description:
+      "Välj enheten som indikerar om ditt fordon för närvarande laddas.",
+    charge_limit_description:
+      "Välj enheten som representerar laddgränsen inställd för ditt fordon.",
+    location_description:
+      "Välj enheten som ger den aktuella platsen för ditt fordon.",
+    mileage_description:
+      "Välj enheten som representerar total körsträcka eller vägmätarställning för ditt fordon.",
+    car_state_description:
+      "Välj enheten som representerar det aktuella tillståndet för ditt fordon (t.ex. parkerad, kör, laddar).",
+    icon_grid_description:
+      "Lägg till enheter i ikonrutnätet. Sök och välj enheter att lägga till. Använd draghandtaget för att omorganisera enheter. Klicka på ikonen för att ändra den och använd (×) för att ta bort en enhet från rutnätet.",
+    custom_colors_description:
+      "Anpassa färgerna på olika element i kortet för att matcha din föredragna stil eller tema.",
     row_separator: "Radavskiljare",
     add_row_separator: "Lägg till radavskiljare",
     separator_color: "Avskiljarfärg",
@@ -123,10 +132,14 @@ export default {
     url: "Öppna URL",
     trigger: "Utlös",
     formatted_entities: "Formaterade enheter",
-    formatted_entities_description: "Rensa enhetsvärden genom att avrunda tal, ersätta understreck med mellanslag, kapitalisera ord och lägga till kommatecken i stora tal.",
-    fuel_level_description: "Välj enheten som representerar bränslenivån för ditt fordon.",
-    fuel_range_description: "Välj enheten som representerar återstående bränsleräckvidd för ditt fordon.",
-    engine_on_description: "Välj enheten som indikerar om motorn på ditt fordon för närvarande är igång.",
+    formatted_entities_description:
+      "Rensa enhetsvärden genom att avrunda tal, ersätta understreck med mellanslag, kapitalisera ord och lägga till kommatecken i stora tal.",
+    fuel_level_description:
+      "Välj enheten som representerar bränslenivån för ditt fordon.",
+    fuel_range_description:
+      "Välj enheten som representerar återstående bränsleräckvidd för ditt fordon.",
+    engine_on_description:
+      "Välj enheten som indikerar om motorn på ditt fordon för närvarande är igång.",
     main_image_height: "Huvudbildhöjd",
     charging_image_height: "Laddningsbildhöjd",
     main_image_section: "Huvudbildinställningar",
@@ -140,7 +153,8 @@ export default {
     engine_off_image_height: "Höjd på bild för motor av",
     engine_on_image_section: "Inställningar för bild med motor på",
     use_bar_gradient: "Använd gradientfält",
-    bar_gradient_description: "Aktivera en färggradient för förloppsfältet. Detta låter dig ställa in flera färgstopp för en mer dynamisk visuell representation av fordonets status.",
+    bar_gradient_description:
+      "Aktivera en färggradient för förloppsfältet. Detta låter dig ställa in flera färgstopp för en mer dynamisk visuell representation av fordonets status.",
     percentage: "Procent",
     color: "Färg",
     add_gradient_stop: "Lägg till gradientstop",
@@ -153,120 +167,121 @@ export default {
     active_custom_label: "Aktiv anpassad etikett",
     custom_label_placeholder: "Ange anpassad etikett",
     template_mode: "Mallläge",
-    template_mode_description: "Ange din mallkod nedan. För att avsluta mallläget, välj ett annat tillstånd från rullgardinsmenyn ovan. Använd {{ true }} och {{ false }} som uttryck för att representera på- och av-tillstånd."
+    template_mode_description:
+      "Ange din mallkod nedan. För att avsluta mallläget, välj ett annat tillstånd från rullgardinsmenyn ovan. Använd {{ true }} och {{ false }} som uttryck för att representera på- och av-tillstånd.",
   },
   device_class: {
     battery: {
       on: "Låg",
-      off: "Normal"
+      off: "Normal",
     },
     battery_charging: {
       on: "Laddar",
-      off: "Laddar inte"
+      off: "Laddar inte",
     },
     carbon_monoxide: {
       on: "Detekterad",
-      off: "Klar"
+      off: "Klar",
     },
     cold: {
       on: "Kall",
-      off: "Normal"
+      off: "Normal",
     },
     connectivity: {
       on: "Ansluten",
-      off: "Frånkopplad"
+      off: "Frånkopplad",
     },
     door: {
       on: "Öppen",
-      off: "Stängd"
+      off: "Stängd",
     },
     garage_door: {
       on: "Öppen",
-      off: "Stängd"
+      off: "Stängd",
     },
     gas: {
       on: "Detekterad",
-      off: "Klar"
+      off: "Klar",
     },
     heat: {
       on: "Varm",
-      off: "Normal"
+      off: "Normal",
     },
     light: {
       on: "Detekterad",
-      off: "Klar"
+      off: "Klar",
     },
     lock: {
       on: "Olåst",
-      off: "Låst"
+      off: "Låst",
     },
     moisture: {
       on: "Fuktig",
-      off: "Torr"
+      off: "Torr",
     },
     motion: {
       on: "Detekterad",
-      off: "Klar"
+      off: "Klar",
     },
     moving: {
       on: "Rör sig",
-      off: "Stillastående"
+      off: "Stillastående",
     },
     occupancy: {
       on: "Upptagen",
-      off: "Klar"
+      off: "Klar",
     },
     opening: {
       on: "Öppen",
-      off: "Stängd"
+      off: "Stängd",
     },
     plug: {
       on: "Inkopplad",
-      off: "Urkopplad"
+      off: "Urkopplad",
     },
     power: {
       on: "Detekterad",
-      off: "Ingen ström"
+      off: "Ingen ström",
     },
     presence: {
       on: "Hemma",
-      off: "Borta"
+      off: "Borta",
     },
     problem: {
       on: "Problem",
-      off: "OK"
+      off: "OK",
     },
     running: {
       on: "Kör",
-      off: "Kör inte"
+      off: "Kör inte",
     },
     safety: {
       on: "Osäker",
-      off: "Säker"
+      off: "Säker",
     },
     smoke: {
       on: "Detekterad",
-      off: "Klar"
+      off: "Klar",
     },
     sound: {
       on: "Detekterad",
-      off: "Klar"
+      off: "Klar",
     },
     tamper: {
       on: "Detekterad",
-      off: "Klar"
+      off: "Klar",
     },
     update: {
       on: "Tillgänglig",
-      off: "Uppdaterad"
+      off: "Uppdaterad",
     },
     vibration: {
       on: "Detekterad",
-      off: "Klar"
+      off: "Klar",
     },
     window: {
       on: "Öppet",
-      off: "Stängt"
-    }
-  }
-}
+      off: "Stängt",
+    },
+  },
+};

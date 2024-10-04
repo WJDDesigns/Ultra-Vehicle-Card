@@ -1,4 +1,9 @@
-export function formatEntityValue(entity, useFormattedEntities, hass, localize) {
+export function formatEntityValue(
+  entity,
+  useFormattedEntities,
+  hass,
+  localize
+) {
   if (!entity || !hass) return null;
 
   // If formatting is not enabled, return the state as-is
@@ -7,7 +12,7 @@ export function formatEntityValue(entity, useFormattedEntities, hass, localize) 
   }
 
   // Use Home Assistant's built-in formatting functions
-  if (typeof hass.formatEntityState === 'function') {
+  if (typeof hass.formatEntityState === "function") {
     return hass.formatEntityState(entity);
   }
 
@@ -16,22 +21,29 @@ export function formatEntityValue(entity, useFormattedEntities, hass, localize) 
 }
 
 function formatBinaryState(state, attributes, hass, localize) {
-  const isOn = state.toLowerCase() === 'on';
+  const isOn = state.toLowerCase() === "on";
   if (attributes.device_class) {
-    const key = `state.${attributes.device_class}.${isOn ? 'on' : 'off'}`;
-    return hass.localize(`component.binary_sensor.${key}`) || localize(key) || (isOn ? 'On' : 'Off');
+    const key = `state.${attributes.device_class}.${isOn ? "on" : "off"}`;
+    return (
+      hass.localize(`component.binary_sensor.${key}`) ||
+      localize(key) ||
+      (isOn ? "On" : "Off")
+    );
   }
-  return isOn ? 'On' : 'Off';
+  return isOn ? "On" : "Off";
 }
 
 function formatDeviceTrackerState(state, attributes) {
   const locationName = attributes.location_name || state;
-  if (locationName.toLowerCase() === 'home') {
-    return 'Home';
-  } else if (locationName.toLowerCase() === 'not_home') {
-    return 'Away';
+  if (locationName.toLowerCase() === "home") {
+    return "Home";
+  } else if (locationName.toLowerCase() === "not_home") {
+    return "Away";
   } else {
-    return locationName.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    return locationName
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   }
 }
 
@@ -48,7 +60,10 @@ function formatSensorState(state, attributes) {
 
 function formatGenericState(state) {
   // Convert snake_case to Title Case
-  return state.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  return state
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
 export async function getIconActiveState(entityId, hass, config) {
@@ -56,46 +71,44 @@ export async function getIconActiveState(entityId, hass, config) {
   if (!state) return false;
   const stateStr = state.state.toLowerCase();
 
-
   // Check custom active and inactive states from config
   const activeState = config.activeState;
   const inactiveState = config.inactiveState;
 
   if (activeState) {
-    if (activeState === 'default') {
+    if (activeState === "default") {
       return isActiveState(stateStr);
-    } else if (activeState.startsWith('template:')) {
-      const templateResp = await (new Promise((resolve, reject) => {
-        hass.connection.subscribeMessage(
-          (msg) => resolve(msg),
-          {
-            type: "render_template",
-            template: activeState.slice(9),
-          }
-        )
-      }));
+    } else if (activeState.startsWith("template:")) {
+      const templateResp = await new Promise((resolve, reject) => {
+        hass.connection.subscribeMessage((msg) => resolve(msg), {
+          type: "render_template",
+          template: activeState.slice(9),
+        });
+      });
       return templateResp.result === true ? true : false;
-    } else if (activeState.startsWith('attribute:')) {
-      const [, attributeName, attributeValue] = activeState.split(':');
+    } else if (activeState.startsWith("attribute:")) {
+      const [, attributeName, attributeValue] = activeState.split(":");
       return state.attributes[attributeName] === attributeValue;
-    } else if (activeState.startsWith('option:')) {
-      return stateStr === activeState.split(':')[1].toLowerCase();
+    } else if (activeState.startsWith("option:")) {
+      return stateStr === activeState.split(":")[1].toLowerCase();
     } else {
       return stateStr === activeState.toLowerCase();
     }
   }
 
   if (inactiveState) {
-    if (inactiveState === 'default') {
+    if (inactiveState === "default") {
       return !isActiveState(stateStr);
-    } else if (inactiveState.startsWith('template:')) {
-      const renderResult = await hass.callApi("post", "template", {template: inactiveState.slice(9)});
+    } else if (inactiveState.startsWith("template:")) {
+      const renderResult = await hass.callApi("post", "template", {
+        template: inactiveState.slice(9),
+      });
       return renderResult === "True" ? true : false;
-    } else if (inactiveState.startsWith('attribute:')) {
-      const [, attributeName, attributeValue] = inactiveState.split(':');
+    } else if (inactiveState.startsWith("attribute:")) {
+      const [, attributeName, attributeValue] = inactiveState.split(":");
       return state.attributes[attributeName] !== attributeValue;
-    } else if (inactiveState.startsWith('option:')) {
-      return stateStr !== inactiveState.split(':')[1].toLowerCase();
+    } else if (inactiveState.startsWith("option:")) {
+      return stateStr !== inactiveState.split(":")[1].toLowerCase();
     } else {
       return stateStr !== inactiveState.toLowerCase();
     }
@@ -107,9 +120,28 @@ export async function getIconActiveState(entityId, hass, config) {
 
 function isActiveState(state) {
   const activeStates = [
-    "on", "active", "open", "connected", "running", "true", "1", "home", "above_horizon", 
-    "charging", "full", "yes", "online", "present", 
-    "armed", "occupied", "unlocked", "playing", "motion", "engaged", "awake", "detected"
+    "on",
+    "active",
+    "open",
+    "connected",
+    "running",
+    "true",
+    "1",
+    "home",
+    "above_horizon",
+    "charging",
+    "full",
+    "yes",
+    "online",
+    "present",
+    "armed",
+    "occupied",
+    "unlocked",
+    "playing",
+    "motion",
+    "engaged",
+    "awake",
+    "detected",
   ];
   return activeStates.includes(state);
 }
@@ -127,15 +159,15 @@ export function isEngineOn(engineOnEntity) {
   // Check attributes for 'engine_on' status
   if (attributes) {
     for (const [key, value] of Object.entries(attributes)) {
-      if (typeof value === 'string' && value.toLowerCase() === 'on') {
+      if (typeof value === "string" && value.toLowerCase() === "on") {
         return true;
       }
     }
   }
 
   // Handle boolean entities
-  if (['on', 'off', 'true', 'false'].includes(state)) {
-    return state === 'on' || state === 'true';
+  if (["on", "off", "true", "false"].includes(state)) {
+    return state === "on" || state === "true";
   }
 
   // Handle numeric entities
@@ -144,7 +176,7 @@ export function isEngineOn(engineOnEntity) {
   }
 
   // Handle string-based entities
-  const engineOnStates = ['on', 'running', 'active', 'true'];
+  const engineOnStates = ["on", "running", "active", "true"];
   return engineOnStates.includes(state);
 }
 

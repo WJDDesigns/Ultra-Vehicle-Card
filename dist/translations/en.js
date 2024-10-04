@@ -21,14 +21,14 @@ export default {
     state: {
       default: {
         on: "On",
-        off: "Off"
-      }
-    }
+        off: "Off",
+      },
+    },
   },
   vehicle_types: {
     ev: "Electric Vehicle",
     fuel: "Fuel Vehicle",
-    hybrid: "Hybrid"
+    hybrid: "Hybrid",
   },
   editor: {
     title: "Ultra Vehicle Card",
@@ -101,15 +101,24 @@ export default {
     local_url: "Local/URL",
     entity: "Entity",
     search_entities: "Search Entities",
-    battery_level_description: "Select the entity that represents the battery level of your vehicle.",
-    battery_range_description: "Select the entity that represents the remaining range of your electric vehicle.",
-    charging_status_description: "Select the entity that indicates whether your vehicle is currently charging.",
-    charge_limit_description: "Select the entity that represents the charging limit set for your vehicle.",
-    location_description: "Select the entity that provides the current location of your vehicle.",
-    mileage_description: "Select the entity that represents the total mileage or odometer reading of your vehicle.",
-    car_state_description: "Select the entity that represents the current state of your vehicle (e.g., parked, driving, charging).",
-    icon_grid_description: "Add entities to the icon grid. Search and select entities to add. Use the drag handle to reorder entities. Click on the icon to change it, and use (×) to remove an entity from the grid.",
-    custom_colors_description: "Customize the colors of various elements in the card to match your preferred style or theme.",
+    battery_level_description:
+      "Select the entity that represents the battery level of your vehicle.",
+    battery_range_description:
+      "Select the entity that represents the remaining range of your electric vehicle.",
+    charging_status_description:
+      "Select the entity that indicates whether your vehicle is currently charging.",
+    charge_limit_description:
+      "Select the entity that represents the charging limit set for your vehicle.",
+    location_description:
+      "Select the entity that provides the current location of your vehicle.",
+    mileage_description:
+      "Select the entity that represents the total mileage or odometer reading of your vehicle.",
+    car_state_description:
+      "Select the entity that represents the current state of your vehicle (e.g., parked, driving, charging).",
+    icon_grid_description:
+      "Add entities to the icon grid. Search and select entities to add. Use the drag handle to reorder entities. Click on the icon to change it, and use (×) to remove an entity from the grid.",
+    custom_colors_description:
+      "Customize the colors of various elements in the card to match your preferred style or theme.",
     row_separator: "Row Separator",
     add_row_separator: "Add Row Separator",
     separator_color: "Separator Color",
@@ -117,7 +126,8 @@ export default {
     transparent: "Transparent",
     set_color: "Set Color",
     separator_height: "Separator Height",
-    separator_height_description: "Set the height of the row separator in pixels.",
+    separator_height_description:
+      "Set the height of the row separator in pixels.",
     icon_gap_size: "Icon Gap Size",
     icon_gap_description: "Set the gap between icons in pixels.",
     horizontal_alignment: "Horizontal Alignment",
@@ -140,23 +150,29 @@ export default {
     separator_color_description: "Choose the color for the row separator.",
     inactive_icon_color: "Inactive Icon Color",
     active_icon_color: "Active Icon Color",
-    custom_colors_description: "Customize the colors of various elements in the card to match your preferred style or theme.",
+    custom_colors_description:
+      "Customize the colors of various elements in the card to match your preferred style or theme.",
     toggle: "Toggle",
     navigate: "Navigate",
     url: "Open URL",
     trigger: "Trigger",
     none: "None",
     formatted_entities: "Formatted Entities",
-    formatted_entities_description: "Clean up entity values by rounding numbers, replacing underscores with spaces, capitalizing words, and adding commas to large numbers.",
-    fuel_level_description: "Select the entity that represents the fuel level of your vehicle.",
-    fuel_range_description: "Select the entity that represents the remaining fuel range of your vehicle.",
-    engine_on_description: "Select the entity that indicates whether your vehicle's engine is currently running.",
+    formatted_entities_description:
+      "Clean up entity values by rounding numbers, replacing underscores with spaces, capitalizing words, and adding commas to large numbers.",
+    fuel_level_description:
+      "Select the entity that represents the fuel level of your vehicle.",
+    fuel_range_description:
+      "Select the entity that represents the remaining fuel range of your vehicle.",
+    engine_on_description:
+      "Select the entity that indicates whether your vehicle's engine is currently running.",
     main_image_height: "Main Image Height",
     charging_image_height: "Charging Image Height",
     main_image_section: "Main Image Settings",
     charging_image_section: "Charging Image Settings",
     use_bar_gradient: "Use Bar Gradient",
-    bar_gradient_description: "Enable a color gradient for the progress bar. This allows you to set multiple color stops for a more dynamic visual representation of the vehicle's status.",
+    bar_gradient_description:
+      "Enable a color gradient for the progress bar. This allows you to set multiple color stops for a more dynamic visual representation of the vehicle's status.",
     percentage: "Percentage",
     color: "Color",
     cardTitleColor: "Card Title Color",
@@ -170,120 +186,121 @@ export default {
     active_custom_label: "Active Custom Label",
     custom_label_placeholder: "Enter custom label",
     template_mode: "Template Mode",
-    template_mode_description: "Enter your template code below. To exit template mode, select a different state from the dropdown above. Use {{ true }} and {{ false }} like statements to represent on and off states."
+    template_mode_description:
+      "Enter your template code below. To exit template mode, select a different state from the dropdown above. Use {{ true }} and {{ false }} like statements to represent on and off states.",
   },
   device_class: {
     battery: {
       on: "Low",
-      off: "Normal"
+      off: "Normal",
     },
     battery_charging: {
       on: "Charging",
-      off: "Not Charging"
+      off: "Not Charging",
     },
     carbon_monoxide: {
       on: "Detected",
-      off: "Clear"
+      off: "Clear",
     },
     cold: {
       on: "Cold",
-      off: "Normal"
+      off: "Normal",
     },
     connectivity: {
       on: "Connected",
-      off: "Disconnected"
+      off: "Disconnected",
     },
     door: {
       on: "Open",
-      off: "Closed"
+      off: "Closed",
     },
     garage_door: {
       on: "Open",
-      off: "Closed"
+      off: "Closed",
     },
     gas: {
       on: "Detected",
-      off: "Clear"
+      off: "Clear",
     },
     heat: {
       on: "Hot",
-      off: "Normal"
+      off: "Normal",
     },
     light: {
       on: "Detected",
-      off: "Clear"
+      off: "Clear",
     },
     lock: {
       on: "Unlocked",
-      off: "Locked"
+      off: "Locked",
     },
     moisture: {
       on: "Wet",
-      off: "Dry"
+      off: "Dry",
     },
     motion: {
       on: "Detected",
-      off: "Clear"
+      off: "Clear",
     },
     moving: {
       on: "Moving",
-      off: "Stopped"
+      off: "Stopped",
     },
     occupancy: {
       on: "Occupied",
-      off: "Clear"
+      off: "Clear",
     },
     opening: {
       on: "Open",
-      off: "Closed"
+      off: "Closed",
     },
     plug: {
       on: "Plugged In",
-      off: "Unplugged"
+      off: "Unplugged",
     },
     power: {
       on: "Detected",
-      off: "No Power"
+      off: "No Power",
     },
     presence: {
       on: "Home",
-      off: "Away"
+      off: "Away",
     },
     problem: {
       on: "Problem",
-      off: "OK"
+      off: "OK",
     },
     running: {
       on: "Running",
-      off: "Not Running"
+      off: "Not Running",
     },
     safety: {
       on: "Unsafe",
-      off: "Safe"
+      off: "Safe",
     },
     smoke: {
       on: "Detected",
-      off: "Clear"
+      off: "Clear",
     },
     sound: {
       on: "Detected",
-      off: "Clear"
+      off: "Clear",
     },
     tamper: {
       on: "Detected",
-      off: "Clear"
+      off: "Clear",
     },
     update: {
       on: "Available",
-      off: "Up-to-date"
+      off: "Up-to-date",
     },
     vibration: {
       on: "Detected",
-      off: "Clear"
+      off: "Clear",
     },
     window: {
       on: "Open",
-      off: "Closed"
-    }
-  }
-}
+      off: "Closed",
+    },
+  },
+};

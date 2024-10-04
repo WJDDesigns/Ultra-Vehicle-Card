@@ -17,7 +17,7 @@ const LocalizeMixin = dedupingMixin(
 
       async loadResources(language) {
         let resources;
-        const languagesToTry = [language, language.split('-')[0], 'en'];
+        const languagesToTry = [language, language.split("-")[0], "en"];
 
         for (const lang of languagesToTry) {
           try {
@@ -31,12 +31,16 @@ const LocalizeMixin = dedupingMixin(
         }
 
         if (!resources) {
-          console.warn('No translations could be loaded. Using default strings.');
+          console.warn(
+            "No translations could be loaded. Using default strings."
+          );
           resources = {};
         }
 
         this.localize = (key, ...args) => {
-          const translatedValue = key.split('.').reduce((o, i) => o && o[i], resources);
+          const translatedValue = key
+            .split(".")
+            .reduce((o, i) => o && o[i], resources);
           if (translatedValue === undefined) return key;
           return translatedValue;
         };
@@ -45,13 +49,15 @@ const LocalizeMixin = dedupingMixin(
       loadTranslationFile(lang) {
         const url = `./translations/${lang}.js`;
         return import(url)
-          .then(module => {
-            if (typeof module.default !== 'object') {
-              throw new Error('Translation file does not export a default object');
+          .then((module) => {
+            if (typeof module.default !== "object") {
+              throw new Error(
+                "Translation file does not export a default object"
+              );
             }
             return module.default;
           })
-          .catch(error => {
+          .catch((error) => {
             console.error(`Failed to load translations for ${lang}:`, error);
             return null;
           });
