@@ -31,7 +31,7 @@ Use this link to directly go to the repository in HACS
 
 ### Manual Installation
 
-1. Download the `ultra-vehicle-card.js`, `styles.js`, and `ultra-vehicle-card-editor.js` files from this repository.
+1. Download all the files from this repository.
 2. Copy the files to your `config/www` folder in your Home Assistant configuration directory.
 3. Add the following to your `configuration.yaml` file:
 
