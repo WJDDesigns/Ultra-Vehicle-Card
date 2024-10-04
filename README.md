@@ -215,7 +215,6 @@ Determine what happens when a user clicks the icon:
 - **Toggle**: Switches the entity between on and off states.
 - **Navigate**: Goes to a specific page in your Home Assistant interface.
 - **Open URL**: Opens a specified web address.
-- **Call Service**: Executes a Home Assistant service.
 - **Assist**: Opens the voice assistant.
 - **Trigger**: Activates the entity (useful for automations or scripts).
 - **None**: Disables interaction for this icon.
@@ -233,7 +232,7 @@ When selected, the card uses built-in logic to determine the active state:
 - For most entities, "on", "home", "open", "locked", etc. are considered active.
 - For numeric sensors, any value above 0 is typically considered active.
 
-#### Template (BETA)
+#### Template
 Allows you to write a custom Jinja2 template to determine the icon state. This is for advanced users who need complex logic. For example:
 >{{ states('sensor.temperature') | float > 20 }}
 This would make the icon active when the temperature is above 20 degrees.
