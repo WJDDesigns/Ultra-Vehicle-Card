@@ -157,6 +157,18 @@ Available entities:
 - Only select entities that are relevant to your vehicle type.
 - Ensure that the entities you select provide the correct type of data (e.g., percentage for battery level).
 - Use the visibility toggles to customize which information is displayed on your card.
+- If you need a percentage entity and your entity only provides remaining fuel/charge use the template below to convert and pull in a new entity.
+  <pre>
+sensor:
+  - platform: template
+    sensors:
+      yourcar_fuel_percentage:
+        friendly_name: "Your Car Fuel Percentage"
+        unit_of_measurement: "%"
+        value_template: >
+          {% set liters = states('fuel_left_sensor_name') | float %}
+          {{ (liters / 65 * 100) | round(0) }}
+  </pre>
 
 ## Icon Grid Configuration
 
