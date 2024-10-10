@@ -162,9 +162,9 @@ export default {
     percentage: "Prozentsatz",
     color: "Farbe",
     add_gradient_stop: "Gradientenstopp hinzufügen",
-    inactive_custom_label: "Inaktives benutzerdefiniertes Label",
-    active_custom_label: "Aktives benutzerdefiniertes Label",
-    custom_label_placeholder: "Benutzerdefiniertes Label eingeben",
+    inactive_custom_label: "Inaktives benutzerdefiniertes Etikett",
+    active_custom_label: "Aktives benutzerdefiniertes Etikett",
+    custom_label_placeholder: "Benutzerdefiniertes Etikett eingeben",
   },
   device_class: {
     battery: {

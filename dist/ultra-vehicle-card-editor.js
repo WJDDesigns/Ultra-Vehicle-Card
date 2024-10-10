@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=32";
+import { version } from "./version.js?v=33";
 import "./state-dropdown.js";
 
 const stl = await import("./styles.js?v=" + version);
@@ -358,17 +358,15 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   _customLabelChanged(e, entityId, state) {
     const value = e.target.value;
-    if (!this.config.custom_labels) {
-      this.config.custom_labels = {};
-    }
-    if (!this.config.custom_labels[entityId]) {
-      this.config.custom_labels[entityId] = {};
-    }
-    this.config.custom_labels[entityId][state] = value;
-    this._updateConfigAndRequestUpdate(
-      "custom_labels",
-      this.config.custom_labels
-    );
+    const newCustomLabels = {
+      ...this.config.custom_labels,
+      [entityId]: {
+        ...(this.config.custom_labels?.[entityId] || {}),
+        [state]: value,
+      },
+    };
+
+    this._updateConfigAndRequestUpdate("custom_labels", newCustomLabels);
   }
 
   _removeDialogCloseHandlers() {
@@ -482,7 +480,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       useFormattedEntities:
         config.useFormattedEntities !== undefined
           ? config.useFormattedEntities
-          : true, // Default to true
+          : true,
       mainImageHeight:
         config.image_url_type !== "none"
           ? config.mainImageHeight || "140px"
@@ -510,8 +508,8 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       infoTextColor: config.infoTextColor || "",
       show_engine_animation: config.show_engine_animation !== false,
       show_charging_animation: config.show_charging_animation !== false,
-      show_charging_status: config.show_charging_status !== false, // Default to true
-      show_engine_on: config.show_engine_on !== false, // Default to true
+      show_charging_status: config.show_charging_status !== false,
+      show_engine_on: config.show_engine_on !== false,
       engine_on_image_url_type: config.engine_on_image_url_type || "none",
       ...config,
     };
@@ -1482,19 +1480,20 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _updateRowSeparatorConfig(index, property, value) {
-    if (!this.config.row_separators) {
-      this.config.row_separators = {};
+    let newSeparators = Array.isArray(this.config.row_separators)
+      ? [...this.config.row_separators]
+      : [];
+
+    if (!newSeparators[index]) {
+      newSeparators[index] = {};
     }
-    if (!this.config.row_separators[index]) {
-      this.config.row_separators[index] = {};
-    }
-    if (value === "") {
-      delete this.config.row_separators[index][property];
-    } else {
-      this.config.row_separators[index][property] = value;
-    }
-    this.configChanged(this.config);
-    this.requestUpdate();
+
+    newSeparators[index] = {
+      ...newSeparators[index],
+      [property]: value,
+    };
+
+    this._updateConfig("row_separators", newSeparators);
   }
 
   _onDrop(e) {
@@ -1545,14 +1544,16 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   _iconColorChanged(e, entityId, iconType) {
     const color = e.target.value;
-    if (!this.config.custom_icons[entityId]) {
-      this.config.custom_icons[entityId] = {};
-    }
-    this.config.custom_icons[entityId][`${iconType}Color`] = color;
-    this._updateConfigAndRequestUpdate(
-      "custom_icons",
-      this.config.custom_icons
-    );
+    this._customIcons = {
+      ...this._customIcons,
+      [entityId]: {
+        ...this._customIcons[entityId],
+        [`${iconType}Color`]: color,
+      },
+    };
+    this._updateCustomIconsConfig();
+    this.requestUpdate();
+    this._fireEvent("config-changed", { config: this.config });
   }
 
   _resetIconColor(e, entityId, iconType) {
@@ -1571,25 +1572,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _updateCustomIconsConfig() {
-    const cleanedCustomIcons = Object.entries(this._customIcons).reduce(
-      (acc, [key, value]) => {
-        const cleanedValue = {
-          active: value.active === "" ? undefined : value.active,
-          inactive: value.inactive === "" ? undefined : value.inactive,
-          activeColor: value.activeColor,
-          inactiveColor: value.inactiveColor,
-        };
-        if (cleanedValue.active || cleanedValue.inactive) {
-          acc[key] = cleanedValue;
-        }
-        return acc;
-      },
-      {}
-    );
-
     this.config = {
       ...this.config,
-      custom_icons: cleanedCustomIcons,
+      custom_icons: this._customIcons,
     };
     this.configChanged(this.config);
   }
@@ -2884,12 +2869,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               <input
                 type="number"
                 .value="${separatorConfig.height || ""}"
-                @input="${(e) =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "height",
-                    e.target.value === "" ? "" : parseInt(e.target.value)
-                  )}"
+                @input="${(e) => this._updateSeparatorHeight(e, index)}"
                 min="0"
                 max="100"
               />
@@ -2902,12 +2882,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               <input
                 type="number"
                 .value="${separatorConfig.icon_gap || ""}"
-                @input="${(e) =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "icon_gap",
-                    e.target.value === "" ? "" : parseInt(e.target.value)
-                  )}"
+                @input="${(e) => this._updateSeparatorIconGap(e, index)}"
                 min="0"
                 max="100"
               />
@@ -2922,11 +2897,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               <button
                 class="icon-button"
                 @click="${() =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "horizontalAlignment",
-                    "left"
-                  )}"
+                  this._updateSeparatorHorizontalAlignment(index, "left")}"
                 ?disabled="${separatorConfig.horizontalAlignment === "left"}"
                 title="${this.localize("editor.align_left")}"
               >
@@ -2935,11 +2906,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               <button
                 class="icon-button"
                 @click="${() =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "horizontalAlignment",
-                    "center"
-                  )}"
+                  this._updateSeparatorHorizontalAlignment(index, "center")}"
                 ?disabled="${separatorConfig.horizontalAlignment === "center" ||
                 separatorConfig.horizontalAlignment === undefined}"
                 title="${this.localize("editor.align_center")}"
@@ -2949,11 +2916,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               <button
                 class="icon-button"
                 @click="${() =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "horizontalAlignment",
-                    "right"
-                  )}"
+                  this._updateSeparatorHorizontalAlignment(index, "right")}"
                 ?disabled="${separatorConfig.horizontalAlignment === "right"}"
                 title="${this.localize("editor.align_right")}"
               >
@@ -2967,11 +2930,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               <button
                 class="icon-button"
                 @click="${() =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "verticalAlignment",
-                    "top"
-                  )}"
+                  this._updateSeparatorVerticalAlignment(index, "top")}"
                 ?disabled="${separatorConfig.verticalAlignment === "top"}"
                 title="${this.localize("editor.align_top")}"
               >
@@ -2980,11 +2939,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               <button
                 class="icon-button"
                 @click="${() =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "verticalAlignment",
-                    "middle"
-                  )}"
+                  this._updateSeparatorVerticalAlignment(index, "middle")}"
                 ?disabled="${separatorConfig.verticalAlignment === "middle"}"
                 title="${this.localize("editor.align_middle")}"
               >
@@ -2993,11 +2948,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               <button
                 class="icon-button"
                 @click="${() =>
-                  this._updateRowSeparatorConfig(
-                    index,
-                    "verticalAlignment",
-                    "bottom"
-                  )}"
+                  this._updateSeparatorVerticalAlignment(index, "bottom")}"
                 ?disabled="${separatorConfig.verticalAlignment === "bottom"}"
                 title="${this.localize("editor.align_bottom")}"
               >
@@ -3131,6 +3082,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   _rowSeparatorColorChanged(e, index) {
     const color = e.target.value;
     this._updateRowSeparatorConfig(index, "color", color);
+    this.requestUpdate();
   }
 
   _applyColorChange(configKey, color) {
@@ -3635,6 +3587,49 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this._fireEvent("config-changed", { config: this.config });
 
     this.requestUpdate();
+  }
+
+  _updateRowSeparatorConfig(index, property, value) {
+    let newSeparators = Array.isArray(this.config.row_separators)
+      ? [...this.config.row_separators]
+      : [];
+
+    if (!newSeparators[index]) {
+      newSeparators[index] = {};
+    }
+
+    newSeparators[index] = {
+      ...newSeparators[index],
+      [property]: value,
+    };
+
+    this._updateConfig("row_separators", newSeparators);
+  }
+
+  _updateSeparatorHeight(e, index) {
+    const height = e.target.value;
+    this._updateRowSeparatorConfig(index, "height", height);
+  }
+
+  _updateSeparatorIconGap(e, index) {
+    const iconGap = e.target.value;
+    this._updateRowSeparatorConfig(index, "icon_gap", iconGap);
+  }
+
+  _updateSeparatorVerticalAlignment(index, verticalAlignment) {
+    this._updateRowSeparatorConfig(
+      index,
+      "verticalAlignment",
+      verticalAlignment
+    );
+  }
+
+  _updateSeparatorHorizontalAlignment(index, horizontalAlignment) {
+    this._updateRowSeparatorConfig(
+      index,
+      "horizontalAlignment",
+      horizontalAlignment
+    );
   }
 }
 customElements.define("ultra-vehicle-card-editor", UltraVehicleCardEditor);
