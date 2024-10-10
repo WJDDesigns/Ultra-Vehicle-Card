@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=31";
+import { version } from "./version.js?v=32";
 import "./state-dropdown.js";
 
 const stl = await import("./styles.js?v=" + version);
@@ -332,6 +332,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this._themeChangeListener = this._onThemeChange.bind(this);
     this._activeTab = "settings";
     this._expandedEntities = {};
+    this._iconLabels = {};
   }
 
   firstUpdated() {
@@ -543,6 +544,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this._layoutType = this.config.layoutType;
     this._showEngineAnimation = this.config.show_engine_animation !== false;
     this._showChargingAnimation = this.config.show_charging_animation !== false;
+    this._iconLabels = { ...this.config.icon_labels };
   }
 
   static getStubConfig() {
@@ -2765,7 +2767,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   configChanged(newConfig) {
     const event = new CustomEvent("config-changed", {
-      detail: { config: newConfig },
+      detail: { config: { ...newConfig, icon_labels: this._iconLabels } },
       bubbles: true,
       composed: true,
     });
@@ -2805,11 +2807,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _updateIconLabel(entityId, value) {
-    if (!this.config.icon_labels) {
-      this.config.icon_labels = {};
-    }
-    this.config.icon_labels[entityId] = value;
-    this.configChanged(this.config);
+    this._iconLabels = { ...this._iconLabels, [entityId]: value };
+    this._updateConfig("icon_labels", this._iconLabels);
+    this.requestUpdate();
   }
 
   _addRowSeparator() {
