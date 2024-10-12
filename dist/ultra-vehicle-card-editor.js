@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=33";
+import { version } from "./version.js?v=34";
 import "./state-dropdown.js";
 
 const stl = await import("./styles.js?v=" + version);
@@ -1062,22 +1062,23 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
               ${this[`_${configValue}Filter`]
                 ? html`
                     <div class="entity-picker-results">
-                      ${Object.keys(this.hass.states)
-                        .filter((eid) =>
-                          eid
-                            .toLowerCase()
-                            .includes(
-                              this[`_${configValue}Filter`].toLowerCase()
-                            )
+                      ${Object.entries(this.hass.states)
+                        .filter(
+                          ([eid, state]) =>
+                            eid
+                              .toLowerCase()
+                              .includes(
+                                this[`_${configValue}Filter`].toLowerCase()
+                              ) || this._entityHasImage(state)
                         )
                         .map(
-                          (eid) => html`
+                          ([eid, state]) => html`
                             <div
                               class="entity-picker-result"
                               @click="${() =>
                                 this._selectEntity(configValue, eid)}"
                             >
-                              ${eid}
+                              ${eid}${this._getImageAttributeInfo(state)}
                             </div>
                           `
                         )}
@@ -1098,6 +1099,75 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         </div>
       </div>
     `;
+  }
+
+  _entityHasImage(state) {
+    // Check if the entity_id starts with 'image.'
+    if (state.entity_id.startsWith("image.")) {
+      return state.attributes.entity_picture !== undefined;
+    }
+
+    // Check if the state itself is a URL
+    if (typeof state.state === "string" && this._isValidImageUrl(state.state)) {
+      return true;
+    }
+
+    // Check for entity_picture attribute
+    if (
+      state.attributes.entity_picture &&
+      this._isValidImageUrl(state.attributes.entity_picture)
+    ) {
+      return true;
+    }
+
+    // Check for any attribute containing 'image' in its key
+    for (const [key, value] of Object.entries(state.attributes)) {
+      if (
+        key.toLowerCase().includes("image") &&
+        typeof value === "string" &&
+        this._isValidImageUrl(value)
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  _isValidImageUrl(url) {
+    return (
+      url.startsWith("http") ||
+      url.startsWith("/local/") ||
+      url.startsWith("/media/")
+    );
+  }
+
+  _getImageAttributeInfo(state) {
+    if (
+      state.entity_id.startsWith("image.") &&
+      state.attributes.entity_picture
+    ) {
+      return " (Has Image)";
+    }
+    if (this._isValidImageUrl(state.state)) {
+      return " (Has Image)";
+    }
+    if (
+      state.attributes.entity_picture &&
+      this._isValidImageUrl(state.attributes.entity_picture)
+    ) {
+      return " (Has Image)";
+    }
+    for (const [key, value] of Object.entries(state.attributes)) {
+      if (
+        key.toLowerCase().includes("image") &&
+        typeof value === "string" &&
+        this._isValidImageUrl(value)
+      ) {
+        return " (Has Image)";
+      }
+    }
+    return "";
   }
 
   _renderIconGridConfig() {
@@ -2367,9 +2437,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                                   @click="${() =>
                                     this._selectEntity(entityKey, eid)}"
                                 >
-                                  ${eid}${this._entityHasImage(state)
-                                    ? " (has image)"
-                                    : ""}
+                                  ${eid}${this._getImageAttributeInfo(state)}
                                 </div>
                               `
                             )}
@@ -2385,15 +2453,72 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _entityHasImage(state) {
-    if (typeof state.state === "string" && state.state.startsWith("http")) {
+    // Check if the entity_id starts with 'image.'
+    if (state.entity_id.startsWith("image.")) {
+      return state.attributes.entity_picture !== undefined;
+    }
+
+    // Check if the state itself is a URL
+    if (typeof state.state === "string" && this._isValidImageUrl(state.state)) {
       return true;
     }
+
+    // Check for entity_picture attribute
+    if (
+      state.attributes.entity_picture &&
+      this._isValidImageUrl(state.attributes.entity_picture)
+    ) {
+      return true;
+    }
+
+    // Check for any attribute containing 'image' in its key
     for (const [key, value] of Object.entries(state.attributes)) {
-      if (typeof value === "string" && value.startsWith("http")) {
+      if (
+        key.toLowerCase().includes("image") &&
+        typeof value === "string" &&
+        this._isValidImageUrl(value)
+      ) {
         return true;
       }
     }
+
     return false;
+  }
+
+  _isValidImageUrl(url) {
+    return (
+      url.startsWith("http") ||
+      url.startsWith("/local/") ||
+      url.startsWith("/media/")
+    );
+  }
+
+  _getImageAttributeInfo(state) {
+    if (
+      state.entity_id.startsWith("image.") &&
+      state.attributes.entity_picture
+    ) {
+      return " (Has Image)";
+    }
+    if (this._isValidImageUrl(state.state)) {
+      return " (Has Image)";
+    }
+    if (
+      state.attributes.entity_picture &&
+      this._isValidImageUrl(state.attributes.entity_picture)
+    ) {
+      return " (Has Image)";
+    }
+    for (const [key, value] of Object.entries(state.attributes)) {
+      if (
+        key.toLowerCase().includes("image") &&
+        typeof value === "string" &&
+        this._isValidImageUrl(value)
+      ) {
+        return " (Has Image)";
+      }
+    }
+    return "";
   }
 
   _renderEntityPickerWithoutToggle(configValue, labelText, description) {

@@ -4,8 +4,8 @@ import {
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 import { until } from "https://unpkg.com/lit-html@1.4.1/directives/until.js?module";
-import { version, setVersion } from "./version.js?v=33";
-setVersion("V1.6.8-beta3");
+import { version, setVersion } from "./version.js?v=34";
+setVersion("V1.6.8-beta4");
 
 const sensorModule = await import("./sensors.js?v=" + version);
 const {
@@ -1052,16 +1052,51 @@ class UltraVehicleCard extends localize(LitElement) {
   _getImageUrlFromEntity(entityId) {
     const stateObj = this.hass.states[entityId];
     if (stateObj) {
-      // Check if the entity has an entity_picture attribute
-      if (stateObj.attributes && stateObj.attributes.entity_picture) {
+      // Special handling for image. entities
+      if (entityId.startsWith("image.")) {
+        if (stateObj.attributes.entity_picture) {
+          return this.hass.hassUrl(stateObj.attributes.entity_picture);
+        }
+        // For image. entities, the state itself is the image URL
+        return this.hass.hassUrl(stateObj.state);
+      }
+
+      // Check if the state itself is a valid URL
+      if (this._isValidImageUrl(stateObj.state)) {
+        return stateObj.state;
+      }
+
+      // Check for entity_picture attribute
+      if (
+        stateObj.attributes.entity_picture &&
+        this._isValidImageUrl(stateObj.attributes.entity_picture)
+      ) {
         return stateObj.attributes.entity_picture;
       }
-      // Check if the state itself is a valid URL
-      if (stateObj.state && stateObj.state.startsWith("http")) {
-        return stateObj.state;
+
+      // Check for any attribute containing 'image' in its key
+      for (const [key, value] of Object.entries(stateObj.attributes)) {
+        if (
+          key.toLowerCase().includes("image") &&
+          typeof value === "string" &&
+          this._isValidImageUrl(value)
+        ) {
+          return value;
+        }
       }
     }
     return null;
+  }
+
+  _isValidImageUrl(url) {
+    if (!url) return false;
+    if (url.startsWith("/")) return true; // Relative URL
+    try {
+      new URL(url);
+      return true;
+    } catch (_) {
+      return false;
+    }
   }
 
   _isEngineOn(engineOnEntity) {
