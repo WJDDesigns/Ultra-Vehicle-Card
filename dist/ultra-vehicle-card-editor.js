@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=34";
+import { version } from "./version.js?v=35";
 import "./state-dropdown.js";
 
 const stl = await import("./styles.js?v=" + version);
@@ -1057,31 +1057,26 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 class="entity-picker-input"
                 .value="${this.config[configValue] || ""}"
                 @input="${(e) => this._entityFilterChanged(e, configValue)}"
+                @blur="${(e) => this._onEntityInputBlur(e, configValue)}"
                 placeholder="${this.localize("editor.search_entities")}"
+                autocomplete="off"
               />
               ${this[`_${configValue}Filter`]
                 ? html`
                     <div class="entity-picker-results">
-                      ${Object.entries(this.hass.states)
-                        .filter(
-                          ([eid, state]) =>
-                            eid
-                              .toLowerCase()
-                              .includes(
-                                this[`_${configValue}Filter`].toLowerCase()
-                              ) || this._entityHasImage(state)
-                        )
-                        .map(
-                          ([eid, state]) => html`
-                            <div
-                              class="entity-picker-result"
-                              @click="${() =>
-                                this._selectEntity(configValue, eid)}"
-                            >
-                              ${eid}${this._getImageAttributeInfo(state)}
-                            </div>
-                          `
-                        )}
+                      ${this._getFilteredEntities(configValue).map(
+                        (eid) => html`
+                          <div
+                            class="entity-picker-result"
+                            @click="${() =>
+                              this._selectEntity(configValue, eid)}"
+                          >
+                            ${eid}${this._getImageAttributeInfo(
+                              this.hass.states[eid]
+                            )}
+                          </div>
+                        `
+                      )}
                     </div>
                   `
                 : ""}
@@ -1099,6 +1094,47 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         </div>
       </div>
     `;
+  }
+
+  _entityFilterChanged(e, configValue) {
+    const value = e.target.value;
+    this[`_${configValue}Filter`] = value;
+    this.requestUpdate();
+  }
+
+  _getFilteredEntities(configValue) {
+    const filter = this[`_${configValue}Filter`].toLowerCase();
+    const allEntities = Object.keys(this.hass.states);
+
+    // Separate entities into three categories
+    const startsWithFilter = [];
+    const containsFilter = [];
+    const hasImage = [];
+
+    allEntities.forEach((eid) => {
+      const lowerEid = eid.toLowerCase();
+      if (lowerEid.startsWith(filter)) {
+        startsWithFilter.push(eid);
+      } else if (lowerEid.includes(filter)) {
+        containsFilter.push(eid);
+      } else if (this._entityHasImage(this.hass.states[eid])) {
+        hasImage.push(eid);
+      }
+    });
+
+    // Combine the arrays, prioritizing exact matches
+    return [...startsWithFilter, ...containsFilter, ...hasImage];
+  }
+
+  _onEntityInputBlur(e, configValue) {
+    const value = e.target.value;
+    this._updateConfig(configValue, value);
+  }
+
+  _selectEntity(configValue, entityId) {
+    this._updateConfig(configValue, entityId);
+    this[`_${configValue}Filter`] = "";
+    this.requestUpdate();
   }
 
   _entityHasImage(state) {
@@ -2416,31 +2452,26 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                     class="entity-picker-input"
                     .value="${this.config[entityKey] || ""}"
                     @input="${(e) => this._entityFilterChanged(e, entityKey)}"
+                    @blur="${(e) => this._onEntityInputBlur(e, entityKey)}"
                     placeholder="${this.localize("editor.search_entities")}"
+                    autocomplete="off"
                   />
                   ${this[`_${entityKey}Filter`]
                     ? html`
                         <div class="entity-picker-results">
-                          ${Object.entries(this.hass.states)
-                            .filter(
-                              ([eid, state]) =>
-                                eid
-                                  .toLowerCase()
-                                  .includes(
-                                    this[`_${entityKey}Filter`].toLowerCase()
-                                  ) || this._entityHasImage(state)
-                            )
-                            .map(
-                              ([eid, state]) => html`
-                                <div
-                                  class="entity-picker-result"
-                                  @click="${() =>
-                                    this._selectEntity(entityKey, eid)}"
-                                >
-                                  ${eid}${this._getImageAttributeInfo(state)}
-                                </div>
-                              `
-                            )}
+                          ${this._getFilteredEntities(entityKey).map(
+                            (eid) => html`
+                              <div
+                                class="entity-picker-result"
+                                @click="${() =>
+                                  this._selectEntity(entityKey, eid)}"
+                              >
+                                ${eid}${this._getImageAttributeInfo(
+                                  this.hass.states[eid]
+                                )}
+                              </div>
+                            `
+                          )}
                         </div>
                       `
                     : ""}
@@ -2534,30 +2565,26 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 class="entity-picker-input"
                 .value="${this.config[configValue] || ""}"
                 @input="${(e) => this._entityFilterChanged(e, configValue)}"
+                @blur="${(e) => this._onEntityInputBlur(e, configValue)}"
                 placeholder="${this.localize("editor.search_entities")}"
+                autocomplete="off"
               />
               ${this[`_${configValue}Filter`]
                 ? html`
                     <div class="entity-picker-results">
-                      ${Object.keys(this.hass.states)
-                        .filter((eid) =>
-                          eid
-                            .toLowerCase()
-                            .includes(
-                              this[`_${configValue}Filter`].toLowerCase()
-                            )
-                        )
-                        .map(
-                          (eid) => html`
-                            <div
-                              class="entity-picker-result"
-                              @click="${() =>
-                                this._selectEntity(configValue, eid)}"
-                            >
-                              ${eid}
-                            </div>
-                          `
-                        )}
+                      ${this._getFilteredEntities(configValue).map(
+                        (eid) => html`
+                          <div
+                            class="entity-picker-result"
+                            @click="${() =>
+                              this._selectEntity(configValue, eid)}"
+                          >
+                            ${eid}${this._getImageAttributeInfo(
+                              this.hass.states[eid]
+                            )}
+                          </div>
+                        `
+                      )}
                     </div>
                   `
                 : ""}
