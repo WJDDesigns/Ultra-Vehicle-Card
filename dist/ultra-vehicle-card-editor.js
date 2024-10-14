@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=35";
+import { version } from "./version.js?v=36";
 import "./state-dropdown.js";
 
 const stl = await import("./styles.js?v=" + version);
@@ -313,6 +313,11 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         }
         .tab ha-icon {
           margin-right: 8px;
+        }
+
+        .entity-picker-result.highlighted {
+          background-color: var(--primary-color);
+          color: var(--text-primary-color);
         }
       `,
     ];
@@ -1044,7 +1049,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _renderEntityPicker(configValue, labelText, description) {
-    const toggleName = this._getToggleName(configValue);
     return html`
       <div class="input-group">
         <label for="${configValue}">${labelText}</label>
@@ -1057,23 +1061,27 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 class="entity-picker-input"
                 .value="${this.config[configValue] || ""}"
                 @input="${(e) => this._entityFilterChanged(e, configValue)}"
-                @blur="${(e) => this._onEntityInputBlur(e, configValue)}"
+                @keydown="${(e) => this._handleEntityKeydown(e, configValue)}"
                 placeholder="${this.localize("editor.search_entities")}"
                 autocomplete="off"
+                @keypress="${(e) => e.key === "Enter" && e.preventDefault()}"
               />
               ${this[`_${configValue}Filter`]
                 ? html`
                     <div class="entity-picker-results">
                       ${this._getFilteredEntities(configValue).map(
-                        (eid) => html`
+                        (eid, index) => html`
                           <div
-                            class="entity-picker-result"
+                            class="entity-picker-result ${this._getHighlightClass(
+                              eid,
+                              configValue,
+                              index
+                            )}"
                             @click="${() =>
                               this._selectEntity(configValue, eid)}"
+                            data-entity-id="${eid}"
                           >
-                            ${eid}${this._getImageAttributeInfo(
-                              this.hass.states[eid]
-                            )}
+                            ${eid}${this._getEntityInfo(this.hass.states[eid])}
                           </div>
                         `
                       )}
@@ -1082,15 +1090,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 : ""}
             </div>
           </div>
-          <label class="switch">
-            <input
-              type="checkbox"
-              ?checked="${this.config[toggleName]}"
-              @change="${this._toggleChanged}"
-              .configValue="${toggleName}"
-            />
-            <span class="slider round"></span>
-          </label>
         </div>
       </div>
     `;
@@ -1099,6 +1098,34 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   _entityFilterChanged(e, configValue) {
     const value = e.target.value;
     this[`_${configValue}Filter`] = value;
+    this[`_${configValue}SelectedIndex`] = 0;
+    this.requestUpdate();
+  }
+
+  _handleEntityKeydown(e, configValue) {
+    const filteredEntities = this._getFilteredEntities(configValue);
+    const currentIndex = this[`_${configValue}SelectedIndex`] || 0;
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        this[`_${configValue}SelectedIndex`] = Math.min(
+          currentIndex + 1,
+          filteredEntities.length - 1
+        );
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        this[`_${configValue}SelectedIndex`] = Math.max(currentIndex - 1, 0);
+        break;
+      case "Enter":
+        e.preventDefault();
+        e.stopPropagation(); // Stop the event from bubbling up
+        if (filteredEntities.length > 0) {
+          this._selectEntity(configValue, filteredEntities[currentIndex]);
+        }
+        break;
+    }
     this.requestUpdate();
   }
 
@@ -1106,34 +1133,68 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     const filter = this[`_${configValue}Filter`].toLowerCase();
     const allEntities = Object.keys(this.hass.states);
 
-    // Separate entities into three categories
     const startsWithFilter = [];
     const containsFilter = [];
-    const hasImage = [];
+    const otherEntities = [];
 
     allEntities.forEach((eid) => {
       const lowerEid = eid.toLowerCase();
-      if (lowerEid.startsWith(filter)) {
+      if (lowerEid === filter) {
+        startsWithFilter.unshift(eid);
+      } else if (lowerEid.startsWith(filter)) {
         startsWithFilter.push(eid);
       } else if (lowerEid.includes(filter)) {
         containsFilter.push(eid);
-      } else if (this._entityHasImage(this.hass.states[eid])) {
-        hasImage.push(eid);
+      } else if (
+        this._entityHasRelevantAttributes(this.hass.states[eid], configValue)
+      ) {
+        otherEntities.push(eid);
       }
     });
 
-    // Combine the arrays, prioritizing exact matches
-    return [...startsWithFilter, ...containsFilter, ...hasImage];
+    return [...startsWithFilter, ...containsFilter, ...otherEntities];
   }
 
-  _onEntityInputBlur(e, configValue) {
-    const value = e.target.value;
-    this._updateConfig(configValue, value);
+  _getHighlightClass(entityId, configValue, index) {
+    const isExactMatch =
+      entityId.toLowerCase() === this[`_${configValue}Filter`].toLowerCase();
+    const isSelected = index === this[`_${configValue}SelectedIndex`];
+    return isExactMatch || isSelected ? "highlighted" : "";
+  }
+
+  _entityHasRelevantAttributes(state, configValue) {
+    if (configValue.includes("image")) {
+      return this._entityHasImage(state);
+    }
+    // Add other attribute checks for different entity types if needed
+    return false;
+  }
+
+  _getEntityInfo(state) {
+    if (this._entityHasImage(state)) {
+      return " (Has Image)";
+    }
+    // Add other entity info as needed
+    return "";
   }
 
   _selectEntity(configValue, entityId) {
-    this._updateConfig(configValue, entityId);
+    this.config = {
+      ...this.config,
+      [configValue]: entityId,
+    };
     this[`_${configValue}Filter`] = "";
+    this[`_${configValue}SelectedIndex`] = 0;
+    this.configChanged(this.config);
+
+    // Close the dropdown
+    const input = this.shadowRoot.querySelector(
+      `[configValue="${configValue}"]`
+    );
+    if (input) {
+      input.blur();
+    }
+
     this.requestUpdate();
   }
 
@@ -1176,34 +1237,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       url.startsWith("/local/") ||
       url.startsWith("/media/")
     );
-  }
-
-  _getImageAttributeInfo(state) {
-    if (
-      state.entity_id.startsWith("image.") &&
-      state.attributes.entity_picture
-    ) {
-      return " (Has Image)";
-    }
-    if (this._isValidImageUrl(state.state)) {
-      return " (Has Image)";
-    }
-    if (
-      state.attributes.entity_picture &&
-      this._isValidImageUrl(state.attributes.entity_picture)
-    ) {
-      return " (Has Image)";
-    }
-    for (const [key, value] of Object.entries(state.attributes)) {
-      if (
-        key.toLowerCase().includes("image") &&
-        typeof value === "string" &&
-        this._isValidImageUrl(value)
-      ) {
-        return " (Has Image)";
-      }
-    }
-    return "";
   }
 
   _renderIconGridConfig() {
@@ -2452,21 +2485,28 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                     class="entity-picker-input"
                     .value="${this.config[entityKey] || ""}"
                     @input="${(e) => this._entityFilterChanged(e, entityKey)}"
-                    @blur="${(e) => this._onEntityInputBlur(e, entityKey)}"
+                    @keydown="${(e) => this._handleEntityKeydown(e, entityKey)}"
                     placeholder="${this.localize("editor.search_entities")}"
                     autocomplete="off"
+                    @keypress="${(e) =>
+                      e.key === "Enter" && e.preventDefault()}"
                   />
                   ${this[`_${entityKey}Filter`]
                     ? html`
                         <div class="entity-picker-results">
                           ${this._getFilteredEntities(entityKey).map(
-                            (eid) => html`
+                            (eid, index) => html`
                               <div
-                                class="entity-picker-result"
+                                class="entity-picker-result ${this._getHighlightClass(
+                                  eid,
+                                  entityKey,
+                                  index
+                                )}"
                                 @click="${() =>
                                   this._selectEntity(entityKey, eid)}"
+                                data-entity-id="${eid}"
                               >
-                                ${eid}${this._getImageAttributeInfo(
+                                ${eid}${this._getEntityInfo(
                                   this.hass.states[eid]
                                 )}
                               </div>
@@ -2524,34 +2564,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     );
   }
 
-  _getImageAttributeInfo(state) {
-    if (
-      state.entity_id.startsWith("image.") &&
-      state.attributes.entity_picture
-    ) {
-      return " (Has Image)";
-    }
-    if (this._isValidImageUrl(state.state)) {
-      return " (Has Image)";
-    }
-    if (
-      state.attributes.entity_picture &&
-      this._isValidImageUrl(state.attributes.entity_picture)
-    ) {
-      return " (Has Image)";
-    }
-    for (const [key, value] of Object.entries(state.attributes)) {
-      if (
-        key.toLowerCase().includes("image") &&
-        typeof value === "string" &&
-        this._isValidImageUrl(value)
-      ) {
-        return " (Has Image)";
-      }
-    }
-    return "";
-  }
-
   _renderEntityPickerWithoutToggle(configValue, labelText, description) {
     return html`
       <div class="input-group">
@@ -2565,23 +2577,27 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 class="entity-picker-input"
                 .value="${this.config[configValue] || ""}"
                 @input="${(e) => this._entityFilterChanged(e, configValue)}"
-                @blur="${(e) => this._onEntityInputBlur(e, configValue)}"
+                @keydown="${(e) => this._handleEntityKeydown(e, configValue)}"
                 placeholder="${this.localize("editor.search_entities")}"
                 autocomplete="off"
+                @keypress="${(e) => e.key === "Enter" && e.preventDefault()}"
               />
               ${this[`_${configValue}Filter`]
                 ? html`
                     <div class="entity-picker-results">
                       ${this._getFilteredEntities(configValue).map(
-                        (eid) => html`
+                        (eid, index) => html`
                           <div
-                            class="entity-picker-result"
+                            class="entity-picker-result ${this._getHighlightClass(
+                              eid,
+                              configValue,
+                              index
+                            )}"
                             @click="${() =>
                               this._selectEntity(configValue, eid)}"
+                            data-entity-id="${eid}"
                           >
-                            ${eid}${this._getImageAttributeInfo(
-                              this.hass.states[eid]
-                            )}
+                            ${eid}${this._getEntityInfo(this.hass.states[eid])}
                           </div>
                         `
                       )}
@@ -2743,26 +2759,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     } catch (error) {
       console.error("Error uploading image:", error);
     }
-  }
-
-  _selectEntity(configValue, entityId) {
-    const entity = this.hass.states[entityId];
-    let imageUrl = entity.state;
-
-    if (!imageUrl.startsWith("http")) {
-      imageUrl =
-        Object.values(entity.attributes).find(
-          (attr) => typeof attr === "string" && attr.startsWith("http")
-        ) || "";
-    }
-
-    this.config = {
-      ...this.config,
-      [configValue]: entityId,
-      [`${configValue.replace("_entity", "_url")}`]: imageUrl,
-    };
-    this[`_${configValue}Filter`] = "";
-    this.configChanged(this.config);
   }
 
   _iconGridFilterChanged(e) {
