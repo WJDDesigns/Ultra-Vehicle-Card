@@ -26,6 +26,9 @@ export const styles = css`
   .reset-icon:active {
     opacity: 0.7;
   }
+  .state-value {
+    font-weight: bold;
+  }
 
   .progress {
     background-color: var(--uvc-primary-color);
