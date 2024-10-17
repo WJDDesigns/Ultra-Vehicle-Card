@@ -81,6 +81,7 @@ export default {
     bottom: "Botten",
     interaction: "Interaktion",
     colors: "Färger",
+    cardTitleColor: "Korttitelfärg",
     cardBackgroundColor: "Kortbakgrundsfärg",
     barBackgroundColor: "Stapelbakgrundsfärg",
     barBorderColor: "Stapelkantfärg",

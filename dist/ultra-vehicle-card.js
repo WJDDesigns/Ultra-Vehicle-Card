@@ -4,8 +4,8 @@ import {
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 import { until } from "https://unpkg.com/lit-html@1.4.1/directives/until.js?module";
-import { version, setVersion } from "./version.js?v=36";
-setVersion("V1.6.8-beta6");
+import { version, setVersion } from "./version.js?v=37";
+setVersion("V1.6.8-beta7");
 
 const sensorModule = await import("./sensors.js?v=" + version);
 const {
@@ -1389,19 +1389,24 @@ class UltraVehicleCard extends localize(LitElement) {
   }
 
   static _getComputedColor(variable) {
-    const style = getComputedStyle(document.documentElement);
-    const value = style.getPropertyValue(variable).trim();
-    if (value.startsWith("#")) {
-      return value;
-    } else if (value.startsWith("rgb")) {
-      const rgb = value.match(/\d+/g);
-      return `#${parseInt(rgb[0]).toString(16).padStart(2, "0")}${parseInt(
-        rgb[1]
-      )
-        .toString(16)
-        .padStart(2, "0")}${parseInt(rgb[2]).toString(16).padStart(2, "0")}`;
+    if (!variable || !variable.startsWith("--")) {
+      return variable; // Return as-is if it's not a CSS variable
     }
-    return "#808080"; // Fallback color if unable to determine
+
+    const style = getComputedStyle(document.documentElement);
+    let value = style.getPropertyValue(variable).trim();
+
+    if (!value) {
+      return `var(${variable})`; // Return the original variable if no value is found
+    }
+
+    // If the value is another CSS variable, return it as is
+    if (value.startsWith("var(")) {
+      return value;
+    }
+
+    // For other values (hex, rgb, rgba), return as is
+    return value;
   }
 
   _handleIconClick(entityId) {
@@ -1555,38 +1560,18 @@ class UltraVehicleCard extends localize(LitElement) {
       charge_limit_entity: "",
       show_car_state: true,
       show_charge_limit: true,
-      cardBackgroundColor: UltraVehicleCard._getComputedColor(
-        "--card-background-color"
-      ),
-      barBackgroundColor: UltraVehicleCard._getComputedColor(
-        "--card-background-color"
-      ),
-      barFillColor: UltraVehicleCard._getComputedColor("--primary-color"),
-      limitIndicatorColor: UltraVehicleCard._getComputedColor(
-        "--primary-text-color"
-      ),
-      iconActiveColor: UltraVehicleCard._getComputedColor("--primary-color"),
-      iconInactiveColor: UltraVehicleCard._getComputedColor(
-        "--primary-text-color"
-      ),
-      carStateTextColor: UltraVehicleCard._getComputedColor(
-        "--primary-text-color"
-      ),
-      rangeTextColor: UltraVehicleCard._getComputedColor(
-        "--primary-text-color"
-      ),
-      percentageTextColor: UltraVehicleCard._getComputedColor(
-        "--primary-text-color"
-      ),
-      cardTitleColor: UltraVehicleCard._getComputedColor(
-        "--primary-text-color"
-      ),
-      infoTextColor: UltraVehicleCard._getComputedColor(
-        "--secondary-text-color"
-      ),
-      barBorderColor: UltraVehicleCard._getComputedColor(
-        "--secondary-text-color"
-      ),
+      cardTitleColor: "var(--primary-text-color)",
+      cardBackgroundColor:
+        "var(--ha-card-background, var(--card-background-color, #fff))",
+      barBackgroundColor: "var(--secondary-text-color)",
+      barBorderColor:
+        "var(--ha-card-background, var(--card-background-color, #fff))",
+      barFillColor: "var(--primary-color)",
+      limitIndicatorColor: "var(--primary-text-color)",
+      infoTextColor: "var(--secondary-text-color)",
+      carStateTextColor: "var(--primary-text-color)",
+      rangeTextColor: "var(--primary-text-color)",
+      percentageTextColor: "var(--primary-text-color)",
       icon_sizes: {},
       icon_labels: {},
       custom_labels: {},
@@ -1621,9 +1606,11 @@ class UltraVehicleCard extends localize(LitElement) {
     ];
 
     colorProps.forEach(({ config, css }) => {
-      const color =
-        this.config[config] || UltraVehicleCard._getComputedColor(css);
-      this.style.setProperty(css, color);
+      if (this.config[config]) {
+        this.style.setProperty(css, this.config[config]);
+      } else {
+        this.style.removeProperty(css);
+      }
     });
 
     // Update icon size
@@ -1633,20 +1620,9 @@ class UltraVehicleCard extends localize(LitElement) {
         `${this.config.icon_size}px`
       );
       this.style.setProperty("--mdc-icon-size", `${this.config.icon_size}px`);
-    }
-
-    // Update RGB values for icon background
-    if (this.config.iconInactiveColor) {
-      const rgb = this._hexToRgb(this.config.iconInactiveColor);
-      this.style.setProperty("--rgb-primary-text-color", rgb);
-      this.style.setProperty(
-        "--uvc-icon-background-light",
-        `rgba(${rgb}, 0.10)`
-      );
-      this.style.setProperty(
-        "--uvc-icon-background-dark",
-        `rgba(${rgb}, 0.10)`
-      );
+    } else {
+      this.style.removeProperty("--uvc-icon-grid-size");
+      this.style.removeProperty("--mdc-icon-size");
     }
 
     // Update card background color
@@ -1655,29 +1631,8 @@ class UltraVehicleCard extends localize(LitElement) {
         "--ha-card-background",
         this.config.cardBackgroundColor
       );
-    }
-
-    // Update percentage text color
-    if (this.config.percentageTextColor) {
-      this.style.setProperty(
-        "--uvc-percentage-text-color",
-        this.config.percentageTextColor
-      );
-    }
-
-    if (this.config.iconActiveColor) {
-      this.style.setProperty("--uvc-icon-active", this.config.iconActiveColor);
     } else {
-      this.style.removeProperty("--uvc-icon-active");
-    }
-
-    if (this.config.iconInactiveColor) {
-      this.style.setProperty(
-        "--uvc-icon-inactive",
-        this.config.iconInactiveColor
-      );
-    } else {
-      this.style.removeProperty("--uvc-icon-inactive");
+      this.style.removeProperty("--ha-card-background");
     }
 
     this.requestUpdate();
@@ -1760,24 +1715,16 @@ class UltraVehicleCard extends localize(LitElement) {
   connectedCallback() {
     super.connectedCallback();
     this._updateIconBackground();
-    window.addEventListener(
-      "theme-changed",
-      this._updateIconBackground.bind(this)
-    );
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addListener(this._updateIconBackground.bind(this));
+    this._updateStyles();
+    window.addEventListener("theme-changed", this._onThemeChanged.bind(this));
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     window.removeEventListener(
       "theme-changed",
-      this._updateIconBackground.bind(this)
+      this._onThemeChanged.bind(this)
     );
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .removeListener(this._updateIconBackground.bind(this));
   }
 
   firstUpdated() {
@@ -1785,9 +1732,9 @@ class UltraVehicleCard extends localize(LitElement) {
   }
 
   _updateIconBackground() {
-    const cardBackgroundColor =
-      this.config.cardBackgroundColor ||
-      getComputedStyle(this).getPropertyValue("--card-background-color").trim();
+    const cardBackgroundColor = getComputedStyle(this)
+      .getPropertyValue("--ha-card-background")
+      .trim();
     const isDarkBackground = this._isColorDark(cardBackgroundColor);
 
     if (isDarkBackground) {
@@ -1798,14 +1745,9 @@ class UltraVehicleCard extends localize(LitElement) {
       this.classList.remove("dark-background");
     }
 
-    this._updateIconBackgroundColor(isDarkBackground);
-    this.requestUpdate();
-  }
-
-  _updateIconBackgroundColor(isDarkBackground) {
     const iconBackgroundColor = isDarkBackground
-      ? "rgb(255 255 255 / 10%)"
-      : "rgb(0 0 0 / 10%)";
+      ? "var(--uvc-icon-background-dark, rgba(255, 255, 255, 0.1))"
+      : "var(--uvc-icon-background-light, rgba(0, 0, 0, 0.1))";
     this.style.setProperty("--uvc-icon-background", iconBackgroundColor);
   }
 
@@ -1876,6 +1818,11 @@ class UltraVehicleCard extends localize(LitElement) {
 
   isTemplateString(str) {
     return str && (str.includes("{{") || str.includes("{%"));
+  }
+
+  _onThemeChanged() {
+    this._updateStyles();
+    this._updateIconBackground();
   }
 }
 

@@ -2,18 +2,20 @@ import { css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 
 export const styles = css`
   :host {
-    --uvc-card-title-color: var(--primary-text-color);
+    --uvc-card-title-color: var(--text-primary-color, #e1e1e1);
+    --uvc-card-background: var(--ha-card-background);
+    --uvc-bar-background: var(--ha-card-background);
+    --uvc-bar-border-color: var(--sidebar-text-color);
     --uvc-primary-color: var(--primary-color);
-    --uvc-card-background: var(--card-background-color);
-    --uvc-bar-background: var(--secondary-text-color);
-    --uvc-bar-border-color: var(--secondary-text-color);
-    --uvc-limit-indicator: var(--primary-text-color);
-    --uvc-info-text-color: var(--secondary-text-color);
-    --uvc-car-state-text-color: var(--primary-text-color);
-    --uvc-range-text-color: var(--primary-text-color);
-    --uvc-percentage-text-color: var(--primary-text-color);
-    --uvc-icon-background-light-color: rgba(255, 255, 255, 0.1);
-    --uvc-icon-background-dark-color: rgba(0, 0, 0, 0.1);
+    --uvc-limit-indicator: var(--text-primary-color);
+    --uvc-info-text-color: var(--sidebar-text-color);
+    --uvc-car-state-text-color: var(--text-primary-color);
+    --uvc-range-text-color: var(--text-primary-color);
+    --uvc-percentage-text-color: var(--text-primary-color);
+    --uvc-icon-inactive: var(--sidebar-text-color);
+    --uvc-icon-active: var(--primary-color);
+    --uvc-icon-background-light: rgba(0, 0, 0, 0.1);
+    --uvc-icon-background-dark: rgba(255, 255, 255, 0.1);
     --uvc-icon-background: var(--uvc-icon-background-light);
   }
 

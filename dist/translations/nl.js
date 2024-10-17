@@ -81,6 +81,7 @@ export default {
     bottom: "Onder",
     interaction: "Interactie",
     colors: "Kleuren",
+    cardTitleColor: "Kaarttitelkleur",
     cardBackgroundColor: "Kaartachtergrondkleur",
     barBackgroundColor: "Balkachtergrondkleur",
     barBorderColor: "Balkrandkleur",

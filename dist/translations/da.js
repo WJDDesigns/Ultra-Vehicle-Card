@@ -88,6 +88,7 @@ export default {
     bottom: "Bund",
     interaction: "Interaktion",
     colors: "Farver",
+    cardTitleColor: "Kort Titelfarve",
     cardBackgroundColor: "Kort Baggrundsfarve",
     barBackgroundColor: "Bar Baggrundsfarve",
     barBorderColor: "Bar Kantfarve",

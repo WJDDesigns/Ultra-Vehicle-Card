@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=36";
+import { version } from "./version.js?v=37";
 import "./state-dropdown.js";
 
 const stl = await import("./styles.js?v=" + version);
@@ -1699,15 +1699,27 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     e.stopPropagation();
     const defaultColor =
       iconType === "active"
-        ? UltraVehicleCardEditor._getComputedColor("--primary-color")
-        : UltraVehicleCardEditor._getComputedColor("--primary-text-color");
-    if (this.config.custom_icons[entityId]) {
-      this.config.custom_icons[entityId][`${iconType}Color`] = defaultColor;
-    }
-    this._updateConfigAndRequestUpdate(
-      "custom_icons",
-      this.config.custom_icons
+        ? "var(--primary-color)"
+        : "var(--primary-text-color)";
+
+    // Create a deep copy of the current custom_icons configuration
+    const newCustomIcons = JSON.parse(
+      JSON.stringify(this.config.custom_icons || {})
     );
+
+    // If the entity doesn't exist in custom_icons, create it
+    if (!newCustomIcons[entityId]) {
+      newCustomIcons[entityId] = {};
+    }
+
+    // Set the color to the default
+    newCustomIcons[entityId][`${iconType}Color`] = defaultColor;
+
+    // Update the config
+    this._updateConfig("custom_icons", newCustomIcons);
+
+    // Force a re-render of the component
+    this.requestUpdate();
   }
 
   _updateCustomIconsConfig() {
@@ -1931,26 +1943,21 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   _renderColorPickers() {
     const getDefaultColor = (property) => {
-      const style = getComputedStyle(this);
-      return (
-        style.getPropertyValue(property).trim() ||
-        style.getPropertyValue(`--${property}`).trim()
-      );
+      return `var(${property})`;
     };
 
     const defaultColors = {
-      cardTitleColor: getDefaultColor("--primary-text-color"),
+      cardTitleColor: "--primary-text-color",
       cardBackgroundColor:
-        UltraVehicleCardEditor._getComputedColor("--ha-card-background") ||
-        UltraVehicleCardEditor._getComputedColor("--card-background-color"),
-      barBackgroundColor: getDefaultColor("--secondary-text-color"),
-      barBorderColor: getDefaultColor("--secondary-text-color"),
-      barFillColor: getDefaultColor("--primary-color"),
-      limitIndicatorColor: getDefaultColor("--primary-text-color"),
-      infoTextColor: getDefaultColor("--secondary-text-color"),
-      carStateTextColor: getDefaultColor("--primary-text-color"),
-      rangeTextColor: getDefaultColor("--primary-text-color"),
-      percentageTextColor: getDefaultColor("--primary-text-color"),
+        "--ha-card-background, --card-background-color, #fff",
+      barBackgroundColor: "--secondary-text-color",
+      barBorderColor: "--ha-card-background, --card-background-color, #fff",
+      barFillColor: "--primary-color",
+      limitIndicatorColor: "--primary-text-color",
+      infoTextColor: "--secondary-text-color",
+      carStateTextColor: "--primary-text-color",
+      rangeTextColor: "--primary-text-color",
+      percentageTextColor: "--primary-text-color",
     };
 
     return html`
@@ -2225,8 +2232,12 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _renderColorPicker(label, configKey, defaultValue) {
-    const currentValue = this.config[configKey] || defaultValue;
-    const textColor = this._getContrastYIQ(currentValue);
+    const computedDefaultValue =
+      UltraVehicleCardEditor._getComputedColor(defaultValue);
+    const currentColor = this.config[configKey] || computedDefaultValue;
+    const computedBgColor =
+      UltraVehicleCardEditor._getComputedColor(currentColor);
+    const textColor = this._getContrastYIQ(computedBgColor);
 
     return html`
       <div class="color-picker">
@@ -2234,16 +2245,19 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
         <div class="icon-grid-color-picker-wrapper">
           <input
             type="text"
-            .value="${currentValue}"
+            .value="${currentColor}"
             @input="${(e) => this._colorChanged(e, configKey)}"
             class="hex-input"
-            style="background-color: ${currentValue}; color: ${textColor};"
+            style="background-color: ${computedBgColor}; color: ${textColor};"
           />
-          <div class="color-preview" style="background-color: ${currentValue};">
+          <div
+            class="color-preview"
+            style="background-color: ${computedBgColor};"
+          >
             <ha-icon icon="mdi:palette" style="color: ${textColor};"></ha-icon>
             <input
               type="color"
-              .value="${currentValue}"
+              .value="${this._getRGBColor(computedBgColor)}"
               @input="${(e) => this._colorChanged(e, configKey)}"
               class="color-input"
             />
@@ -2251,25 +2265,73 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
           <ha-icon
             class="reset-icon"
             icon="mdi:refresh"
-            @click="${(e) => this._resetColor(configKey, defaultValue, e)}"
+            @click="${(e) => this._resetColor(e, configKey)}"
           ></ha-icon>
         </div>
       </div>
     `;
   }
 
-  _colorChanged(e, configKey) {
-    const color = e.target.value;
-    this._userChangedColors[configKey] =
-      color !== this._defaultColors[configKey];
-    this._debouncedColorChanged(configKey, color);
+  // Helper function to get contrast color
+  _getContrastYIQ(hexcolor) {
+    hexcolor = hexcolor.replace("#", "");
+    var r = parseInt(hexcolor.substr(0, 2), 16);
+    var g = parseInt(hexcolor.substr(2, 2), 16);
+    var b = parseInt(hexcolor.substr(4, 2), 16);
+    var yiq = (r * 299 + g * 587 + b * 114) / 1000;
+    return yiq >= 128 ? "black" : "white";
   }
 
-  _debouncedColorChanged(configKey, color) {
-    // Clean up and potentially expand the color before applying
-    const cleanedColor = this._cleanAndExpandColor(color);
-    this.config = { ...this.config, [configKey]: cleanedColor };
-    this.configChanged(this.config);
+  // Helper function to convert RGB to HEX
+  _getRGBColor(color) {
+    if (color.startsWith("rgb")) {
+      const rgb = color.match(/\d+/g);
+      return (
+        "#" +
+        ((1 << 24) + (+rgb[0] << 16) + (+rgb[1] << 8) + +rgb[2])
+          .toString(16)
+          .slice(1)
+      );
+    }
+    return color;
+  }
+
+  _colorChanged(e, configKey) {
+    const newValue = e.target.value;
+    this._updateConfigAndRequestUpdate(configKey, newValue);
+  }
+
+  _resetColor(e, configKey) {
+    e.stopPropagation();
+    const defaultColors = {
+      cardTitleColor: "var(--primary-text-color)",
+      cardBackgroundColor:
+        "var(--ha-card-background, var(--card-background-color, #fff))",
+      barBackgroundColor: "var(--secondary-text-color)",
+      barBorderColor:
+        "var(--ha-card-background, var(--card-background-color, #fff))",
+      barFillColor: "var(--primary-color)",
+      limitIndicatorColor: "var(--primary-text-color)",
+      infoTextColor: "var(--secondary-text-color)",
+      carStateTextColor: "var(--primary-text-color)",
+      rangeTextColor: "var(--primary-text-color)",
+      percentageTextColor: "var(--primary-text-color)",
+      separatorColor: "var(--secondary-text-color)",
+      iconActiveColor: "var(--primary-color)",
+      iconInactiveColor: "var(--primary-text-color)",
+    };
+
+    const defaultColorVar = defaultColors[configKey];
+    if (defaultColorVar) {
+      this._updateConfigAndRequestUpdate(configKey, defaultColorVar);
+    } else {
+      console.warn(`No default color found for ${configKey}`);
+    }
+  }
+
+  _updateConfigAndRequestUpdate(key, value) {
+    this._updateConfig(key, value);
+    this.requestUpdate();
   }
 
   _cleanAndExpandColor(color) {
@@ -2285,38 +2347,37 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     return color;
   }
 
-  _expandHexColor(color) {
-    return (
-      "#" +
-      color
-        .slice(1)
-        .split("")
-        .map((char) => char + char)
-        .join("")
-    );
-  }
+  static _getComputedColor(variable) {
+    if (!variable) return "";
 
-  _rgbaToHex(rgba) {
-    const [r, g, b] = rgba.match(/\d+/g).map(Number);
-    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-  }
+    // If it's already a color value (not a variable), return it
+    if (!variable.startsWith("var(")) return variable;
 
-  static _expandHexColor(color) {
-    if (color && color.charAt(0) === "#" && color.length === 0) {
-      return color.replace(/([0-9A-F])/gi, "$1$1");
-    }
-    return color;
-  }
+    const style = getComputedStyle(document.documentElement);
 
-  _resetColor(configKey, defaultValue, e) {
-    if (e && typeof e.stopPropagation === "function") {
-      e.stopPropagation();
-    }
-    const expandedDefaultColor =
-      UltraVehicleCardEditor._expandHexColor(defaultValue);
-    this._userChangedColors[configKey] = false;
-    this._applyColorChange(configKey, expandedDefaultColor);
-    this.requestUpdate();
+    // Function to resolve nested variables
+    const resolveVariable = (varString) => {
+      const varName = varString.trim().slice(4, -1); // Remove 'var(' and ')'
+      const [primary, ...fallbacks] = varName.split(",").map((v) => v.trim());
+
+      let value = style.getPropertyValue(primary).trim();
+
+      if (!value) {
+        // Try fallbacks
+        for (const fallback of fallbacks) {
+          if (fallback.startsWith("var(")) {
+            value = resolveVariable(fallback);
+          } else {
+            value = fallback;
+          }
+          if (value) break;
+        }
+      }
+
+      return value || varString; // Return original string if no value found
+    };
+
+    return resolveVariable(variable);
   }
 
   _updateIconBackground() {
@@ -2870,32 +2931,33 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       .replace(/^\w/, (c) => c.toUpperCase());
   }
 
-  _getContrastYIQ(color) {
-    let r,
-      g,
-      b,
-      a = 1;
-
-    if (color.startsWith("rgba")) {
-      [r, g, b, a] = color.match(/[\d.]+/g).map(Number);
-    } else if (color.startsWith("rgb")) {
-      [r, g, b] = color.match(/\d+/g).map(Number);
-    } else if (color.startsWith("#")) {
-      const hex = color.replace("#", "");
-      r = parseInt(hex.substr(0, 2), 16);
-      g = parseInt(hex.substr(2, 2), 16);
-      b = parseInt(hex.substr(4, 2), 16);
-    } else {
-      return "#808080"; // Default to black text if color format is unknown
+  _getContrastColor(color) {
+    // If it's a CSS variable, get the computed color
+    if (color.startsWith("var(")) {
+      color = UltraVehicleCardEditor._getComputedColor(color);
     }
 
-    // Adjust for transparency by blending with a white background
-    r = Math.round(r * a + 255 * (1 - a));
-    g = Math.round(g * a + 255 * (1 - a));
-    b = Math.round(b * a + 255 * (1 - a));
+    // If it's an RGB or RGBA color, convert it to HEX
+    if (color.startsWith("rgb")) {
+      const rgb = color.match(/\d+/g);
+      color =
+        "#" +
+        ((1 << 24) + (+rgb[0] << 16) + (+rgb[1] << 8) + +rgb[2])
+          .toString(16)
+          .slice(1);
+    }
 
-    const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-    return yiq >= 128 ? "black" : "white";
+    // Now we should have a hex color
+    if (color.startsWith("#")) {
+      const r = parseInt(color.substr(1, 2), 16);
+      const g = parseInt(color.substr(3, 2), 16);
+      const b = parseInt(color.substr(5, 2), 16);
+      const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+      return yiq >= 128 ? "black" : "white";
+    }
+
+    // If we couldn't determine the color, return a default
+    return "black";
   }
 
   configChanged(newConfig) {
@@ -3110,10 +3172,10 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _renderRowSeparatorColorPicker(index) {
+    const defaultColor = "var(--secondary-text-color)";
     const currentColor =
-      this.config.row_separators?.[index]?.color ||
-      this._getDefaultColorAsHex();
-    const textColor = this._getContrastYIQ(currentColor);
+      this.config.row_separators?.[index]?.color || defaultColor;
+    const textColor = this._getContrastColor(currentColor);
     const isTransparent = currentColor === "transparent";
 
     return html`
@@ -3172,7 +3234,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   _toggleTransparentSeparator(index) {
     const currentColor = this.config.row_separators?.[index]?.color;
-    const defaultColor = this._getDefaultColorAsHex();
+    const defaultColor = "var(--secondary-text-color)";
     const newColor =
       currentColor === "transparent" ? defaultColor : "transparent";
     this._updateRowSeparatorConfig(index, "color", newColor);
@@ -3181,7 +3243,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   _resetRowSeparatorColor(e, index) {
     e.stopPropagation();
-    const defaultColor = this._getDefaultColorAsHex();
+    const defaultColor = "var(--secondary-text-color)";
     this._updateRowSeparatorConfig(index, "color", defaultColor);
   }
 
@@ -3234,7 +3296,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   _applyColorChange(configKey, color) {
-    const expandedColor = UltraVehicleCardEditor._expandHexColor(color);
     if (configKey === "cardTitleColor") {
       this.config = {
         ...this.config,
@@ -3561,44 +3622,47 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   }
 
   static _getComputedColor(variable) {
+    if (!variable) return "";
+
+    // If it's already a color value (not a variable), return it
+    if (!variable.startsWith("var(")) return variable;
+
     const style = getComputedStyle(document.documentElement);
-    let value = style.getPropertyValue(variable).trim();
 
-    if (value.startsWith("#")) {
-      return this._expandHexColor(value);
-    } else if (value.startsWith("rgb")) {
-      // Handle both rgb and rgba
-      const parts = value.match(/[\d.]+/g);
-      if (parts.length >= 3) {
-        const r = parseInt(parts[0]);
-        const g = parseInt(parts[1]);
-        const b = parseInt(parts[2]);
-        const a = parts.length === 4 ? parseFloat(parts[3]) : 1;
+    // Function to resolve nested variables
+    const resolveVariable = (varString) => {
+      const varName = varString.trim().slice(4, -1); // Remove 'var(' and ')'
+      const [primary, ...fallbacks] = varName.split(",").map((v) => v.trim());
 
-        if (a < 1) {
-          // Return rgba for transparent colors
-          return `rgba(${r}, ${g}, ${b}, ${a})`;
-        } else {
-          // Convert to hex for opaque colors
-          return `#${((1 << 24) | (r << 16) | (g << 8) | b)
-            .toString(16)
-            .slice(1)}`;
+      let value = style.getPropertyValue(primary).trim();
+
+      if (!value) {
+        // Try fallbacks
+        for (const fallback of fallbacks) {
+          if (fallback.startsWith("var(")) {
+            value = resolveVariable(fallback);
+          } else {
+            value = fallback;
+          }
+          if (value) break;
         }
       }
-    }
 
-    // Return the original value if it's not a recognized format
-    return value;
+      return value || varString; // Return original string if no value found
+    };
+
+    return resolveVariable(variable);
   }
 
   _renderIconColorPicker(label, entityId, iconType) {
     const isActive = iconType === "active";
     const defaultColor = isActive
-      ? UltraVehicleCardEditor._getComputedColor("--primary-color")
-      : UltraVehicleCardEditor._getComputedColor("--primary-text-color");
-    const currentColor = UltraVehicleCardEditor._expandHexColor(
-      this.config.custom_icons[entityId]?.[`${iconType}Color`] || defaultColor
-    );
+      ? "var(--primary-color)"
+      : "var(--primary-text-color)";
+    const currentColor =
+      this.config.custom_icons[entityId]?.[`${iconType}Color`] || defaultColor;
+    const textColor = this._getContrastColor(currentColor);
+    const computedBgColor = this._getComputedColor(currentColor);
 
     return html`
       <div class="color-picker">
@@ -3609,18 +3673,16 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
             .value="${currentColor}"
             @input="${(e) => this._iconColorChanged(e, entityId, iconType)}"
             class="hex-input"
-            style="background-color: ${currentColor}; color: ${this._getContrastYIQ(
-              currentColor
-            )};"
+            style="background-color: ${computedBgColor}; color: ${textColor};"
           />
-          <div class="color-preview" style="background-color: ${currentColor};">
-            <ha-icon
-              icon="mdi:palette"
-              style="color: ${this._getContrastYIQ(currentColor)};"
-            ></ha-icon>
+          <div
+            class="color-preview"
+            style="background-color: ${computedBgColor};"
+          >
+            <ha-icon icon="mdi:palette" style="color: ${textColor};"></ha-icon>
             <input
               type="color"
-              .value="${currentColor}"
+              .value="${computedBgColor}"
               @input="${(e) => this._iconColorChanged(e, entityId, iconType)}"
               class="color-input"
             />
@@ -3666,38 +3728,22 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
   _resetAllColors() {
     const defaultColors = {
-      cardTitleColor: UltraVehicleCardEditor._getComputedColor(
-        "--primary-text-color"
-      ),
+      cardTitleColor: "var(--primary-text-color)",
       cardBackgroundColor:
-        UltraVehicleCardEditor._getComputedColor("--ha-card-background") ||
-        UltraVehicleCardEditor._getComputedColor("--card-background-color"),
-      barBackgroundColor: UltraVehicleCardEditor._getComputedColor(
-        "--secondary-text-color"
-      ),
-      barBorderColor: UltraVehicleCardEditor._getComputedColor(
-        "--secondary-text-color"
-      ),
-      barFillColor: UltraVehicleCardEditor._getComputedColor("--primary-color"),
-      limitIndicatorColor: UltraVehicleCardEditor._getComputedColor(
-        "--primary-text-color"
-      ),
-      infoTextColor: UltraVehicleCardEditor._getComputedColor(
-        "--secondary-text-color"
-      ),
-      carStateTextColor: UltraVehicleCardEditor._getComputedColor(
-        "--primary-text-color"
-      ),
-      rangeTextColor: UltraVehicleCardEditor._getComputedColor(
-        "--primary-text-color"
-      ),
-      percentageTextColor: UltraVehicleCardEditor._getComputedColor(
-        "--primary-text-color"
-      ),
+        "var(--ha-card-background, var(--card-background-color, #fff))",
+      barBackgroundColor: "var(--secondary-text-color)",
+      barBorderColor:
+        "var(--ha-card-background, var(--card-background-color, #fff))",
+      barFillColor: "var(--primary-color)",
+      limitIndicatorColor: "var(--primary-text-color)",
+      infoTextColor: "var(--secondary-text-color)",
+      carStateTextColor: "var(--primary-text-color)",
+      rangeTextColor: "var(--primary-text-color)",
+      percentageTextColor: "var(--primary-text-color)",
     };
 
-    Object.entries(defaultColors).forEach(([key, defaultValue]) => {
-      this._resetColor(key, defaultValue);
+    Object.entries(defaultColors).forEach(([key, value]) => {
+      this._updateConfig(key, value);
     });
 
     this.requestUpdate();
@@ -3752,6 +3798,47 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     };
 
     this._updateConfig("row_separators", newSeparators);
+  }
+
+  _getContrastColor(color) {
+    // If it's a CSS variable, get the computed color
+    if (color.startsWith("var(")) {
+      color = UltraVehicleCardEditor._getComputedColor(color);
+    }
+
+    // If it's an RGB or RGBA color, convert it to HEX
+    if (color.startsWith("rgb")) {
+      const rgb = color.match(/\d+/g);
+      color =
+        "#" +
+        ((1 << 24) + (+rgb[0] << 16) + (+rgb[1] << 8) + +rgb[2])
+          .toString(16)
+          .slice(1);
+    }
+
+    // Now we should have a hex color
+    if (color.startsWith("#")) {
+      const r = parseInt(color.substr(1, 2), 16);
+      const g = parseInt(color.substr(3, 2), 16);
+      const b = parseInt(color.substr(5, 2), 16);
+      const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+      return yiq >= 128 ? "black" : "white";
+    }
+
+    // If we couldn't determine the color, return a default
+    return "black";
+  }
+  // Helper function to get computed color value
+  _getComputedColor(color) {
+    if (color.startsWith("var(")) {
+      const dummyElement = document.createElement("div");
+      dummyElement.style.color = color;
+      document.body.appendChild(dummyElement);
+      const computedColor = getComputedStyle(dummyElement).color;
+      document.body.removeChild(dummyElement);
+      return computedColor;
+    }
+    return color;
   }
 
   _updateSeparatorHeight(e, index) {

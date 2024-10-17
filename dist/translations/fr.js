@@ -81,6 +81,7 @@ export default {
     bottom: "Bas",
     interaction: "Interaction",
     colors: "Couleurs",
+    cardTitleColor: "Couleur du titre de la carte",
     cardBackgroundColor: "Couleur de fond de la carte",
     barBackgroundColor: "Couleur de fond de la barre",
     barBorderColor: "Couleur de bordure de la barre",

@@ -81,6 +81,7 @@ export default {
     bottom: "Bunn",
     interaction: "Interaksjon",
     colors: "Farger",
+    cardTitleColor: "Korttittelfarge",
     cardBackgroundColor: "Kortbakgrunnsfarge",
     barBackgroundColor: "Linjebakgrunnsfarge",
     barBorderColor: "Linjekantfarge",
