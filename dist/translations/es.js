@@ -132,6 +132,7 @@ export default {
       "Esta entidad proporciona la imagen para la visualización.",
     toggle: "Alternar",
     navigate: "Navegar",
+    navigation_path: "Ruta de navegación",
     url: "Abrir URL",
     trigger: "Activar",
     formatted_entities: "Entidades formateadas",

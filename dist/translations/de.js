@@ -134,6 +134,7 @@ export default {
       "Diese Entität stellt das Bild für die Anzeige bereit.",
     toggle: "Umschalten",
     navigate: "Navigieren",
+    navigation_path: "Navigationpfad",
     url: "URL öffnen",
     trigger: "Auslösen",
     formatted_entities: "Formatierte Entitäten",

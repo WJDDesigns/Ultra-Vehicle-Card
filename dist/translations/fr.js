@@ -132,6 +132,7 @@ export default {
     entity_provides_image: "Cette entité fournit l'image pour l'affichage.",
     toggle: "Basculer",
     navigate: "Naviguer",
+    navigation_path: "Chemin de navigation",
     url: "Ouvrir l'URL",
     trigger: "Déclencher",
     formatted_entities: "Entités formatées",

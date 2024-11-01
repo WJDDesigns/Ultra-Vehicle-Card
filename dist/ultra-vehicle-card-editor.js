@@ -3,7 +3,7 @@ import {
   html,
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
-import { version } from "./version.js?v=38";
+import { version } from "./version.js?v=39";
 import "./state-dropdown.js";
 
 const stl = await import("./styles.js?v=" + version);
@@ -338,6 +338,7 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this._activeTab = "settings";
     this._expandedEntities = {};
     this._iconLabels = {};
+    this._lovelaceViews = [];
   }
 
   firstUpdated() {
@@ -989,66 +990,81 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     return html`
       ${vehicle_type === "EV" || vehicle_type === "Hybrid"
         ? html`
-            ${this._renderEntityPicker(
+            ${this._renderEntityPickerWithToggle(
               "battery_level_entity",
               this.localize("editor.battery_level"),
-              this.localize("editor.battery_level_description")
+              this.localize("editor.battery_level_description"),
+              "show_battery"
             )}
-            ${this._renderEntityPicker(
+            ${this._renderEntityPickerWithToggle(
               "battery_range_entity",
               this.localize("editor.battery_range"),
-              this.localize("editor.battery_range_description")
+              this.localize("editor.battery_range_description"),
+              "show_battery_range"
             )}
-            ${this._renderEntityPicker(
+            ${this._renderEntityPickerWithToggle(
               "charging_status_entity",
               this.localize("editor.charging_status"),
-              this.localize("editor.charging_status_description")
+              this.localize("editor.charging_status_description"),
+              "show_charging_status"
             )}
-            ${this._renderEntityPicker(
+            ${this._renderEntityPickerWithToggle(
               "charge_limit_entity",
               this.localize("editor.charge_limit"),
-              this.localize("editor.charge_limit_description")
+              this.localize("editor.charge_limit_description"),
+              "show_charge_limit"
             )}
           `
         : ""}
       ${vehicle_type === "Fuel" || vehicle_type === "Hybrid"
         ? html`
-            ${this._renderEntityPicker(
+            ${this._renderEntityPickerWithToggle(
               "fuel_level_entity",
               this.localize("editor.fuel_level"),
-              this.localize("editor.fuel_level_description")
+              this.localize("editor.fuel_level_description"),
+              "show_fuel"
             )}
-            ${this._renderEntityPicker(
+            ${this._renderEntityPickerWithToggle(
               "fuel_range_entity",
               this.localize("editor.fuel_range"),
-              this.localize("editor.fuel_range_description")
+              this.localize("editor.fuel_range_description"),
+              "show_fuel_range"
             )}
-            ${this._renderEntityPicker(
+            ${this._renderEntityPickerWithToggle(
               "engine_on_entity",
               this.localize("editor.engine_on"),
-              this.localize("editor.engine_on_description")
+              this.localize("editor.engine_on_description"),
+              "show_engine_on"
             )}
           `
         : ""}
-      ${this._renderEntityPicker(
+      ${this._renderEntityPickerWithToggle(
         "location_entity",
         this.localize("editor.location"),
-        this.localize("editor.location_description")
+        this.localize("editor.location_description"),
+        "show_location"
       )}
-      ${this._renderEntityPicker(
+      ${this._renderEntityPickerWithToggle(
         "mileage_entity",
         this.localize("editor.mileage"),
-        this.localize("editor.mileage_description")
+        this.localize("editor.mileage_description"),
+        "show_mileage"
       )}
-      ${this._renderEntityPicker(
+      ${this._renderEntityPickerWithToggle(
         "car_state_entity",
         this.localize("editor.car_state"),
-        this.localize("editor.car_state_description")
+        this.localize("editor.car_state_description"),
+        "show_car_state"
       )}
     `;
   }
 
-  _renderEntityPicker(configValue, labelText, description) {
+  _renderEntityPickerWithToggle(
+    configValue,
+    labelText,
+    description,
+    toggleKey
+  ) {
     return html`
       <div class="input-group">
         <label for="${configValue}">${labelText}</label>
@@ -1090,9 +1106,26 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
                 : ""}
             </div>
           </div>
+          <label class="switch">
+            <input
+              type="checkbox"
+              .checked="${this.config[toggleKey] !== false}"
+              @change="${(e) => this._toggleChanged(e, toggleKey)}"
+            />
+            <span class="slider round"></span>
+          </label>
         </div>
       </div>
     `;
+  }
+
+  _toggleChanged(ev, toggleKey) {
+    const target = ev.target;
+    this.config = {
+      ...this.config,
+      [toggleKey]: target.checked,
+    };
+    this.configChanged(this.config);
   }
 
   _entityFilterChanged(e, configValue) {
@@ -1742,8 +1775,35 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     this.requestUpdate();
   }
 
+  async _fetchLovelaceConfig() {
+    try {
+      const response = await this.hass.callWS({
+        type: "lovelace/config",
+      });
+      console.log("Fetched Lovelace Views:", response.views);
+      return response.views || [];
+    } catch (error) {
+      console.error("Failed to fetch Lovelace config:", error);
+      return [];
+    }
+  }
+
+  async _initializeLovelaceViews() {
+    try {
+      const views = await this._fetchLovelaceConfig();
+      console.log("Initialized Views:", views);
+      this._lovelaceViews = views.map((view) => {
+        const path = view.path || view.title.toLowerCase().replace(/\s+/g, "_");
+        return `/lovelace/${path}`;
+      });
+      this.requestUpdate();
+    } catch (error) {
+      console.error("Failed to initialize Lovelace views:", error);
+    }
+  }
+
   _getNavigationPaths() {
-    return [
+    const defaultPaths = [
       "overview",
       "map",
       "logbook",
@@ -1751,7 +1811,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       "energy",
       "config",
       "developer-tools",
-      "lovelace",
       "devices",
       "integrations",
       "automations",
@@ -1761,7 +1820,10 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       "tags",
       "people",
     ];
+
+    return [...defaultPaths, ...this._lovelaceViews];
   }
+
   _updateIndices() {
     const elements = this.shadowRoot.querySelectorAll(".selected-entity");
     elements.forEach((element, index) => {
@@ -1948,10 +2010,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
 
     const defaultColors = {
       cardTitleColor: "--primary-text-color",
-      cardBackgroundColor:
-        "--ha-card-background, --card-background-color, #fff",
+      cardBackgroundColor: "--card-background-color, #fff",
       barBackgroundColor: "--secondary-text-color",
-      barBorderColor: "--ha-card-background, --card-background-color, #fff",
+      barBorderColor: "--card-background-color, #fff",
       barFillColor: "--primary-color",
       limitIndicatorColor: "--primary-text-color",
       infoTextColor: "--secondary-text-color",
@@ -2305,11 +2366,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
     e.stopPropagation();
     const defaultColors = {
       cardTitleColor: "var(--primary-text-color)",
-      cardBackgroundColor:
-        "var(--ha-card-background, var(--card-background-color, #fff))",
+      cardBackgroundColor: "var(--card-background-color, #fff))",
       barBackgroundColor: "var(--secondary-text-color)",
-      barBorderColor:
-        "var(--ha-card-background, var(--card-background-color, #fff))",
+      barBorderColor: "var(--card-background-color, #fff))",
       barFillColor: "var(--primary-color)",
       limitIndicatorColor: "var(--primary-text-color)",
       infoTextColor: "var(--secondary-text-color)",
@@ -2421,17 +2480,6 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
       composed: true,
     });
     this.dispatchEvent(event);
-  }
-
-  _toggleChanged(ev) {
-    const target = ev.target;
-    if (target.configValue) {
-      this.config = {
-        ...this.config,
-        [target.configValue]: target.checked,
-      };
-      this.configChanged(this.config);
-    }
   }
 
   _vehicleTypeChanged(ev) {
@@ -3729,11 +3777,9 @@ export class UltraVehicleCardEditor extends localize(LitElement) {
   _resetAllColors() {
     const defaultColors = {
       cardTitleColor: "var(--primary-text-color)",
-      cardBackgroundColor:
-        "var(--ha-card-background, var(--card-background-color, #fff))",
+      cardBackgroundColor: "var(--card-background-color, #fff))",
       barBackgroundColor: "var(--secondary-text-color)",
-      barBorderColor:
-        "var(--ha-card-background, var(--card-background-color, #fff))",
+      barBorderColor: "var(--card-background-color, #fff))",
       barFillColor: "var(--primary-color)",
       limitIndicatorColor: "var(--primary-text-color)",
       infoTextColor: "var(--secondary-text-color)",

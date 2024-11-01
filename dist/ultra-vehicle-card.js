@@ -4,8 +4,8 @@ import {
   css,
 } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
 import { until } from "https://unpkg.com/lit-html@1.4.1/directives/until.js?module";
-import { version, setVersion } from "./version.js?v=38";
-setVersion("V1.6.8");
+import { version, setVersion } from "./version.js?v=39";
+setVersion("V1.6.9-beta1");
 
 const sensorModule = await import("./sensors.js?v=" + version);
 const {
@@ -43,7 +43,6 @@ class UltraVehicleCard extends localize(LitElement) {
     super.updated(changedProperties);
     if (changedProperties.has("config")) {
       this._updateStyles();
-      this._updateIconBackground();
       this._updateImageHeights();
     }
   }
@@ -1561,11 +1560,9 @@ class UltraVehicleCard extends localize(LitElement) {
       show_car_state: true,
       show_charge_limit: true,
       cardTitleColor: "var(--primary-text-color)",
-      cardBackgroundColor:
-        "var(--ha-card-background, var(--card-background-color, #fff))",
+      cardBackgroundColor: "var(--card-background-color, #fff))",
       barBackgroundColor: "var(--secondary-text-color)",
-      barBorderColor:
-        "var(--ha-card-background, var(--card-background-color, #fff))",
+      barBorderColor: "var(--card-background-color, #fff))",
       barFillColor: "var(--primary-color)",
       limitIndicatorColor: "var(--primary-text-color)",
       infoTextColor: "var(--secondary-text-color)",
@@ -1707,14 +1704,12 @@ class UltraVehicleCard extends localize(LitElement) {
     };
 
     this._updateStyles();
-    this._updateIconBackground();
     this._updateImageHeights();
     this.requestUpdate();
   }
 
   connectedCallback() {
     super.connectedCallback();
-    this._updateIconBackground();
     this._updateStyles();
     window.addEventListener("theme-changed", this._onThemeChanged.bind(this));
   }
@@ -1727,50 +1722,7 @@ class UltraVehicleCard extends localize(LitElement) {
     );
   }
 
-  firstUpdated() {
-    this._updateIconBackground();
-  }
-
-  _updateIconBackground() {
-    const cardBackgroundColor = getComputedStyle(this)
-      .getPropertyValue("--ha-card-background")
-      .trim();
-    const isDarkBackground = this._isColorDark(cardBackgroundColor);
-
-    if (isDarkBackground) {
-      this.classList.add("dark-background");
-      this.classList.remove("light-background");
-    } else {
-      this.classList.add("light-background");
-      this.classList.remove("dark-background");
-    }
-
-    const iconBackgroundColor = isDarkBackground
-      ? "var(--uvc-icon-background-dark, rgba(255, 255, 255, 0.1))"
-      : "var(--uvc-icon-background-light, rgba(0, 0, 0, 0.1))";
-    this.style.setProperty("--uvc-icon-background", iconBackgroundColor);
-  }
-
-  _isColorDark(color) {
-    const rgb = this._hexToRgb(color);
-    if (!rgb) return false;
-    const [r, g, b] = rgb.split(",").map(Number);
-    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-    return brightness < 128;
-  }
-
-  _hexToRgb(hex) {
-    if (!hex) return null;
-    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-    hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result
-      ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(
-          result[3],
-          16
-        )}`
-      : null;
-  }
+  firstUpdated() {}
 
   _updateImageHeights() {
     if (this.config.image_url_type !== "none") {
@@ -1822,7 +1774,6 @@ class UltraVehicleCard extends localize(LitElement) {
 
   _onThemeChanged() {
     this._updateStyles();
-    this._updateIconBackground();
   }
 }
 

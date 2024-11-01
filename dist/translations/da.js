@@ -155,6 +155,7 @@ export default {
       "Tilpas farverne på forskellige elementer for at matche din foretrukne stil eller tema.",
     toggle: "Skift",
     navigate: "Naviger",
+    navigation_path: "Navigationssti",
     url: "Åbn URL",
     trigger: "Trigger",
     none: "Ingen",

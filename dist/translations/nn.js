@@ -130,6 +130,7 @@ export default {
     entity_provides_image: "Denne eininga gir biletet for visinga.",
     toggle: "Veksle",
     navigate: "Naviger",
+    navigation_path: "Navigasjonssti",
     url: "Opne URL",
     trigger: "Utløys",
     formatted_entities: "Formaterte einingar",

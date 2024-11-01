@@ -553,7 +553,7 @@ export const styles = css`
     border-radius: 50%;
     padding: 8px;
     transition: background-color 0.3s;
-    background-color: var(--uvc-icon-background);
+    background-color: var(--divider-color);
   }
 
   .icon-wrapper.square,

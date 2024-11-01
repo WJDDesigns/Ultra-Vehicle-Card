@@ -130,6 +130,7 @@ export default {
     entity_provides_image: "Denna enhet tillhandahåller bilden för visningen.",
     toggle: "Växla",
     navigate: "Navigera",
+    navigation_path: "Navigeringssökväg",
     url: "Öppna URL",
     trigger: "Utlös",
     formatted_entities: "Formaterade enheter",

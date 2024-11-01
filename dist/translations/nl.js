@@ -132,6 +132,7 @@ export default {
       "Deze entiteit levert de afbeelding voor de weergave.",
     toggle: "Schakelen",
     navigate: "Navigeren",
+    navigation_path: "Navigatiepad",
     url: "URL openen",
     trigger: "Activeren",
     formatted_entities: "Geformatteerde entiteiten",

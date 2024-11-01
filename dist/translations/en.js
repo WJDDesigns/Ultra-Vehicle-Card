@@ -154,6 +154,7 @@ export default {
       "Customize the colors of various elements in the card to match your preferred style or theme.",
     toggle: "Toggle",
     navigate: "Navigate",
+    navigation_path: "Navigation Path",
     url: "Open URL",
     trigger: "Trigger",
     none: "None",
