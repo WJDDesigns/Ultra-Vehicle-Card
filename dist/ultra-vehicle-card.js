@@ -461,6 +461,7 @@ class UltraVehicleCard extends localize(LitElement) {
       "in_progress",
       "active",
       "connected",
+      "charging_system_charging",
     ];
     return chargingStates.includes(state);
   }
