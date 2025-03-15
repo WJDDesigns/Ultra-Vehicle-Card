@@ -1,4 +1,4 @@
-import { css } from "https://unpkg.com/lit-element@2.4.0/lit-element.js?module";
+import { css } from "https://esm.run/lit-element@2.4.0/lit-element.js";
 
 export const styles = css`
   :host {
