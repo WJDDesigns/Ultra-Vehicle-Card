@@ -1,0 +1,45 @@
+{
+  "name": "ultra-vehicle-card",
+  "version": "2.0.0-beta1",
+  "description": "Ultra Vehicle Card for Home Assistant",
+  "main": "dist/ultra-vehicle-card.js",
+  "scripts": {
+    "prebuild": "node prepare-build.js",
+    "build": "webpack --mode production",
+    "build:deploy": "npm run prebuild && webpack --mode production && mkdir -p /Volumes/config/www/community/Ultra-Vehicle-Card/ && cp -R dist/* /Volumes/config/www/community/Ultra-Vehicle-Card/",
+    "watch": "webpack --watch --mode development",
+    "start": "webpack serve --mode development --open",
+    "dev": "webpack serve --mode development --open",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix"
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@ldrender/gradient-picker": "^2.0.12",
+    "@mdi/js": "^7.4.47",
+    "custom-card-helpers": "^1.9.0",
+    "grapick": "^0.1.13",
+    "home-assistant-js-websocket": "^8.0.1",
+    "lit": "^3.1.0",
+    "memoize-one": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^8.26.1",
+    "@typescript-eslint/parser": "^8.26.1",
+    "copy-webpack-plugin": "^13.0.0",
+    "css-loader": "^7.1.2",
+    "eslint": "^9.22.0",
+    "eslint-config-prettier": "^10.1.1",
+    "file-loader": "^6.2.0",
+    "prettier": "^3.5.3",
+    "rollup-plugin-copy": "^3.5.0",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.3.3",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.15.1"
+  }
+}
