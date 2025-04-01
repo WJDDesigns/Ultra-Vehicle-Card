@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "format": "prettier --write \"src/**/*.{ts,js,css}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,js,css}\""
+  }
+} 
