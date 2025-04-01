@@ -1,12 +1,11 @@
 {
   "name": "ultra-vehicle-card",
-  "version": "2.0.0-beta1",
+  "version": "V2.0-Beta4",
   "description": "Ultra Vehicle Card for Home Assistant",
   "main": "dist/ultra-vehicle-card.js",
   "scripts": {
-    "prebuild": "node prepare-build.js",
     "build": "webpack --mode production",
-    "build:deploy": "npm run prebuild && webpack --mode production && mkdir -p /Volumes/config/www/community/Ultra-Vehicle-Card/ && cp -R dist/* /Volumes/config/www/community/Ultra-Vehicle-Card/",
+    "build:deploy": "webpack --mode production && mkdir -p /Volumes/config/www/community/Ultra-Vehicle-Card/ && cp -R dist/* /Volumes/config/www/community/Ultra-Vehicle-Card/",
     "watch": "webpack --watch --mode development",
     "start": "webpack serve --mode development --open",
     "dev": "webpack serve --mode development --open",

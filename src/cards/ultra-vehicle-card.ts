@@ -9,10 +9,9 @@ import {
   createLinearGradient,
   getColorAtPosition,
 } from '../components/gradient-editor';
-import { version, setVersion } from '../../dist/version.js';
 
-// Set the version number - keep this in sync with version.js
-setVersion('2.0-Beta1');
+// Declare the global constant injected by Webpack
+declare const CARD_VERSION: string;
 
 @customElement('ultra-vehicle-card')
 export class UltraVehicleCard extends LitElement {
@@ -1880,7 +1879,7 @@ export class UltraVehicleCard extends LitElement {
 
     // Add this code to log the version in the console with custom styling
     console.info(
-      `%c Ultra Vehicle Card%c  ${version} `,
+      `%c Ultra Vehicle Card%c  ${CARD_VERSION} `,
       'background-color: #4299D9;color: #fff;padding: 3px 2px 3px 3px;border-radius: 14px 0 0 14px;font-family: DejaVu Sans,Verdana,Geneva,sans-serif;text-shadow: 0 1px 0 rgba(1, 1, 1, 0.3)',
       'background-color: #4299D9;color: #fff;padding: 3px 3px 3px 2px;border-radius: 0 14px 14px 0;font-family: DejaVu Sans,Verdana,Geneva,sans-serif;text-shadow: 0 1px 0 rgba(1, 1, 1, 0.3)'
     );

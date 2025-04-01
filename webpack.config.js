@@ -1,22 +1,9 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const fs = require('fs');
+const webpack = require('webpack');
+const packageJson = require('./package.json');
 
-// Extract version from version.js file
-function getVersion() {
-  try {
-    const versionFile = fs.readFileSync(path.resolve(__dirname, 'dist/version.js'), 'utf8');
-    const versionMatch = versionFile.match(/v([\d\.\-A-Za-z]+)/);
-    if (versionMatch && versionMatch[1]) {
-      return versionMatch[1];
-    }
-  } catch (e) {
-    console.error('Error reading version:', e);
-  }
-  return 'unknown';
-}
-
-const version = getVersion();
+const version = packageJson.version;
 console.log(`Building Ultra Vehicle Card version: ${version}`);
 
 module.exports = {
@@ -45,6 +32,9 @@ module.exports = {
           to: path.resolve(__dirname, 'dist/assets'),
         },
       ],
+    }),
+    new webpack.DefinePlugin({
+      CARD_VERSION: JSON.stringify(version),
     }),
   ],
   performance: {

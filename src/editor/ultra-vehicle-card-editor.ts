@@ -19,6 +19,9 @@ import {
 } from '../components/gradient-editor';
 import { mdiDelete } from '@mdi/js';
 
+// Declare the global constant injected by Webpack
+declare const CARD_VERSION: string;
+
 // Define schema types
 interface SchemaBase {
   name?: string;
@@ -527,7 +530,7 @@ export class UltraVehicleCardEditor extends LitElement {
   @property() private _dropTargetBar = null;
   @property() private _dropTargetIconRow = null;
   @state() private _draggedSection: number | null = null;
-  private _editorVersion = '1.2.0-debug'; // Add version to help with debugging
+  private _editorVersion = CARD_VERSION; // Use the global constant
   @state() private _activeIconTabs: Record<string, string> = {};
   @state() private _activeBarTabs: Record<number, string> = {}; // State for bar tabs
   @state() private _gradientEditorKeys: Record<number, number> = {}; // State for gradient editor keys
@@ -3862,15 +3865,18 @@ export class UltraVehicleCardEditor extends LitElement {
         border: 1px solid var(--divider-color);
         border-radius: 8px;
         overflow: hidden;
-        background-color: var(--card-background-color, #212121);
+        background-color: var(
+          --card-background-color,
+          #212121
+        ); /* Keep fallback, but primarily use variable */
       }
 
       .section-header {
         font-size: 1.1em;
         font-weight: 500;
         padding: 12px 16px;
-        background-color: #1d1d1d;
-        color: white;
+        background-color: var(--secondary-background-color); /* Use theme variable */
+        color: var(--primary-text-color); /* Use theme variable */
         margin-bottom: 0;
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
@@ -3879,7 +3885,7 @@ export class UltraVehicleCardEditor extends LitElement {
       .settings-content {
         padding: 16px;
         display: grid;
-        background-color: #2b2b2b;
+        background-color: var(--primary-background-color); /* Use theme variable */
       }
 
       /* Forms and inputs */
@@ -5122,7 +5128,7 @@ export class UltraVehicleCardEditor extends LitElement {
         margin-bottom: 16px;
         border: 1px solid var(--divider-color);
         border-radius: 8px;
-        background-color: #2b2b2b;
+        background-color: var(--primary-background-color); /* Use theme variable */
         overflow: hidden;
         padding: 0;
       }
