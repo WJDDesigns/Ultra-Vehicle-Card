@@ -80,6 +80,9 @@ export interface CustomCard {
     type: string;
     name: string;
     description: string;
+    preview?: boolean;
+    documentationURL?: string;
+    version?: string;
 }
 export interface IconConfig {
     entity: string;

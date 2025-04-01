@@ -15,4 +15,4 @@ function setVersion(value) {
 // Set default version (will be overridden by card)
 setVersion('2.0-Beta1');
 
-export { version, setVersion }; 
+export { version, setVersion };

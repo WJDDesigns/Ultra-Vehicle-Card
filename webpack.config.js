@@ -34,7 +34,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
-    filename: `ultra-vehicle-card-${version}.js`,
+    filename: 'ultra-vehicle-card.js',
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
@@ -46,20 +46,6 @@ module.exports = {
         },
       ],
     }),
-    // Generate a versioned file reference for HACS
-    {
-      apply: compiler => {
-        compiler.hooks.afterEmit.tap('GenerateVersionedReference', () => {
-          // Create a simple reference file that redirects to the versioned file
-          const refContent = `// This file auto-redirects to the current version
-import './ultra-vehicle-card-${version}.js';`;
-
-          fs.writeFileSync(path.resolve(__dirname, 'dist/ultra-vehicle-card.js'), refContent);
-
-          console.log(`Created reference file pointing to version ${version}`);
-        });
-      },
-    },
   ],
   performance: {
     hints: false,
