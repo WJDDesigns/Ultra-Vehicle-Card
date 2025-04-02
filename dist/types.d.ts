@@ -109,6 +109,7 @@ export interface IconConfig {
     show_state?: boolean;
     show_name?: boolean;
     show_units?: boolean;
+    show_icon?: boolean;
     on_click_action?: string;
     text_position?: 'bottom' | 'top' | 'left' | 'right';
     vertical_alignment?: 'flex-start' | 'center' | 'flex-end';

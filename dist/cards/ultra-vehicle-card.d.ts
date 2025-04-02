@@ -32,6 +32,7 @@ export declare class UltraVehicleCard extends LitElement {
     private _renderIconRow;
     private _renderCardIcon;
     private _handleIconClick;
+    private _showMapDialog;
     private _handleDragStart;
     private _handleDragEnd;
     private _hexToRgb;
