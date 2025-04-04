@@ -108,9 +108,7 @@ export declare class UltraVehicleCardEditor extends LitElement {
     private _handleDrop;
     private _rearrangeBars;
     private _createDefaultConfig;
-    private _handleImageUpload;
-    private _showNotification;
-    private _closeNotification;
+    private _handleFileInputChange;
     private _formatFieldName;
     private _createDefaultIconRow;
     private _createDefaultIcon;
@@ -127,6 +125,9 @@ export declare class UltraVehicleCardEditor extends LitElement {
     private _renderCardIcon;
     private _handleIconClick;
     private _renderVehicleImageConfig;
+    private _handleImageUpload;
+    private _showNotification;
+    private _closeNotification;
     private _renderActionImageConfig;
     private _updateImageCrop;
     private _resetImageCrop;

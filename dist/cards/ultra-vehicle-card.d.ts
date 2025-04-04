@@ -5,6 +5,7 @@ export declare class UltraVehicleCard extends LitElement {
     hass: HomeAssistant;
     private config;
     private _lastRenderTime;
+    private _mapPopupData;
     static getConfigElement(): HTMLElement;
     static getStubConfig(): {
         title: string;
@@ -32,7 +33,10 @@ export declare class UltraVehicleCard extends LitElement {
     private _renderIconRow;
     private _renderCardIcon;
     private _handleIconClick;
-    private _showMapDialog;
+    /**
+     * Opens a location map for the entity
+     */
+    private _openLocationMap;
     private _handleDragStart;
     private _handleDragEnd;
     private _hexToRgb;
@@ -40,6 +44,7 @@ export declare class UltraVehicleCard extends LitElement {
     private _computeImageStyle;
     private _normalizeState;
     private _renderBarLabels;
+    private _showMoreInfo;
     connectedCallback(): void;
     disconnectedCallback(): void;
     private _handleConfigChanged;
@@ -48,4 +53,9 @@ export declare class UltraVehicleCard extends LitElement {
     private _setupRefreshInterval;
     protected updated(changedProperties: Map<string, any>): void;
     private _evaluateTemplate;
+    private _renderMapPopup;
+    private _formatCoordinates;
+    private _getEntityForCoordinates;
+    private _isDarkMode;
+    private _closeMapPopup;
 }
