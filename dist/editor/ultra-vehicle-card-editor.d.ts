@@ -41,6 +41,7 @@ export declare class UltraVehicleCardEditor extends LitElement {
     private handleFileUpload;
     private _getCleanConfig;
     private _updateConfig;
+    private _configChangedTimeout;
     private _valueChanged;
     private _barValueChanged;
     private _setNestedValue;

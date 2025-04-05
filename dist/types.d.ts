@@ -110,6 +110,7 @@ export interface IconConfig {
     show_name?: boolean;
     show_units?: boolean;
     on_click_action?: string;
+    navigation_path?: string;
     text_position?: 'bottom' | 'top' | 'left' | 'right';
     vertical_alignment?: 'flex-start' | 'center' | 'flex-end';
     icon_size?: string | number;
