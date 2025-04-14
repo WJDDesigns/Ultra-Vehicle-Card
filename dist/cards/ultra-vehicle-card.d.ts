@@ -5,6 +5,7 @@ export declare class UltraVehicleCard extends LitElement {
     hass: HomeAssistant;
     private config;
     private _lastRenderTime;
+    private _lastImageUrl;
     private _mapPopupData;
     static getConfigElement(): HTMLElement;
     static getStubConfig(): {
@@ -51,6 +52,8 @@ export declare class UltraVehicleCard extends LitElement {
     private _handleForceGradientRefresh;
     private _refreshInterval;
     private _setupRefreshInterval;
+    private _entityStates;
+    private _entityImageUrls;
     protected updated(changedProperties: Map<string, any>): void;
     private _evaluateTemplate;
     private _renderMapPopup;

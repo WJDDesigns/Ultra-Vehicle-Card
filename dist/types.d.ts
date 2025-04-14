@@ -53,6 +53,7 @@ export interface UltraVehicleCardConfig {
         [key: string]: 'left' | 'right';
     };
     hidden_sections?: string[];
+    section_styles?: SectionStyles;
 }
 export interface BarConfig {
     entity: string;
@@ -109,13 +110,24 @@ export interface IconConfig {
     show_state?: boolean;
     show_name?: boolean;
     show_units?: boolean;
+    show_icon_active?: boolean;
+    show_icon_inactive?: boolean;
     on_click_action?: string;
     navigation_path?: string;
-    text_position?: 'bottom' | 'top' | 'left' | 'right';
+    text_position?: 'top' | 'bottom' | 'left' | 'right';
     vertical_alignment?: 'flex-start' | 'center' | 'flex-end';
+    text_alignment?: 'left' | 'center' | 'right';
     icon_size?: string | number;
     text_size?: string | number;
+    name_color_active?: string;
+    name_color_inactive?: string;
+    state_color_active?: string;
+    state_color_inactive?: string;
     icon_background?: 'none' | 'circle' | 'square' | 'rounded-square';
+    icon_background_color?: string;
+    container_background?: 'none' | 'circle' | 'square' | 'rounded-square';
+    container_background_color?: string;
+    container_width?: number;
     draggable?: boolean;
 }
 export interface IconRowConfig {
@@ -130,4 +142,11 @@ export interface ImageCropSettings {
     right: number;
     bottom: number;
     left: number;
+}
+export interface SectionStyleSettings {
+    marginTop?: number;
+    marginBottom?: number;
+}
+export interface SectionStyles {
+    [sectionId: string]: SectionStyleSettings;
 }
