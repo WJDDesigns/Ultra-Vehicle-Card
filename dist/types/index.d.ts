@@ -65,6 +65,7 @@ export interface BarConfig {
     limit_entity?: string;
     limit_indicator_color?: string;
     bar_size?: 'thin' | 'regular' | 'thick' | 'thiccc';
+    bar_radius?: 'round' | 'square' | 'rounded-square';
     show_left?: boolean;
     show_right?: boolean;
     alignment?: 'flex-start' | 'center' | 'flex-end' | 'space-between';

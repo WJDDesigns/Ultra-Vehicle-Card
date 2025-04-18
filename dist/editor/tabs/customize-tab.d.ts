@@ -1,0 +1,34 @@
+import { LitElement, TemplateResult, nothing } from 'lit';
+import { HomeAssistant } from 'custom-card-helpers';
+import { UltraVehicleCardConfig } from '../../types';
+export declare class CustomizeTab extends LitElement {
+    hass: HomeAssistant;
+    config: UltraVehicleCardConfig;
+    private _draggedSection;
+    private _expandedSectionId;
+    private _dropTargetSection;
+    private _dropTargetColumn;
+    private _t;
+    private _fireConfigChanged;
+    private _getFriendlyName;
+    private _truncateText;
+    private _valueChanged;
+    private _handleSectionDragStart;
+    private _handleSectionDragEnd;
+    private _handleSectionDragOver;
+    private _handleSectionDragLeave;
+    private _handleSectionDrop;
+    private _handleColumnDragOver;
+    private _handleColumnDragLeave;
+    private _getDisplaySections;
+    private _getExpandedConfigSections;
+    private _handleColumnDrop;
+    private _rearrangeSections;
+    private _toggleSectionExpand;
+    private _updateSectionMargin;
+    protected render(): TemplateResult | typeof nothing;
+    private _renderCustomizeTab;
+    private _renderDraggableSections;
+    private _renderGlobalCssSection;
+    static styles: import("lit").CSSResult;
+}

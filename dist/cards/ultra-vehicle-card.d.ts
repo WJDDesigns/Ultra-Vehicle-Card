@@ -11,7 +11,7 @@ export declare class UltraVehicleCard extends LitElement {
     static getStubConfig(): {
         title: string;
         title_alignment: string;
-        title_size: string;
+        title_size: number;
         formatted_entities: boolean;
         vehicle_image_type: string;
     };
@@ -25,6 +25,7 @@ export declare class UltraVehicleCard extends LitElement {
     private _forceFullRender;
     protected render(): import("lit").TemplateResult<1>;
     private _renderImage;
+    private _getFriendlyName;
     private _formatValue;
     private _handleImageError;
     private _renderBar;
@@ -48,7 +49,6 @@ export declare class UltraVehicleCard extends LitElement {
     private _showMoreInfo;
     connectedCallback(): void;
     disconnectedCallback(): void;
-    private _handleConfigChanged;
     private _handleForceGradientRefresh;
     private _refreshInterval;
     private _setupRefreshInterval;

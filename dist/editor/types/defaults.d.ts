@@ -1,0 +1,92 @@
+import { BarConfig } from '../../types';
+import { UltraVehicleCardConfig } from '../../types';
+export declare const DEFAULT_BAR_CONFIG: BarConfig;
+export declare const DEFAULT_CONFIG: Partial<UltraVehicleCardConfig>;
+export declare function createDefaultIcon(): {
+    id: string;
+    entity: string;
+    condition_entity: string;
+    condition_state: string;
+    name: string;
+    name_template: string;
+    icon: string;
+    icon_template: string;
+    active_state: string;
+    state_entity: string;
+    icon_active_color: string;
+    icon_inactive_color: string;
+    name_active_color: string;
+    name_inactive_color: string;
+    show_state: boolean;
+    state_active_color: string;
+    state_inactive_color: string;
+    state_template: string;
+    tap_action: {
+        action: string;
+    };
+    hold_action: {
+        action: string;
+    };
+    icon_size: number;
+    text_size: number;
+    icon_background_color: string;
+    container_background_color: string;
+    show_name: boolean;
+    size: number;
+    show_ring: boolean;
+    ring_color: string;
+    ring_size: number;
+    type: string;
+    image_source: string;
+    align: string;
+};
+export declare function createDefaultIconRow(): {
+    id: string;
+    spacing: string;
+    align: string;
+    icons: {
+        id: string;
+        entity: string;
+        condition_entity: string;
+        condition_state: string;
+        name: string;
+        name_template: string;
+        icon: string;
+        icon_template: string;
+        active_state: string;
+        state_entity: string;
+        icon_active_color: string;
+        icon_inactive_color: string;
+        name_active_color: string;
+        name_inactive_color: string;
+        show_state: boolean;
+        state_active_color: string;
+        state_inactive_color: string;
+        state_template: string;
+        tap_action: {
+            action: string;
+        };
+        hold_action: {
+            action: string;
+        };
+        icon_size: number;
+        text_size: number;
+        icon_background_color: string;
+        container_background_color: string;
+        show_name: boolean;
+        size: number;
+        show_ring: boolean;
+        ring_color: string;
+        ring_size: number;
+        type: string;
+        image_source: string;
+        align: string;
+    }[];
+};
+export declare function createDefaultCropSettings(): {
+    left: number;
+    top: number;
+    right: number;
+    bottom: number;
+};
+export declare function generateUniqueId(): string;

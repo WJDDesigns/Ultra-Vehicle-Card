@@ -33,7 +33,10 @@ export declare class GradientEditor extends LitElement {
     _handlePointerUp(e: PointerEvent): void;
     private _endDrag;
     _handleDeleteClick(e: Event, stop: GradientStop): void;
-    _handleAddStop(): void;
-    _handleResetStops(): void;
     private _updateDraggedStop;
+}
+export declare class UltraVehicleGradientEditor extends GradientEditor {
+    constructor();
+    updated(changedProperties: any): void;
+    render(): import("lit").TemplateResult<1>;
 }

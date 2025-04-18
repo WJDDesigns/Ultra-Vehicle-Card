@@ -1,5 +1,5 @@
 import { GradientStop } from './components/gradient-editor';
-export interface UltraVehicleCardConfig {
+interface UltraVehicleCardConfig {
     type?: string;
     title?: string;
     title_alignment?: 'left' | 'center' | 'right';
@@ -55,7 +55,7 @@ export interface UltraVehicleCardConfig {
     hidden_sections?: string[];
     section_styles?: SectionStyles;
 }
-export interface BarConfig {
+interface BarConfig {
     entity: string;
     limit_entity?: string;
     limit_indicator_color?: string;
@@ -75,6 +75,7 @@ export interface BarConfig {
     right_title_size?: string | number;
     right_text_size?: string | number;
     bar_size?: 'thin' | 'regular' | 'thick' | 'thiccc';
+    bar_radius?: 'round' | 'square' | 'rounded-square';
     show_left?: boolean;
     show_right?: boolean;
     alignment?: string;
@@ -89,12 +90,13 @@ export interface BarConfig {
     action_animation_state?: string;
     action_animation?: string;
 }
-export interface CustomCard {
+interface CustomCard {
     type: string;
     name: string;
     description: string;
+    draggable?: boolean;
 }
-export interface IconConfig {
+interface IconConfig {
     entity: string;
     name?: string;
     icon_inactive?: string;
@@ -114,6 +116,10 @@ export interface IconConfig {
     show_icon_inactive?: boolean;
     on_click_action?: string;
     navigation_path?: string;
+    url?: string;
+    service?: string;
+    service_data?: Record<string, any> | string;
+    action?: Record<string, any> | string;
     text_position?: 'top' | 'bottom' | 'left' | 'right';
     vertical_alignment?: 'flex-start' | 'center' | 'flex-end';
     text_alignment?: 'left' | 'center' | 'right';
@@ -130,23 +136,24 @@ export interface IconConfig {
     container_width?: number;
     draggable?: boolean;
 }
-export interface IconRowConfig {
+interface IconRowConfig {
     id: string;
     width: string;
     alignment: string;
     spacing?: string;
     icons: IconConfig[];
 }
-export interface ImageCropSettings {
+interface ImageCropSettings {
     top: number;
     right: number;
     bottom: number;
     left: number;
 }
-export interface SectionStyleSettings {
+interface SectionStyleSettings {
     marginTop?: number;
     marginBottom?: number;
 }
-export interface SectionStyles {
+interface SectionStyles {
     [sectionId: string]: SectionStyleSettings;
 }
+export { UltraVehicleCardConfig, BarConfig, CustomCard, IconConfig, IconRowConfig, ImageCropSettings, SectionStyleSettings, SectionStyles, GradientStop, };
