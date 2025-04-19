@@ -7,6 +7,7 @@ export declare class UltraVehicleCard extends LitElement {
     private _lastRenderTime;
     private _lastImageUrl;
     private _mapPopupData;
+    private _iconActiveStates;
     static getConfigElement(): HTMLElement;
     static getStubConfig(): {
         title: string;
