@@ -55,7 +55,7 @@ export declare class UltraVehicleCard extends LitElement {
     private _entityStates;
     private _entityImageUrls;
     protected updated(changedProperties: Map<string, any>): void;
-    private _evaluateTemplate;
+    private _evaluateTemplateAsync;
     private _renderMapPopup;
     private _formatCoordinates;
     private _getEntityForCoordinates;
