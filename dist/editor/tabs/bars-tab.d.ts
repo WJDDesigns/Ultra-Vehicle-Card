@@ -37,6 +37,7 @@ export declare class BarsTab extends LitElement {
     private _renderBar;
     private _renderBarContent;
     private _renderBarConfigurationTab;
+    private _renderAlignmentControl;
     private _renderBarColorsTab;
     private _renderBarAnimationTab;
     private _renderColorPickersGrid;
