@@ -1,7 +1,7 @@
 # Ultra Vehicle Card v2.0 - Your Dashboard's New Best Friend! 🚗💨
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/hacs/integration)
-![header-hero-uvc](https://private-user-images.githubusercontent.com/139587188/371209195-4fbd3ad9-fc07-4923-895c-4e316adbbf64.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDUwOTQ4ODcsIm5iZiI6MTc0NTA5NDU4NywicGF0aCI6Ii8xMzk1ODcxODgvMzcxMjA5MTk1LTRmYmQzYWQ5LWZjMDctNDkyMy04OTVjLTRlMzE2YWRiYmY2NC5naWY_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwNDE5JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDQxOVQyMDI5NDdaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1hOTMxZjk4M2RjNjdmMGNhMjZiY2VkNGExZTkzYWExNzJhMDIyNTYzMGE5MzJhM2Y5YTcyZjg1ZmViZTA2ZTA3JlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.u5XT8DNNZvJNBs7R72Cekvk3tZw1XspLu754dm8S--Y)
+![header-hero-uvc](https://github.com/user-attachments/assets/4fbd3ad9-fc07-4923-895c-4e316adbbf64)
 
 Welcome to the future! Ultra Vehicle Card v2.0 has been rebuilt from the ground up using **TypeScript** and **Lit**, making it more powerful, flexible, and frankly, more awesome than ever before. Forget the old ways; this is a whole new ride!
 
