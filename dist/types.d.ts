@@ -109,6 +109,8 @@ interface IconConfig {
     active_template_mode?: boolean;
     inactive_template?: string;
     active_template?: string;
+    active_state_text?: string;
+    inactive_state_text?: string;
     show_state?: boolean;
     show_name?: boolean;
     show_units?: boolean;

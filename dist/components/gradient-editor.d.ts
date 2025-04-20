@@ -6,7 +6,7 @@ export interface GradientStop {
 }
 export interface GradientConfig {
     stops: GradientStop[];
-    displayMode: 'value_based' | 'full';
+    displayMode: 'value_based' | 'full' | 'cropped';
 }
 export declare function generateGradientString(stops: GradientStop[]): string;
 export declare function createLinearGradient(stops: GradientStop[], direction?: string): string;
