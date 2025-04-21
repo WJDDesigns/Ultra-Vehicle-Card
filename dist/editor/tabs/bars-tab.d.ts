@@ -16,12 +16,14 @@ export declare class BarsTab extends LitElement {
     private _getFriendlyName;
     private _truncateText;
     private _fireConfigChanged;
+    private _fireForceRefreshEvent;
     private _fireForceGradientRefreshEvent;
     private _toggleBarExpand;
     private _addBar;
     private _duplicateBar;
     private _removeBar;
     private _barValueChanged;
+    private _handleColorChange;
     private _setNestedBarValue;
     private _setActiveBarTab;
     private _updateBarProperty;
@@ -40,6 +42,7 @@ export declare class BarsTab extends LitElement {
     private _renderAlignmentControl;
     private _renderBarColorsTab;
     private _renderBarAnimationTab;
+    private _renderPercentageTextSize;
     private _renderColorPickersGrid;
     private _renderGradientEditor;
     private _getMainBarSchema;

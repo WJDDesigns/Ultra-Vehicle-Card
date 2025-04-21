@@ -4,6 +4,8 @@ interface UltraVehicleCardConfig {
     title?: string;
     title_alignment?: 'left' | 'center' | 'right';
     title_size?: string | number;
+    title_color?: string;
+    card_background?: string;
     vehicle_image_type?: 'default' | 'upload' | 'url' | 'entity' | 'none';
     vehicle_image?: string;
     vehicle_image_entity?: string;
@@ -29,10 +31,15 @@ interface UltraVehicleCardConfig {
     show_charge_limit?: boolean;
     location_entity?: string;
     show_location?: boolean;
+    location_icon_color?: string;
+    location_text_color?: string;
     mileage_entity?: string;
     show_mileage?: boolean;
+    mileage_icon_color?: string;
+    mileage_text_color?: string;
     car_state_entity?: string;
     show_car_state?: boolean;
+    car_state_text_color?: string;
     bars?: BarConfig[];
     action_entity?: string;
     action_state?: string;
@@ -40,11 +47,8 @@ interface UltraVehicleCardConfig {
     action_image?: string;
     action_image_entity?: string;
     action_image_width?: number;
-    action_images?: {
-        [entityId: string]: {
-            [state: string]: string;
-        };
-    };
+    action_images?: ActionImageConfig[];
+    action_image_priority?: 'priority' | 'newest';
     icon_rows?: IconRowConfig[];
     vehicle_image_crop?: ImageCropSettings;
     action_image_crop?: ImageCropSettings;
@@ -70,14 +74,17 @@ interface BarConfig {
     left_text_color?: string;
     right_title_color?: string;
     right_text_color?: string;
+    percentage_text_color?: string;
     left_title_size?: string | number;
     left_text_size?: string | number;
     right_title_size?: string | number;
     right_text_size?: string | number;
+    percentage_text_size?: string | number;
     bar_size?: 'thin' | 'regular' | 'thick' | 'thiccc';
     bar_radius?: 'round' | 'square' | 'rounded-square';
     show_left?: boolean;
     show_right?: boolean;
+    show_percentage?: boolean;
     alignment?: string;
     width?: string;
     use_gradient?: boolean;
@@ -113,10 +120,14 @@ interface IconConfig {
     inactive_state_text?: string;
     show_state?: boolean;
     show_name?: boolean;
+    show_name_active?: boolean;
+    show_name_inactive?: boolean;
+    show_state_active?: boolean;
+    show_state_inactive?: boolean;
     show_units?: boolean;
     show_icon_active?: boolean;
     show_icon_inactive?: boolean;
-    on_click_action?: string;
+    on_click_action?: 'toggle' | 'more-info' | 'navigate' | 'url' | 'call-service' | 'perform-action' | 'show-location-map' | 'voice-assistant' | 'trigger' | 'no-action';
     navigation_path?: string;
     url?: string;
     service?: string;
@@ -150,6 +161,10 @@ interface ImageCropSettings {
     right: number;
     bottom: number;
     left: number;
+    width?: number;
+    height?: number;
+    x?: number;
+    y?: number;
 }
 interface SectionStyleSettings {
     marginTop?: number;
@@ -158,4 +173,15 @@ interface SectionStyleSettings {
 interface SectionStyles {
     [sectionId: string]: SectionStyleSettings;
 }
-export { UltraVehicleCardConfig, BarConfig, CustomCard, IconConfig, IconRowConfig, ImageCropSettings, SectionStyleSettings, SectionStyles, GradientStop, };
+interface ActionImageConfig {
+    id: string;
+    entity: string;
+    state: string;
+    image_type: 'upload' | 'url' | 'entity' | 'none';
+    image?: string;
+    image_entity?: string;
+    image_width?: number;
+    image_crop?: ImageCropSettings;
+    priority: number;
+}
+export { UltraVehicleCardConfig, BarConfig, CustomCard, IconConfig, IconRowConfig, ImageCropSettings, SectionStyleSettings, SectionStyles, GradientStop, ActionImageConfig, };

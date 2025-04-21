@@ -43,6 +43,11 @@ export declare class IconsTab extends LitElement {
     private _resetIconStateColor;
     private _resetIconAppearanceColor;
     private _resetIconSize;
+    /**
+     * Helper to get the icon defined for an entity in Home Assistant,
+     * falling back to domain/device_class defaults.
+     */
+    private _getEntityIcon;
     protected render(): TemplateResult | typeof nothing;
     private _renderIconRow;
     private _renderIconRowContent;

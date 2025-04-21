@@ -30,6 +30,7 @@ export declare class UltraVehicleCard extends LitElement {
     private _formatValue;
     private _handleImageError;
     private _renderBar;
+    private _renderPercentageText;
     private _getBarAnimationClass;
     private _getEntityState;
     private _renderIconRows;
