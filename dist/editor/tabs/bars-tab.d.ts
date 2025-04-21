@@ -11,6 +11,11 @@ export declare class BarsTab extends LitElement {
     private _preventExpandCollapse;
     private _activeBarTabs;
     private _gradientEditorKeys;
+    private _updateStopDebounceTimer;
+    private _removeStopDebounceTimer;
+    private _updateOrderDebounceTimer;
+    private readonly DEBOUNCE_DELAY;
+    private readonly MAX_STOPS;
     private _t;
     private _generateUniqueId;
     private _getFriendlyName;
@@ -33,14 +38,14 @@ export declare class BarsTab extends LitElement {
     private _addGradientStop;
     private _updateGradientStop;
     private _removeGradientStop;
-    private _updateGradientStopsOrder;
-    private _generateGradientPreview;
+    private _handleDuplicateStop;
     protected render(): TemplateResult | typeof nothing;
     private _renderBar;
     private _renderBarContent;
     private _renderBarConfigurationTab;
     private _renderAlignmentControl;
     private _renderBarColorsTab;
+    private _handleGradientFormChange;
     private _renderBarAnimationTab;
     private _renderPercentageTextSize;
     private _renderColorPickersGrid;
@@ -55,4 +60,6 @@ export declare class BarsTab extends LitElement {
     private _getGradientToggleSchema;
     private _prepareBarData;
     static styles: import("lit").CSSResult;
+    private _generateGradientPreview;
+    private _updateGradientStopsOrder;
 }
