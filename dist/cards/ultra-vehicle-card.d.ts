@@ -8,6 +8,8 @@ export declare class UltraVehicleCard extends LitElement {
     private _lastImageUrl;
     private _mapPopupData;
     private _iconActiveStates;
+    private _templateSubscriptions;
+    private _templateResults;
     static getConfigElement(): HTMLElement;
     static getStubConfig(): {
         title: string;
@@ -58,6 +60,9 @@ export declare class UltraVehicleCard extends LitElement {
     private _entityImageUrls;
     protected updated(changedProperties: Map<string, any>): void;
     private _evaluateTemplate;
+    private _subscribeToTemplate;
+    private _parseTemplateResult;
+    private _unsubscribeAllTemplates;
     private _renderMapPopup;
     private _formatCoordinates;
     private _getEntityForCoordinates;
