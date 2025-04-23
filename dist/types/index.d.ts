@@ -83,6 +83,12 @@ export interface BarConfig {
     animation_entity?: string;
     animation_state?: string;
     animation_type?: 'charging_lines' | 'fill_repeat' | 'pulse' | 'glow' | 'rainbow';
+    percentage_type?: 'entity' | 'difference';
+    percentage_amount_entity?: string;
+    percentage_total_entity?: string;
+    action_animation_entity?: string;
+    action_animation_state?: string;
+    action_animation?: string;
 }
 export interface CustomCard {
     type: string;

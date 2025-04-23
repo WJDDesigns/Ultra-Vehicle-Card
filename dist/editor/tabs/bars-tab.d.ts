@@ -48,6 +48,7 @@ export declare class BarsTab extends LitElement {
     private _handleGradientFormChange;
     private _renderBarAnimationTab;
     private _renderPercentageTextSize;
+    private _renderPercentageOptions;
     private _renderColorPickersGrid;
     private _renderGradientEditor;
     private _getMainBarSchema;
