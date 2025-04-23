@@ -46,6 +46,7 @@ export declare class UltraVehicleCard extends LitElement {
     private _handleDragStart;
     private _handleDragEnd;
     private _hexToRgb;
+    private _getZoneInfo;
     private _renderVehicleInfo;
     private _computeImageStyle;
     private _normalizeState;
@@ -68,4 +69,5 @@ export declare class UltraVehicleCard extends LitElement {
     private _getEntityForCoordinates;
     private _isDarkMode;
     private _closeMapPopup;
+    private _shouldRenderSection;
 }

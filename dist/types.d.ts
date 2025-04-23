@@ -1,4 +1,12 @@
 import { GradientStop } from './components/gradient-editor';
+export interface SectionCondition {
+    type: 'none' | 'show' | 'hide';
+    entity: string;
+    state: string;
+}
+export interface SectionConditions {
+    [sectionId: string]: SectionCondition;
+}
 interface UltraVehicleCardConfig {
     type?: string;
     title?: string;
@@ -58,6 +66,8 @@ interface UltraVehicleCardConfig {
     };
     hidden_sections?: string[];
     section_styles?: SectionStyles;
+    section_conditions?: SectionConditions;
+    global_css?: string;
 }
 interface BarConfig {
     entity: string;
