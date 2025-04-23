@@ -26,6 +26,7 @@ interface UltraVehicleCardConfig {
     layout_type?: 'single' | 'double';
     formatted_entities?: boolean;
     show_units?: boolean;
+    show_action_toasts?: boolean;
     icon_text_position?: 'bottom' | 'top' | 'left' | 'right';
     icon_vertical_alignment?: 'top' | 'center' | 'bottom';
     icon_text_size?: 'small' | 'medium' | 'large';

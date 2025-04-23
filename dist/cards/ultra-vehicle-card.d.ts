@@ -40,6 +40,12 @@ export declare class UltraVehicleCard extends LitElement {
     private _renderCardIcon;
     private _handleIconClick;
     /**
+     * Shows a toast notification
+     * @param message The message to display
+     * @param type The type of toast (success, error, or info)
+     */
+    private _showToast;
+    /**
      * Opens a location map for the entity
      */
     private _openLocationMap;
