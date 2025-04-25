@@ -1,6 +1,6 @@
 /**
  * Ultra Vehicle Card Version
- * v2.5.5
+ * v2.5.6
  * 
  * This file is auto-generated from src/version.ts
  * DO NOT MODIFY DIRECTLY
@@ -13,6 +13,6 @@ function setVersion(value) {
 }
 
 // Set default version (will be overridden by card)
-setVersion('2.5.5');
+setVersion('2.5.6');
 
 export { version, setVersion };

@@ -63,4 +63,7 @@ export declare class BarsTab extends LitElement {
     static styles: import("lit").CSSResult;
     private _generateGradientPreview;
     private _updateGradientStopsOrder;
+    private _updateBarCondition;
+    private _renderLeftSideConditionFields;
+    private _renderRightSideConditionFields;
 }

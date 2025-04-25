@@ -53,6 +53,8 @@ interface UltraVehicleCardConfig {
     show_car_state?: boolean;
     car_state_text_color?: string;
     car_state_text_size?: string | number;
+    car_state_template_mode?: boolean;
+    car_state_template?: string;
     show_info_icons?: boolean;
     bars?: BarConfig[];
     action_entity?: string;
@@ -112,6 +114,8 @@ interface BarConfig {
     action_animation_entity?: string;
     action_animation_state?: string;
     action_animation?: string;
+    left_condition?: SectionCondition;
+    right_condition?: SectionCondition;
 }
 interface CustomCard {
     type: string;

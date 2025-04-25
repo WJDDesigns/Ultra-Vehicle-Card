@@ -11,6 +11,8 @@ declare module 'custom-card-helpers' {
 export declare class UltraVehicleCard extends LitElement {
     hass: HomeAssistant;
     private config;
+    private _templateService?;
+    private static readonly DEFAULT_ACTIVE_STATES;
     private static readonly DEFAULT_INACTIVE_STATES;
     private _lastRenderTime;
     private _lastImageUrl;
@@ -80,7 +82,6 @@ export declare class UltraVehicleCard extends LitElement {
     private _subscribeToTemplate;
     private _parseTemplateResult;
     private _unsubscribeAllTemplates;
-    private _updateIconTemplateSubscriptions;
     private _renderMapPopup;
     private _formatCoordinates;
     private _getEntityForCoordinates;
@@ -88,4 +89,5 @@ export declare class UltraVehicleCard extends LitElement {
     private _closeMapPopup;
     private _shouldRenderSection;
     private _cancelConfirmation;
+    private _checkBarSideCondition;
 }
