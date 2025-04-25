@@ -1,15 +1,25 @@
 import { LitElement } from 'lit';
 import { HomeAssistant } from 'custom-card-helpers';
 import { UltraVehicleCardConfig } from '../types';
+declare module 'custom-card-helpers' {
+    interface HomeAssistant {
+        __uvc_template_strings?: {
+            [key: string]: string;
+        };
+    }
+}
 export declare class UltraVehicleCard extends LitElement {
     hass: HomeAssistant;
     private config;
+    private static readonly DEFAULT_INACTIVE_STATES;
     private _lastRenderTime;
     private _lastImageUrl;
     private _mapPopupData;
     private _iconActiveStates;
+    private _iconsAwaitingConfirmation;
     private _templateSubscriptions;
     private _templateResults;
+    private _confirmationCancelListeners;
     static getConfigElement(): HTMLElement;
     static getStubConfig(): {
         title: string;
@@ -70,10 +80,12 @@ export declare class UltraVehicleCard extends LitElement {
     private _subscribeToTemplate;
     private _parseTemplateResult;
     private _unsubscribeAllTemplates;
+    private _updateIconTemplateSubscriptions;
     private _renderMapPopup;
     private _formatCoordinates;
     private _getEntityForCoordinates;
     private _isDarkMode;
     private _closeMapPopup;
     private _shouldRenderSection;
+    private _cancelConfirmation;
 }

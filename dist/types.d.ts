@@ -24,6 +24,7 @@ interface UltraVehicleCardConfig {
     status_image_entity?: string;
     status_image_trigger_entity?: string;
     layout_type?: 'single' | 'double';
+    column_width?: '50-50' | '30-70' | '70-30' | '40-60' | '60-40';
     formatted_entities?: boolean;
     show_units?: boolean;
     show_action_toasts?: boolean;
@@ -42,13 +43,17 @@ interface UltraVehicleCardConfig {
     show_location?: boolean;
     location_icon_color?: string;
     location_text_color?: string;
+    location_text_size?: string | number;
     mileage_entity?: string;
     show_mileage?: boolean;
     mileage_icon_color?: string;
     mileage_text_color?: string;
+    mileage_text_size?: string | number;
     car_state_entity?: string;
     show_car_state?: boolean;
     car_state_text_color?: string;
+    car_state_text_size?: string | number;
+    show_info_icons?: boolean;
     bars?: BarConfig[];
     action_entity?: string;
     action_state?: string;
@@ -138,7 +143,7 @@ interface IconConfig {
     show_units?: boolean;
     show_icon_active?: boolean;
     show_icon_inactive?: boolean;
-    on_click_action?: 'toggle' | 'more-info' | 'navigate' | 'url' | 'call-service' | 'perform-action' | 'show-location-map' | 'voice-assistant' | 'trigger' | 'no-action';
+    on_click_action?: 'toggle' | 'more-info' | 'navigate' | 'url' | 'call-service' | 'perform-action' | 'show-location-map' | 'location-map' | 'voice-assistant' | 'trigger' | 'no-action';
     navigation_path?: string;
     url?: string;
     service?: string;
@@ -159,6 +164,10 @@ interface IconConfig {
     container_background_color?: string;
     container_width?: number;
     draggable?: boolean;
+    active_icon_template?: string;
+    inactive_icon_template?: string;
+    active_state_template?: string;
+    inactive_state_template?: string;
 }
 interface IconRowConfig {
     id: string;

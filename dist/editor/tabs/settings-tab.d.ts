@@ -26,5 +26,8 @@ export declare class SettingsTab extends LitElement {
     protected render(): TemplateResult;
     private _handleConfigChangedFromActionImages;
     private _handleFileUploadEvent;
+    private _resetLocationTextSize;
+    private _resetMileageTextSize;
+    private _resetCarStateTextSize;
     static styles: import("lit").CSSResult;
 }
