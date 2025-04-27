@@ -98,7 +98,7 @@ export declare class UltraVehicleCardEditor extends LitElement {
     private _handleIconDragLeave;
     private _handleIconDrop;
     private _rearrangeIcons;
-    render(): typeof nothing | import("lit").TemplateResult<1>;
+    render(): import("lit").TemplateResult<1> | typeof nothing;
     static get styles(): import("lit").CSSResult;
     firstUpdated(): void;
     private _refreshEntityList;
