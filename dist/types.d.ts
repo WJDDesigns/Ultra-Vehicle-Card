@@ -7,7 +7,7 @@ export interface SectionCondition {
 export interface SectionConditions {
     [sectionId: string]: SectionCondition;
 }
-interface UltraVehicleCardConfig {
+export type UltraVehicleCardConfig = {
     type?: string;
     title?: string;
     title_alignment?: 'left' | 'center' | 'right';
@@ -23,11 +23,14 @@ interface UltraVehicleCardConfig {
     status_image?: string;
     status_image_entity?: string;
     status_image_trigger_entity?: string;
-    layout_type?: 'single' | 'double';
+    layout_type?: 'single' | 'double' | 'dashboard';
     column_width?: '50-50' | '30-70' | '70-30' | '40-60' | '60-40';
     formatted_entities?: boolean;
     show_units?: boolean;
     show_action_toasts?: boolean;
+    top_view_side_margin?: number;
+    top_view_middle_spacing?: number;
+    top_view_vertical_spacing?: number;
     icon_text_position?: 'bottom' | 'top' | 'left' | 'right';
     icon_vertical_alignment?: 'top' | 'center' | 'bottom';
     icon_text_size?: 'small' | 'medium' | 'large';
@@ -69,14 +72,15 @@ interface UltraVehicleCardConfig {
     vehicle_image_crop?: ImageCropSettings;
     action_image_crop?: ImageCropSettings;
     sections_order?: string[];
-    sections_columns?: {
-        [key: string]: 'left' | 'right';
-    };
+    sections_columns?: SectionColumns;
     hidden_sections?: string[];
     section_styles?: SectionStyles;
     section_conditions?: SectionConditions;
     global_css?: string;
-}
+};
+export type SectionColumns = {
+    [sectionId: string]: 'right' | 'top' | 'top_middle' | 'left_middle' | 'right_middle' | 'bottom_middle' | 'bottom' | 'middle';
+};
 interface BarConfig {
     entity: string;
     limit_entity?: string;
@@ -100,6 +104,7 @@ interface BarConfig {
     percentage_text_size?: string | number;
     bar_size?: 'thin' | 'regular' | 'thick' | 'thiccc';
     bar_radius?: 'round' | 'square' | 'rounded-square';
+    bar_style?: 'flat' | 'glossy' | 'embossed' | 'inset' | 'gradient' | 'neon' | 'outline' | 'glass' | 'metallic' | 'neumorphic';
     show_left?: boolean;
     show_right?: boolean;
     show_percentage?: boolean;
@@ -178,6 +183,7 @@ interface IconRowConfig {
     width: string;
     alignment: string;
     spacing?: string;
+    columns?: number;
     icons: IconConfig[];
 }
 interface ImageCropSettings {
@@ -208,4 +214,4 @@ interface ActionImageConfig {
     image_crop?: ImageCropSettings;
     priority: number;
 }
-export { UltraVehicleCardConfig, BarConfig, CustomCard, IconConfig, IconRowConfig, ImageCropSettings, SectionStyleSettings, SectionStyles, GradientStop, ActionImageConfig, };
+export { BarConfig, CustomCard, IconConfig, IconRowConfig, ImageCropSettings, SectionStyleSettings, SectionStyles, GradientStop, ActionImageConfig, };

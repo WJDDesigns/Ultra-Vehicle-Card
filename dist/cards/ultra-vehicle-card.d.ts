@@ -28,6 +28,7 @@ export declare class UltraVehicleCard extends LitElement {
         title_alignment: string;
         title_size: number;
         formatted_entities: boolean;
+        show_units: boolean;
         vehicle_image_type: string;
     };
     static get properties(): {

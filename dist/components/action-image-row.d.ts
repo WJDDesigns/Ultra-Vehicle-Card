@@ -6,6 +6,7 @@ export declare class ActionImageRow extends LitElement {
     config: ActionImageConfig;
     lang: string;
     private expanded;
+    private _cropExpanded;
     protected render(): import("lit").TemplateResult<1>;
     private _renderPreview;
     private _renderImageInput;
@@ -23,5 +24,9 @@ export declare class ActionImageRow extends LitElement {
     private _getFileName;
     private _handleDragStart;
     private _handleDragEnd;
+    private _renderCropControls;
+    private _createDefaultCropSettings;
+    private _updateImageCrop;
+    private _handleWidthChange;
     static styles: import("lit").CSSResult;
 }
