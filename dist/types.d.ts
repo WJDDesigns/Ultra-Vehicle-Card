@@ -104,7 +104,7 @@ interface BarConfig {
     percentage_text_size?: string | number;
     bar_size?: 'thin' | 'regular' | 'thick' | 'thiccc';
     bar_radius?: 'round' | 'square' | 'rounded-square';
-    bar_style?: 'flat' | 'glossy' | 'embossed' | 'inset' | 'gradient' | 'neon' | 'outline' | 'glass' | 'metallic' | 'neumorphic';
+    bar_style?: 'flat' | 'glossy' | 'embossed' | 'inset' | 'gradient' | 'neon' | 'outline' | 'glass' | 'metallic' | 'neumorphic' | 'dashed';
     show_left?: boolean;
     show_right?: boolean;
     show_percentage?: boolean;
@@ -112,7 +112,7 @@ interface BarConfig {
     width?: string;
     use_gradient?: boolean;
     gradient_stops?: GradientStop[];
-    gradient_display_mode?: 'full' | 'value_based';
+    gradient_display_mode?: 'full' | 'value_based' | 'cropped';
     animation_entity?: string;
     animation_state?: string;
     animation_type?: string;
@@ -212,6 +212,8 @@ interface ActionImageConfig {
     image_entity?: string;
     image_width?: number;
     image_crop?: ImageCropSettings;
-    priority: number;
+    priority?: number;
+    template_mode?: boolean;
+    template?: string;
 }
 export { BarConfig, CustomCard, IconConfig, IconRowConfig, ImageCropSettings, SectionStyleSettings, SectionStyles, GradientStop, ActionImageConfig, };
