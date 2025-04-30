@@ -6,8 +6,6 @@
 
 Welcome to the future of vehicle monitoring in Home Assistant! Ultra Vehicle Card brings all your vehicle data into a beautiful, customizable interface that works with any vehicle type - electric, gas, hybrid, or even spacecraft (okay, maybe not yet, but we're working on it! 🚀).
 
-**Version: 2.6.0**
-
 ## ✨ Features
 
 - **Universal Vehicle Support:** Electric, gas, hybrid - configure it however you need
@@ -284,7 +282,7 @@ Yes! The card supports multiple languages. Check the TRANSLATION_GUIDE.md for de
 
 If you find this card useful, consider supporting its continued development:
 
-- [Buy me a coffee](https://www.buymeacoffee.com/ultraui)
+- [Buy me some caffeine](https://www.paypal.com/donate/?cmd=_s-xclick&hosted_button_id=4JVCZ46FZPUTG&clickref=1101lAycwnhU&gad_source=7&pid=328130457&dclid=CjgKEAjwh_i_BhCRhu7RxN_14hYSJACbYkcgx98-Vsb49UI4imjGhPA2lwk73DpbbgCri-G8TCTB9PD_BwE&ssrt=1744735247042)
 - [Join our Discord](https://www.discord.gg/6xVgHxzzBV)
 - Star the repository
 - Share your setup in the Home Assistant community
