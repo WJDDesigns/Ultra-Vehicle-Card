@@ -77,6 +77,7 @@ export type UltraVehicleCardConfig = {
     section_styles?: SectionStyles;
     section_conditions?: SectionConditions;
     global_css?: string;
+    section_breaks?: SectionBreakConfig[];
 };
 export type SectionColumns = {
     [sectionId: string]: 'right' | 'top' | 'top_middle' | 'left_middle' | 'right_middle' | 'bottom_middle' | 'bottom' | 'middle';
@@ -216,4 +217,11 @@ interface ActionImageConfig {
     template_mode?: boolean;
     template?: string;
 }
-export { BarConfig, CustomCard, IconConfig, IconRowConfig, ImageCropSettings, SectionStyleSettings, SectionStyles, GradientStop, ActionImageConfig, };
+interface SectionBreakConfig {
+    id: string;
+    break_style?: 'blank' | 'line' | 'double_line' | 'dotted' | 'double_dotted' | 'shadow';
+    break_thickness?: number;
+    break_width_percent?: number;
+    break_color?: string;
+}
+export { BarConfig, CustomCard, IconConfig, IconRowConfig, ImageCropSettings, SectionStyleSettings, SectionStyles, GradientStop, ActionImageConfig, SectionBreakConfig, };

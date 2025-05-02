@@ -30,6 +30,8 @@ export declare class SettingsTab extends LitElement {
     private _resetLocationTextSize;
     private _resetMileageTextSize;
     private _resetCarStateTextSize;
+    private _handleInputWidth;
+    private _handleInputWidthChange;
     private _handleSliderInput;
     private _handleImageWidthChange;
     static styles: import("lit").CSSResult;
