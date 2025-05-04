@@ -153,6 +153,11 @@ interface IconConfig {
     show_units?: boolean;
     show_icon_active?: boolean;
     show_icon_inactive?: boolean;
+    use_entity_color_for_icon?: boolean;
+    use_entity_color_for_icon_active?: boolean;
+    use_entity_color_for_icon_inactive?: boolean;
+    use_entity_color_for_icon_background?: boolean;
+    use_entity_color_for_container_background?: boolean;
     on_click_action?: 'toggle' | 'more-info' | 'navigate' | 'url' | 'call-service' | 'perform-action' | 'show-location-map' | 'location-map' | 'voice-assistant' | 'trigger' | 'no-action';
     navigation_path?: string;
     url?: string;

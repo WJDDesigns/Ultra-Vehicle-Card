@@ -127,6 +127,11 @@ export interface IconConfig {
     container_background?: 'none' | 'circle' | 'square' | 'rounded-square';
     container_background_color?: string;
     container_width?: number;
+    use_entity_color_for_icon?: boolean;
+    use_entity_color_for_icon_active?: boolean;
+    use_entity_color_for_icon_inactive?: boolean;
+    use_entity_color_for_icon_background?: boolean;
+    use_entity_color_for_container_background?: boolean;
     show_icon_active?: boolean;
     show_icon_inactive?: boolean;
     show_name_active?: boolean;
