@@ -16,6 +16,7 @@ export declare class IconsTab extends LitElement {
     private _activeIconTabs;
     private _layoutHelpExpanded;
     private _rowSettingsExpanded;
+    private _stateSettingsExpanded;
     private _t;
     private _generateUniqueId;
     private _getFriendlyName;
@@ -68,5 +69,6 @@ export declare class IconsTab extends LitElement {
     private _renderColorPicker;
     private _toggleLayoutHelp;
     private _toggleRowSettings;
+    private _toggleStateSettings;
     static styles: import("lit").CSSResult;
 }
