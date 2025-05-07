@@ -30,6 +30,7 @@ export declare class UltraVehicleCard extends LitElement {
         formatted_entities: boolean;
         show_units: boolean;
         vehicle_image_type: string;
+        sections_order: string[];
     };
     static get properties(): {
         hass: {};
@@ -37,6 +38,8 @@ export declare class UltraVehicleCard extends LitElement {
     };
     static get styles(): import("lit").CSSResult;
     setConfig(config: UltraVehicleCardConfig): void;
+    private _migrateBarsToIndividual;
+    private _saveConfigChanges;
     private _checkForGradientOrAnimationChanges;
     private _forceFullRender;
     protected render(): import("lit").TemplateResult<1>;
@@ -71,6 +74,7 @@ export declare class UltraVehicleCard extends LitElement {
     private _normalizeState;
     private _renderBarLabels;
     private _showMoreInfo;
+    firstUpdated(): void;
     connectedCallback(): void;
     disconnectedCallback(): void;
     private _handleForceGradientRefresh;

@@ -71,4 +71,10 @@ export declare class IconsTab extends LitElement {
     private _toggleRowSettings;
     private _toggleStateSettings;
     static styles: import("lit").CSSResult;
+    private _rearrangeIconRows;
+    private _handleIconRowDragStart;
+    private _handleIconRowDragEnd;
+    private _handleIconRowDragOver;
+    private _handleIconRowDragLeave;
+    private _handleIconRowDrop;
 }

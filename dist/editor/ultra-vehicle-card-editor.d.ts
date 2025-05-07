@@ -41,6 +41,7 @@ export declare class UltraVehicleCardEditor extends LitElement {
     private _resetTitleSize;
     private _t;
     private _fireForceGradientRefreshEvent;
+    private _forceSaveConfig;
     render(): import("lit").TemplateResult<1> | typeof nothing;
     static get styles(): import("lit").CSSResult;
     firstUpdated(): void;

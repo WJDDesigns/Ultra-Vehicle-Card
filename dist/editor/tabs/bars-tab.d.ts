@@ -11,6 +11,8 @@ export declare class BarsTab extends LitElement {
     private _preventExpandCollapse;
     private _activeBarTabs;
     private _gradientEditorKeys;
+    private _draggedBar;
+    private _dropTargetBar;
     private _updateStopDebounceTimer;
     private _removeStopDebounceTimer;
     private _updateOrderDebounceTimer;
@@ -24,6 +26,7 @@ export declare class BarsTab extends LitElement {
     private _fireForceRefreshEvent;
     private _fireForceGradientRefreshEvent;
     private _toggleBarExpand;
+    private _syncSectionsOrderWithBars;
     private _addBar;
     private _duplicateBar;
     private _removeBar;
@@ -66,4 +69,10 @@ export declare class BarsTab extends LitElement {
     private _updateBarCondition;
     private _renderLeftSideConditionFields;
     private _renderRightSideConditionFields;
+    private _handleBarDragStart;
+    private _handleBarDragEnd;
+    private _handleBarDragOver;
+    private _handleBarDragLeave;
+    private _handleBarDrop;
+    private _rearrangeBars;
 }
