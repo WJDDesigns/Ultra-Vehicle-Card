@@ -83,9 +83,11 @@ export interface BarConfig {
     animation_entity?: string;
     animation_state?: string;
     animation_type?: 'charging_lines' | 'fill_repeat' | 'pulse' | 'glow' | 'rainbow';
-    percentage_type?: 'entity' | 'difference';
+    percentage_type?: 'entity' | 'difference' | 'attribute' | 'template';
     percentage_amount_entity?: string;
     percentage_total_entity?: string;
+    percentage_attribute?: string;
+    percentage_template?: string;
     action_animation_entity?: string;
     action_animation_state?: string;
     action_animation?: string;
@@ -148,9 +150,11 @@ export interface IconConfig {
 }
 export interface IconRowConfig {
     id: string;
-    width: string;
-    alignment: string;
+    width?: string;
+    alignment?: string;
+    vertical_alignment?: string;
     spacing?: string;
+    columns?: number;
     icons: IconConfig[];
 }
 export interface ImageCropSettings {

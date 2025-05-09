@@ -122,6 +122,13 @@ interface BarConfig {
     action_animation?: string;
     left_condition?: SectionCondition;
     right_condition?: SectionCondition;
+    left_template_mode?: boolean;
+    left_template?: string;
+    right_template_mode?: boolean;
+    right_template?: string;
+    percentage_type?: 'entity' | 'difference';
+    percentage_amount_entity?: string;
+    percentage_total_entity?: string;
 }
 interface CustomCard {
     type: string;
@@ -186,8 +193,9 @@ interface IconConfig {
 }
 interface IconRowConfig {
     id: string;
-    width: string;
-    alignment: string;
+    width?: string;
+    alignment?: string;
+    vertical_alignment?: string;
     spacing?: string;
     columns?: number;
     icons: IconConfig[];

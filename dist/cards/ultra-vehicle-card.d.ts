@@ -73,6 +73,11 @@ export declare class UltraVehicleCard extends LitElement {
     private _computeImageStyle;
     private _normalizeState;
     private _renderBarLabels;
+    /**
+     * Process bar template and return the rendered result
+     * Similar to how templates are handled for icons
+     */
+    private _processBarTemplate;
     private _showMoreInfo;
     firstUpdated(): void;
     connectedCallback(): void;
@@ -95,4 +100,5 @@ export declare class UltraVehicleCard extends LitElement {
     private _shouldRenderSection;
     private _cancelConfirmation;
     private _checkBarSideCondition;
+    private _processPercentageTemplate;
 }
