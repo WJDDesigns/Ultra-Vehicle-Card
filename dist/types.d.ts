@@ -1,4 +1,5 @@
 import { GradientStop } from './components/gradient-editor';
+export { GradientStop };
 export interface SectionCondition {
     type: 'none' | 'show' | 'hide';
     entity: string;
@@ -23,7 +24,7 @@ export type UltraVehicleCardConfig = {
     status_image?: string;
     status_image_entity?: string;
     status_image_trigger_entity?: string;
-    layout_type?: 'single' | 'double' | 'dashboard';
+    layout_type?: 'single' | 'double' | 'dashboard' | 'half_full' | 'full_half';
     column_width?: '50-50' | '30-70' | '70-30' | '40-60' | '60-40';
     formatted_entities?: boolean;
     show_units?: boolean;
@@ -69,6 +70,7 @@ export type UltraVehicleCardConfig = {
     action_images?: ActionImageConfig[];
     action_image_priority?: 'priority' | 'newest';
     icon_rows?: IconRowConfig[];
+    info_rows?: InfoRowConfig[];
     vehicle_image_crop?: ImageCropSettings;
     action_image_crop?: ImageCropSettings;
     sections_order?: string[];
@@ -80,9 +82,9 @@ export type UltraVehicleCardConfig = {
     section_breaks?: SectionBreakConfig[];
 };
 export type SectionColumns = {
-    [sectionId: string]: 'right' | 'top' | 'top_middle' | 'left_middle' | 'right_middle' | 'bottom_middle' | 'bottom' | 'middle';
+    [sectionId: string]: 'right' | 'top' | 'top_middle' | 'left_middle' | 'right_middle' | 'bottom_middle' | 'bottom' | 'middle' | 'half_full_row1_left' | 'half_full_row1_right' | 'half_full_row2_full' | 'full_half_row1_full' | 'full_half_row2_left' | 'full_half_row2_right';
 };
-interface BarConfig {
+export interface BarConfig {
     entity: string;
     limit_entity?: string;
     limit_indicator_color?: string;
@@ -130,13 +132,13 @@ interface BarConfig {
     percentage_amount_entity?: string;
     percentage_total_entity?: string;
 }
-interface CustomCard {
+export interface CustomCard {
     type: string;
     name: string;
     description: string;
     draggable?: boolean;
 }
-interface IconConfig {
+export interface IconConfig {
     entity: string;
     name?: string;
     icon_inactive?: string;
@@ -191,7 +193,7 @@ interface IconConfig {
     active_state_template?: string;
     inactive_state_template?: string;
 }
-interface IconRowConfig {
+export interface IconRowConfig {
     id: string;
     width?: string;
     alignment?: string;
@@ -200,7 +202,7 @@ interface IconRowConfig {
     columns?: number;
     icons: IconConfig[];
 }
-interface ImageCropSettings {
+export interface ImageCropSettings {
     top: number;
     right: number;
     bottom: number;
@@ -210,14 +212,14 @@ interface ImageCropSettings {
     x?: number;
     y?: number;
 }
-interface SectionStyleSettings {
+export interface SectionStyleSettings {
     marginTop?: number;
     marginBottom?: number;
 }
-interface SectionStyles {
+export interface SectionStyles {
     [sectionId: string]: SectionStyleSettings;
 }
-interface ActionImageConfig {
+export interface ActionImageConfig {
     id: string;
     entity: string;
     state: string;
@@ -230,11 +232,46 @@ interface ActionImageConfig {
     template_mode?: boolean;
     template?: string;
 }
-interface SectionBreakConfig {
+export interface SectionBreakConfig {
     id: string;
     break_style?: 'blank' | 'line' | 'double_line' | 'dotted' | 'double_dotted' | 'shadow';
     break_thickness?: number;
     break_width_percent?: number;
     break_color?: string;
 }
-export { BarConfig, CustomCard, IconConfig, IconRowConfig, ImageCropSettings, SectionStyleSettings, SectionStyles, GradientStop, ActionImageConfig, SectionBreakConfig, };
+export interface InfoEntityConfig {
+    id: string;
+    entity: string;
+    name?: string;
+    icon?: string;
+    show_icon?: boolean;
+    show_name?: boolean;
+    text_size?: string | number;
+    name_size?: string | number;
+    icon_size?: string | number;
+    icon_color?: string;
+    name_color?: string;
+    text_color?: string | 'primary' | 'secondary' | 'accent' | 'custom' | '';
+    custom_text_color?: string;
+    value_template?: string;
+    template_mode?: boolean;
+    on_click_action?: 'more-info' | 'navigate' | 'url' | 'call-service' | 'none';
+    navigation_path?: string;
+    url?: string;
+    service?: string;
+    service_data?: Record<string, any> | string;
+}
+export interface InfoRowConfig {
+    id: string;
+    width: string;
+    alignment: string;
+    vertical_alignment?: string;
+    spacing: string;
+    columns?: number;
+    allow_wrap?: boolean;
+    info_entities: InfoEntityConfig[];
+    row_header?: string;
+    row_header_size?: number;
+    row_header_color?: string;
+    show_row_header?: boolean;
+}

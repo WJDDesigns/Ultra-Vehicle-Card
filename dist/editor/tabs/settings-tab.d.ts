@@ -14,6 +14,10 @@ export declare class SettingsTab extends LitElement {
     private _vehicleCropExpanded;
     private _activeSubTab;
     private _displayedWidth;
+    private _rowSettingsExpanded;
+    private _activeEntityTabs;
+    private _t;
+    private _generateUniqueId;
     private _formatFieldName;
     private _truncatePath;
     private _valueChanged;
@@ -27,12 +31,11 @@ export declare class SettingsTab extends LitElement {
     protected render(): TemplateResult;
     private _handleConfigChangedFromActionImages;
     private _handleFileUploadEvent;
-    private _resetLocationTextSize;
-    private _resetMileageTextSize;
-    private _resetCarStateTextSize;
     private _handleInputWidth;
     private _handleInputWidthChange;
     private _handleSliderInput;
     private _handleImageWidthChange;
+    private _needsMigration;
+    private _performMigration;
     static styles: import("lit").CSSResult;
 }

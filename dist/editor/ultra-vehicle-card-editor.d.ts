@@ -9,6 +9,7 @@ import './tabs/bars-tab';
 import './tabs/icons-tab';
 import './tabs/customize-tab';
 import './tabs/about-tab';
+import './tabs/info-tab';
 export declare class UltraVehicleCardEditor extends LitElement {
     hass: HomeAssistant;
     private config;

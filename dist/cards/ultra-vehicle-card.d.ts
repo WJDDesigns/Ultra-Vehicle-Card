@@ -39,6 +39,7 @@ export declare class UltraVehicleCard extends LitElement {
     static get styles(): import("lit").CSSResult;
     setConfig(config: UltraVehicleCardConfig): void;
     private _migrateBarsToIndividual;
+    private _cleanupInfoSections;
     private _saveConfigChanges;
     private _checkForGradientOrAnimationChanges;
     private _forceFullRender;
@@ -101,4 +102,8 @@ export declare class UltraVehicleCard extends LitElement {
     private _cancelConfirmation;
     private _checkBarSideCondition;
     private _processPercentageTemplate;
+    private _renderInfoRowsFromConfig;
+    private _renderSingleInfoRow;
+    private _renderSingleInfoEntity;
+    private _handleInfoEntityClick;
 }

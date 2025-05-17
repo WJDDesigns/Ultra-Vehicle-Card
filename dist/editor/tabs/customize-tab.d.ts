@@ -7,6 +7,7 @@ export declare class CustomizeTab extends LitElement {
     private _draggedSection;
     private _expandedSectionId;
     private _dropTargetSection;
+    private _layoutDescriptionsExpanded;
     private _dropTargetColumn;
     private _t;
     private _fireConfigChanged;
@@ -35,5 +36,8 @@ export declare class CustomizeTab extends LitElement {
     private _renderCustomizeTab;
     private _renderDraggableSections;
     private _renderGlobalCssSection;
+    getSectionIcon(sectionId: string): string;
+    getSectionLabel(sectionId: string): string;
+    private _cleanupSectionsOrder;
     static styles: import("lit").CSSResult;
 }
