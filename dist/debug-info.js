@@ -1,4 +1,4 @@
 // Ultra Vehicle Card Debug Info
-// Version: 2.8.0-beta2
-// Build Date: 2025-05-18T13:45:27.149Z
+// Version: 2.8.0
+// Build Date: 2025-05-19T19:22:38.493Z
 // Build Mode: production
