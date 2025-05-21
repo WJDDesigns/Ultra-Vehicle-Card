@@ -75,6 +75,7 @@ export type UltraVehicleCardConfig = {
     action_image_crop?: ImageCropSettings;
     sections_order?: string[];
     sections_columns?: SectionColumns;
+    bar_row_alignment?: 'flex-start' | 'center' | 'flex-end';
     hidden_sections?: string[];
     section_styles?: SectionStyles;
     section_conditions?: SectionConditions;

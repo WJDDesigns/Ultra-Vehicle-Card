@@ -23,6 +23,8 @@ export declare class BarsTab extends LitElement {
     private _fireConfigChanged;
     private _fireForceRefreshEvent;
     private _fireForceGradientRefreshEvent;
+    private _navigateToCustomizeTab;
+    private _handleGlobalBarAlignmentChange;
     private _toggleBarExpand;
     private _syncSectionsOrderWithBars;
     private _addBar;

@@ -12,6 +12,7 @@ export declare class InfoTab extends LitElement {
     private _rowSettingsExpanded;
     private _draggedEntity;
     private _dropTargetEntity;
+    private _isTemplateEditing;
     private _t;
     private _generateUniqueId;
     private _getFriendlyName;
@@ -36,6 +37,8 @@ export declare class InfoTab extends LitElement {
     private _createDefaultInfoRow;
     private _createDefaultInfoEntity;
     private _toggleRowSettings;
+    private _navigateToCustomizeTab;
+    private _setTemplateEditingMode;
     protected render(): TemplateResult | typeof nothing;
     private _renderMigrationNotice;
     private _migrateFromLegacy;
@@ -50,4 +53,7 @@ export declare class InfoTab extends LitElement {
     private _handleInfoEntityDrop;
     private _rearrangeInfoEntities;
     static styles: import("lit").CSSResult;
+    connectedCallback(): void;
+    disconnectedCallback(): void;
+    private _handleGlobalClick;
 }
