@@ -39,5 +39,9 @@ export declare class CustomizeTab extends LitElement {
     getSectionIcon(sectionId: string): string;
     getSectionLabel(sectionId: string): string;
     private _cleanupSectionsOrder;
+    private _handleConditionTypeChange;
+    private _updateEntityCondition;
+    private _updateStateCondition;
     static styles: import("lit").CSSResult;
+    updated(changedProperties: Map<string, any>): void;
 }
