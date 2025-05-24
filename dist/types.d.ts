@@ -154,6 +154,8 @@ export interface IconConfig {
     active_template?: string;
     active_state_text?: string;
     inactive_state_text?: string;
+    active_animation?: 'none' | 'pulse' | 'vibrate' | 'rotate-left' | 'rotate-right' | 'hover' | 'fade' | 'scale' | 'bounce' | 'shake' | 'tada';
+    inactive_animation?: 'none' | 'pulse' | 'vibrate' | 'rotate-left' | 'rotate-right' | 'hover' | 'fade' | 'scale' | 'bounce' | 'shake' | 'tada';
     show_state?: boolean;
     show_name?: boolean;
     show_name_active?: boolean;

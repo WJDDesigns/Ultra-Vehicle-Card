@@ -1,4 +1,4 @@
-import { LitElement } from 'lit';
+import { LitElement, TemplateResult } from 'lit';
 import { HomeAssistant } from 'custom-card-helpers';
 import { UltraVehicleCardConfig } from '../types';
 declare module 'custom-card-helpers' {
@@ -43,7 +43,7 @@ export declare class UltraVehicleCard extends LitElement {
     private _saveConfigChanges;
     private _checkForGradientOrAnimationChanges;
     private _forceFullRender;
-    protected render(): import("lit").TemplateResult<1>;
+    protected render(): TemplateResult<1>;
     private _renderImage;
     private _getFriendlyName;
     private _formatValue;
@@ -106,4 +106,7 @@ export declare class UltraVehicleCard extends LitElement {
     private _renderSingleInfoRow;
     private _renderSingleInfoEntity;
     private _handleInfoEntityClick;
+    private _getDisplaySections;
+    private _cleanupSectionsOrder;
+    private _ensureInfoAndIconRowsInSectionsOrder;
 }
