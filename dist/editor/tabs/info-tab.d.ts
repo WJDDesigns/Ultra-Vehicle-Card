@@ -6,6 +6,7 @@ import '../../components/color-picker';
 export declare class InfoTab extends LitElement {
     hass: HomeAssistant;
     config: UltraVehicleCardConfig;
+    private _templateService?;
     private _expandedInfoRow;
     private _expandedInfoEntity;
     private _activeInfoTabs;
@@ -55,5 +56,6 @@ export declare class InfoTab extends LitElement {
     static styles: import("lit").CSSResult;
     connectedCallback(): void;
     disconnectedCallback(): void;
+    protected updated(changedProperties: Map<string, any>): void;
     private _handleGlobalClick;
 }

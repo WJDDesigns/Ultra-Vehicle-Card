@@ -29,6 +29,7 @@ export type UltraVehicleCardConfig = {
     formatted_entities?: boolean;
     show_units?: boolean;
     show_action_toasts?: boolean;
+    help_highlight?: boolean;
     top_view_side_margin?: number;
     top_view_middle_spacing?: number;
     top_view_vertical_spacing?: number;

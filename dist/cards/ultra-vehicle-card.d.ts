@@ -22,6 +22,8 @@ export declare class UltraVehicleCard extends LitElement {
     private _templateSubscriptions;
     private _templateResults;
     private _confirmationCancelListeners;
+    private _iconStateDebounceTimers;
+    private _highlightedSections;
     static getConfigElement(): HTMLElement;
     static getStubConfig(): {
         title: string;
@@ -55,6 +57,7 @@ export declare class UltraVehicleCard extends LitElement {
     private _renderIconRows;
     private _renderIconRow;
     private _renderCardIcon;
+    private _debouncedIconStateUpdate;
     private _handleIconClick;
     /**
      * Shows a toast notification
@@ -69,6 +72,8 @@ export declare class UltraVehicleCard extends LitElement {
     private _handleDragStart;
     private _handleDragEnd;
     private _hexToRgb;
+    private _hsToRgb;
+    private _colorTempToRgb;
     private _getZoneInfo;
     private _renderVehicleInfo;
     private _computeImageStyle;
@@ -109,4 +114,9 @@ export declare class UltraVehicleCard extends LitElement {
     private _getDisplaySections;
     private _cleanupSectionsOrder;
     private _ensureInfoAndIconRowsInSectionsOrder;
+    private _handleHighlightSections;
+    private _isHighlighted;
+    private _getHighlightClass;
+    private _getImageHighlightStyle;
+    private _handleClearHighlight;
 }

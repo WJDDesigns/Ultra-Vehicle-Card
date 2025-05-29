@@ -17,6 +17,8 @@ export declare class TemplateService {
     private hass;
     private _templateSubscriptions;
     private _templateResults;
+    private _evaluationCache;
+    private readonly CACHE_TTL;
     constructor(hass: HomeAssistant);
     /**
      * Get a specific template result

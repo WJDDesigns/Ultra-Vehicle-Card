@@ -6,6 +6,7 @@ export declare class ActionImagesTab extends LitElement {
     hass: HomeAssistant;
     config: UltraVehicleCardConfig;
     private _dragOverIndex;
+    private _newlyAddedImageIds;
     protected render(): import("lit").TemplateResult<1>;
     private _handleImageConfigChange;
     private _addActionImage;

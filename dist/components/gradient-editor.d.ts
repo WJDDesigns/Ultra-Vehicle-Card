@@ -6,7 +6,7 @@ export interface GradientStop {
 }
 export interface GradientConfig {
     stops: GradientStop[];
-    displayMode: 'value_based' | 'full' | 'cropped';
+    displayMode: 'value_based' | 'full';
 }
 export declare function generateGradientString(stops: GradientStop[]): string;
 export declare function createLinearGradient(stops: GradientStop[], direction?: string): string;
@@ -16,27 +16,24 @@ export declare function createStopAtLargestGap(stops: GradientStop[]): GradientS
 export declare class GradientEditor extends LitElement {
     stops: GradientStop[];
     key: number;
+    private _isDragging;
     private _draggedStopId;
-    private _dropTargetId;
-    private _dropTargetPosition;
-    private readonly MAX_STOPS;
+    private _lastRenderTime;
+    private _boundPointerMove;
+    private _boundPointerUp;
     disconnectedCallback(): void;
+    private _getProcessedStops;
     updated(changedProperties: any): void;
-    private _getStopsSortedByPosition;
-    private _generatePreviewGradient;
-    private _handleColorChange;
-    private _handlePositionInput;
-    private _handleDuplicateClick;
-    private _handleDeleteClick;
-    private _handleDragStart;
-    private _handleDragOver;
-    private _handleDragLeave;
-    private _handleDrop;
-    private _handleDragEnd;
-    private _clearDropTargetStyles;
-    private _cleanupDragState;
-    static styles: import("lit").CSSResult;
+    private _updateGradientPreview;
+    static get styles(): import("lit").CSSResult;
     render(): import("lit").TemplateResult<1>;
-}
-export declare class UltraVehicleGradientEditor extends GradientEditor {
+    _handleNativeColorChange(e: InputEvent, stop: GradientStop): void;
+    _handlePointerDown(e: PointerEvent, stop: GradientStop): void;
+    _handlePointerMove(e: PointerEvent): void;
+    _handlePointerUp(e: PointerEvent): void;
+    private _endDrag;
+    _handleDeleteClick(e: Event, stop: GradientStop): void;
+    _handleAddStop(): void;
+    _handleResetStops(): void;
+    private _updateDraggedStop;
 }

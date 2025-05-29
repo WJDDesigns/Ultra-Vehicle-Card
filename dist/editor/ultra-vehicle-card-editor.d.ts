@@ -14,6 +14,8 @@ export declare class UltraVehicleCardEditor extends LitElement {
     hass: HomeAssistant;
     private config;
     private activeTab;
+    private _highlightedSections;
+    private _highlightTimeout;
     private _cropperActive;
     private _cropperImage;
     private _cropperTargetField;
@@ -44,6 +46,8 @@ export declare class UltraVehicleCardEditor extends LitElement {
     private _fireForceGradientRefreshEvent;
     private _forceSaveConfig;
     private _handleRequestTabChange;
+    private _getHighlightedSectionsForTab;
+    private _updateHighlightedSections;
     render(): import("lit").TemplateResult<1> | typeof nothing;
     static get styles(): import("lit").CSSResult;
     firstUpdated(): void;
