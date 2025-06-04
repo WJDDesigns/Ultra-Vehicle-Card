@@ -48,6 +48,14 @@ export declare class UltraVehicleCard extends LitElement {
     protected render(): TemplateResult<1>;
     private _renderImage;
     private _getFriendlyName;
+    /**
+     * Check if an entity is a location tracking entity with coordinate data
+     */
+    private _isLocationTrackingEntity;
+    /**
+     * Render a map view for location tracking entities
+     */
+    private _renderMapImage;
     private _formatValue;
     private _handleImageError;
     private _renderBar;

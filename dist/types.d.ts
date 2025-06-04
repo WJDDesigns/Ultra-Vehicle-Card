@@ -8,6 +8,13 @@ export interface SectionCondition {
 export interface SectionConditions {
     [sectionId: string]: SectionCondition;
 }
+export interface SectionTemplate {
+    template_mode?: boolean;
+    template?: string;
+}
+export interface SectionTemplates {
+    [sectionId: string]: SectionTemplate;
+}
 export type UltraVehicleCardConfig = {
     type?: string;
     title?: string;
@@ -80,6 +87,7 @@ export type UltraVehicleCardConfig = {
     hidden_sections?: string[];
     section_styles?: SectionStyles;
     section_conditions?: SectionConditions;
+    section_templates?: SectionTemplates;
     global_css?: string;
     section_breaks?: SectionBreakConfig[];
 };

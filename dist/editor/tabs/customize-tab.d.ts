@@ -33,6 +33,7 @@ export declare class CustomizeTab extends LitElement {
     private _handleAddSectionBreak;
     private _handleDeleteSectionBreak;
     protected render(): TemplateResult | typeof nothing;
+    protected updated(changedProperties: Map<string, any>): void;
     private _renderCustomizeTab;
     private _renderDraggableSections;
     private _renderGlobalCssSection;
@@ -42,6 +43,7 @@ export declare class CustomizeTab extends LitElement {
     private _handleConditionTypeChange;
     private _updateEntityCondition;
     private _updateStateCondition;
+    private _getSectionTemplate;
+    private _updateSectionTemplate;
     static styles: import("lit").CSSResult;
-    updated(changedProperties: Map<string, any>): void;
 }
