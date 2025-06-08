@@ -1,0 +1,33 @@
+import { LitElement, TemplateResult, nothing } from 'lit';
+import { HomeAssistant } from 'custom-card-helpers';
+import { UltraVehicleCardConfig } from '../../types';
+import '../../components/entity-picker';
+import '../../components/color-picker';
+export declare class ImagesTab extends LitElement {
+    hass: HomeAssistant;
+    config: UltraVehicleCardConfig;
+    private _expandedImageEntity;
+    connectedCallback(): void;
+    disconnectedCallback(): void;
+    private _handleWindowError;
+    private _handleUnhandledRejection;
+    private _t;
+    private _fireConfigChanged;
+    private _generateUniqueId;
+    private _addImageEntity;
+    private _removeImageEntity;
+    private _duplicateImageEntity;
+    private _createDefaultImageEntity;
+    private _migrationCheck;
+    private _migrateFromLegacy;
+    private _navigateToCustomizeTab;
+    protected render(): TemplateResult | typeof nothing;
+    private _renderImageEntity;
+    private _renderImageEntityContent;
+    private _toggleImageEntity;
+    private _renderImageSourceFields;
+    private _handleImageTypeChange;
+    private _updateImageEntityConfig;
+    private _handleImageUpload;
+    static get styles(): import("lit").CSSResult;
+}

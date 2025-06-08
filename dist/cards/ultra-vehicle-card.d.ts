@@ -24,6 +24,9 @@ export declare class UltraVehicleCard extends LitElement {
     private _confirmationCancelListeners;
     private _iconStateDebounceTimers;
     private _highlightedSections;
+    private _activeTimedImage;
+    private _timedImageTimeout;
+    private _lastTimedImageStates;
     static getConfigElement(): HTMLElement;
     static getStubConfig(): {
         title: string;
@@ -41,11 +44,17 @@ export declare class UltraVehicleCard extends LitElement {
     static get styles(): import("lit").CSSResult;
     setConfig(config: UltraVehicleCardConfig): void;
     private _migrateBarsToIndividual;
+    private _migrateImagesToNewFormat;
     private _cleanupInfoSections;
     private _saveConfigChanges;
     private _checkForGradientOrAnimationChanges;
     private _forceFullRender;
     protected render(): TemplateResult<1>;
+    private _shouldDisplayImage;
+    private _getImageUrl;
+    private _getTimedImage;
+    private _startTimedImage;
+    private _clearTimedImage;
     private _renderImage;
     private _getFriendlyName;
     /**
@@ -111,6 +120,7 @@ export declare class UltraVehicleCard extends LitElement {
     private _getEntityForCoordinates;
     private _isDarkMode;
     private _closeMapPopup;
+    private _shouldShowCard;
     private _shouldRenderSection;
     private _cancelConfirmation;
     private _checkBarSideCondition;

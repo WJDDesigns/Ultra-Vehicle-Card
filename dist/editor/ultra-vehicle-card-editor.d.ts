@@ -7,6 +7,7 @@ import '../components/gradient-editor';
 import './tabs/settings-tab';
 import './tabs/bars-tab';
 import './tabs/icons-tab';
+import './tabs/image-tab';
 import './tabs/customize-tab';
 import './tabs/about-tab';
 import './tabs/info-tab';
@@ -29,6 +30,7 @@ export declare class UltraVehicleCardEditor extends LitElement {
     private _configChangedTimeout;
     setConfig(config: UltraVehicleCardConfig): void;
     private _migrateToIndividualSections;
+    private _migrateImagesToNewFormat;
     private _handleFileUploadEvent;
     private _getCleanConfig;
     private _updateConfig;

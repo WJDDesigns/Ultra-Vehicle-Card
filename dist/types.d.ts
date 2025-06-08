@@ -79,6 +79,8 @@ export type UltraVehicleCardConfig = {
     action_image_priority?: 'priority' | 'newest';
     icon_rows?: IconRowConfig[];
     info_rows?: InfoRowConfig[];
+    images?: ImageConfig[];
+    image_priority_mode?: 'order' | 'last_triggered' | 'timed';
     vehicle_image_crop?: ImageCropSettings;
     action_image_crop?: ImageCropSettings;
     sections_order?: string[];
@@ -90,6 +92,9 @@ export type UltraVehicleCardConfig = {
     section_templates?: SectionTemplates;
     global_css?: string;
     section_breaks?: SectionBreakConfig[];
+    card_condition_type?: 'show' | 'hide' | '';
+    card_condition_entity?: string;
+    card_condition_state?: string;
 };
 export type SectionColumns = {
     [sectionId: string]: 'right' | 'top' | 'top_middle' | 'left_middle' | 'right_middle' | 'bottom_middle' | 'bottom' | 'middle' | 'half_full_row1_left' | 'half_full_row1_right' | 'half_full_row2_full' | 'full_half_row1_full' | 'full_half_row2_left' | 'full_half_row2_right';
@@ -250,6 +255,14 @@ export interface SectionBreakConfig {
     break_thickness?: number;
     break_width_percent?: number;
     break_color?: string;
+    enable_title?: boolean;
+    title_text?: string;
+    title_size?: number;
+    title_color?: string;
+    title_bold?: boolean;
+    title_italic?: boolean;
+    title_uppercase?: boolean;
+    title_strikethrough?: boolean;
 }
 export interface InfoEntityConfig {
     id: string;
@@ -286,4 +299,21 @@ export interface InfoRowConfig {
     row_header_size?: number;
     row_header_color?: string;
     show_row_header?: boolean;
+}
+export interface ImageConfig {
+    id: string;
+    name?: string;
+    image_type: 'upload' | 'url' | 'entity' | 'none' | 'default' | 'map';
+    image?: string;
+    image_entity?: string;
+    image_width?: number;
+    image_crop?: ImageCropSettings;
+    conditional_entity?: string;
+    conditional_state?: string;
+    conditional_type?: 'show' | 'hide';
+    template_mode?: boolean;
+    template?: string;
+    priority?: number;
+    timed_duration?: number;
+    is_fallback?: boolean;
 }

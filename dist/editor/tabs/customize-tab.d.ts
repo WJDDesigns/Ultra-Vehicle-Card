@@ -30,6 +30,7 @@ export declare class CustomizeTab extends LitElement {
     private _updateSectionCondition;
     private _updateSectionBreakConfig;
     private _resetSectionBreakColor;
+    private _resetSectionTitleColor;
     private _handleAddSectionBreak;
     private _handleDeleteSectionBreak;
     protected render(): TemplateResult | typeof nothing;
