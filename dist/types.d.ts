@@ -156,7 +156,6 @@ export interface CustomCard {
 export interface IconConfig {
     entity: string;
     name?: string;
-    interaction_type?: 'single' | 'double' | 'hold';
     icon_inactive?: string;
     icon_active?: string;
     color_inactive?: string;
@@ -185,6 +184,25 @@ export interface IconConfig {
     use_entity_color_for_icon_inactive?: boolean;
     use_entity_color_for_icon_background?: boolean;
     use_entity_color_for_container_background?: boolean;
+    single_click_action?: 'toggle' | 'more-info' | 'navigate' | 'url' | 'call-service' | 'perform-action' | 'show-location-map' | 'location-map' | 'voice-assistant' | 'trigger' | 'no-action' | 'none';
+    single_navigation_path?: string;
+    single_url?: string;
+    single_service?: string;
+    single_service_data?: Record<string, any> | string;
+    single_action?: Record<string, any> | string;
+    double_click_action?: 'toggle' | 'more-info' | 'navigate' | 'url' | 'call-service' | 'perform-action' | 'show-location-map' | 'location-map' | 'voice-assistant' | 'trigger' | 'no-action' | 'none';
+    double_navigation_path?: string;
+    double_url?: string;
+    double_service?: string;
+    double_service_data?: Record<string, any> | string;
+    double_action?: Record<string, any> | string;
+    hold_click_action?: 'toggle' | 'more-info' | 'navigate' | 'url' | 'call-service' | 'perform-action' | 'show-location-map' | 'location-map' | 'voice-assistant' | 'trigger' | 'no-action' | 'none';
+    hold_navigation_path?: string;
+    hold_url?: string;
+    hold_service?: string;
+    hold_service_data?: Record<string, any> | string;
+    hold_action?: Record<string, any> | string;
+    hold_action_data?: Record<string, any> | string;
     on_click_action?: 'toggle' | 'more-info' | 'navigate' | 'url' | 'call-service' | 'perform-action' | 'show-location-map' | 'location-map' | 'voice-assistant' | 'trigger' | 'no-action';
     navigation_path?: string;
     url?: string;

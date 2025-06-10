@@ -12,6 +12,7 @@ export declare class UltraVehicleCard extends LitElement {
     hass: HomeAssistant;
     private config;
     private _templateService?;
+    constructor();
     private static readonly DEFAULT_ACTIVE_STATES;
     private static readonly DEFAULT_INACTIVE_STATES;
     private _lastRenderTime;
@@ -22,11 +23,9 @@ export declare class UltraVehicleCard extends LitElement {
     private _templateSubscriptions;
     private _templateResults;
     private _confirmationCancelListeners;
-    private _iconStateDebounceTimers;
-    private _highlightedSections;
-    private _activeTimedImage;
-    private _timedImageTimeout;
-    private _lastTimedImageStates;
+    private _recentDoubleClick;
+    private _holdTimer;
+    private _currentHoldIcon;
     static getConfigElement(): HTMLElement;
     static getStubConfig(): {
         title: string;
@@ -44,27 +43,13 @@ export declare class UltraVehicleCard extends LitElement {
     static get styles(): import("lit").CSSResult;
     setConfig(config: UltraVehicleCardConfig): void;
     private _migrateBarsToIndividual;
-    private _migrateImagesToNewFormat;
     private _cleanupInfoSections;
     private _saveConfigChanges;
     private _checkForGradientOrAnimationChanges;
     private _forceFullRender;
     protected render(): TemplateResult<1>;
-    private _shouldDisplayImage;
-    private _getImageUrl;
-    private _getTimedImage;
-    private _startTimedImage;
-    private _clearTimedImage;
     private _renderImage;
     private _getFriendlyName;
-    /**
-     * Check if an entity is a location tracking entity with coordinate data
-     */
-    private _isLocationTrackingEntity;
-    /**
-     * Render a map view for location tracking entities
-     */
-    private _renderMapImage;
     private _formatValue;
     private _handleImageError;
     private _renderBar;
@@ -74,13 +59,9 @@ export declare class UltraVehicleCard extends LitElement {
     private _renderIconRows;
     private _renderIconRow;
     private _renderCardIcon;
-    private _debouncedIconStateUpdate;
-    private _iconHoldTimers;
-    private _handleIconInteraction;
-    private _handleIconPointerDown;
-    private _handleIconPointerUp;
-    private _handleIconPointerLeave;
     private _handleIconClick;
+    private _startHoldTimer;
+    private _clearHoldTimer;
     /**
      * Shows a toast notification
      * @param message The message to display
@@ -94,8 +75,6 @@ export declare class UltraVehicleCard extends LitElement {
     private _handleDragStart;
     private _handleDragEnd;
     private _hexToRgb;
-    private _hsToRgb;
-    private _colorTempToRgb;
     private _getZoneInfo;
     private _renderVehicleInfo;
     private _computeImageStyle;
@@ -125,7 +104,6 @@ export declare class UltraVehicleCard extends LitElement {
     private _getEntityForCoordinates;
     private _isDarkMode;
     private _closeMapPopup;
-    private _shouldShowCard;
     private _shouldRenderSection;
     private _cancelConfirmation;
     private _checkBarSideCondition;
@@ -134,12 +112,4 @@ export declare class UltraVehicleCard extends LitElement {
     private _renderSingleInfoRow;
     private _renderSingleInfoEntity;
     private _handleInfoEntityClick;
-    private _getDisplaySections;
-    private _cleanupSectionsOrder;
-    private _ensureInfoAndIconRowsInSectionsOrder;
-    private _handleHighlightSections;
-    private _isHighlighted;
-    private _getHighlightClass;
-    private _getImageHighlightStyle;
-    private _handleClearHighlight;
 }

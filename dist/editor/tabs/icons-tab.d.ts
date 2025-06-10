@@ -62,4 +62,6 @@ export declare class IconsTab extends LitElement {
     private _toggleStateSettings;
     static styles: import("lit").CSSResult;
     private _navigateToCustomizeTab;
+    private _renderIconActionsTab;
+    private _getActionSchema;
 }
