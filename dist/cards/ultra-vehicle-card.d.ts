@@ -75,6 +75,11 @@ export declare class UltraVehicleCard extends LitElement {
     private _renderIconRow;
     private _renderCardIcon;
     private _debouncedIconStateUpdate;
+    private _iconHoldTimers;
+    private _handleIconInteraction;
+    private _handleIconPointerDown;
+    private _handleIconPointerUp;
+    private _handleIconPointerLeave;
     private _handleIconClick;
     /**
      * Shows a toast notification

@@ -156,6 +156,7 @@ export interface CustomCard {
 export interface IconConfig {
     entity: string;
     name?: string;
+    interaction_type?: 'single' | 'double' | 'hold';
     icon_inactive?: string;
     icon_active?: string;
     color_inactive?: string;
