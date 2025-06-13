@@ -11,6 +11,8 @@ export declare class ImageTab extends LitElement {
     private _draggedImage;
     private _dropTargetImage;
     private _isTemplateEditing;
+    private _imageTemplateStates;
+    private _forceConditionalTabRender;
     private _t;
     private _generateUniqueId;
     private _getFriendlyName;
@@ -25,6 +27,7 @@ export declare class ImageTab extends LitElement {
     private _toggleImageExpand;
     private _updateImageConfig;
     private _updateFallbackImage;
+    private _updateImageTemplate;
     private _createDefaultImage;
     private _setActiveImageTab;
     private _navigateToCustomizeTab;

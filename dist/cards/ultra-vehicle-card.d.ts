@@ -20,12 +20,20 @@ export declare class UltraVehicleCard extends LitElement {
     private _mapPopupData;
     private _iconActiveStates;
     private _iconsAwaitingConfirmation;
+    private _currentTimedImage;
+    private _timedImageStartTime;
+    private _imageConditionStates;
+    private _imageTriggerTimes;
+    private _imageTriggerResults;
+    private _cardInstanceId;
+    private _stateRestored;
     private _templateSubscriptions;
     private _templateResults;
     private _confirmationCancelListeners;
     private _recentDoubleClick;
     private _holdTimer;
     private _currentHoldIcon;
+    private _timedImageTimer;
     static getConfigElement(): HTMLElement;
     static getStubConfig(): {
         title: string;
@@ -49,6 +57,12 @@ export declare class UltraVehicleCard extends LitElement {
     private _forceFullRender;
     protected render(): TemplateResult<1>;
     private _renderImage;
+    private _selectImageFromNewSystem;
+    private _imageMatchesConditions;
+    private _selectImageFromLegacySystem;
+    private _processSelectedImage;
+    private _startTimedImage;
+    private _clearTimedImage;
     private _getFriendlyName;
     private _formatValue;
     private _handleImageError;
@@ -104,6 +118,9 @@ export declare class UltraVehicleCard extends LitElement {
     private _getEntityForCoordinates;
     private _isDarkMode;
     private _closeMapPopup;
+    private _getStorageKey;
+    private _restoreStateFromStorage;
+    private _saveStateToStorage;
     private _shouldRenderSection;
     private _cancelConfirmation;
     private _checkBarSideCondition;
