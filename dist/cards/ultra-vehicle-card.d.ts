@@ -89,6 +89,7 @@ export declare class UltraVehicleCard extends LitElement {
     private _handleDragStart;
     private _handleDragEnd;
     private _hexToRgb;
+    private _hashString;
     private _getZoneInfo;
     private _renderVehicleInfo;
     private _computeImageStyle;
