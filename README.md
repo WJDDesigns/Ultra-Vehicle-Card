@@ -41,7 +41,15 @@ For the DIY enthusiasts:
 4. Add `/local/ultra-vehicle-card.js` as a JavaScript Module
 5. Restart your browser
 
-## 📋 Configuration Guide
+### 📚 Community Guides
+
+Looking for some inspiration or help getting started? Check out these awesome guides created by the community:
+
+- [Ultra Vehicle Card Video Guide by EverythingSmartHome](https://youtu.be/SOdAIGpClFs) 🎥
+
+Have you made a guide you'd like featured here? [Open an issue](https://github.com/WJDDesigns/Ultra-Vehicle-Card/issues) or share it on our [Discord](https://www.discord.gg/6xVgHxzzBV)!
+
+### 📋 Configuration Guide
 
 ### Quick Start
 
