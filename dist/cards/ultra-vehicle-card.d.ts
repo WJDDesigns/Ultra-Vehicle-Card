@@ -30,9 +30,12 @@ export declare class UltraVehicleCard extends LitElement {
     private _templateSubscriptions;
     private _templateResults;
     private _confirmationCancelListeners;
-    private _recentDoubleClick;
     private _holdTimer;
     private _currentHoldIcon;
+    private _singleClickTimers;
+    private _pendingSingleClicks;
+    private _touchStartTimes;
+    private _lastTouchEndTime;
     private _timedImageTimer;
     static getConfigElement(): HTMLElement;
     static getStubConfig(): {
@@ -73,6 +76,14 @@ export declare class UltraVehicleCard extends LitElement {
     private _renderIconRows;
     private _renderIconRow;
     private _renderCardIcon;
+    private _handlePointerDown;
+    private _handlePointerUp;
+    private _handlePointerLeave;
+    private _handleTouchStart;
+    private _handleTouchEnd;
+    private _handleTouchCancel;
+    private _handleIconTap;
+    private _handleIconClickWithDelay;
     private _handleIconClick;
     private _startHoldTimer;
     private _clearHoldTimer;
