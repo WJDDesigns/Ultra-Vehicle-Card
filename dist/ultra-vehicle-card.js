@@ -2746,10 +2746,13 @@
                   </div>
                 </div>
               `)}else s&&a.push(J`
-                <div class="section-break-container" style="${g}">
+                <div
+                  class="section-break-container"
+                  style="${g}; display: flex; justify-content: center; align-items: center;"
+                >
                   <div
                     class="section-break break-style-${t}"
-                    style="--break-thickness: ${i}px; --break-color: ${o}; width: ${n}%;"
+                    style="--break-thickness: ${i}px; --break-color: ${o}; width: ${n}%; position: static; left: auto; transform: none;"
                   ></div>
                 </div>
               `)}else console.warn(`[UltraVehicleCard] Render: Could not find config for break ID: ${d}`)}else switch(d){case"title":const e=this.config.title_size||24;a.push(this.config.title?J`<h1
