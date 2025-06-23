@@ -333,6 +333,27 @@ export interface ImageConfig {
     template_mode?: boolean;
     template?: string;
     priority?: number;
+    single_click_action?: 'toggle' | 'more-info' | 'navigate' | 'url' | 'call-service' | 'perform-action' | 'location-map' | 'assist' | 'trigger' | 'none';
+    single_entity?: string;
+    single_navigation_path?: string;
+    single_url?: string;
+    single_service?: string;
+    single_service_data?: Record<string, any> | string;
+    single_action?: Record<string, any> | string;
+    double_click_action?: 'toggle' | 'more-info' | 'navigate' | 'url' | 'call-service' | 'perform-action' | 'location-map' | 'assist' | 'trigger' | 'none';
+    double_entity?: string;
+    double_navigation_path?: string;
+    double_url?: string;
+    double_service?: string;
+    double_service_data?: Record<string, any> | string;
+    double_action?: Record<string, any> | string;
+    hold_click_action?: 'toggle' | 'more-info' | 'navigate' | 'url' | 'call-service' | 'perform-action' | 'location-map' | 'assist' | 'trigger' | 'none';
+    hold_entity?: string;
+    hold_navigation_path?: string;
+    hold_url?: string;
+    hold_service?: string;
+    hold_service_data?: Record<string, any> | string;
+    hold_action?: Record<string, any> | string;
     timed_duration?: number;
     is_fallback?: boolean;
 }

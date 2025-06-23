@@ -36,6 +36,9 @@ export declare class UltraVehicleCard extends LitElement {
     private _pendingSingleClicks;
     private _touchStartTimes;
     private _lastTouchEndTime;
+    private _currentHoldImage;
+    private _pendingSingleImageClicks;
+    private _imageHoldTimer;
     private _timedImageTimer;
     static getConfigElement(): HTMLElement;
     static getStubConfig(): {
@@ -87,6 +90,17 @@ export declare class UltraVehicleCard extends LitElement {
     private _handleIconClick;
     private _startHoldTimer;
     private _clearHoldTimer;
+    private _handleImageClickWithDelay;
+    private _handleImageClick;
+    private _startImageHoldTimer;
+    private _clearImageHoldTimer;
+    private _handleImageTouchStart;
+    private _handleImageTouchEnd;
+    private _handleImageTouchCancel;
+    private _handleImageTap;
+    private _handleImagePointerDown;
+    private _handleImagePointerUp;
+    private _handleImagePointerLeave;
     /**
      * Shows a toast notification
      * @param message The message to display

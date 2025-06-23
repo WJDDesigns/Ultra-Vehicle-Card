@@ -28,6 +28,9 @@ export declare class ImageTab extends LitElement {
     private _updateImageConfig;
     private _updateFallbackImage;
     private _updateImageTemplate;
+    private _getImageActionSchema;
+    private _getImageActionDescription;
+    private _prepareImageActionFormData;
     private _createDefaultImage;
     private _setActiveImageTab;
     private _navigateToCustomizeTab;

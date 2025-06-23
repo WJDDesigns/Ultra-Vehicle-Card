@@ -1,4 +1,4 @@
 // Ultra Vehicle Card Debug Info
-// Version: 3.0.0-beta8
-// Build Date: 2025-06-22T22:13:24.111Z
+// Version: 3.0.0-beta10
+// Build Date: 2025-06-23T13:15:36.706Z
 // Build Mode: production
