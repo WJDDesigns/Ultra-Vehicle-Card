@@ -117,6 +117,10 @@ export interface IconConfig {
     active_template?: string;
     inactive_template_mode?: boolean;
     inactive_template?: string;
+    icon_template_mode?: boolean;
+    icon_template?: string;
+    color_template_mode?: boolean;
+    color_template?: string;
     active_state_text?: string;
     inactive_state_text?: string;
     icon_size?: number | string;

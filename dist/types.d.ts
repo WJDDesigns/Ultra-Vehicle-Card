@@ -166,6 +166,10 @@ export interface IconConfig {
     active_template_mode?: boolean;
     inactive_template?: string;
     active_template?: string;
+    icon_template_mode?: boolean;
+    icon_template?: string;
+    color_template_mode?: boolean;
+    color_template?: string;
     active_state_text?: string;
     inactive_state_text?: string;
     active_animation?: 'none' | 'pulse' | 'vibrate' | 'rotate-left' | 'rotate-right' | 'hover' | 'fade' | 'scale' | 'bounce' | 'shake' | 'tada';
@@ -299,6 +303,10 @@ export interface InfoEntityConfig {
     custom_text_color?: string;
     value_template?: string;
     template_mode?: boolean;
+    icon_template_mode?: boolean;
+    icon_template?: string;
+    color_template_mode?: boolean;
+    color_template?: string;
     on_click_action?: 'more-info' | 'navigate' | 'url' | 'call-service' | 'none';
     navigation_path?: string;
     url?: string;

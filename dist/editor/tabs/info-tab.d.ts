@@ -30,6 +30,7 @@ export declare class InfoTab extends LitElement {
     private _duplicateInfoEntity;
     private _toggleInfoEntityEdit;
     private _updateInfoEntityConfig;
+    private _handleInfoEntityTemplateSubscriptions;
     /**
      * Helper to get the icon defined for an entity in Home Assistant,
      * falling back to domain/device_class defaults.
