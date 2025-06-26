@@ -7,6 +7,8 @@ import '../../components/gradient-editor';
 export declare class IconsTab extends LitElement {
     hass: HomeAssistant;
     config: UltraVehicleCardConfig;
+    private _dynamicColorService?;
+    private _dynamicIconService?;
     private _expandedIconRow;
     private _expandedIcon;
     private _activeIconTabs;
@@ -36,6 +38,8 @@ export declare class IconsTab extends LitElement {
     private _resetIconStateColor;
     private _resetIconAppearanceColor;
     private _resetIconSize;
+    private _updateIconFormattingToggle;
+    private _renderIconFormattingToggles;
     /**
      * Helper to get the icon defined for an entity in Home Assistant,
      * falling back to domain/device_class defaults.
@@ -62,6 +66,9 @@ export declare class IconsTab extends LitElement {
     private _toggleStateSettings;
     static styles: import("lit").CSSResult;
     private _navigateToCustomizeTab;
+    connectedCallback(): void;
+    disconnectedCallback(): void;
+    protected updated(changedProperties: Map<string, any>): void;
     private _renderIconActionsTab;
     private _getActionSchema;
 }

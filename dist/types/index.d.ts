@@ -1,4 +1,5 @@
 import { GradientStop } from '../components/gradient-editor';
+import { SectionCondition } from '../types';
 export interface UltraVehicleCardConfig {
     type?: string;
     title?: string;
@@ -75,6 +76,10 @@ export interface BarConfig {
     show_left?: boolean;
     show_right?: boolean;
     show_percentage?: boolean;
+    show_left_title?: boolean;
+    show_left_value?: boolean;
+    show_right_title?: boolean;
+    show_right_value?: boolean;
     alignment?: 'flex-start' | 'center' | 'flex-end' | 'space-between';
     width?: '25' | '50' | '75' | '100';
     use_gradient?: boolean;
@@ -88,6 +93,12 @@ export interface BarConfig {
     percentage_total_entity?: string;
     percentage_attribute?: string;
     percentage_template?: string;
+    left_template_mode?: boolean;
+    left_template?: string;
+    right_template_mode?: boolean;
+    right_template?: string;
+    left_condition?: SectionCondition;
+    right_condition?: SectionCondition;
     action_animation_entity?: string;
     action_animation_state?: string;
     action_animation?: string;
@@ -117,10 +128,6 @@ export interface IconConfig {
     active_template?: string;
     inactive_template_mode?: boolean;
     inactive_template?: string;
-    icon_template_mode?: boolean;
-    icon_template?: string;
-    color_template_mode?: boolean;
-    color_template?: string;
     active_state_text?: string;
     inactive_state_text?: string;
     icon_size?: number | string;

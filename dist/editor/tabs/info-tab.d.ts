@@ -7,6 +7,8 @@ export declare class InfoTab extends LitElement {
     hass: HomeAssistant;
     config: UltraVehicleCardConfig;
     private _templateService?;
+    private _dynamicColorService?;
+    private _dynamicIconService?;
     private _expandedInfoRow;
     private _expandedInfoEntity;
     private _activeInfoTabs;
@@ -30,7 +32,6 @@ export declare class InfoTab extends LitElement {
     private _duplicateInfoEntity;
     private _toggleInfoEntityEdit;
     private _updateInfoEntityConfig;
-    private _handleInfoEntityTemplateSubscriptions;
     /**
      * Helper to get the icon defined for an entity in Home Assistant,
      * falling back to domain/device_class defaults.
@@ -41,6 +42,8 @@ export declare class InfoTab extends LitElement {
     private _toggleRowSettings;
     private _navigateToCustomizeTab;
     private _setTemplateEditingMode;
+    private _updateInfoFormattingToggle;
+    private _renderInfoFormattingToggles;
     protected render(): TemplateResult | typeof nothing;
     private _renderMigrationNotice;
     private _migrateFromLegacy;

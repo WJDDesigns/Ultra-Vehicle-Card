@@ -38,6 +38,8 @@ export declare class BarsTab extends LitElement {
     private _updateBarProperty;
     private _resetBarColor;
     private _resetBarSize;
+    private _updateBarFormattingToggle;
+    private _renderBarFormattingToggles;
     private _getEnsuredGradientStops;
     private _addGradientStop;
     private _updateGradientStop;

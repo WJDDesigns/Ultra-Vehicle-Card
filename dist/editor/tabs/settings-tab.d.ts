@@ -19,6 +19,8 @@ export declare class SettingsTab extends LitElement {
     private _valueChanged;
     private _dispatchFileUpload;
     private _resetTitleSize;
+    private _updateFormattingToggle;
+    private _renderFormattingToggles;
     private _createDefaultCropSettings;
     private _renderCropSliders;
     private _updateImageCrop;
