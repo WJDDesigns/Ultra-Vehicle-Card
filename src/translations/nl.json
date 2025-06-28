@@ -161,7 +161,7 @@
       "name": "Naam (Optioneel)",
       "image_type": "Afbeeldingstype",
       "url": "Afbeelding URL",
-      "image_entity": "Afbeeldingentiteit",
+      "image_entity": "Afbeelding-entiteit",
       "priority": "Prioriteit (0 = hoogste)",
       "priority_mode": "Prioriteitsmodus",
       "timed_duration": "Weergaveduur (seconden)",
