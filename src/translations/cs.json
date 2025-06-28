@@ -1,0 +1,1078 @@
+{
+  "editor": {
+    "tabs": {
+      "settings": "Nastavení",
+      "bars": "Ukazatele",
+      "icons": "Ikony",
+      "customize": "Přizpůsobit",
+      "about": "O aplikaci",
+      "info": "Informace",
+      "images": "Obrázky"
+    },
+    "info": {
+      "title": "Informace o kartě",
+      "description": "Nakonfigurujte informační řádky a entity tak, aby zobrazovaly podrobnosti o vozidle, jako je umístění, najetých kilometrů atd. Informační položky se zobrazí na jednom řádku, pokud je to možné, zabalit na více řádků v úzkých kontejnerech.",
+      "add_row": "Přidat řádek informací",
+      "add_entity": "Přidat entitu informací",
+      "arrange_info_rows": "Uspořádejte informační řádky",
+      "duplicate_row": "Duplikovat řádek",
+      "delete_row": "Smazat řádek",
+      "expand_row": "Rozbalit řádek",
+      "collapse_row": "Sbalit řádek",
+      "duplicate_entity": "Duplikovat entitu",
+      "delete_entity": "Smazat entitu",
+      "expand_entity": "Rozbalit entitu",
+      "collapse_entity": "Sbalit entitu",
+      "row_prefix": "Řádek informací",
+      "entity_prefix": "Entita",
+      "template_mode": "Režim šablony",
+      "template_mode_description": "Použijte šablonu k formátu hodnoty entity. Šablony vám umožňují používat syntaxi pro pomoc při komplexním formátování.",
+      "template_examples_header": "Společné příklady:",
+      "dynamic_icon": {
+        "title": "Dynamická šablona ikon",
+        "description": "Použijte šablonu k dynamickému výběru ikony na základě stavů entit nebo podmínek.",
+        "enable": "Povolit dynamickou šablonu ikon"
+      },
+      "dynamic_color": {
+        "title": "Dynamická šablona barev",
+        "description": "Použijte šablonu k dynamickému nastavení barev na základě stavů entit nebo hodnot.",
+        "enable": "Povolit dynamickou šablonu barev"
+      },
+      "row_settings": {
+        "header": "Nastavení řádku",
+        "row_name": "Název řádku",
+        "row_name_description": "Vlastní název pro tento informační řádek (ponechte prázdné pro použití výchozího pojmenování)",
+        "horizontal_alignment": "Vodorovné zarovnání",
+        "alignment_description": "Vodorovné zarovnání entit v tomto řádku",
+        "vertical_alignment": "Svislé zarovnání",
+        "vertical_alignment_description": "Ovládá, jak jsou entity zarovnány svisle v rámci řádku.",
+        "spacing": "Rozestup",
+        "spacing_description": "Rozestup mezi entitami v tomto řádku",
+        "allow_wrap": "Povolit zalamování položek",
+        "allow_wrap_description": "Pokud je povoleno, položky přejdou na další řádek, pokud se nevejdou do jednoho řádku. Pokud je zakázáno, všechny položky zůstanou v jednom řádku."
+      },
+      "entity_settings": {
+        "header": "Informační položky",
+        "name": "Vlastní název",
+        "entity_description": "Vyberte entitu pro zobrazení informací",
+        "name_description": "Přepsat název entity (ponechte prázdné pro použití popisného názvu entity)",
+        "show_icon": "Zobrazit ikonu",
+        "icon_color": "Barva ikony",
+        "name_color": "Barva názvu",
+        "entity_color": "Barva entity",
+        "icon_size": "Velikost ikony",
+        "name_size": "Velikost názvu",
+        "value_size": "Velikost hodnoty",
+        "size_settings": "Nastavení velikosti",
+        "show_name": "Zobrazit název",
+        "show_name_description": "Zobrazit název entity před hodnotou",
+        "click_action": "Akce při kliknutí",
+        "navigation_path": "Navigační cesta",
+        "navigation_path_description": "Cesta, na kterou se naviguje při kliknutí (např. /lovelace/0)",
+        "url": "URL",
+        "url_description": "URL, která se otevře při kliknutí",
+        "service": "Služba",
+        "service_description": "Služba, kterou zavolat (např. light.turn_on)",
+        "service_data": "Data služby (JSON)"
+      },
+      "alignments": {
+        "flex-start": "Začátek",
+        "center": "Střed",
+        "flex-end": "Konec",
+        "space-between": "Mezera mezi",
+        "space-around": "Mezera kolem",
+        "space-evenly": "Rovnoměrná mezera"
+      },
+      "spacing": {
+        "none": "Žádné",
+        "small": "Malé",
+        "medium": "Střední",
+        "large": "Velké"
+      },
+      "click_actions": {
+        "more-info": "Více informací",
+        "navigate": "Navigovat",
+        "url": "Otevřít URL",
+        "call-service": "Zavolat službu",
+        "none": "Žádné"
+      },
+      "row_vertical_alignments": {
+        "top": "Nahoře",
+        "center": "Střed",
+        "bottom": "Dole"
+      }
+    },
+    "settings_subtabs": {
+      "general": "Obecné",
+      "action_images": "Obrázky akcí"
+    },
+    "action_images": {
+      "title": "Nastavení Obrázků Akcí",
+      "description": "Nakonfigurujte obrázky, které se zobrazí při splnění konkrétních stavů entit.",
+      "add_image": "Přidat Obrázek Akce",
+      "no_images": "Zatím nejsou nakonfigurovány žádné obrázky akcí. Začněte přidáním jednoho.",
+      "actions": {
+        "drag": "Přetažením změníte pořadí",
+        "duplicate": "Duplikovat",
+        "delete": "Smazat",
+        "expand": "Rozbalit",
+        "collapse": "Sbalit"
+      },
+      "delete_confirm": "Opravdu chcete smazat tento obrázek akce?",
+      "entity_settings": "Entita Settings",
+      "image_settings": "Nastavení Obrázku",
+      "entity_placeholder": "Vyberte entitu",
+      "state_placeholder": "Zadejte hodnotu stavu",
+      "preview": {
+        "no_entity": "Není vybrána žádná entita",
+        "no_image": "Žádný obrázek",
+        "any_state": "Jakýkoliv stav"
+      },
+      "trigger_entity": "Spouštěcí Entita",
+      "trigger_state": "Spouštěcí Stav",
+      "entity_help": "Vyberte entitu k monitorování. Obrázek bude zobrazen, když tato entita odpovídá stavu níže.",
+      "state_help": "Zadejte hodnotu stavu, která spustí zobrazení tohoto obrázku. Ponechte prázdné pro odpovídání jakémukoli stavu.",
+      "image_type": {
+        "title": "Typ Obrázku",
+        "upload": "Nahrát Obrázek",
+        "url": "URL Obrázku",
+        "entity": "Entita Image",
+        "none": "Žádný"
+      },
+      "template_mode": "Režim šablony",
+      "template_description": "Použijte šablonu k určení, kdy má být tento obrázek zobrazen. Šablony umožňují použití syntaxe šablon Home Assistant (jako {{ states.sensor.temperature.state > 70 }}) pro složité podmínky.",
+      "template_label": "Zobrazit šablonu",
+      "template_help": "Zadejte šablonu, která vrací true/false. Tento obrázek bude zobrazen, když se šablona vyhodnotí jako true. Používejte syntaxi Jinja2: {{ states(...) }}",
+      "priority": {
+        "label": "Priorita Zobrazení",
+        "description": "Založeno na Prioritě používá první shodu shora dolů. Nejnovější Shoda používá poslední shodu nalezenou v seznamu.",
+        "options": {
+          "priority": "Založeno na Prioritě",
+          "newest": "Nejnovější Shoda"
+        }
+      }
+    },
+    "images": {
+      "title": "Obrázky",
+      "description": "Nakonfigurujte obrázky, které budou zobrazeny na základě podmínek nebo šablon.",
+      "add_image": "Přidat Obrázek",
+      "no_images": "Zatím nejsou nakonfigurovány žádné obrázky. Přidejte jeden a začněte.",
+      "arrange_images": "Uspořádat Obrázky",
+      "name": "Název (Volitelný)",
+      "image_type": "Typ Obrázku",
+      "url": "URL Obrázku",
+      "image_entity": "Entita Obrázku",
+      "priority": "Priorita (0 = nejvyšší)",
+      "priority_mode": "Režim Priority",
+      "timed_duration": "Doba Zobrazení (sekundy)",
+      "timed_duration_help": "Jak dlouho má být tento obrázek zobrazen před návratem k hlavnímu obrázku.",
+      "duplicate": "Duplikovat Obrázek",
+      "delete": "Smazat Obrázek",
+      "delete_confirm": "Jste si jisti, že chcete smazat tento obrázek?",
+      "image_types": {
+        "none": "Žádný",
+        "default": "Výchozí Vozidlo",
+        "url": "URL Obrázku",
+        "upload": "Nahrát Obrázek",
+        "entity": "Entita Obrázku",
+        "map": "Mapa"
+      },
+      "priority_modes": {
+        "order": "Priorita Pořadí",
+        "order_help": "Obrázky jsou zobrazovány na základě jejich pořadí v seznamu (přetažením změníte pořadí).",
+        "last_triggered": "Naposledy Spuštěno",
+        "last_triggered_help": "Naposledy spuštěný obrázek zůstane zobrazen, dokud nebude spuštěn jiný obrázek.",
+        "timed": "Časované Obrázky",
+        "timed_help": "Obrázky pod prvním se zobrazí na stanovenou dobu a poté se vrátí k hlavnímu obrázku."
+      },
+      "conditional_types": {
+        "show": "Zobrazit Když",
+        "hide": "Skrýt Když"
+      },
+      "tabs": {
+        "general": "Obecné",
+        "conditional": "Podmínečné",
+        "appearance": "Vzhled"
+      },
+      "conditional_help": "Nakonfigurujte, kdy má být tento obrázek zobrazen na základě stavů entit nebo šablon.",
+      "conditional_help_simple": "Nakonfigurujte, kdy má být tento obrázek zobrazen na základě stavů entit.",
+      "conditional_state_help": "Obrázek bude zobrazen, když se entita rovná této hodnotě stavu.",
+      "conditional_entity": "Podmínečná Entita",
+      "conditional_state": "Podmínečný Stav",
+      "basic_conditions": "Základní Podmínky",
+      "advanced_conditional": "Pokročilé Podmínky Šablon",
+      "advanced_help": "Používejte šablony pro složité podmínky jako několik entit nebo matematická porovnání.",
+      "template_mode_active_help": "Používejte šablony pro složité podmínky jako několik entit nebo matematická porovnání.",
+      "template_mode": {
+        "header": "Režim Šablony",
+        "enable": "Povolit Režim Šablony",
+        "template": "Šablona"
+      },
+      "template_examples_header": "Běžné Příklady:",
+      "width": "Šířka (%)",
+      "width_settings": "Nastavení Šířky",
+      "crop_settings": "Nastavení Oříznutí",
+      "crop_help": "Kladné hodnoty ořezávají dovnitř, záporné hodnoty přidávají odsazení ven.",
+      "crop_top": "Nahoře",
+      "crop_right": "Vpravo",
+      "crop_bottom": "Dole",
+      "crop_left": "Vlevo",
+      "fallback_image": "Záložní Obrázek",
+      "fallback_help": "Tento obrázek bude použit jako záloha, pokud žádné spouštěče neodpovídají nebo dojde k časovému limitu. Pouze jeden obrázek může být záložní.",
+      "map_entity": "Entita Polohy",
+      "map_entity_help": "Vyberte entitu se souřadnicemi zeměpisné šířky/délky nebo adresou pro zobrazení na mapě.",
+      "target_entity": "Cílová Entita",
+      "target_entity_description": "Vyberte entitu, na kterou má být tato akce zaměřena",
+      "common": {
+        "width": "Šířka obrázku",
+        "width_description": "Šířka jako procento karty",
+        "width_over_100": "Hodnoty nad 100% mohou pomoci oříznout prázdný prostor kolem obrázků",
+        "url_description": "Zadejte URL obrázku"
+      },
+      "vehicle": {
+        "crop": "Oříznout Obrázek"
+      },
+      "migration": {
+        "title": "Zjištěny zastaralé obrázky",
+        "description": "Našli jsme konfigurace zastaralých obrázků, které lze migrovat do nového formátu.",
+        "migrate_button": "Migrovat nyní",
+        "success": "Obrázky úspěšně migrovány!"
+      }
+    },
+    "card_settings": {
+      "title": "Název karty",
+      "title_alignment": "Zarovnání názvu",
+      "title_size": "Velikost názvu",
+      "title_color": "Barva Názvu",
+      "title_color_description": "Barva názvu karty",
+      "title_description": "Název zobrazený v horní části karty (volitelné)",
+      "title_alignment_description": "Jak je název karty zarovnán",
+      "title_size_description": "Velikost názvu karty v pixelech",
+      "colors": "Barvy",
+      "card_background": "Pozadí Karty",
+      "card_background_description": "Barva pozadí celé karty",
+      "format_entities": "Formátovat hodnoty entit",
+      "format_entities_description": "Povolit dodatečné formátování hodnot entit (přidává čárky, převádí jednotky atd.)",
+      "show_units": "Zobrazit jednotky",
+      "show_units_description": "Zobrazit jednotky vedle hodnot",
+      "help_highlight": "Nápověda zvýraznit",
+      "help_highlight_description": "Zobrazit vizuální hlavní body při přepínání mezi kartami editoru, abyste pomohli zjistit, která sekce upravujete",
+      "general": "Obecné",
+      "conditional_logic": "Podmínečná Logika",
+      "card_visibility": "Viditelnost Karty",
+      "card_visibility_description": "Zobrazit nebo skrýt celou kartu na základě podmínky entity"
+    },
+    "vehicle_info": {
+      "title": "Informace o Vozidle",
+      "location": {
+        "title": "Entita Polohy",
+        "description": "Vyberte entitu, která zobrazuje aktuální polohu vozidla.",
+        "show": "Zobrazit Polohu",
+        "show_description": "Zobrazit polohu vozidla"
+      },
+      "mileage": {
+        "title": "Entita Kilometráže",
+        "description": "Vyberte entitu, která představuje celkovou kilometráž nebo stav tachometru vozidla.",
+        "show": "Zobrazit Kilometráž",
+        "show_description": "Zobrazit kilometráž vozidla"
+      },
+      "car_state": {
+        "title": "Entita Stavu Vozidla",
+        "description": "Vyberte entitu, která představuje aktuální stav vozidla (např. zaparkováno, jízda, nabíjení).",
+        "show": "Zobrazit Stav Vozidla",
+        "show_description": "Zobrazit stav vozidla"
+      }
+    },
+    "crop": {
+      "title": "Oříznutí Obrázku",
+      "top": "Nahoře",
+      "right": "Vpravo",
+      "bottom": "Dole",
+      "left": "Vlevo",
+      "pixels": "PX",
+      "help": "Zadejte hodnoty v pixelech (kladné nebo záporné) pro úpravu oříznutí a odsazení"
+    },
+    "alignment": {
+      "left": "Vlevo",
+      "center": "Na střed",
+      "right": "Vpravo"
+    },
+    "common": {
+      "choose_file": "Vybrat Soubor",
+      "no_file_chosen": "Není vybrán žádný soubor",
+      "entity": "Entita",
+      "width": "Šířka",
+      "width_description": "Šířka jako procento karty",
+      "width_over_100": "Hodnoty nad 100% mohou pomoci oříznout prázdný prostor kolem obrázků",
+      "none": "Žádný",
+      "default": "Výchozí",
+      "upload": "Nahrát",
+      "url": "URL",
+      "url_description": "URL odkazující na obrázek",
+      "reset": "Resetovat",
+      "condition_prompt": "Vyberte „Zobrazit“ nebo „Skrýt“ pro konfiguraci stavu entity",
+      "bold": "Tučné",
+      "italic": "Kurzíva",
+      "uppercase": "Velká Písmena",
+      "strikethrough": "Přeškrtnuté"
+    },
+    "conditions": {
+      "condition_type": "Typ Podmínky",
+      "show_card_if": "Zobrazit Kartu Pokud",
+      "hide_card_if": "Skrýt Kartu Pokud",
+      "entity_description": "Vyberte entitu pro kontrolu podmínky",
+      "state": "Stav",
+      "state_description": "Hodnota stavu, která spouští podmínku"
+    },
+    "bars": {
+      "title": "Procentuální Pruhy",
+      "description": "Přidejte procentuální pruhy pro zobrazení hodnot jako úroveň paliva, nabití baterie nebo dojezd. Každý pruh může zobrazovat hlavní procentuální hodnotu s volitelnými popisky vlevo a vpravo.",
+      "add": "Přidat Nový Pruh",
+      "duplicate": "Duplikovat Pruh",
+      "delete": "Smazat Pruh",
+      "expand": "Rozbalit Pruh",
+      "collapse": "Sbalit Pruh",
+      "no_entity": "Není vybrána žádná entita",
+      "bar_prefix": "Pruh",
+      "template": {
+        "description": "Pomocí šablony naformátujte zobrazený text, převedení jednotek nebo zobrazení vypočítaných hodnot.",
+        "enable": "Povolit režim šablony",
+        "template_label": "Šablona",
+        "helper_text": "Používejte syntaxi šablon Home Assistant. Příklady:\n• {{ states('sensor.temperature') | float * 1.8 + 32 }} °F\n• {{ now().strftime(\"%b %d, %H:%M\") }}",
+        "examples_header": "Společné příklady:",
+        "examples": {
+          "temperature": "{{ states('sensor.temperature') | float * 1.8 + 32 }}°F - Převést Celsius na Fahrenheit",
+          "datetime": "{{ now().strftime(\"%b %d, %H:%M\") }} - Formátovat aktuální datum/čas",
+          "power": "{{ 'Nabíjení na ' + states('sensor.ev_power') + ' kW' }} - Kombinovat text a hodnotu senzoru"
+        }
+      },
+      "bar_radius": {
+        "round": "Kulatý",
+        "square": "Hranatý",
+        "rounded-square": "Zaoblený Hranatý"
+      },
+      "tabs": {
+        "arrange_bars": "Uspořádat pruhy",
+        "config": "Konfigurace",
+        "colors": "Barvy",
+        "animation": "Animace"
+      },
+      "settings": {
+        "header": "Nastavení Pruhu",
+        "entity": "Entita Procenta Pruhu",
+        "entity_description": "Vyberte entitu, která vrací procentuální hodnotu (0-100). Toto ovládá úroveň naplnění pruhu.",
+        "limit_entity": "Entita Limitní Hodnoty (volitelné)",
+        "limit_entity_description": "Volitelné: Přidá svislou indikační čáru na pruh (např. limit nabíjení pro EV baterii).",
+        "limit_color": "Barva Indikátoru Limitu",
+        "limit_color_description": "Barva svislé čáry zobrazující pozici limitu na pruhu. Změny vynutí aktualizaci karty.",
+        "bar_size": "Velikost Pruhu",
+        "bar_size_description": "Definuje tloušťku/výšku pruhu postupu.",
+        "bar_radius": "Zaoblení Pruhu",
+        "bar_radius_description": "Tvar rohů pruhu postupu",
+        "width": "Šířka Pruhu",
+        "width_description": "Definuje šířku pruhu jako procento šířky karty.",
+        "alignment": "Zarovnání Popisků",
+        "alignment_description": "Jak se levé a pravé popisky zarovnávají vůči sobě.",
+        "show_percentage": "Zobrazit Procenta",
+        "show_percentage_description": "Zobrazit procentuální hodnotu uvnitř pruhu"
+      },
+      "percentage": {
+        "header": "Procentuální Text",
+        "display_header": "Zobrazení Procentuálního Textu",
+        "display_description": "Ovládejte viditelnost a vzhled procentuálních hodnot zobrazených přímo na pruhu. Tato čísla poskytují jasný vizuální indikátor aktuální úrovně.",
+        "text_size": "Velikost Textu",
+        "calculation_header": "Výpočet Procent",
+        "calculation_description": "Nakonfigurujte, jak se vypočítá procentuální naplnění pruhu pomocí jedné z následujících možností.",
+        "type_header": "Výpočet Procent",
+        "type_label": "Typ Procent",
+        "type_description": "Jak vypočítat procentuální hodnotu zobrazenou v pruhu",
+        "type_entity": "Entita (0-100)",
+        "type_attribute": "Entita Attribute",
+        "type_template": "Režim šablony",
+        "type_difference": "Rozdíl (Množství/Celkem)",
+        "amount_entity": "Entita Množství",
+        "amount_description": "Entita představující aktuální množství/hodnotu (čitatel)",
+        "total_entity": "Entita Celku",
+        "total_description": "Entita představující celkové množství/maximum (jmenovatel)"
+      },
+      "left_side": {
+        "header": "Levá strana",
+        "section_description": "Nakonfigurujte hodnotu názvu a entity zobrazenou na levé straně tyče. To je užitečné pro zobrazování štítků jako „Range“ nebo „Baterie“ spolu s jejich hodnotami.",
+        "toggle_description": "Ukažte nebo skryjte levou stranu štítku tyče",
+        "title": "Levý název",
+        "title_description": "Volitelný štítek zobrazený na levé straně pod lištou.",
+        "entity": "Levý entita",
+        "entity_description": "Entita, jejíž hodnota je zobrazena na levé straně tyče.",
+        "alignment_description": "Řídí, jak je tento štítek zarovnán pod lištou.",
+        "title_size": "Velikost titulu",
+        "value_size": "Velikost hodnoty",
+        "hidden_message": "Levá strana je skrytá"
+      },
+      "right_side": {
+        "header": "Pravá strana",
+        "section_description": "Nakonfigurujte hodnotu názvu a entity zobrazené na pravé straně lišty. To je ideální pro doplňkové informace, jako je „čas na plné“ nebo sekundární měření.",
+        "toggle_description": "Ukázat nebo skrýt pravou stranu štítku tyče",
+        "title": "Správný název",
+        "title_description": "Volitelný štítek zobrazený na pravé straně pod lištou.",
+        "entity": "Správný entita",
+        "entity_description": "Entita, jejíž hodnota je zobrazena na pravé straně tyče.",
+        "alignment_description": "Řídí, jak je tento štítek zarovnán pod lištou.",
+        "title_size": "Velikost titulu",
+        "value_size": "Velikost hodnoty",
+        "hidden_message": "Pravá strana je skrytá"
+      },
+      "colors": {
+        "header": "Barvy",
+        "bar_color": "Barva Pruhu",
+        "background_color": "Barva Pozadí",
+        "border_color": "Barva Okraje",
+        "limit_indicator_color": "Barva Indikátoru Limitu",
+        "left_title_color": "Barva Levého Nadpisu",
+        "left_value_color": "Barva Levé Hodnoty",
+        "right_title_color": "Barva Pravého Nadpisu",
+        "right_value_color": "Barva Pravé Hodnoty",
+        "percentage_text_color": "Barva Procentuálního Textu",
+        "reset_color": "Resetovat na výchozí barvu"
+      },
+      "gradient": {
+        "header": "Režim gradientu",
+        "description": "Vytvořte krásné barevné přechody napříč vašimi pruhy pro pokrok. Ideální pro zobrazování hladin baterie, měřidla paliva nebo jakýkoli indikátor stavu vyžadujícího vizuální důraz.",
+        "toggle": "Použijte gradient",
+        "toggle_description": "Místo plné barvy použijte gradient pro pokrok",
+        "display_mode": "Režim zobrazení gradientu",
+        "display_mode_full": "Plný",
+        "display_mode_value_based": "Založené na hodnotě",
+        "display_mode_cropped": "Oříznuté",
+        "display_mode_description": "Full: Ukažte celý gradient. Založeno na hodnotě: Zobrazit gradient až do aktuální hodnoty.",
+        "editor_header": "Gradientní editor",
+        "add_stop": "Přidat zastávku"
+      },
+      "animation": {
+        "header": "Animace Akce",
+        "description": "Přidejte animace k pruhu, když konkrétní entita dosáhne konkrétního stavu. Perfektní pro zobrazení stavů nabíjení, stavů alarmu a dalších.",
+        "pro_tip": "Pro Tip: Pro 'vždy zapnuté' animace vyberte typ animace, ale ponechte pole entity a stavu prázdná. Vyzkoušejte animace 'Bubliny' a 'Naplnění'!",
+        "entity": "Entita Animace",
+        "entity_description": "Entita, která spustí animaci, když odpovídá zadanému stavu",
+        "state": "Entita State",
+        "state_description": "Když stav entity odpovídá této hodnotě, animace bude spuštěna",
+        "type": "Typ Animace",
+        "type_description": "Efekt animace, který se zobrazí, když stav entity odpovídá",
+        "select_entity_prompt": "Vyberte Entitu a zadejte stav, který chcete spustit animaci (příklady: \"nabíjení\", \"zapnuto\", \"nečinný\")",
+        "action_entity": "Akční entita",
+        "action_state": "Stav akce",
+        "action_description": "Tato animace přepíše pravidelnou animaci, když je zadaná entita v konkrétním stavu.",
+        "action_entity_prompt": "Vyberte akční entitu a stav, který má definovat, kdy by tato animace by měla přepsat pravidelnou animaci"
+      },
+      "bar_sizes": {
+        "thin": "Tenký",
+        "regular": "Normální",
+        "thick": "Tlustý",
+        "thiccc": "Extra Tlustý"
+      },
+      "bar_widths": {
+        "25": "25% Šířka",
+        "50": "50% Šířka",
+        "75": "75% Šířka",
+        "100": "100% (Plná Šířka)"
+      },
+      "bar_alignments": {
+        "space-between": "Mezera Mezi",
+        "flex-start": "Vlevo",
+        "center": "Na střed",
+        "flex-end": "Vpravo"
+      },
+      "bar_styles": {
+        "flat": "Plochý (Výchozí)",
+        "glossy": "Lesklý",
+        "embossed": "Reliéfní",
+        "inset": "Zapuštěný",
+        "gradient": "Přechodový",
+        "neon": "Neonový",
+        "outline": "Obrysový",
+        "glass": "Skleněný",
+        "metallic": "Kovový",
+        "neumorphic": "Neumorfní"
+      },
+      "animation_types": {
+        "none": "Žádná",
+        "charging-lines": "Nabíjení (Diagonální Čáry)",
+        "pulse": "Pulzování",
+        "blinking": "Blikání",
+        "bouncing": "Poskakování",
+        "glow": "Záření",
+        "rainbow": "Duha",
+        "bubbles": "Bubliny",
+        "fill": "Naplnění"
+      },
+      "custom_bar_settings": {
+        "title": "Vlastní nastavení sloupce",
+        "description": "Definujte vlastní konfigurace pro jednotlivé pruhy.",
+        "name": "Název baru",
+        "entity": "Entita",
+        "unit": "Jednotka",
+        "min": "Min hodnota",
+        "max": "Maximální hodnota",
+        "thresholds": "Prahy",
+        "severity": "Mapa závažnosti"
+      },
+      "template_mode": {
+        "header": "Režim šablony",
+        "description": "Použijte šablonu k formátování zobrazeného textu, převodu jednotek nebo zobrazení vypočítaných hodnot.",
+        "enable": "Povolit režim šablony",
+        "template": "Šablona"
+      }
+    },
+    "icons": {
+      "title": "Ikony Karty",
+      "description": "Přidejte řádky ikon pro zobrazení více ikon na vaší kartě. Každý řádek může být nakonfigurován s různými nastaveními.",
+      "add_row": "Přidat Řádek Ikon",
+      "duplicate_row": "Duplikovat Řádek",
+      "delete_row": "Smazat Řádek",
+      "expand_row": "Rozbalit Řádek",
+      "collapse_row": "Sbalit Řádek",
+      "no_row": "Nebyly přidány žádné řádky ikon",
+      "row_prefix": "Řádek",
+      "icon_prefix": "Ikona",
+      "add_icon": "Přidat Ikonu",
+      "duplicate_icon": "Duplikovat Ikonu",
+      "delete_icon": "Smazat Ikonu",
+      "template_mode": "Režim šablony",
+      "template_mode_active_description": "Pomocí šablony určete, kdy by měla být tato ikona aktivní. Šablony vám umožňují používat syntaxe domácího asistenta pro složité podmínky.",
+      "template_mode_inactive_description": "Pomocí šablony určete, kdy by tato ikona měla být neaktivní. Šablony vám umožňují používat syntaxe domácího asistenta pro složité podmínky.",
+      "template_examples_header": "Společné příklady:",
+      "text_formatting": "Formátování textu stavu",
+      "name_formatting": "Formátování názvu",
+      "dynamic_icon": {
+        "title": "Dynamická šablona ikon",
+        "description": "Použijte šablonu k dynamickému výběru ikony na základě stavů entit nebo podmínek.",
+        "enable": "Povolit dynamickou šablonu ikon"
+      },
+      "dynamic_color": {
+        "title": "Dynamická šablona barev",
+        "description": "Použijte šablonu k dynamickému nastavení barvy ikony na základě stavů entit nebo hodnot.",
+        "enable": "Povolit dynamickou šablonu barev"
+      },
+      "enable_template_mode": "Povolit režim šablony",
+      "row_settings": {
+        "header": "Nastavení Řádku",
+        "width": "Šířka Řádku",
+        "width_description": "Šířka řádku jako procento šířky karty",
+        "alignment": "Zarovnání Řádku",
+        "alignment_description": "Jak jsou ikony zarovnány v tomto řádku",
+        "spacing": "Mezery Mezi Ikonami",
+        "spacing_description": "Množství prostoru mezi ikonami v tomto řádku",
+        "columns": "Počet Sloupců",
+        "columns_description": "Počet stejně velkých sloupců v řádku (0 = automatická distribuce podle obsahu)",
+        "confirmation_mode": "Režim Potvrzení",
+        "confirmation_mode_description": "Vyžadovat dva klepnutí/kliknutí pro aktivaci ikon v tomto řádku, zabraňuje náhodným interakcím",
+        "layout_info_title": "Jak funguje nastavení rozvržení"
+      },
+      "icon_settings": {
+        "header": "Seznam Ikon",
+        "entity": "Entita",
+        "entity_description": "Entita zobrazená s touto ikonou",
+        "icon": "Ikona",
+        "icon_description": "Vyberte ikonu nebo zadejte vlastní ikonu",
+        "name": "Název",
+        "name_description": "Vlastní název zobrazený pod ikonou (pokud není zadán, použije se název entity)",
+        "interaction_type": "Typ Interakce",
+        "interaction_type_description": "Vyberte, jak uživatelé interagují s touto ikonou pro spuštění akcí",
+        "show_name": "Zobrazit Název",
+        "show_name_description": "Zobrazit text názvu pod ikonou",
+        "show_state": "Zobrazit Stav",
+        "show_state_description": "Zobrazit stav entity pod ikonou",
+        "show_units": "Zobrazit Jednotky",
+        "show_units_description": "Zahrnout jednotky při zobrazení stavu",
+        "text_position": "Pozice Textu",
+        "text_position_description": "Kde je text názvu a stavu umístěn vzhledem k ikoně",
+        "click_action": "Akce při Kliknutí",
+        "service": "Služba",
+        "service_description": "Služba k volání (např. light.turn_on)",
+        "service_data": "Data Služby (JSON)",
+        "service_data_description": "JSON data odeslaná s voláním služby",
+        "action": "Akce (JSON/Služba)",
+        "action_description": "Pokročilá konfigurace akce (viz dokumentace)",
+        "navigation_path": "Navigační Cesta",
+        "navigation_path_description": "Cesta k navigaci (např. /lovelace/dashboard)",
+        "navigation_target_selector": "Cíl Navigace",
+        "navigation_target_description": "Vyberte z dostupných řídicích panelů, pohledů nebo systémových stránek",
+        "url": "URL",
+        "url_description": "URL k otevření v novém panelu",
+        "automation_entity": "Entita Automatizace",
+        "automation_entity_description": "Automatizace ke spuštění při kliknutí"
+      },
+      "icon_appearance": {
+        "header": "Vzhled Ikony",
+        "icon": "Vzhled Ikony",
+        "general": "Obecný Vzhled",
+        "active": "Aktivní Stav",
+        "inactive": "Neaktivní Stav",
+        "state_conditions": "Podmínky Stavu",
+        "advanced": "Pokročilá Nastavení",
+        "icon_size": "Velikost Ikony",
+        "icon_size_description": "Velikost ikony v pixelech",
+        "text_size": "Velikost Textu",
+        "text_size_description": "Velikost textu názvu/stavu v pixelech",
+        "name_size": "Velikost jména",
+        "name_size_description": "Velikost textu názvu entity v pixelech",
+        "text_alignment": "Zarovnání Textu",
+        "text_alignment_description": "Jak je text zarovnán pod ikonou",
+        "icon_background": "Pozadí Ikony",
+        "icon_background_description": "Přidat tvar pozadí za ikonu",
+        "icon_background_color": "Barva Pozadí Ikony",
+        "icon_background_color_description": "Barva pozadí za ikonou",
+        "container_background_color": "Barva Pozadí Kontejneru",
+        "container_background_color_description": "Barva pozadí za celým kontejnerem ikony",
+        "text_appearance": "Vzhled Textu",
+        "container": {
+          "header": "Vzhled Kontejneru",
+          "vertical_alignment": "Vertikální Zarovnání",
+          "vertical_alignment_description": "Zarovnat ikonu a text vertikálně v kontejneru.",
+          "width": "Šířka Kontejneru",
+          "width_description": "Nastavit šířku kontejneru ikony relativně k řádku.",
+          "background": "Tvar Pozadí Kontejneru",
+          "background_description": "Vyberte tvar pozadí pro celý kontejner ikony."
+        },
+        "show_when_active": "Zobrazit ikonu, když je aktivní",
+        "show_when_active_description": "Zobrazit tuto ikonu pouze tehdy, když je v aktivním stavu",
+        "template_mode": "Režim šablony",
+        "template_description": "Pomocí šablony určete aktivní/neaktivní stav. Šablony umožňují použití syntaxe šablon Home Assistant (jako {{ states.sensor.temperature.state > 70 }}) pro složité podmínky.",
+        "active_template": "Aktivní šablona",
+        "active_template_description": "Šablona, ​​která vrací pravdu, když by ikona měla být aktivní.",
+        "active_state": "Aktivní stav",
+        "active_state_description": "Státní řetězec, který představuje „aktivní“.",
+        "active_state_text": "Vlastní text aktivního stavu",
+        "active_state_text_description": "Přepíše text zobrazený, když je ikona aktivní. Nechte prázdné, abyste použili skutečný stav.",
+        "inactive_template": "Neaktivní šablona",
+        "inactive_template_description": "Šablona, ​​která vrací pravdu, když by ikona měla být neaktivní.",
+        "inactive_state": "Neaktivní stav",
+        "inactive_state_description": "Státní řetězec, který představuje „neaktivní“.",
+        "inactive_state_text": "Vlastní neaktivní text stavu",
+        "inactive_state_text_description": "Přepíše text zobrazený, když je ikona neaktivní. Nechte prázdné, abyste použili skutečný stav.",
+        "active_icon": "Aktivní ikona",
+        "inactive_icon": "Neaktivní ikona",
+        "active_icon_color": "Aktivní barva ikony",
+        "inactive_icon_color": "Neaktivní barva ikon",
+        "active_name_color": "Aktivní barva názvu",
+        "inactive_name_color": "Neaktivní barva názvu",
+        "active_state_color": "Aktivní stav stavu",
+        "inactive_state_color": "Neaktivní barva stavu",
+        "show_icon_active": "Zobrazit ikonu, když je aktivní",
+        "show_icon_active_description": "Zobrazit ikonu, když je stav aktivní.",
+        "show_icon_inactive": "Zobrazit ikonu, když je neaktivní",
+        "show_icon_inactive_description": "Zobrazit ikonu, když je stav neaktivní.",
+        "custom_active_state_text": "Vlastní text aktivního stavu",
+        "custom_inactive_state_text": "Vlastní neaktivní text stavu",
+        "action_description": "Akce pro provedení, když je ikona klikne.",
+        "show_name_active": "Zobrazit název, když je aktivní",
+        "show_name_active_description": "Zobrazit název, když je stav aktivní.",
+        "show_name_inactive": "Zobrazit jméno, když je neaktivní",
+        "show_name_inactive_description": "Zobrazit název, když je stav neaktivní.",
+        "show_state_active": "Ukažte stav, kdy je aktivní",
+        "show_state_active_description": "Zobrazit stav, kdy je stát aktivní.",
+        "show_state_inactive": "Ukažte stav, kdy je neaktivní",
+        "show_state_inactive_description": "Zobrazit stav, kdy je stát neaktivní.",
+        "use_entity_color_for_icon": "Pro ikonu použijte barvu entity",
+        "use_entity_color_for_icon_description": "Použijte atribut barvy entity pro ikonu, pokud je k dispozici",
+        "use_entity_color_for_icon_background": "Použijte barvu entity pro pozadí ikony",
+        "use_entity_color_for_icon_background_description": "Použijte atribut barevného entity pro pozadí ikony, pokud je k dispozici",
+        "use_entity_color_for_container_background": "Použijte barvu entity pro kontejner",
+        "use_entity_color_for_container_background_description": "Použijte atribut barevného entity pro pozadí kontejneru, pokud je k dispozici",
+        "dynamic_icon_template": "Dynamická šablona ikon",
+        "dynamic_icon_template_description": "Použijte šablonu k dynamickému výběru ikony na základě stavů entit nebo podmínek.",
+        "enable_dynamic_icon_template": "Povolit dynamickou šablonu ikon",
+        "dynamic_color_template": "Dynamická šablona barev",
+        "dynamic_color_template_description": "Použijte šablonu k dynamickému nastavení barvy ikony na základě stavů entit nebo hodnot.",
+        "enable_dynamic_color_template": "Povolit dynamickou šablonu barev",
+        "size_settings": "Nastavení velikosti",
+        "value_size": "Velikost hodnoty",
+        "state_text_formatting": "Formátování textu stavu",
+        "row_name": "Název řádku",
+        "row_name_description": "Vlastní název pro tento řádek ikon (ponechte prázdné pro použití výchozího pojmenování)",
+        "width_description": "Ovládá, kolik z dostupné šířky tento řádek použije. Konfiguruje, jak se tento řádek ikon zobrazuje. Šířka ovládá celkovou šířku řádku, rozestup upravuje mezery mezi ikonami a počet sloupců určuje, kolik ikon se objeví v každém řádku (0 = automaticky).",
+        "layout_info_title": "Jak fungují nastavení rozložení",
+        "layout_info_width": "Šířka řádku: Ovládá, kolik horizontálního prostoru řádek zaujímá na kartě (procento šířky karty)",
+        "layout_info_alignment": "Zarovnání řádku: Platí pouze když je počet sloupců 0. Určuje, jak jsou ikony umístěny v řádku",
+        "layout_info_spacing": "Rozestup ikon: Nastavuje množství prostoru mezi ikonami",
+        "layout_info_columns": "Počet sloupců: Když je nastaven na 0, ikony plynou přirozeně podle dostupného prostoru. Když je nastaven na číslo, vynutí přesný počet sloupců v mřížkovém rozložení",
+        "layout_info_tip": "Použijte počet sloupců s konzistentním množstvím ikon na řádek pro nejuniformnější rozložení",
+        "control_right_side_description": "Ovládání zobrazení nebo skrytí pravé strany na základě stavu entity",
+        "dynamic_icon": {
+          "title": "Dynamická šablona ikon",
+          "description": "Použijte šablonu k dynamickému výběru ikony na základě stavů entit nebo podmínek.",
+          "enable": "Povolit dynamickou šablonu ikon",
+          "template_label": "Šablona ikon"
+        },
+        "dynamic_color": {
+          "title": "Dynamická šablona barev",
+          "description": "Použijte šablonu k dynamickému nastavení barvy ikony na základě stavů entit nebo hodnot.",
+          "enable": "Povolit dynamickou šablonu barev",
+          "template_label": "Šablona barev"
+        }
+      },
+      "tabs": {
+        "general": "Obecné",
+        "actions": "Akce",
+        "appearance": "Vzhled",
+        "states": "Stavy",
+        "active_state": "Aktivní Stav",
+        "inactive_state": "Neaktivní Stav",
+        "icons": {
+          "arrange_icon_rows": "Uspořádat Řádky Ikon"
+        }
+      },
+      "alignments": {
+        "flex-start": "Vlevo",
+        "center": "Na střed",
+        "flex-end": "Vpravo",
+        "space-between": "Mezera Mezi",
+        "space-around": "Mezera Kolem",
+        "space-evenly": "Rovnoměrné Mezery"
+      },
+      "vertical_alignments": {
+        "flex-start": "Nahoře",
+        "center": "Uprostřed",
+        "flex-end": "Dole"
+      },
+      "spacing": {
+        "none": "Žádné",
+        "small": "Malé",
+        "medium": "Střední",
+        "large": "Velké"
+      },
+      "text_positions": {
+        "below": "Pod Ikonou",
+        "beside": "Vedle Ikony",
+        "none": "Bez Textu",
+        "top": "Nahoře",
+        "left": "Vlevo",
+        "right": "Vpravo"
+      },
+      "reset": {
+        "size": "Resetujte na výchozí velikost",
+        "color": "Resetujte na výchozí barvu",
+        "all": "Resetujte na výchozí hodnoty"
+      },
+      "click_actions": {
+        "toggle": "Přepnout",
+        "more-info": "Zobrazit Více Informací",
+        "navigate": "Přejít na Cestu",
+        "url": "Otevřít URL",
+        "call-service": "Volat Službu",
+        "perform-action": "Provést Akci",
+        "location-map": "Zobrazit Mapu",
+        "assist": "Hlasový Asistent",
+        "trigger": "Spustit",
+        "none": "Žádná Akce",
+        "descriptions": {
+          "toggle": "Přepíná stav entity mezi zapnuto a vypnuto.",
+          "more-info": "Otevře dialog s dalšími informacemi o entitě.",
+          "navigate": "Přejde na zadanou cestu v Lovelace.",
+          "url": "Otevře zadanou URL v novém panelu.",
+          "call-service": "Zavolá zadanou službu Home Assistant.",
+          "perform-action": "Provede vlastní akci (viz dokumentace).",
+          "location-map": "Zobrazí polohu entity na mapě.",
+          "assist": "Otevře hlasového asistenta Home Assistant.",
+          "trigger": "Spustí entitu (automatizace, skript, tlačítko, atd).",
+          "none": "Nebude provedena žádná akce."
+        }
+      },
+      "backgrounds": {
+        "none": "Žádné",
+        "circle": "Kruh",
+        "square": "Čtverec",
+        "rounded_square": "Zaoblený Čtverec"
+      },
+      "container_widths": {
+        "25": "25% šířka",
+        "50": "50% šířka",
+        "75": "75% šířka",
+        "100": "100% (plná šířka)"
+      },
+      "row_widths": {
+        "25": "25% šířka",
+        "50": "50% šířka",
+        "75": "75% šířka",
+        "100": "100% (plná šířka)"
+      },
+      "interactions": {
+        "single": "Jedno Klepnutí/Klik",
+        "double": "Dvojité Klepnutí/Klik",
+        "hold": "Držet/Dlouhé Stisknutí"
+      },
+      "animations": {
+        "title": "Animace Ikony",
+        "active_description": "Vyberte animaci, která se použije, když je tato ikona v aktivním stavu.",
+        "inactive_description": "Vyberte animaci, která se použije, když je tato ikona v neaktivním stavu.",
+        "select_animation": "Vybrat Animaci",
+        "none": "Žádná",
+        "pulse": "Pulz",
+        "vibrate": "Vibrace",
+        "rotate_left": "Rotace Vlevo",
+        "rotate_right": "Rotace Vpravo",
+        "hover": "Vznášení",
+        "fade": "Zeslabení",
+        "scale": "Škálování",
+        "bounce": "Poskočení",
+        "shake": "Otřesení",
+        "tada": "Tada"
+      },
+      "row_vertical_alignments": {
+        "top": "Nahoře",
+        "center": "Uprostřed",
+        "bottom": "Dole"
+      },
+      "actions": {
+        "single": "Akce Jednoho Kliknutí",
+        "double": "Akce Dvojitého Kliknutí",
+        "hold": "Akce Držení",
+        "single_description": "Akce provedená při jednom klepnutí/kliknutí - nejběžnější interakce",
+        "double_description": "Akce provedená při dvojitém klepnutí/kliknutí - pomáhá předcházet náhodným spuštěním",
+        "hold_description": "Akce provedená při držení po dobu 500ms - ideální pro kritické akce",
+        "section_header": "Akce Interakce"
+      }
+    },
+    "customize": {
+      "title": "Přizpůsobte rozvržení",
+      "description": "Přizpůsobte rozložení, objednávku a přidejte sekce na vaši kartu",
+      "condition_prompt": "Vyberte „Zobrazit“ nebo „Skrýt“ pro konfiguraci stavu entity",
+      "template_mode_active": "Použít Režim Šablony",
+      "layout": {
+        "title": "Styl rozvržení",
+        "description": "Vyberte mezi jednosloupečkovým nebo dvousloupečkovým rozvržením karty",
+        "header": "Nastavení rozvržení",
+        "descriptions_header": "Popisy Rozvržení",
+        "single_column": "Jeden sloupec",
+        "single_column_description": "Všechny sekce jsou uspořádány vertikálně v jednom sloupci - nejlepší pro jednoduché displeje a mobilní zobrazení.",
+        "double_column": "Dva sloupce",
+        "double_column_description": "Sekce jsou rozděleny mezi dva sloupce pro efektivní využití horizontálního prostoru - ideální pro širší obrazovky.",
+        "top_view": "Pohled shora",
+        "top_view_description": "Obrázek je výrazně zobrazen nahoře s dalšími sekcemi uspořádanými v konfigurovatelných pozicích kolem něj.",
+        "half_full": "Polovina + celý",
+        "half_full_description": "Horní řádek má dvě poloviční sekce, spodní řádek má jednu celou sekci - skvělé pro vyvážené rozložení.",
+        "full_half": "Celý + polovina",
+        "full_half_description": "Horní řádek má jednu celou sekci, spodní řádek má dvě poloviční sekce - perfektní pro zvýraznění horního obsahu."
+      },
+      "layout_types": {
+        "single": "Jeden sloupec",
+        "double": "Dva sloupce",
+        "dashboard": "Přehled",
+        "half_full": "Polovina + plná",
+        "full_half": "Plná + polovina"
+      },
+      "column_width": {
+        "title": "Šířka sloupce",
+        "description": "Nastavte poměr šířky mezi levým a pravým sloupcem",
+        "50_50": "Stejné (50/50)",
+        "30_70": "Úzký vlevo, široký vpravo (30/70)",
+        "70_30": "Široký vlevo, úzký vpravo (70/30)",
+        "40_60": "Mírně úzký vlevo (40/60)",
+        "60_40": "Mírně široký vlevo (60/40)"
+      },
+      "top_view": {
+        "header": "Nastavení přehledu",
+        "description": "Nastavte mezery a rozvržení pro přehled",
+        "side_margin": "Boční okraje",
+        "side_margin_help": "Okraje na stranách přehledu v pixelech",
+        "middle_spacing": "Střední mezera",
+        "middle_spacing_help": "Mezera mezi středními sloupci v pixelech",
+        "vertical_spacing": "Vertikální mezera",
+        "vertical_spacing_help": "Mezera mezi řádky v pixelech"
+      },
+      "sections": {
+        "header": "Sekce karty",
+        "arrangement_header": "Uspořádání sekcí",
+        "arrangement_desc_base": "Přetáhněte sekce pro změnu jejich pořadí na kartě.",
+        "arrangement_desc_single_extra": "Všechny sekce budou zobrazeny v jednom sloupci.",
+        "arrangement_desc_double_extra": "Ve dvousloupečkovém rozvržení můžete umístit každou sekci do levého nebo pravého sloupce.",
+        "arrangement_desc_dashboard_extra": "V přehledu můžete umístit sekce kolem obrázku vozidla."
+      },
+      "section_labels": {
+        "title": "Název",
+        "image": "Obrázek vozidla",
+        "info": "Informace o vozidle",
+        "bars": "Všechny ukazatele",
+        "icons": "Všechny řádky ikon",
+        "section_break": "Přestávka sekce"
+      },
+      "actions": {
+        "collapse_margins": "Skrýt okraje",
+        "expand_margins": "Zobrazit okraje",
+        "collapse_options": "Skrýt možnosti",
+        "expand_options": "Zobrazit možnosti",
+        "add_break": "Přidat zlom sekce",
+        "delete_break": "Odstranit zlom sekce"
+      },
+      "css": {
+        "header": "Globální CSS",
+        "description": "Zde zadejte vlastní CSS pravidla pro přepsání výchozího stylu karty. Tato pravidla budou aplikována přímo na kartu. Používejte s opatrností.",
+        "label": "Vlastní CSS",
+        "input_description": "Zde zadejte vaše vlastní CSS pravidla."
+      },
+      "conditions": {
+        "header": "Podmíněná logika",
+        "description": "Zobrazit nebo skrýt tuto sekci na základě stavu entity.",
+        "template_mode_description": "Použijte šablonu k určení viditelnosti sekce. Šablony umožňují používat syntaxi šablon Home Assistant pro složité podmínky.",
+        "type_label": "Typ podmínky",
+        "section_title": "Název sekce",
+        "enable_section_title": "Povolit název sekce",
+        "title_text": "Text názvu",
+        "title_size": "Velikost názvu",
+        "title_color": "Barva názvu",
+        "enable_template_mode": "Povolit režim šablony",
+        "use_template_description": "Použijte šablonu k určení, kdy má být tato sekce viditelná. Šablony umožňují použití syntaxe šablon Home Assistant pro složité podmínky.",
+        "info_row": "Řádek informací",
+        "entity_label": "Entita podmínky",
+        "state_label": "Stav podmínky",
+        "state_description": "Hodnota stavu, která spouští podmínku",
+        "types": {
+          "none": "Žádná (Vždy zobrazit)",
+          "show": "Zobrazit když...",
+          "hide": "Skrýt když..."
+        }
+      },
+      "template": {
+        "description": "Použijte šablonu k určení, kdy má být tato sekce viditelná. Šablony umožňují používat syntaxi šablon Home Assistant pro složité podmínky.",
+        "enable": "Povolit Režim Šablony"
+      },
+      "template_mode": {
+        "header": "Režim šablony",
+        "description": "Použijte šablonu k ovládání zobrazení nebo skrytí tohoto obrázku na základě složité logiky, výpočtů nebo více stavů entit.",
+        "enable": "Povolit režim šablony",
+        "disabled_notice": "(Zakázáno - režim šablony aktivní)",
+        "disabled_help": "Základní ovládání podmínek je zakázáno, když je aktivní režim šablony. Režim šablony má přednost před základními podmínkami.",
+        "examples": {
+          "show_when_charging": "Zobrazit při nabíjení",
+          "show_when_battery_low": "Zobrazit při vybité baterii",
+          "multiple_conditions": "Více podmínek",
+          "show_during_day": "Zobrazit během denních hodin",
+          "show_when_door_unlocked": "Zobrazit při odemčených dveřích"
+        }
+      },
+      "section_title": {
+        "header": "Název Sekce",
+        "enable": "Povolit Název Sekce",
+        "text": "Text Názvu",
+        "size": "Velikost Názvu",
+        "color": "Barva Názvu",
+        "bold": "Tučné",
+        "italic": "Kurzíva",
+        "uppercase": "Velká Písmena",
+        "strikethrough": "Přeškrtnuté"
+      },
+      "margins": {
+        "header": "Okraje",
+        "top": "Horní okraj",
+        "bottom": "Dolní okraj"
+      },
+      "columns": {
+        "left": "Levý sloupec",
+        "right": "Pravý sloupec",
+        "empty": "Přetáhněte sem sekce"
+      },
+      "dashboard": {
+        "top": "Horní sekce",
+        "top_middle": "Horní střední sekce",
+        "left_middle": "Levá střední sekce",
+        "middle": "Střední sekce",
+        "middle_empty": "Oblast obrázku vozidla (Doporučeno)",
+        "right_middle": "Pravá střední sekce",
+        "bottom_middle": "Dolní střední sekce",
+        "bottom": "Dolní sekce"
+      },
+      "half_full": {
+        "row1_col1": "Řádek 1 - Levý sloupec",
+        "row1_col2": "Řádek 1 - Pravý sloupec",
+        "row2_full": "Řádek 2, plná šířka (100%)"
+      },
+      "full_half": {
+        "row1_full": "Řádek 1, plná šířka (100%)",
+        "row2_col1": "Řádek 2 - Levý sloupec",
+        "row2_col2": "Řádek 2 - Pravý sloupec"
+      },
+      "break_styles": {
+        "blank": "Prázdné (bez řádku)",
+        "line": "Plná čára",
+        "double_line": "Dvojitá linie",
+        "dotted": "Tečkovaná čára",
+        "double_dotted": "Dvojitá tečkovaná čára",
+        "shadow": "Stínový gradient"
+      },
+      "break_style": {
+        "header": "Styl zlomu",
+        "style_label": "Styl",
+        "thickness_label": "Tloušťka",
+        "width_percent_label": "Šířka (%)",
+        "color_label": "Barva"
+      }
+    },
+    "container_widths": {
+      "25": "25% šířka",
+      "50": "50% šířka",
+      "75": "75% šířka",
+      "100": "100% (plná šířka)"
+    },
+    "row_widths": {
+      "25": "25% šířka",
+      "50": "50% šířka",
+      "75": "75% šířka",
+      "100": "100% (plná šířka)"
+    }
+  },
+  "about": {
+    "logo_alt": "Ultra Vehicle Card",
+    "developed_by": "Vyvinuto",
+    "discord_button": "Připojte se k našemu Discordu",
+    "docs_button": "Prohlédněte si naši dokumentaci",
+    "donate_button": "DAROVAT (PAYPAL)",
+    "github_button": "Navštivte náš Github",
+    "support_title": "Podpořte Ultra Vehicle Card",
+    "support_description": "Vaše velkorysé tipy podporují vývoj úžasných funkcí pro tuto kartu! Bez podpory uživatelů, jako jste vy, by nepřetržitě inovace nebyla možné."
+  },
+  "custom_icons": {
+    "title": "Vlastní ikony",
+    "description": "Definujte vlastní ikony pro různé stavy.",
+    "icon_entity": "Entita ikony",
+    "default_icon": "Výchozí ikona",
+    "state_icons": "Ikony stavů",
+    "state": "Stav",
+    "icon": "Ikona"
+  },
+  "custom_active_state_text": "Vlastní text aktivního stavu",
+  "custom_inactive_state_text": "Vlastní text neaktivního stavu",
+  "image_settings": {
+    "title": "Nastavení obrázku",
+    "description": "Nastavte vzhled hlavního obrázku.",
+    "type": "Typ obrázku",
+    "width": "Šířka obrázku",
+    "crop": "Oříznout obrázek",
+    "entity": "Entita obrázku",
+    "entity_description": "Entita poskytující URL obrázku"
+  },
+  "entity_settings": {
+    "entity": "Entita",
+    "entity_description": "Vyberte entitu, z které můžete zobrazit informace",
+    "name": "Název",
+    "name_description": "Přepište název entity (ponechejte prázdné pro použití přátelského jména entity)",
+    "show_icon": "Zobrazit ikonu",
+    "icon": "Ikona",
+    "icon_color": "Barva ikon",
+    "name_color": "Barva jména",
+    "entity_color": "Barva entity",
+    "text_color": "Barva entity",
+    "show_name": "Zobrazit jméno",
+    "show_name_description": "Zobrazit název entity před hodnotou",
+    "template_mode": "Použít šablonu pro hodnotu",
+    "template_mode_description": "Použijte šablonu k formátu hodnoty entity",
+    "value_template": "Šablona hodnoty",
+    "template_header": "Šablona hodnoty",
+    "template_examples_header": "Příklady šablon",
+    "template_basic": "Základní hodnota",
+    "template_units": "S jednotkami",
+    "template_round": "Kulatý na 1 desetinné číslo",
+    "dynamic_icon_template": "Šablona ikon",
+    "dynamic_color_template": "Šablona barev",
+    "dynamic_icon_template_mode": "Povolit dynamickou šablonu ikon",
+    "dynamic_color_template_mode": "Povolit dynamickou šablonu barev"
+  }
+}

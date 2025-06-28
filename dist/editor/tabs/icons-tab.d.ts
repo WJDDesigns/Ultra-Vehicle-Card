@@ -4,6 +4,7 @@ import { UltraVehicleCardConfig } from '../../types';
 import '../../components/entity-picker';
 import '../../components/color-picker';
 import '../../components/gradient-editor';
+import '../../components/navigation-picker';
 export declare class IconsTab extends LitElement {
     hass: HomeAssistant;
     config: UltraVehicleCardConfig;

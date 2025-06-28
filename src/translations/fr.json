@@ -1,0 +1,1078 @@
+{
+  "editor": {
+    "tabs": {
+      "settings": "Paramètres",
+      "bars": "Barres",
+      "icons": "Icônes",
+      "customize": "Personnaliser",
+      "about": "À propos",
+      "info": "Informations",
+      "images": "Images"
+    },
+    "info": {
+      "title": "Informations sur la carte",
+      "description": "Configurer les lignes d'informations et les entités pour afficher les détails des véhicules comme l'emplacement, le kilométrage, etc. Les éléments d'informations s'afficheront sur une seule ligne lorsque cela est possible, enveloppant plusieurs lignes dans des conteneurs étroits.",
+      "add_row": "Ajouter une ligne d'info",
+      "add_entity": "Ajouter une entité d'info",
+      "arrange_info_rows": "Organiser les lignes d'informations",
+      "duplicate_row": "Dupliquer la ligne",
+      "delete_row": "Supprimer la ligne",
+      "expand_row": "Développer la ligne",
+      "collapse_row": "Réduire la ligne",
+      "duplicate_entity": "Dupliquer l'entité",
+      "delete_entity": "Supprimer l'entité",
+      "expand_entity": "Développer l'entité",
+      "collapse_entity": "Réduire l'entité",
+      "row_prefix": "Ligne d'info",
+      "entity_prefix": "Entité",
+      "template_mode": "Mode modèle",
+      "template_mode_description": "Utilisez un modèle pour formater la valeur de l'entité. Les modèles vous permettent d'utiliser la syntaxe des modèles d'assistant à domicile pour le formatage complexe.",
+      "template_examples_header": "Exemples courants:",
+      "dynamic_icon": {
+        "title": "Modèle d'icône dynamique",
+        "description": "Utilisez un modèle pour sélectionner dynamiquement l'icône basée sur les états d'entité ou les conditions.",
+        "enable": "Activer le modèle d'icône dynamique"
+      },
+      "dynamic_color": {
+        "title": "Modèle de couleur dynamique",
+        "description": "Utilisez un modèle pour définir dynamiquement les couleurs basées sur les états d'entité ou les valeurs.",
+        "enable": "Activer le modèle de couleur dynamique"
+      },
+      "row_settings": {
+        "header": "Paramètres de ligne",
+        "row_name": "Nom de ligne",
+        "row_name_description": "Nom personnalisé pour cette ligne d'info (laisser vide pour utiliser le nom par défaut)",
+        "horizontal_alignment": "Alignement horizontal",
+        "alignment_description": "Alignement horizontal des entités dans cette ligne",
+        "vertical_alignment": "Alignement vertical",
+        "vertical_alignment_description": "Contrôle l'alignement vertical des entités dans la ligne.",
+        "spacing": "Espacement",
+        "spacing_description": "Espacement entre les entités dans cette ligne",
+        "allow_wrap": "Permettre l'habillage des éléments",
+        "allow_wrap_description": "Lorsque activé, les éléments passeront à la ligne suivante s'ils ne tiennent pas sur une ligne. Lorsque désactivé, tous les éléments resteront sur une seule ligne."
+      },
+      "entity_settings": {
+        "header": "Éléments d'info",
+        "name": "Nom personnalisé",
+        "entity_description": "Sélectionnez une entité pour afficher les informations",
+        "name_description": "Remplacer le nom de l'entité (laisser vide pour utiliser le nom convivial de l'entité)",
+        "show_icon": "Afficher l'icône",
+        "icon_color": "Couleur de l'icône",
+        "name_color": "Couleur du nom",
+        "entity_color": "Couleur de l'entité",
+        "icon_size": "Taille de l'icône",
+        "name_size": "Taille du nom",
+        "value_size": "Taille de la valeur",
+        "size_settings": "Paramètres de taille",
+        "show_name": "Afficher le nom",
+        "show_name_description": "Afficher le nom de l'entité avant la valeur",
+        "click_action": "Action de clic",
+        "navigation_path": "Chemin de navigation",
+        "navigation_path_description": "Chemin vers lequel naviguer lors du clic (ex: /lovelace/0)",
+        "url": "URL",
+        "url_description": "URL à ouvrir lors du clic",
+        "service": "Service",
+        "service_description": "Service à appeler (ex: light.turn_on)",
+        "service_data": "Données de service (JSON)"
+      },
+      "alignments": {
+        "flex-start": "Début",
+        "center": "Centre",
+        "flex-end": "Fin",
+        "space-between": "Espace entre",
+        "space-around": "Espace autour",
+        "space-evenly": "Espace uniforme"
+      },
+      "spacing": {
+        "none": "Aucun",
+        "small": "Petit",
+        "medium": "Moyen",
+        "large": "Grand"
+      },
+      "click_actions": {
+        "more-info": "Plus d'infos",
+        "navigate": "Naviguer",
+        "url": "Ouvrir URL",
+        "call-service": "Appeler service",
+        "none": "Aucun"
+      },
+      "row_vertical_alignments": {
+        "top": "Haut",
+        "center": "Centre",
+        "bottom": "Bas"
+      }
+    },
+    "settings_subtabs": {
+      "general": "Général",
+      "action_images": "Images d'action"
+    },
+    "action_images": {
+      "title": "Paramètres des Images d'Action",
+      "description": "Configurez les images à afficher lorsque des états d'entités spécifiques sont atteints.",
+      "add_image": "Ajouter une Image d'Action",
+      "no_images": "Aucune image d'action configurée pour l'instant. Ajoutez-en une pour commencer.",
+      "actions": {
+        "drag": "Glisser pour réorganiser",
+        "duplicate": "Dupliquer",
+        "delete": "Supprimer",
+        "expand": "Développer",
+        "collapse": "Réduire"
+      },
+      "delete_confirm": "Êtes-vous sûr de vouloir supprimer cette image d'action ?",
+      "entity_settings": "Paramètres de l'Entité",
+      "image_settings": "Paramètres de l'Image",
+      "entity_placeholder": "Sélectionnez une entité",
+      "state_placeholder": "Entrez la valeur d'état",
+      "preview": {
+        "no_entity": "Aucune entité sélectionnée",
+        "no_image": "Pas d'image",
+        "any_state": "N'importe quel état"
+      },
+      "trigger_entity": "Entité Déclencheuse",
+      "trigger_state": "État Déclencheur",
+      "entity_help": "Sélectionnez une entité à surveiller. L'image sera affichée lorsque cette entité correspond à l'état ci-dessous.",
+      "state_help": "Entrez la valeur d'état qui déclenchera l'affichage de cette image. Laissez vide pour correspondre à tout état.",
+      "image_type": {
+        "title": "Type d'Image",
+        "upload": "Télécharger l'Image",
+        "url": "URL de l'Image",
+        "entity": "Image de l'Entité",
+        "none": "Aucune"
+      },
+      "template_mode": "Mode Modèle",
+      "template_description": "Utiliser un modèle pour déterminer quand cette image doit être affichée. Les modèles permettent d'utiliser la syntaxe de modélisation de Home Assistant (comme {{ states.sensor.temperature.state > 70 }}) pour des conditions complexes.",
+      "template_label": "Modèle d'affichage",
+      "template_help": "Entrez un modèle qui retourne vrai/faux. Cette image sera affichée lorsque le modèle s'évalue à vrai. Utilisez la syntaxe Jinja2 : {{ states(...) }}",
+      "priority": {
+        "label": "Priorité d'Affichage",
+        "description": "Basé sur la Priorité utilise la première correspondance de haut en bas. Correspondance la Plus Récente utilise la dernière correspondance trouvée dans la liste.",
+        "options": {
+          "priority": "Basé sur la Priorité",
+          "newest": "Correspondance la Plus Récente"
+        }
+      }
+    },
+    "images": {
+      "title": "Images",
+      "description": "Configurez des images qui seront affichées selon des conditions ou des modèles.",
+      "add_image": "Ajouter une Image",
+      "no_images": "Aucune image configurée pour l'instant. Ajoutez-en une pour commencer.",
+      "arrange_images": "Organiser les Images",
+      "name": "Nom (Optionnel)",
+      "image_type": "Type d'Image",
+      "url": "URL d'Image",
+      "image_entity": "Entité d'Image",
+      "priority": "Priorité (0 = plus élevée)",
+      "priority_mode": "Mode de Priorité",
+      "timed_duration": "Durée d'Affichage (secondes)",
+      "timed_duration_help": "Combien de temps cette image doit être affichée avant de revenir à l'image principale.",
+      "duplicate": "Dupliquer l'Image",
+      "delete": "Supprimer l'Image",
+      "delete_confirm": "Êtes-vous sûr de vouloir supprimer cette image ?",
+      "image_types": {
+        "none": "Aucune",
+        "default": "Véhicule par Défaut",
+        "url": "URL d'Image",
+        "upload": "Télécharger une Image",
+        "entity": "Image d'Entité",
+        "map": "Carte"
+      },
+      "priority_modes": {
+        "order": "Priorité par Ordre",
+        "order_help": "Les images sont affichées selon leur ordre dans la liste (glissez pour réorganiser).",
+        "last_triggered": "Dernier Déclenché",
+        "last_triggered_help": "L'image déclenchée le plus récemment restera affichée jusqu'à ce qu'une autre image soit déclenchée.",
+        "timed": "Images Chronométrées",
+        "timed_help": "Les images en dessous de la première s'afficheront pendant une durée définie puis reviendront à l'image principale."
+      },
+      "conditional_types": {
+        "show": "Afficher Quand",
+        "hide": "Masquer Quand"
+      },
+      "tabs": {
+        "general": "Général",
+        "conditional": "Conditionnel",
+        "appearance": "Apparence"
+      },
+      "conditional_help": "Configurez quand cette image doit être affichée selon les états d'entités ou les modèles.",
+      "conditional_help_simple": "Configurez quand cette image doit être affichée selon les états d'entités.",
+      "conditional_state_help": "L'image sera affichée lorsque l'entité est égale à cette valeur d'état.",
+      "conditional_entity": "Entité Conditionnelle",
+      "conditional_state": "État Conditionnel",
+      "basic_conditions": "Conditions de Base",
+      "advanced_conditional": "Conditions de Modèle Avancées",
+      "advanced_help": "Utilisez des modèles pour des conditions complexes comme plusieurs entités ou des comparaisons mathématiques.",
+      "template_mode_active_help": "Utilisez des modèles pour des conditions complexes comme plusieurs entités ou des comparaisons mathématiques.",
+      "template_mode": {
+        "header": "Mode Modèle",
+        "enable": "Activer le Mode Modèle",
+        "template": "Modèle"
+      },
+      "template_examples_header": "Exemples Courants:",
+      "width": "Largeur (%)",
+      "width_settings": "Paramètres de Largeur",
+      "crop_settings": "Paramètres de Recadrage",
+      "crop_help": "Les valeurs positives recadrent vers l'intérieur, les valeurs négatives ajoutent du rembourrage vers l'extérieur.",
+      "crop_top": "Haut",
+      "crop_right": "Droite",
+      "crop_bottom": "Bas",
+      "crop_left": "Gauche",
+      "fallback_image": "Image de Secours",
+      "fallback_help": "Cette image sera utilisée comme secours si aucun déclencheur ne correspond ou si un délai d'attente se produit. Une seule image peut être de secours.",
+      "map_entity": "Entité de Localisation",
+      "map_entity_help": "Sélectionnez une entité avec des coordonnées latitude/longitude ou une adresse à afficher sur la carte.",
+      "target_entity": "Entité Cible",
+      "target_entity_description": "Sélectionnez l'entité à cibler avec cette action",
+      "common": {
+        "width": "Largeur d'Image",
+        "width_description": "Largeur en pourcentage de la carte",
+        "width_over_100": "Les valeurs de plus de 100% peuvent aider à recadrer l'espace vide autour des images",
+        "url_description": "Entrez l'URL de l'image"
+      },
+      "vehicle": {
+        "crop": "Recadrer l'Image"
+      },
+      "migration": {
+        "title": "Images Héritées Détectées",
+        "description": "Nous avons trouvé des configurations d'images héritées qui peuvent être migrées vers le nouveau format.",
+        "migrate_button": "Migrer Maintenant",
+        "success": "Images migrées avec succès !"
+      }
+    },
+    "card_settings": {
+      "title": "Titre de la carte",
+      "title_alignment": "Alignement du titre",
+      "title_size": "Taille du titre",
+      "title_color": "Couleur du Titre",
+      "title_color_description": "Couleur du titre de la carte",
+      "title_description": "Titre affiché en haut de la carte (optionnel)",
+      "title_alignment_description": "Comment le titre de la carte est aligné",
+      "title_size_description": "Taille du titre de la carte en pixels",
+      "colors": "Couleurs",
+      "card_background": "Arrière-plan de la Carte",
+      "card_background_description": "Couleur d'arrière-plan de toute la carte",
+      "format_entities": "Formater les valeurs d'entités",
+      "format_entities_description": "Active le formatage supplémentaire des valeurs d'entités (ajoute des virgules, convertit les unités, etc.)",
+      "show_units": "Afficher les unités",
+      "show_units_description": "Afficher les unités à côté des valeurs",
+      "help_highlight": "Aider à mettre en évidence",
+      "help_highlight_description": "Afficher les points forts visuels lors de la commutation entre les onglets de l'éditeur pour aider à identifier la section que vous modifiez",
+      "general": "Général",
+      "conditional_logic": "Logique Conditionnelle",
+      "card_visibility": "Visibilité de la Carte",
+      "card_visibility_description": "Afficher ou masquer toute la carte selon une condition d'entité"
+    },
+    "vehicle_info": {
+      "title": "Informations du Véhicule",
+      "location": {
+        "title": "Entité de Localisation",
+        "description": "Sélectionne l'entité qui affiche l'emplacement actuel du véhicule.",
+        "show": "Afficher la Localisation",
+        "show_description": "Affiche l'emplacement du véhicule"
+      },
+      "mileage": {
+        "title": "Entité de Kilométrage",
+        "description": "Sélectionne l'entité qui représente le kilométrage total ou l'odomètre du véhicule.",
+        "show": "Afficher le Kilométrage",
+        "show_description": "Affiche le kilométrage du véhicule"
+      },
+      "car_state": {
+        "title": "Entité d'État du Véhicule",
+        "description": "Sélectionne l'entité qui représente l'état actuel du véhicule (ex. garé, en mouvement, en charge).",
+        "show": "Afficher l'État du Véhicule",
+        "show_description": "Affiche l'état du véhicule"
+      }
+    },
+    "crop": {
+      "title": "Recadrage d'Image",
+      "top": "Haut",
+      "right": "Droit",
+      "bottom": "Bas",
+      "left": "Gauche",
+      "pixels": "px",
+      "help": "Entrez des valeurs en pixels (positives ou négatives) pour ajuster le recadrage et le remplissage"
+    },
+    "alignment": {
+      "left": "Gauche",
+      "center": "Centre",
+      "right": "Droite"
+    },
+    "common": {
+      "choose_file": "Choisir un Fichier",
+      "no_file_chosen": "Aucun fichier sélectionné",
+      "entity": "Entité",
+      "width": "Largeur",
+      "width_description": "Largeur en pourcentage de la carte",
+      "width_over_100": "Les valeurs de plus de 100% peuvent aider à recadrer l'espace vide autour des images",
+      "none": "Aucun",
+      "default": "Par défaut",
+      "upload": "Télécharger",
+      "url": "URL",
+      "url_description": "URL pointant vers l'image",
+      "reset": "Réinitialiser",
+      "condition_prompt": "Sélectionnez \"afficher\" ou \"masquer\" pour configurer la condition d'entité",
+      "bold": "Gras",
+      "italic": "Italique",
+      "uppercase": "Majuscules",
+      "strikethrough": "Barré"
+    },
+    "conditions": {
+      "condition_type": "Type de Condition",
+      "show_card_if": "Afficher la Carte Si",
+      "hide_card_if": "Masquer la Carte Si",
+      "entity_description": "Sélectionnez l'entité à vérifier pour la condition",
+      "state": "État",
+      "state_description": "La valeur d'état qui déclenche la condition"
+    },
+    "bars": {
+      "title": "Barres de Pourcentage",
+      "description": "Ajoute des barres de pourcentage pour afficher des valeurs comme le niveau de carburant, la charge de la batterie ou l'autonomie. Chaque barre peut afficher une valeur de pourcentage principale avec des étiquettes optionnelles à gauche et à droite.",
+      "add": "Ajouter une Nouvelle Barre",
+      "duplicate": "Dupliquer la Barre",
+      "delete": "Supprimer la Barre",
+      "expand": "Développer la Barre",
+      "collapse": "Réduire la Barre",
+      "no_entity": "Aucune entité sélectionnée",
+      "bar_prefix": "Barre",
+      "template": {
+        "description": "Utilisez un modèle pour formater le texte affiché, convertir des unités ou afficher des valeurs calculées.",
+        "enable": "Activer le mode modèle",
+        "template_label": "Modèle",
+        "helper_text": "Utilisez la syntaxe de modélisation de Home Assistant. Exemples :\n• {{ states('sensor.temperature') | float * 1.8 + 32 }} °F\n• {{ now().strftime(\"%b %d, %H:%M\") }}",
+        "examples_header": "Exemples courants:",
+        "examples": {
+          "temperature": "{{ states('sensor.temperature') | float * 1.8 + 32 }}°F - Convertir Celsius en Fahrenheit",
+          "datetime": "{{ now().strftime(\"%b %d, %H:%M\") }} - Formater la date/heure actuelle",
+          "power": "{{ 'Charge à ' + states('sensor.ev_power') + ' kW' }} - Combiner texte et valeur de capteur"
+        }
+      },
+      "bar_radius": {
+        "round": "Arrondi",
+        "square": "Carré",
+        "rounded-square": "Carré Arrondi"
+      },
+      "tabs": {
+        "arrange_bars": "Organiser les Barres",
+        "config": "Configuration",
+        "colors": "Couleurs",
+        "animation": "Animation"
+      },
+      "settings": {
+        "header": "Configuration de la Barre",
+        "entity": "Entité de la Barre",
+        "entity_description": "Sélectionnez une entité qui renvoie une valeur en pourcentage (0-100). Cela contrôle le remplissage de la barre.",
+        "limit_entity": "Entité de Limite (optionnel)",
+        "limit_entity_description": "Optionnel: Ajouter un indicateur de limite vertical sur la barre (ex. limite de charge pour batterie VE).",
+        "limit_color": "Couleur de l'Indicateur de Limite",
+        "limit_color_description": "Couleur de la ligne verticale indiquant la position de la limite sur la barre.",
+        "bar_size": "Taille de la Barre",
+        "bar_size_description": "Définit l'épaisseur/hauteur de la barre de progression.",
+        "bar_radius": "Rayon de la Barre",
+        "bar_radius_description": "Forme des coins de la barre de progression",
+        "width": "Largeur de la Barre",
+        "width_description": "Définit la largeur de la barre en pourcentage de la largeur de la carte.",
+        "alignment": "Alignement des Étiquettes",
+        "alignment_description": "Comment les étiquettes gauche et droite s'alignent entre elles.",
+        "show_percentage": "Afficher le Pourcentage",
+        "show_percentage_description": "Afficher la valeur en pourcentage à l'intérieur de la barre"
+      },
+      "percentage": {
+        "header": "Texte du Pourcentage",
+        "display_header": "Affichage du Texte de Pourcentage",
+        "display_description": "Contrôlez la visibilité et l'apparence des valeurs de pourcentage affichées directement sur la barre. Ces nombres fournissent un indicateur visuel clair du niveau actuel.",
+        "text_size": "Taille du Texte",
+        "calculation_header": "Calcul du Pourcentage",
+        "calculation_description": "Configurez comment le niveau de remplissage en pourcentage de la barre est calculé en utilisant l'une des options ci-dessous.",
+        "type_header": "Calcul du Pourcentage",
+        "type_label": "Type de Pourcentage",
+        "type_description": "Comment calculer la valeur de pourcentage affichée dans la barre",
+        "type_entity": "Entité (0-100)",
+        "type_attribute": "Attribut d'Entité",
+        "type_template": "Mode Modèle",
+        "type_difference": "Différence (Quantité/Total)",
+        "amount_entity": "Entité de Quantité",
+        "amount_description": "Entité représentant la quantité/valeur actuelle (numérateur)",
+        "total_entity": "Entité de Total",
+        "total_description": "Entité représentant la quantité/maximum total (dénominateur)"
+      },
+      "left_side": {
+        "header": "Côté Gauche",
+        "section_description": "Configurez le titre et la valeur de l'entité affichés du côté gauche de la barre. Ceci est utile pour afficher des étiquettes comme 'Autonomie' ou 'Batterie' avec leurs valeurs.",
+        "toggle_description": "Afficher ou masquer le côté gauche de l'étiquette de la barre",
+        "title": "Titre Gauche",
+        "title_description": "Étiquette facultative affichée sur le côté gauche sous la barre.",
+        "entity": "Entité Gauche",
+        "entity_description": "Entité dont la valeur est affichée sur le côté gauche de la barre.",
+        "alignment_description": "Contrôle l'alignement de cette étiquette sous la barre.",
+        "title_size": "Taille du Titre",
+        "value_size": "Taille de la Valeur",
+        "hidden_message": "Le côté gauche est masqué"
+      },
+      "right_side": {
+        "header": "Côté Droit",
+        "section_description": "Configurez le titre et la valeur de l'entité affichés du côté droit de la barre. C'est idéal pour les informations complémentaires comme 'Temps jusqu'à Plein' ou les mesures secondaires.",
+        "toggle_description": "Afficher ou masquer le côté droit de l'étiquette de la barre",
+        "title": "Titre Droit",
+        "title_description": "Étiquette facultative affichée sur le côté droit sous la barre.",
+        "entity": "Entité Droite",
+        "entity_description": "Entité dont la valeur est affichée sur le côté droit de la barre.",
+        "alignment_description": "Contrôle l'alignement de cette étiquette sous la barre.",
+        "title_size": "Taille du Titre",
+        "value_size": "Taille de la Valeur",
+        "hidden_message": "Le côté droit est masqué"
+      },
+      "colors": {
+        "header": "Couleurs",
+        "bar_color": "Couleur de la Barre",
+        "background_color": "Couleur d'Arrière-plan",
+        "border_color": "Couleur de Bordure",
+        "limit_indicator_color": "Couleur de l'Indicateur de Limite",
+        "left_title_color": "Couleur du Titre Gauche",
+        "left_value_color": "Couleur de la Valeur Gauche",
+        "right_title_color": "Couleur du Titre Droit",
+        "right_value_color": "Couleur de la Valeur Droite",
+        "percentage_text_color": "Couleur du Texte de Pourcentage",
+        "reset_color": "Réinitialiser la couleur par défaut"
+      },
+      "gradient": {
+        "header": "Mode Dégradé",
+        "description": "Créez de belles transitions de couleur sur vos barres de progression. Idéal pour afficher les niveaux de batterie, les jauges de carburant ou tout indicateur d'état nécessitant une mise en valeur visuelle.",
+        "toggle": "Utiliser un Dégradé",
+        "toggle_description": "Utiliser un dégradé pour la barre de progression au lieu d'une couleur unie",
+        "display_mode": "Mode d'Affichage du Dégradé",
+        "display_mode_full": "Complet",
+        "display_mode_value_based": "Basé sur la Valeur",
+        "display_mode_cropped": "Recadré",
+        "display_mode_description": "Complet: Affiche tout le dégradé. Basé sur la Valeur: Affiche le dégradé jusqu'à la valeur actuelle.",
+        "editor_header": "Éditeur de Dégradé",
+        "add_stop": "Ajouter un Arrêt"
+      },
+      "animation": {
+        "header": "Animation d'Action",
+        "description": "Ajoute des animations à la barre lorsqu'une entité spécifique atteint un état spécifique. Parfait pour afficher les états de charge, les états d'alarme et plus encore.",
+        "pro_tip": "Astuce Pro: Pour des animations 'toujours actives', sélectionne un type d'animation mais laisse les champs d'entité et d'état vides. Essaie les animations 'Bulles' et 'Remplissage'!",
+        "entity": "Entité d'Animation",
+        "entity_description": "Entité qui déclenche l'animation lorsqu'elle correspond à l'état spécifié",
+        "state": "État de l'Entité",
+        "state_description": "Lorsque l'état de l'entité correspond à cette valeur, l'animation sera déclenchée",
+        "type": "Type d'Animation",
+        "type_description": "L'effet d'animation à afficher lorsque l'état de l'entité correspond",
+        "select_entity_prompt": "Sélectionnez une Entité et saisissez l'état qui déclenchera l'animation (exemples : \"charging\", \"on\", \"idle\")",
+        "action_entity": "Entité d'action",
+        "action_state": "État d'action",
+        "action_description": "Cette animation remplacera l'animation régulière lorsque l'entité spécifiée est dans un état spécifique.",
+        "action_entity_prompt": "Sélectionnez une entité d'action et l'état pour définir lorsque cette animation devrait remplacer l'animation régulière"
+      },
+      "bar_sizes": {
+        "thin": "Fine",
+        "regular": "Normale",
+        "thick": "Épaisse",
+        "thiccc": "Très Épaisse"
+      },
+      "bar_widths": {
+        "25": "25% de Largeur",
+        "50": "50% de Largeur",
+        "75": "75% de Largeur",
+        "100": "100% (Pleine Largeur)"
+      },
+      "bar_alignments": {
+        "space-between": "Espace Entre",
+        "flex-start": "Gauche",
+        "center": "Centre",
+        "flex-end": "Droite"
+      },
+      "bar_styles": {
+        "flat": "Plat (Par défaut)",
+        "glossy": "Brillant",
+        "embossed": "En relief",
+        "inset": "Encastré",
+        "gradient": "Superposition de dégradé",
+        "neon": "Lueur néon",
+        "outline": "Contour",
+        "glass": "Verre",
+        "metallic": "Métallique",
+        "neumorphic": "Neumorphique"
+      },
+      "animation_types": {
+        "none": "Aucune",
+        "charging-lines": "Charge (Lignes Diagonales)",
+        "pulse": "Pulsation",
+        "blinking": "Clignotement",
+        "bouncing": "Rebond",
+        "glow": "Lueur",
+        "rainbow": "Arc-en-ciel",
+        "bubbles": "Bulles",
+        "fill": "Remplissage"
+      },
+      "custom_bar_settings": {
+        "title": "Paramètres de Barre Personnalisés",
+        "description": "Définissez des configurations personnalisées pour des barres individuelles.",
+        "name": "Nom de la Barre",
+        "entity": "Entité",
+        "unit": "Unité",
+        "min": "Valeur Minimale",
+        "max": "Valeur Maximale",
+        "thresholds": "Seuils",
+        "severity": "Carte de Sévérité"
+      },
+      "template_mode": {
+        "header": "Mode Modèle",
+        "description": "Utilisez un modèle pour formater le texte affiché, convertir les unités ou afficher des valeurs calculées.",
+        "enable": "Activer le Mode Modèle",
+        "template": "Modèle"
+      }
+    },
+    "icons": {
+      "title": "Icônes de Carte",
+      "description": "Ajoutez des lignes d'icônes pour afficher plusieurs icônes dans votre carte. Chaque ligne peut être configurée avec différents paramètres. Note : Les lignes d'icônes et l'ordre des sections peuvent être réorganisés dans l'onglet Personnaliser.",
+      "add_row": "Ajouter une Ligne d'Icônes",
+      "duplicate_row": "Dupliquer la Ligne",
+      "delete_row": "Supprimer la Ligne",
+      "expand_row": "Développer la Ligne",
+      "collapse_row": "Réduire la Ligne",
+      "no_row": "Aucune ligne d'icônes ajoutée",
+      "row_prefix": "Ligne",
+      "icon_prefix": "Icône",
+      "add_icon": "Ajouter une Icône",
+      "duplicate_icon": "Dupliquer l'Icône",
+      "delete_icon": "Supprimer l'Icône",
+      "template_mode": "Mode modèle",
+      "template_mode_active_description": "Utilisez un modèle pour déterminer quand cette icône doit être active. Les modèles vous permettent d'utiliser la syntaxe des modèles d'assistant à domicile pour des conditions complexes.",
+      "template_mode_inactive_description": "Utilisez un modèle pour déterminer quand cette icône doit être inactive. Les modèles vous permettent d'utiliser la syntaxe des modèles d'assistant à domicile pour des conditions complexes.",
+      "template_examples_header": "Exemples courants:",
+      "text_formatting": "Formatage du Texte d'État",
+      "name_formatting": "Formatage du Nom",
+      "dynamic_icon": {
+        "title": "Modèle d'Icône Dynamique",
+        "description": "Utilisez un modèle pour sélectionner dynamiquement l'icône basée sur les états d'entités ou les conditions.",
+        "enable": "Activer le Modèle d'Icône Dynamique"
+      },
+      "dynamic_color": {
+        "title": "Modèle de Couleur Dynamique",
+        "description": "Utilisez un modèle pour définir dynamiquement la couleur de l'icône basée sur les états d'entités ou les valeurs.",
+        "enable": "Activer le Modèle de Couleur Dynamique"
+      },
+      "enable_template_mode": "Activer le mode modèle",
+      "row_settings": {
+        "header": "Paramètres de Ligne",
+        "width": "Largeur de Ligne",
+        "width_description": "Largeur de la ligne en pourcentage de la largeur de la carte",
+        "alignment": "Alignement de la Ligne",
+        "alignment_description": "Comment aligner les icônes dans cette ligne",
+        "spacing": "Espacement des Icônes",
+        "spacing_description": "Quantité d'espace entre les icônes dans cette ligne",
+        "columns": "Nombre de Colonnes",
+        "columns_description": "Nombre de colonnes de taille uniforme dans la ligne (0 = distribution automatique basée sur le contenu)",
+        "confirmation_mode": "Mode de Confirmation",
+        "confirmation_mode_description": "Nécessite deux pressions/clics pour activer les icônes dans cette ligne, évitant les interactions accidentelles",
+        "layout_info_title": "Comment fonctionnent les paramètres de mise en page"
+      },
+      "icon_settings": {
+        "header": "Paramètres d'Icône",
+        "entity": "Entité",
+        "entity_description": "Entité à afficher avec cette icône",
+        "icon": "Icône",
+        "icon_description": "Sélectionnez une icône ou entrez une personnalisée",
+        "name": "Nom",
+        "name_description": "Nom personnalisé à afficher sous l'icône (utilise le nom de l'entité par défaut si non défini)",
+        "interaction_type": "Type d'Interaction",
+        "interaction_type_description": "Choisissez comment les utilisateurs interagissent avec cette icône pour déclencher des actions",
+        "show_name": "Afficher le Nom",
+        "show_name_description": "Afficher le texte du nom sous l'icône",
+        "show_state": "Afficher l'État",
+        "show_state_description": "Afficher l'état de l'entité sous l'icône",
+        "show_units": "Afficher les Unités",
+        "show_units_description": "Inclure les unités lors de l'affichage de l'état",
+        "text_position": "Position du Texte",
+        "text_position_description": "Où placer le texte du nom et de l'état par rapport à l'icône",
+        "click_action": "Action au Clic",
+        "service": "Service",
+        "service_description": "Service à appeler (ex. light.turn_on)",
+        "service_data": "Données du Service (JSON)",
+        "service_data_description": "Données JSON à envoyer avec l'appel de service",
+        "action": "Action (JSON / Service)",
+        "action_description": "Configuration d'action avancée (voir docs)",
+        "navigation_path": "Chemin de Navigation",
+        "navigation_path_description": "Chemin vers lequel naviguer (ex. /lovelace/dashboard)",
+        "navigation_target_selector": "Cible de Navigation",
+        "navigation_target_description": "Sélectionnez parmi les tableaux de bord, vues ou pages système disponibles",
+        "url": "URL",
+        "url_description": "URL à ouvrir dans un nouvel onglet",
+        "automation_entity": "Entité d'Automatisation",
+        "automation_entity_description": "Automatisation à déclencher lors du clic"
+      },
+      "icon_appearance": {
+        "header": "Apparence de l'Icône",
+        "icon": "Spécifique à l'Icône",
+        "general": "Apparence Générale",
+        "active": "État Actif",
+        "inactive": "État Inactif",
+        "state_conditions": "Conditions d'État",
+        "advanced": "Paramètres Avancés",
+        "icon_size": "Taille de l'Icône",
+        "icon_size_description": "Taille de l'icône en pixels",
+        "text_size": "Taille du Texte",
+        "text_size_description": "Taille du texte du nom/état en pixels",
+        "name_size": "Taille de nom",
+        "name_size_description": "Taille du texte du nom de l'entité en pixels",
+        "text_alignment": "Alignement du Texte",
+        "text_alignment_description": "Comment aligner le texte sous l'icône",
+        "icon_background": "Fond d'Icône",
+        "icon_background_description": "Ajouter une forme d'arrière-plan derrière l'icône",
+        "icon_background_color": "Couleur de Fond d'Icône",
+        "icon_background_color_description": "Couleur de l'arrière-plan derrière l'icône",
+        "container_background_color": "Couleur de Fond du Conteneur",
+        "container_background_color_description": "Couleur de l'arrière-plan derrière le conteneur complet d'icône",
+        "text_appearance": "Apparence du Texte",
+        "container": {
+          "header": "Apparence du Conteneur",
+          "vertical_alignment": "Alignement Vertical",
+          "vertical_alignment_description": "Aligne l'icône et le texte verticalement dans le conteneur.",
+          "width": "Largeur du Conteneur",
+          "width_description": "Définit la largeur du conteneur d'icône par rapport à la ligne.",
+          "background": "Forme d'Arrière-plan du Conteneur",
+          "background_description": "Choisissez une forme d'arrière-plan pour tout le conteneur d'icône."
+        },
+        "show_when_active": "Afficher l'Icône Lorsqu'Active",
+        "show_when_active_description": "Afficher cette icône uniquement lorsqu'elle est dans un état actif",
+        "template_mode": "Mode Modèle",
+        "template_description": "Utilisez un modèle pour déterminer l'état actif/inactif. Les modèles permettent d'utiliser la syntaxe de modèles de Home Assistant (comme {{ states.sensor.temperature.state > 70 }}) pour des conditions complexes.",
+        "active_template": "Modèle Actif",
+        "active_template_description": "Modèle qui retourne vrai quand l'icône doit être active.",
+        "active_state": "État Actif",
+        "active_state_description": "Chaîne d'état représentant \"actif\".",
+        "active_state_text": "Texte d'État Actif Personnalisé",
+        "active_state_text_description": "Remplace le texte affiché lorsque l'icône est active. Laissez vide pour utiliser l'état réel.",
+        "inactive_template": "Modèle Inactif",
+        "inactive_template_description": "Modèle qui retourne vrai quand l'icône doit être inactive.",
+        "inactive_state": "État Inactif",
+        "inactive_state_description": "Chaîne d'état représentant \"inactif\".",
+        "inactive_state_text": "Texte d'État Inactif Personnalisé",
+        "inactive_state_text_description": "Remplace le texte affiché lorsque l'icône est inactive. Laissez vide pour utiliser l'état réel.",
+        "active_icon": "Icône Active",
+        "inactive_icon": "Icône Inactive",
+        "active_icon_color": "Couleur de l'Icône Active",
+        "inactive_icon_color": "Couleur de l'Icône Inactive",
+        "active_name_color": "Couleur du Nom Actif",
+        "inactive_name_color": "Couleur du Nom Inactif",
+        "active_state_color": "Couleur de l'État Actif",
+        "inactive_state_color": "Couleur de l'État Inactif",
+        "show_icon_active": "Afficher l'Icône Lorsqu'Active",
+        "show_icon_active_description": "Afficher l'icône lorsque l'état est actif.",
+        "show_icon_inactive": "Afficher l'Icône Lorsqu'Inactive",
+        "show_icon_inactive_description": "Afficher l'icône lorsque l'état est inactif.",
+        "custom_active_state_text": "Texte d'État Actif Personnalisé",
+        "custom_inactive_state_text": "Texte d'État Inactif Personnalisé",
+        "action_description": "Action à effectuer lorsque l'icône est cliquée.",
+        "show_name_active": "Afficher le Nom Lorsqu'Actif",
+        "show_name_active_description": "Afficher le nom lorsque l'état est actif.",
+        "show_name_inactive": "Afficher le Nom Lorsqu'Inactif",
+        "show_name_inactive_description": "Afficher le nom lorsque l'état est inactif.",
+        "show_state_active": "Afficher l'État Lorsqu'Actif",
+        "show_state_active_description": "Afficher l'état lorsque l'état est actif.",
+        "show_state_inactive": "Afficher l'État Lorsqu'Inactif",
+        "show_state_inactive_description": "Afficher l'état lorsque l'état est inactif.",
+        "use_entity_color_for_icon": "Utiliser la couleur de l'entité pour l'icône",
+        "use_entity_color_for_icon_description": "Utiliser l'attribut de couleur de l'entité pour l'icône lorsqu'elle est disponible",
+        "use_entity_color_for_icon_background": "Utiliser la couleur de l'entité pour l'arrière-plan de l'icône",
+        "use_entity_color_for_icon_background_description": "Utilisez l'attribut de couleur de l'entité pour l'arrière-plan de l'icône lorsqu'il est disponible",
+        "use_entity_color_for_container_background": "Utiliser la couleur de l'entité pour le conteneur",
+        "use_entity_color_for_container_background_description": "Utilisez l'attribut de couleur de l'entité pour l'arrière-plan du conteneur lorsqu'il est disponible",
+        "dynamic_icon_template": "Modèle d'Icône Dynamique",
+        "dynamic_icon_template_description": "Utilisez un modèle pour sélectionner dynamiquement l'icône basée sur les états d'entités ou les conditions.",
+        "enable_dynamic_icon_template": "Activer le Modèle d'Icône Dynamique",
+        "dynamic_color_template": "Modèle de Couleur Dynamique",
+        "dynamic_color_template_description": "Utilisez un modèle pour définir dynamiquement la couleur de l'icône basée sur les états d'entités ou les valeurs.",
+        "enable_dynamic_color_template": "Activer le Modèle de Couleur Dynamique",
+        "size_settings": "Paramètres de Taille",
+        "value_size": "Taille de la Valeur",
+        "state_text_formatting": "Formatage du Texte d'État",
+        "row_name": "Nom de la Ligne",
+        "row_name_description": "Nom personnalisé pour cette ligne d'icônes (laisser vide pour utiliser le nom par défaut)",
+        "width_description": "Contrôle la quantité de largeur disponible que cette ligne utilisera. Configurez comment cette ligne d'icônes s'affiche. La largeur contrôle la largeur globale de la ligne, l'espacement ajuste les écarts entre les icônes, et le nombre de colonnes détermine combien d'icônes apparaissent dans chaque ligne (0 = automatique).",
+        "layout_info_title": "Comment Fonctionnent les Paramètres de Mise en Page",
+        "layout_info_width": "Largeur de Ligne : Contrôle l'espace horizontal que la ligne occupe dans la carte (pourcentage de la largeur de la carte)",
+        "layout_info_alignment": "Alignement de Ligne : S'applique uniquement quand le Nombre de Colonnes est 0. Détermine comment les icônes sont positionnées dans la ligne",
+        "layout_info_spacing": "Espacement des Icônes : Définit la quantité d'espace entre les icônes",
+        "layout_info_columns": "Nombre de Colonnes : Quand défini à 0, les icônes s'organisent naturellement selon l'espace disponible. Quand défini à un nombre, force ce nombre exact de colonnes dans une mise en page en grille",
+        "layout_info_tip": "Utilisez le Nombre de Colonnes avec des quantités cohérentes d'icônes par ligne pour la mise en page la plus uniforme",
+        "control_right_side_description": "Contrôler quand le côté droit est affiché ou masqué selon l'état de l'entité",
+        "dynamic_icon": {
+          "title": "Modèle d'Icône Dynamique",
+          "description": "Utilisez un modèle pour sélectionner dynamiquement l'icône basée sur les états d'entités ou les conditions.",
+          "enable": "Activer le Modèle d'Icône Dynamique",
+          "template_label": "Modèle d'Icône"
+        },
+        "dynamic_color": {
+          "title": "Modèle de Couleur Dynamique",
+          "description": "Utilisez un modèle pour définir dynamiquement la couleur de l'icône basée sur les états d'entités ou les valeurs.",
+          "enable": "Activer le Modèle de Couleur Dynamique",
+          "template_label": "Modèle de Couleur"
+        }
+      },
+      "tabs": {
+        "general": "Général",
+        "actions": "Actions",
+        "appearance": "Apparence",
+        "states": "États",
+        "active_state": "État Actif",
+        "inactive_state": "État Inactif",
+        "icons": {
+          "arrange_icon_rows": "Organiser les Lignes d'Icônes"
+        }
+      },
+      "alignments": {
+        "flex-start": "Gauche",
+        "center": "Centre",
+        "flex-end": "Droite",
+        "space-between": "Espace Entre",
+        "space-around": "Espace Autour",
+        "space-evenly": "Espacement Égal"
+      },
+      "vertical_alignments": {
+        "flex-start": "Haut",
+        "center": "Milieu",
+        "flex-end": "Bas"
+      },
+      "spacing": {
+        "none": "Aucun",
+        "small": "Petit",
+        "medium": "Moyen",
+        "large": "Grand"
+      },
+      "text_positions": {
+        "below": "Sous l'Icône",
+        "beside": "À Côté de l'Icône",
+        "none": "Pas de Texte",
+        "top": "En Haut",
+        "left": "À Gauche",
+        "right": "À Droite"
+      },
+      "reset": {
+        "size": "Réinitialiser à la taille par défaut",
+        "color": "Réinitialiser à la couleur par défaut",
+        "all": "Réinitialiser aux valeurs par défaut"
+      },
+      "click_actions": {
+        "toggle": "Basculer l'Entité",
+        "more-info": "Afficher Plus d'Informations",
+        "navigate": "Naviguer vers un Chemin",
+        "url": "Ouvrir une URL",
+        "call-service": "Appeler un Service",
+        "perform-action": "Exécuter une Action",
+        "location-map": "Afficher la Carte de Localisation",
+        "assist": "Assistant Vocal",
+        "trigger": "Déclencher",
+        "none": "Aucune Action",
+        "descriptions": {
+          "toggle": "Bascule l'état de l'entité.",
+          "more-info": "Ouvre la boîte de dialogue d'informations de l'entité.",
+          "navigate": "Navigue vers le chemin Lovelace spécifié.",
+          "url": "Ouvre l'URL spécifiée dans un nouvel onglet.",
+          "call-service": "Appelle le service Home Assistant spécifié.",
+          "perform-action": "Exécute une action personnalisée (voir documentation).",
+          "location-map": "Affiche la localisation de l'entité sur une carte.",
+          "assist": "Ouvre l'assistant vocal Home Assistant.",
+          "trigger": "Déclenche ou bascule l'entité (automatisation, script, bouton, verrou, etc.).",
+          "none": "Aucune action ne sera effectuée."
+        }
+      },
+      "backgrounds": {
+        "none": "Aucun",
+        "circle": "Cercle",
+        "square": "Carré",
+        "rounded_square": "Carré Arrondi"
+      },
+      "container_widths": {
+        "25": "25% de Largeur",
+        "50": "50% de Largeur",
+        "75": "75% de Largeur",
+        "100": "100% (Pleine Largeur)"
+      },
+      "row_widths": {
+        "25": "25% de Largeur",
+        "50": "50% de Largeur",
+        "75": "75% de Largeur",
+        "100": "100% (Pleine Largeur)"
+      },
+      "interactions": {
+        "single": "Appui/Clic Simple",
+        "double": "Double Appui/Clic",
+        "hold": "Maintenir/Pression Longue"
+      },
+      "animations": {
+        "title": "Animation d'Icône",
+        "active_description": "Sélectionnez une animation à appliquer quand cette icône est dans l'état actif.",
+        "inactive_description": "Sélectionnez une animation à appliquer quand cette icône est dans l'état inactif.",
+        "select_animation": "Sélectionner une Animation",
+        "none": "Aucune",
+        "pulse": "Pulsation",
+        "vibrate": "Vibration",
+        "rotate_left": "Rotation Gauche",
+        "rotate_right": "Rotation Droite",
+        "hover": "Survol",
+        "fade": "Fondu",
+        "scale": "Échelle",
+        "bounce": "Rebond",
+        "shake": "Secousse",
+        "tada": "Tada"
+      },
+      "row_vertical_alignments": {
+        "top": "Haut",
+        "center": "Centre",
+        "bottom": "Bas"
+      },
+      "actions": {
+        "single": "Action Clic Simple",
+        "double": "Action Double Clic",
+        "hold": "Action Maintien",
+        "single_description": "Action effectuée sur un appui/clic simple - interaction la plus courante",
+        "double_description": "Action effectuée sur un double appui/clic - aide à prévenir les déclenchements accidentels",
+        "hold_description": "Action effectuée lors du maintien pendant 500ms - idéale pour les actions critiques",
+        "section_header": "Actions d'Interaction"
+      }
+    },
+    "customize": {
+      "title": "Personnaliser la mise en page",
+      "description": "Personnalisez la mise en page, commandez et ajoutez des sections à votre carte",
+      "condition_prompt": "Sélectionnez \"afficher\" ou \"masquer\" pour configurer la condition d'entité",
+      "template_mode_active": "Utiliser le Mode Modèle",
+      "layout": {
+        "title": "Style de mise en page",
+        "description": "Choisissez entre une vue à une ou deux colonnes pour la carte",
+        "header": "Paramètres de mise en page",
+        "descriptions_header": "Descriptions de Mise en Page",
+        "single_column": "Colonne Simple",
+        "single_column_description": "Toutes les sections sont empilées verticalement dans une seule colonne - idéal pour les affichages simples et les vues mobiles.",
+        "double_column": "Double Colonne",
+        "double_column_description": "Les sections sont réparties entre deux colonnes pour une utilisation efficace de l'espace horizontal - idéal pour les écrans plus larges.",
+        "top_view": "Vue Supérieure",
+        "top_view_description": "L'image est affichée de manière proéminente en haut avec les autres sections organisées dans des positions configurables autour d'elle.",
+        "half_full": "Moitié + Plein",
+        "half_full_description": "La ligne supérieure a deux sections demi-largeur, la ligne inférieure a une section pleine largeur - parfait pour les mises en page équilibrées.",
+        "full_half": "Plein + Moitié",
+        "full_half_description": "La ligne supérieure a une section pleine largeur, la ligne inférieure a deux sections demi-largeur - parfait pour mettre en évidence le contenu supérieur."
+      },
+      "layout_types": {
+        "single": "Colonne unique",
+        "double": "Double colonne",
+        "dashboard": "Tableau de bord",
+        "half_full": "Demi + plein",
+        "full_half": "Full + moitié"
+      },
+      "column_width": {
+        "title": "Largeur des colonnes",
+        "description": "Configurez le rapport de largeur entre les colonnes gauche et droite",
+        "50_50": "Égal (50/50)",
+        "30_70": "Étroite gauche, large droite (30/70)",
+        "70_30": "Large gauche, étroite droite (70/30)",
+        "40_60": "Légèrement plus étroite gauche (40/60)",
+        "60_40": "Légèrement plus large gauche (60/40)"
+      },
+      "top_view": {
+        "header": "Paramètres du tableau de bord",
+        "description": "Configurez les paramètres d'espacement et de mise en page pour la vue tableau de bord",
+        "side_margin": "Marges latérales",
+        "side_margin_help": "Marges sur les côtés de la vue en pixels",
+        "middle_spacing": "Espacement moyen",
+        "middle_spacing_help": "Espace entre les colonnes moyennes en pixels",
+        "vertical_spacing": "Espacement vertical",
+        "vertical_spacing_help": "Espace entre les lignes en pixels"
+      },
+      "sections": {
+        "header": "Sections de la carte",
+        "arrangement_header": "Disposition des sections",
+        "arrangement_desc_base": "Faites glisser les sections pour organiser leur ordre sur la carte.",
+        "arrangement_desc_single_extra": "Toutes les sections seront affichées dans une seule colonne.",
+        "arrangement_desc_double_extra": "Dans la vue à deux colonnes, vous pouvez placer chaque section dans la colonne gauche ou droite.",
+        "arrangement_desc_dashboard_extra": "Dans la vue tableau de bord, vous pouvez placer les sections autour de l'image de votre véhicule."
+      },
+      "section_labels": {
+        "title": "Titre",
+        "image": "Image du véhicule",
+        "info": "Informations du véhicule",
+        "bars": "Toutes les barres de capteurs",
+        "icons": "Toutes les lignes d'icônes",
+        "section_break": "Break de la section"
+      },
+      "actions": {
+        "collapse_margins": "Réduire les marges",
+        "expand_margins": "Étendre les marges",
+        "collapse_options": "Réduire les options",
+        "expand_options": "Étendre les options",
+        "add_break": "Ajouter la pause de la section",
+        "delete_break": "Supprimer la pause de la section"
+      },
+      "css": {
+        "header": "CSS Global",
+        "description": "Entrez des règles CSS personnalisées ici pour remplacer le style par défaut de la carte. Ces règles seront appliquées directement à la carte. À utiliser avec précaution.",
+        "label": "CSS Personnalisé",
+        "input_description": "Entrez vos règles CSS personnalisées ici."
+      },
+      "conditions": {
+        "header": "Logique conditionnelle",
+        "description": "Afficher ou masquer cette section en fonction de l'état d'une entité.",
+        "template_mode_description": "Utilisez un modèle pour déterminer la visibilité de la section. Les modèles vous permettent d'utiliser la syntaxe de modèles de Home Assistant pour des conditions complexes.",
+        "type_label": "Type de condition",
+        "section_title": "Titre de Section",
+        "enable_section_title": "Activer le Titre de Section",
+        "title_text": "Texte du Titre",
+        "title_size": "Taille du Titre",
+        "title_color": "Couleur du Titre",
+        "enable_template_mode": "Activer le Mode Modèle",
+        "use_template_description": "Utilisez un modèle pour déterminer quand cette section doit être visible. Les modèles vous permettent d'utiliser la syntaxe de modèles de Home Assistant pour des conditions complexes.",
+        "info_row": "Ligne d'Information",
+        "entity_label": "Entité de condition",
+        "state_label": "État de condition",
+        "state_description": "La valeur d'état qui déclenche la condition",
+        "types": {
+          "none": "Aucune (Toujours afficher)",
+          "show": "Afficher quand...",
+          "hide": "Masquer quand..."
+        }
+      },
+      "template": {
+        "description": "Utilisez un modèle pour déterminer quand cette section doit être visible. Les modèles vous permettent d'utiliser la syntaxe de modèles de Home Assistant pour des conditions complexes.",
+        "enable": "Activer le Mode Modèle"
+      },
+      "template_mode": {
+        "header": "Mode Modèle",
+        "description": "Utilisez un modèle pour contrôler quand cette image est affichée ou masquée selon une logique complexe, des calculs, ou plusieurs états d'entités.",
+        "enable": "Activer le Mode Modèle",
+        "disabled_notice": "(Désactivé - Mode Modèle Actif)",
+        "disabled_help": "Les contrôles de condition de base sont désactivés quand le Mode Modèle est actif. Le Mode Modèle a la priorité sur les conditions de base.",
+        "examples": {
+          "show_when_charging": "Afficher pendant la charge",
+          "show_when_battery_low": "Afficher quand la batterie est faible",
+          "multiple_conditions": "Conditions multiples",
+          "show_during_day": "Afficher pendant les heures de jour",
+          "show_when_door_unlocked": "Afficher quand la porte est déverrouillée"
+        }
+      },
+      "section_title": {
+        "header": "Titre de Section",
+        "enable": "Activer le Titre de Section",
+        "text": "Texte du Titre",
+        "size": "Taille du Titre",
+        "color": "Couleur du Titre",
+        "bold": "Gras",
+        "italic": "Italique",
+        "uppercase": "Majuscules",
+        "strikethrough": "Barré"
+      },
+      "margins": {
+        "header": "Marges",
+        "top": "Marge supérieure",
+        "bottom": "Marge inférieure"
+      },
+      "columns": {
+        "left": "Colonne gauche",
+        "right": "Colonne droite",
+        "empty": "Déposer les sections ici"
+      },
+      "dashboard": {
+        "top": "Section supérieure",
+        "top_middle": "Section supérieure-moyenne",
+        "left_middle": "Section gauche-moyenne",
+        "middle": "Section moyenne",
+        "middle_empty": "Zone d'image du véhicule (Recommandé)",
+        "right_middle": "Section droite-moyenne",
+        "bottom_middle": "Section inférieure-moyenne",
+        "bottom": "Section inférieure"
+      },
+      "half_full": {
+        "row1_col1": "Rangée 1 - Colonne Gauche",
+        "row1_col2": "Rangée 1 - Colonne Droite",
+        "row2_full": "Rangée 2, pleine largeur (100%)"
+      },
+      "full_half": {
+        "row1_full": "Rangée 1, pleine largeur (100%)",
+        "row2_col1": "Rangée 2 - Colonne Gauche",
+        "row2_col2": "Rangée 2 - Colonne Droite"
+      },
+      "break_styles": {
+        "blank": "Vide (pas de ligne)",
+        "line": "Ligne continue",
+        "double_line": "Double ligne",
+        "dotted": "Ligne pointillée",
+        "double_dotted": "Ligne à double pointillé",
+        "shadow": "Gradient d'ombre"
+      },
+      "break_style": {
+        "header": "Casse",
+        "style_label": "Style",
+        "thickness_label": "Épaisseur",
+        "width_percent_label": "Largeur (%)",
+        "color_label": "Couleur"
+      }
+    },
+    "container_widths": {
+      "25": "25% de Largeur",
+      "50": "50% de Largeur",
+      "75": "75% de Largeur",
+      "100": "100% (Pleine Largeur)"
+    },
+    "row_widths": {
+      "25": "25% de Largeur",
+      "50": "50% de Largeur",
+      "75": "75% de Largeur",
+      "100": "100% (Pleine Largeur)"
+    }
+  },
+  "about": {
+    "logo_alt": "Ultra Vehicle Card",
+    "developed_by": "Développé par",
+    "discord_button": "Rejoignez notre Discord",
+    "docs_button": "Lisez notre documentation",
+    "donate_button": "FAIRE UN DON (PAYPAL)",
+    "github_button": "Visitez notre Github",
+    "support_title": "Soutenez Ultra Vehicle Card",
+    "support_description": "Vos conseils généreux alimentent le développement de fonctionnalités incroyables pour cette carte! Sans le support d'utilisateurs comme vous, l'innovation continue ne serait pas possible."
+  },
+  "custom_icons": {
+    "title": "Icônes personnalisées",
+    "description": "Définissez des icônes personnalisées pour différents états.",
+    "icon_entity": "Entité d'icône",
+    "default_icon": "Icône par défaut",
+    "state_icons": "Icônes d'état",
+    "state": "État",
+    "icon": "Icône"
+  },
+  "custom_active_state_text": "Texte personnalisé d'état actif",
+  "custom_inactive_state_text": "Texte personnalisé d'état inactif",
+  "image_settings": {
+    "title": "Paramètres d'image",
+    "description": "Configurez l'apparence de l'image principale.",
+    "type": "Type d'image",
+    "width": "Largeur d'image",
+    "crop": "Recadrer l'image",
+    "entity": "Entité d'image",
+    "entity_description": "Entité qui fournit l'URL de l'image"
+  },
+  "entity_settings": {
+    "entity": "Entité",
+    "entity_description": "Sélectionnez une entité pour afficher des informations à partir de",
+    "name": "Name",
+    "name_description": "Remplacez le nom de l'entité (laissez en blanc pour utiliser le nom amical de l'entité)",
+    "show_icon": "Icône de montre",
+    "icon": "Icône",
+    "icon_color": "Couleur icône",
+    "name_color": "Nom de la couleur",
+    "entity_color": "Couleur d'entité",
+    "text_color": "Couleur du texte",
+    "show_name": "Nom de spectacle",
+    "show_name_description": "Affichez le nom de l'entité avant la valeur",
+    "template_mode": "Utiliser un Modèle pour la Valeur",
+    "template_mode_description": "Utilisez un modèle pour formater la valeur de l'entité",
+    "value_template": "Modèle de valeur",
+    "template_header": "Modèle de valeur",
+    "template_examples_header": "Exemples de Modèles",
+    "template_basic": "Valeur de base",
+    "template_units": "Avec des unités",
+    "template_round": "À 1 décimal",
+    "dynamic_icon_template": "Modèle d'icône",
+    "dynamic_color_template": "Modèle de couleur",
+    "dynamic_icon_template_mode": "Activer le modèle d'icône dynamique",
+    "dynamic_color_template_mode": "Activer le modèle de couleur dynamique"
+  }
+}

@@ -1,0 +1,1078 @@
+{
+  "editor": {
+    "tabs": {
+      "settings": "Inställningar",
+      "bars": "Staplar",
+      "icons": "Ikoner",
+      "customize": "Anpassa",
+      "about": "Om",
+      "info": "Info",
+      "images": "Images"
+    },
+    "info": {
+      "arrange_info_rows": "Ordna info -rader",
+      "title": "Kortinformation",
+      "description": "Konfigurera informationsrader och enheter för att visa fordonsinformation som plats, körsträcka, etc. Info -objekt kommer att visas på en enda rad när det är möjligt, inpackning till flera linjer i smala behållare.",
+      "template_mode": "Mallläge",
+      "template_mode_description": "Använd en mall för att formatera enhetsvärdet. Mallar gör att du kan använda Home Assistant Templating Syntax för komplex formatering.",
+      "template_examples_header": "Vanliga exempel:",
+      "add_row": "Add Info Row",
+      "add_entity": "Add Info Entity",
+      "duplicate_row": "Duplicate Row",
+      "delete_row": "Delete Row",
+      "expand_row": "Expand Row",
+      "collapse_row": "Collapse Row",
+      "duplicate_entity": "Duplicate Entity",
+      "delete_entity": "Delete Entity",
+      "expand_entity": "Expand Entity",
+      "collapse_entity": "Collapse Entity",
+      "row_prefix": "Info Row",
+      "entity_prefix": "Entity",
+      "dynamic_icon": {
+        "title": "Dynamic Icon Template",
+        "description": "Use a template to dynamically select the icon based on entity states or conditions.",
+        "enable": "Enable Dynamic Icon Template"
+      },
+      "dynamic_color": {
+        "title": "Dynamic Color Template",
+        "description": "Use a template to dynamically set colors based on entity states or values.",
+        "enable": "Enable Dynamic Color Template"
+      },
+      "row_settings": {
+        "header": "Row Settings",
+        "row_name": "Row Name",
+        "row_name_description": "Custom name for this info row (leave blank to use default naming)",
+        "horizontal_alignment": "Horizontal Alignment",
+        "alignment_description": "Horizontal alignment of entities in this row",
+        "vertical_alignment": "Vertical Alignment",
+        "vertical_alignment_description": "Controls how entities are aligned vertically within the row.",
+        "spacing": "Spacing",
+        "spacing_description": "Spacing between entities in this row",
+        "allow_wrap": "Allow items to wrap",
+        "allow_wrap_description": "When enabled, items will flow to the next line if they don't fit in one row. When disabled, all items will stay in a single row."
+      },
+      "entity_settings": {
+        "header": "Info Items",
+        "name": "Custom Name",
+        "entity_description": "Select an entity to display information from",
+        "name_description": "Override the entity name (leave blank to use entity's friendly name)",
+        "show_icon": "Show Icon",
+        "icon_color": "Icon Color",
+        "name_color": "Name Color",
+        "entity_color": "Entity Color",
+        "icon_size": "Icon Size",
+        "name_size": "Name Size",
+        "value_size": "Value Size",
+        "size_settings": "Size Settings",
+        "show_name": "Show Name",
+        "show_name_description": "Display the entity name before the value",
+        "click_action": "Click Action",
+        "navigation_path": "Navigation Path",
+        "navigation_path_description": "Path to navigate to when clicked (e.g., /lovelace/0)",
+        "url": "URL",
+        "url_description": "URL to open when clicked",
+        "service": "Service",
+        "service_description": "Service to call (e.g., light.turn_on)",
+        "service_data": "Service Data (JSON)"
+      },
+      "alignments": {
+        "flex-start": "Start",
+        "center": "Center",
+        "flex-end": "End",
+        "space-between": "Space Between",
+        "space-around": "Space Around",
+        "space-evenly": "Space Evenly"
+      },
+      "spacing": {
+        "none": "None",
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      },
+      "click_actions": {
+        "more-info": "More Info",
+        "navigate": "Navigate",
+        "url": "Open URL",
+        "call-service": "Call Service",
+        "none": "None"
+      },
+      "row_vertical_alignments": {
+        "top": "Top",
+        "center": "Center",
+        "bottom": "Bottom"
+      }
+    },
+    "settings_subtabs": {
+      "general": "Allmänt",
+      "action_images": "Åtgärdsbilder"
+    },
+    "action_images": {
+      "title": "Åtgärdsbilder Inställningar",
+      "description": "Konfigurera bilder som ska visas när specifika enhetstillstånd uppfylls.",
+      "add_image": "Lägg till Åtgärdsbild",
+      "no_images": "Inga åtgärdsbilder är konfigurerade ännu. Lägg till en för att komma igång.",
+      "actions": {
+        "drag": "Dra för att ändra ordning",
+        "duplicate": "Duplicera",
+        "delete": "Ta bort",
+        "expand": "Expandera",
+        "collapse": "Minimera"
+      },
+      "delete_confirm": "Är du säker på att du vill ta bort denna åtgärdsbild?",
+      "entity_settings": "Enhetsinställningar",
+      "image_settings": "Bildinställningar",
+      "entity_placeholder": "Välj en enhet",
+      "state_placeholder": "Ange tillståndsvärde",
+      "preview": {
+        "no_entity": "Ingen enhet vald",
+        "no_image": "Ingen bild",
+        "any_state": "Vilket tillstånd som helst"
+      },
+      "trigger_entity": "Utlösande Enhet",
+      "trigger_state": "Utlösande Tillstånd",
+      "entity_help": "Välj en enhet att övervaka. Bilden kommer att visas när denna enhet matchar tillståndet nedan.",
+      "state_help": "Ange tillståndsvärdet som kommer utlösa att denna bild visas. Lämna tomt för att matcha alla tillstånd.",
+      "image_type": {
+        "title": "Bildtyp",
+        "upload": "Ladda upp Bild",
+        "url": "Bild URL",
+        "entity": "Enhetsbild",
+        "none": "Ingen"
+      },
+      "template_mode": "Mall-läge",
+      "template_description": "Använd en mall för att bestämma när den här bilden ska visas. Mallar gör att du kan använda Home Assistant mall-syntax (som {{ states.sensor.temperature.state > 70 }}) för komplexa villkor.",
+      "template_label": "Visningsmall",
+      "template_help": "Ange en mall som returnerar sant/falskt. Den här bilden kommer att visas när mallen utvärderas till sant. Använd Jinja2-syntax: {{ states(...) }}",
+      "priority": {
+        "label": "Visningsprioritet",
+        "description": "Prioritetsbaserad använder första matchningen uppifrån och ned. Senast Matchande använder den sista matchningen som hittades i listan.",
+        "options": {
+          "priority": "Prioritetsbaserad",
+          "newest": "Senast Matchande"
+        }
+      }
+    },
+    "images": {
+      "title": "Bilder",
+      "description": "Konfigurera bilder som kommer att visas baserat på villkor eller mallar.",
+      "add_image": "Lägg till Bild",
+      "no_images": "Inga bilder konfigurerade ännu. Lägg till en för att komma igång.",
+      "arrange_images": "Arrangera Bilder",
+      "name": "Namn (Valfritt)",
+      "image_type": "Bildtyp",
+      "url": "Bild URL",
+      "image_entity": "Bildenhet",
+      "priority": "Prioritet (0 = högst)",
+      "priority_mode": "Prioritetsläge",
+      "timed_duration": "Visningstid (sekunder)",
+      "timed_duration_help": "Hur länge denna bild ska visas innan den återgår till huvudbilden.",
+      "duplicate": "Duplicera Bild",
+      "delete": "Ta bort Bild",
+      "delete_confirm": "Är du säker på att du vill ta bort denna bild?",
+      "image_types": {
+        "none": "Ingen",
+        "default": "Standardfordon",
+        "url": "Bild URL",
+        "upload": "Ladda upp Bild",
+        "entity": "Entitetsbild",
+        "map": "Karta"
+      },
+      "priority_modes": {
+        "order": "Ordningsprioritet",
+        "order_help": "Bilder visas baserat på deras ordning i listan (dra för att ändra ordning).",
+        "last_triggered": "Senast Utlöst",
+        "last_triggered_help": "Den senast utlösta bilden kommer att förbli visad tills en annan bild utlöses.",
+        "timed": "Tidsinställda Bilder",
+        "timed_help": "Bilder under den första kommer att visas under en bestämd tid och sedan återgå till huvudbilden."
+      },
+      "conditional_types": {
+        "show": "Visa När",
+        "hide": "Dölj När"
+      },
+      "tabs": {
+        "general": "Allmänt",
+        "conditional": "Villkorlig",
+        "appearance": "Utseende"
+      },
+      "conditional_help": "Konfigurera när denna bild ska visas baserat på enhetstillstånd eller mallar.",
+      "conditional_help_simple": "Konfigurera när denna bild ska visas baserat på enhetstillstånd.",
+      "conditional_state_help": "Bilden kommer att visas när enheten är lika med detta tillståndsvärde.",
+      "conditional_entity": "Villkorlig Enhet",
+      "conditional_state": "Villkorligt Tillstånd",
+      "basic_conditions": "Grundläggande Villkor",
+      "advanced_conditional": "Avancerade Mallvillkor",
+      "advanced_help": "Använd mallar för komplexa villkor som flera enheter eller matematiska jämförelser.",
+      "template_mode_active_help": "Använd mallar för komplexa villkor som flera enheter eller matematiska jämförelser.",
+      "template_mode": {
+        "header": "Mallläge",
+        "enable": "Aktivera Mallläge",
+        "template": "Mall"
+      },
+      "template_examples_header": "Vanliga Exempel:",
+      "width": "Bredd (%)",
+      "width_settings": "Breddinställningar",
+      "crop_settings": "Beskärningsinställningar",
+      "crop_help": "Positiva värden beskär inåt, negativa värden lägger till utfyllnad utåt.",
+      "crop_top": "Topp",
+      "crop_right": "Höger",
+      "crop_bottom": "Botten",
+      "crop_left": "Vänster",
+      "fallback_image": "Reservbild",
+      "fallback_help": "Denna bild kommer att användas som reserv om inga utlösare matchar eller timeout inträffar. Endast en bild kan vara en reserv.",
+      "map_entity": "Platsenhet",
+      "map_entity_help": "Välj en enhet med latitud/longitud-koordinater eller adress för att visa på kartan.",
+      "target_entity": "Målenhet",
+      "target_entity_description": "Välj enheten att rikta in sig på med denna åtgärd",
+      "common": {
+        "width": "Image Width",
+        "width_description": "Bredd i procent av kortet",
+        "width_over_100": "Värden över 100% kan hjälpa till att beskära tomma utrymme runt bilder",
+        "url_description": "Ange bildens URL"
+      },
+      "vehicle": {
+        "crop": "Beskär Bild"
+      },
+      "migration": {
+        "title": "Legacy Images Detected",
+        "description": "We found legacy image configurations that can be migrated to the new format.",
+        "migrate_button": "Migrate Now",
+        "success": "Images migrated successfully!"
+      }
+    },
+    "card_settings": {
+      "title": "Korttitel",
+      "title_alignment": "Titeljustering",
+      "title_size": "Titelstorlek",
+      "title_color": "Titelfärg",
+      "title_color_description": "Färg på kortets titel",
+      "title_description": "Titel som visas överst på kortet (valfritt)",
+      "title_alignment_description": "Hur korttiteln justeras",
+      "title_size_description": "Storlek på korttiteln i pixlar",
+      "colors": "Färger",
+      "card_background": "Kortbakgrund",
+      "card_background_description": "Bakgrundsfärg för hela kortet",
+      "format_entities": "Formatera Enhetsvärden",
+      "format_entities_description": "Aktivera ytterligare formatering av enhetsvärden (lägger till kommatecken, konverterar enheter, etc.)",
+      "show_units": "Visa Enheter",
+      "show_units_description": "Visa enheter bredvid värden",
+      "help_highlight": "Hjälp med att lyfta fram",
+      "help_highlight_description": "Visa visuella höjdpunkter när du växer mellan redigerarflikar för att identifiera vilket avsnitt du redigerar",
+      "general": "Allmänt",
+      "conditional_logic": "Villkorlig Logik",
+      "card_visibility": "Kortsynlighet",
+      "card_visibility_description": "Visa eller dölj hela kortet baserat på ett enhetsvillkor"
+    },
+    "vehicle_info": {
+      "title": "Fordonsinformation",
+      "location": {
+        "title": "Positionsenhet",
+        "description": "Välj enheten som visar fordonets nuvarande position.",
+        "show": "Visa Position",
+        "show_description": "Visa fordonets position"
+      },
+      "mileage": {
+        "title": "Mätarställning Enhet",
+        "description": "Välj enheten som representerar total körsträcka eller fordonets vägmätare.",
+        "show": "Visa Mätarställning",
+        "show_description": "Visa fordonets mätarställning"
+      },
+      "car_state": {
+        "title": "Fordonstillstånd Enhet",
+        "description": "Välj enheten som representerar fordonets nuvarande tillstånd (t.ex. parkerad, kör, laddar).",
+        "show": "Visa Fordonstillstånd",
+        "show_description": "Visa fordonets tillstånd"
+      }
+    },
+    "crop": {
+      "title": "Bildbeskärning",
+      "top": "Topp",
+      "right": "Höger",
+      "bottom": "Botten",
+      "left": "Vänster",
+      "pixels": "px",
+      "help": "Ange värden i pixlar (positiva eller negativa) för att justera beskärning och padding"
+    },
+    "alignment": {
+      "left": "Vänster",
+      "center": "Centrum",
+      "right": "Höger"
+    },
+    "common": {
+      "choose_file": "Välj Fil",
+      "no_file_chosen": "Ingen fil vald",
+      "entity": "Enhet",
+      "width": "Bredd",
+      "width_description": "Bredd som procent av kortet",
+      "width_over_100": "Värden över 100% kan hjälpa till att beskära tomma utrymme runt bilder",
+      "none": "Ingen",
+      "default": "Standard",
+      "upload": "Ladda upp",
+      "url": "URL",
+      "url_description": "URL som pekar till bilden",
+      "reset": "Återställ",
+      "condition_prompt": "Välj \"Visa\" eller \"dölj\" för att konfigurera enhetsvillkor",
+      "bold": "Fet",
+      "italic": "Kursiv",
+      "uppercase": "Versaler",
+      "strikethrough": "Genomstruken"
+    },
+    "conditions": {
+      "condition_type": "Villkorstyp",
+      "show_card_if": "Visa Kort Om",
+      "hide_card_if": "Dölj Kort Om",
+      "entity_description": "Välj enheten att kontrollera för villkoret",
+      "state": "Tillstånd",
+      "state_description": "Tillståndsvärdet som utlöser villkoret"
+    },
+    "bars": {
+      "title": "Procentuella Staplar",
+      "description": "Lägg till procentuella staplar för att visa värden som bränslenivå, batteriladdning eller räckvidd. Varje stapel kan visa ett huvudprocentvärde med valfria etiketter på vänster och höger sida.",
+      "add": "Lägg till Ny Stapel",
+      "duplicate": "Duplicera Stapel",
+      "delete": "Ta bort Stapel",
+      "expand": "Expandera Stapel",
+      "collapse": "Minimera Stapel",
+      "no_entity": "Ingen enhet vald",
+      "bar_prefix": "Stapel",
+      "template": {
+        "description": "Använd en mall för att formatera den visade texten, konvertera enheter eller visa beräknade värden.",
+        "enable": "Aktivera mallläge",
+        "template_label": "Mall",
+        "helper_text": "Använd Home Assistant mall-syntax. Exempel:\n• {{ states('sensor.temperature') | float * 1.8 + 32 }} °F\n• {{ now().strftime(\"%b %d, %H:%M\") }}",
+        "examples_header": "Vanliga exempel:",
+        "examples": {
+          "temperature": "{{ states('sensor.temperature') | float * 1.8 + 32 }}°F - Konvertera Celsius till Fahrenheit",
+          "datetime": "{{ now().strftime(\"%b %d, %H:%M\") }} - Formatera aktuellt datum/tid",
+          "power": "{{ 'Laddar vid ' + states('sensor.ev_power') + ' kW' }} - Kombinera text och sensorvärde"
+        }
+      },
+      "bar_radius": {
+        "round": "Rund",
+        "square": "Fyrkantig",
+        "rounded-square": "Avrundad Fyrkantig"
+      },
+      "tabs": {
+        "config": "Konfiguration",
+        "colors": "Färger",
+        "animation": "Animation",
+        "arrange_bars": "Arrange Bars"
+      },
+      "settings": {
+        "header": "Stapelinställningar",
+        "entity": "Stapel Procentenhet",
+        "entity_description": "Välj en enhet som returnerar ett procentvärde (0-100). Detta styr stapelns fyllnadsnivå.",
+        "limit_entity": "Gränsvärde Enhet (valfritt)",
+        "limit_entity_description": "Valfritt: Lägg till en vertikal indikatorlinje på stapeln (t.ex. laddgräns för EV-batteri).",
+        "limit_color": "Gränsindikator Färg",
+        "limit_color_description": "Färg på den vertikala linjen som visar gränspositionen på stapeln. Ändringar kommer att tvinga en kortuppdatering.",
+        "bar_size": "Stapelstorlek",
+        "bar_size_description": "Definierar tjockleken/höjden på förloppsstapeln.",
+        "bar_radius": "Stapelradie",
+        "bar_radius_description": "Form på förloppsstapelns hörn",
+        "width": "Stapelbredd",
+        "width_description": "Definierar bredden på stapeln som en procentandel av kortbredden.",
+        "alignment": "Etikettjustering",
+        "alignment_description": "Hur vänster och höger etiketter justeras i förhållande till varandra.",
+        "show_percentage": "Visa Procent",
+        "show_percentage_description": "Visa procentvärdet inne i stapeln"
+      },
+      "percentage": {
+        "header": "Procenttext",
+        "display_header": "Procenttext Visning",
+        "display_description": "Kontrollera synligheten och utseendet på procentvärden som visas direkt på stapeln. Dessa siffror ger en tydlig visuell indikator på aktuell nivå.",
+        "text_size": "Textstorlek",
+        "calculation_header": "Procentberäkning",
+        "calculation_description": "Konfigurera hur stapelns procentfyllning beräknas med hjälp av ett av alternativen nedan.",
+        "type_header": "Procentberäkning",
+        "type_label": "Procenttyp",
+        "type_description": "Hur procentvärdet som visas i stapeln beräknas",
+        "type_entity": "Enhet (0-100)",
+        "type_difference": "Differens (Mängd/Total)",
+        "amount_entity": "Mängdenhet",
+        "amount_description": "Enhet som representerar aktuell mängd/värde (täljare)",
+        "total_entity": "Totalenhet",
+        "total_description": "Enhet som representerar total mängd/maximum (nämnare)",
+        "type_attribute": "Entity Attribute",
+        "type_template": "Template Mode"
+      },
+      "left_side": {
+        "header": "Vänster sida",
+        "section_description": "Konfigurera titeln och enhetsvärdet som visas på vänster sida av baren. Detta är användbart för att visa etiketter som \"räckvidd\" eller \"batteri\" tillsammans med deras värden.",
+        "toggle_description": "Visa eller dölj vänster sida av stapeletiketten",
+        "title": "Vänster titel",
+        "title_description": "Valfri etikett som visas på vänster sida under baren.",
+        "entity": "Vänster enhet",
+        "entity_description": "Enhet vars värde visas på vänster sida av stången.",
+        "alignment_description": "Kontrollerar hur den här etiketten är inriktad under baren.",
+        "title_size": "Titelstorlek",
+        "value_size": "Värdestorlek",
+        "hidden_message": "Vänster sida är dold"
+      },
+      "right_side": {
+        "header": "Höger sida",
+        "section_description": "Konfigurera titeln och enhetsvärdet som visas på höger sida av baren. Detta är idealiskt för kompletterande information som \"tid till full\" eller sekundära mätningar.",
+        "toggle_description": "Visa eller dölj höger sida av stapeletiketten",
+        "title": "Rätt",
+        "title_description": "Valfri etikett som visas på höger sida under stången.",
+        "entity": "Rättighet",
+        "entity_description": "Enhet vars värde visas på höger sida av stången.",
+        "alignment_description": "Kontrollerar hur den här etiketten är inriktad under baren.",
+        "title_size": "Titelstorlek",
+        "value_size": "Värdestorlek",
+        "hidden_message": "Höger sida är dold"
+      },
+      "colors": {
+        "header": "Färger",
+        "bar_color": "Stapelfärg",
+        "background_color": "Bakgrundsfärg",
+        "border_color": "Kantfärg",
+        "limit_indicator_color": "Gränsindikator Färg",
+        "left_title_color": "Vänster Titelfärg",
+        "left_value_color": "Vänster Värdefärg",
+        "right_title_color": "Höger Titelfärg",
+        "right_value_color": "Höger Värdefärg",
+        "percentage_text_color": "Procenttext Färg",
+        "reset_color": "Återställ till standardfärg"
+      },
+      "gradient": {
+        "header": "Lutningsläge",
+        "description": "Skapa vackra färgövergångar över dina framstegsstänger. Idealisk för att visa batterinivåer, bränslemätare eller någon statusindikator som kräver visuell betoning.",
+        "toggle": "Använd lutning",
+        "toggle_description": "Använd en lutning för framstegsfältet istället för en fast färg",
+        "display_mode": "Lutningsläge",
+        "display_mode_full": "Full",
+        "display_mode_value_based": "Värdebaserad",
+        "display_mode_cropped": "Beskuren",
+        "display_mode_description": "FULL: Visa hela lutningen. Värdebaserad: Visa lutningen upp till det aktuella värdet.",
+        "editor_header": "Lutningsredaktör",
+        "add_stop": "Lägg till stopp"
+      },
+      "animation": {
+        "header": "Åtgärdsanimation",
+        "description": "Lägg till animationer till stapeln när en specifik enhet når ett specifikt tillstånd. Perfekt för att visa laddningstillstånd, larmtillstånd och mer.",
+        "pro_tip": "Pro Tips: För 'alltid på' animationer, välj en animationstyp men lämna enhets- och tillståndsfälten tomma. Prova 'Bubblor' och 'Fyll' animationerna!",
+        "entity": "Animationsenhet",
+        "entity_description": "Enhet som utlöser animationen när den matchar det specificerade tillståndet",
+        "state": "Enhetstillstånd",
+        "state_description": "När enhetstillståndet matchar detta värde kommer animationen att utlösas",
+        "type": "Animationstyp",
+        "type_description": "Animationseffekten som ska visas när enhetstillståndet matchar",
+        "select_entity_prompt": "Välj en Enhet och ange tillståndet du vill utlösa animationen (exempel: \"laddar\", \"på\", \"inaktiv\")",
+        "action_entity": "Handlingsenhet",
+        "action_state": "Handlingstillstånd",
+        "action_description": "Denna animation kommer att åsidosätta den regelbundna animationen när den angivna enheten är i ett specifikt tillstånd.",
+        "action_entity_prompt": "Välj en actionenhet och stat att definiera när denna animation bör åsidosätta den vanliga animationen"
+      },
+      "bar_sizes": {
+        "thin": "Tunn",
+        "regular": "Normal",
+        "thick": "Tjock",
+        "thiccc": "Extra Tjock"
+      },
+      "bar_widths": {
+        "25": "25% Bredd",
+        "50": "50% Bredd",
+        "75": "75% Bredd",
+        "100": "100% (Full Bredd)"
+      },
+      "bar_alignments": {
+        "space-between": "Mellanrum Mellan",
+        "flex-start": "Vänster",
+        "center": "Centrum",
+        "flex-end": "Höger"
+      },
+      "bar_styles": {
+        "flat": "Platt (Standard)",
+        "glossy": "Blank",
+        "embossed": "Präglad",
+        "inset": "Infälld",
+        "gradient": "Gradient Överlägg",
+        "neon": "Neon Glöd",
+        "outline": "Kontur",
+        "glass": "Glas",
+        "metallic": "Metallisk",
+        "neumorphic": "Neumorfisk"
+      },
+      "animation_types": {
+        "none": "Ingen",
+        "charging-lines": "Laddning (Diagonala Linjer)",
+        "pulse": "Puls",
+        "blinking": "Blinkande",
+        "bouncing": "Studsande",
+        "glow": "Glöd",
+        "rainbow": "Regnbåge",
+        "bubbles": "Bubblor",
+        "fill": "Fyll"
+      },
+      "custom_bar_settings": {
+        "title": "Anpassade stapelinställningar",
+        "description": "Definiera anpassade konfigurationer för enskilda staplar.",
+        "name": "Barnamn",
+        "entity": "Enhet",
+        "unit": "Enhet",
+        "min": "Minvärde",
+        "max": "Maxvärde",
+        "thresholds": "Tröskelvärden",
+        "severity": "Svårighetsgrad"
+      },
+      "template_mode": {
+        "header": "Template Mode",
+        "description": "Use a template to format the displayed text, convert units, or show calculated values.",
+        "enable": "Enable Template Mode",
+        "template": "Template"
+      }
+    },
+    "icons": {
+      "title": "Kortikoner",
+      "description": "Lägg till ikonrader för att visa flera ikoner på ditt kort. Varje rad kan konfigureras med olika inställningar.",
+      "add_row": "Lägg till Ikonrad",
+      "duplicate_row": "Duplicera Rad",
+      "delete_row": "Ta bort Rad",
+      "expand_row": "Expandera Rad",
+      "collapse_row": "Minimera Rad",
+      "no_row": "Inga ikonrader är tillagda",
+      "row_prefix": "Rad",
+      "icon_prefix": "Ikon",
+      "add_icon": "Lägg till Ikon",
+      "duplicate_icon": "Duplicera Ikon",
+      "delete_icon": "Ta bort Ikon",
+      "template_mode": "Mallläge",
+      "template_mode_active_description": "Använd en mall för att avgöra när denna ikon ska vara aktiv. Mallar gör att du kan använda Home Assistant Templating Syntax för komplexa förhållanden.",
+      "template_mode_inactive_description": "Använd en mall för att avgöra när denna ikon ska vara inaktiv. Mallar gör att du kan använda Home Assistant Templating Syntax för komplexa förhållanden.",
+      "template_examples_header": "Vanliga exempel:",
+      "enable_template_mode": "Aktivera mallläge",
+      "row_settings": {
+        "header": "Radinställningar",
+        "width": "Radbredd",
+        "width_description": "Bredd på raden som procent av kortbredd",
+        "alignment": "Radjustering",
+        "alignment_description": "Hur ikoner justeras i denna rad",
+        "spacing": "Ikonavstånd",
+        "spacing_description": "Mängd mellanrum mellan ikoner i denna rad",
+        "columns": "Antal Kolumner",
+        "columns_description": "Antal lika stora kolumner i raden (0 = automatisk distribution baserad på innehåll)",
+        "confirmation_mode": "Bekräftelseläge",
+        "confirmation_mode_description": "Kräv två tryck/klick för att aktivera ikoner i denna rad, förhindrar oavsiktliga interaktioner",
+        "layout_info_title": "Hur layoutinställningar fungerar"
+      },
+      "icon_settings": {
+        "header": "Ikonlista",
+        "entity": "Enhet",
+        "entity_description": "Enhet som visas med denna ikon",
+        "icon": "Ikon",
+        "icon_description": "Välj en ikon eller ange en anpassad ikon",
+        "name": "Namn",
+        "name_description": "Anpassat namn som visas under ikonen (använder enhetsnamn som standard om inte specificerat)",
+        "interaction_type": "Interaktionstyp",
+        "interaction_type_description": "Välj hur användare interagerar med denna ikon för att utlösa åtgärder",
+        "show_name": "Visa Namn",
+        "show_name_description": "Visa namntext under ikonen",
+        "show_state": "Visa Tillstånd",
+        "show_state_description": "Visa enhetstillståndet under ikonen",
+        "show_units": "Visa Enheter",
+        "show_units_description": "Inkludera enheter när tillstånd visas",
+        "text_position": "Textposition",
+        "text_position_description": "Var namn- och tillståndstext placeras i förhållande till ikonen",
+        "click_action": "Klickåtgärd",
+        "service": "Tjänst",
+        "service_description": "Tjänst att anropa (t.ex. light.turn_on)",
+        "service_data": "Tjänstdata (JSON)",
+        "service_data_description": "JSON-data som skickas med tjänstanropet",
+        "action": "Åtgärd (JSON/Tjänst)",
+        "action_description": "Avancerad åtgärdskonfiguration (se dokumentation)",
+        "navigation_path": "Navigationssökväg",
+        "navigation_path_description": "Sökväg att navigera till (t.ex. /lovelace/dashboard)",
+        "navigation_target_selector": "Navigationsmål",
+        "navigation_target_description": "Välj från tillgängliga instrumentpaneler, vyer eller systemsidor",
+        "url": "Url",
+        "url_description": "URL att öppna i ny flik",
+        "automation_entity": "Automatiseringsenhet",
+        "automation_entity_description": "Automatisering att utlösa vid klick"
+      },
+      "icon_appearance": {
+        "header": "Ikonutseende",
+        "icon": "Ikonutseende",
+        "general": "Allmänt Utseende",
+        "active": "Aktivt Tillstånd",
+        "inactive": "Inaktivt Tillstånd",
+        "state_conditions": "Tillståndsvillkor",
+        "advanced": "Avancerade Inställningar",
+        "icon_size": "Ikonstorlek",
+        "icon_size_description": "Storlek på ikonen i pixlar",
+        "text_size": "Textstorlek",
+        "text_size_description": "Storlek på namn/tillståndstext i pixlar",
+        "name_size": "Namnstorlek",
+        "name_size_description": "Storleken på enhetens namntext i pixlar",
+        "text_alignment": "Textjustering",
+        "text_alignment_description": "Hur texten justeras under ikonen",
+        "icon_background": "Ikonbakgrund",
+        "icon_background_description": "Lägg till en bakgrundsform bakom ikonen",
+        "icon_background_color": "Ikonbakgrundsfärg",
+        "icon_background_color_description": "Färg på bakgrunden bakom ikonen",
+        "container_background_color": "Containerbakgrundsfärg",
+        "container_background_color_description": "Färg på bakgrunden bakom hela ikoncontainern",
+        "text_appearance": "Textutseende",
+        "container": {
+          "header": "Containerutseende",
+          "vertical_alignment": "Vertikal Justering",
+          "vertical_alignment_description": "Justera ikonen och texten vertikalt i containern.",
+          "width": "Containerbredd",
+          "width_description": "Sätt bredden på ikoncontainern relativt till raden.",
+          "background": "Containerbakgrundsform",
+          "background_description": "Välj en bakgrundsform för hela ikoncontainern."
+        },
+        "show_when_active": "Visa ikonen när den är aktiv",
+        "show_when_active_description": "Visa bara den här ikonen när den är i ett aktivt tillstånd",
+        "template_mode": "Mallläge",
+        "template_description": "Använd en mall för att bestämma aktivt/inaktivt tillstånd. Mallar gör att du kan använda Home Assistant mall-syntax (som {{ states.sensor.temperature.state > 70 }}) för komplexa villkor.",
+        "active_template": "Aktiv mall",
+        "active_template_description": "Mall som returnerar sant när ikonen ska vara aktiv.",
+        "active_state": "Aktivt tillstånd",
+        "active_state_description": "Tillståndssträng som representerar \"aktiv\".",
+        "active_state_text": "Anpassad aktiv tillståndstext",
+        "active_state_text_description": "Åsidosätter texten som visas när ikonen är aktiv. Lämna tomt för att använda det faktiska tillståndet.",
+        "inactive_template": "Inaktiv mall",
+        "inactive_template_description": "Mall som returnerar sant när ikonen ska vara inaktiv.",
+        "inactive_state": "Inaktivt tillstånd",
+        "inactive_state_description": "Tillståndssträng som representerar \"inaktiv\".",
+        "inactive_state_text": "Anpassad inaktiv tillståndstext",
+        "inactive_state_text_description": "Åsidosätter texten som visas när ikonen är inaktiv. Lämna tomt för att använda det faktiska tillståndet.",
+        "active_icon": "Aktiv ikon",
+        "inactive_icon": "Inaktiv ikon",
+        "active_icon_color": "Aktiv ikonfärg",
+        "inactive_icon_color": "Inaktiv ikonfärg",
+        "active_name_color": "Aktivt namnfärg",
+        "inactive_name_color": "Inaktiv namnfärg",
+        "active_state_color": "Aktivt tillståndsfärg",
+        "inactive_state_color": "Inaktiv tillståndsfärg",
+        "show_icon_active": "Visa ikonen när den är aktiv",
+        "show_icon_active_description": "Visa ikonen när staten är aktiv.",
+        "show_icon_inactive": "Visa ikonen när den är inaktiv",
+        "show_icon_inactive_description": "Visa ikonen när staten är inaktiv.",
+        "custom_active_state_text": "Anpassad aktiv tillståndstext",
+        "custom_inactive_state_text": "Anpassad inaktiv tillståndstext",
+        "action_description": "Åtgärd för att utföra när ikonen klickas.",
+        "show_name_active": "Visa namn när det är aktivt",
+        "show_name_active_description": "Visa namnet när staten är aktiv.",
+        "show_name_inactive": "Visa namn när inaktivt",
+        "show_name_inactive_description": "Visa namnet när staten är inaktivt.",
+        "show_state_active": "Visa tillstånd när det är aktivt",
+        "show_state_active_description": "Visa staten när staten är aktiv.",
+        "show_state_inactive": "Visa tillstånd när det är inaktivt",
+        "show_state_inactive_description": "Visa staten när staten är inaktiv.",
+        "use_entity_color_for_icon": "Använd enhetsfärg för ikonen",
+        "use_entity_color_for_icon_description": "Använd enhetens färgattribut för ikonen när den är tillgänglig",
+        "use_entity_color_for_icon_background": "Använd enhetsfärg för ikonbakgrund",
+        "use_entity_color_for_icon_background_description": "Använd enhetens färgattribut för ikonbakgrunden när den är tillgänglig",
+        "use_entity_color_for_container_background": "Använd enhetsfärg för behållare",
+        "use_entity_color_for_container_background_description": "Använd enhetens färgattribut för behållarbakgrunden när den är tillgänglig",
+        "dynamic_icon_template": "Dynamic Icon Template",
+        "dynamic_icon_template_description": "Use a template to dynamically select the icon based on entity states or conditions.",
+        "enable_dynamic_icon_template": "Enable Dynamic Icon Template",
+        "dynamic_color_template": "Dynamic Color Template",
+        "dynamic_color_template_description": "Use a template to dynamically set the icon color based on entity states or values.",
+        "enable_dynamic_color_template": "Enable Dynamic Color Template",
+        "size_settings": "Size Settings",
+        "value_size": "Value Size",
+        "state_text_formatting": "State Text Formatting",
+        "row_name": "Row Name",
+        "row_name_description": "Custom name for this icon row (leave blank to use default naming)",
+        "width_description": "Controls how much of the available width this row will use. Configure how this row of icons displays. Width controls the overall row width, spacing adjusts gaps between icons, and column count determines how many icons appear in each row (0 = automatic).",
+        "layout_info_title": "How Layout Settings Work",
+        "layout_info_width": "Row Width: Controls how much horizontal space the row takes up in the card (percentage of card width)",
+        "layout_info_alignment": "Row Alignment: Only applies when Column Count is 0. Determines how icons are positioned within the row",
+        "layout_info_spacing": "Icon Spacing: Sets the amount of space between icons",
+        "layout_info_columns": "Column Count: When set to 0, icons flow naturally based on available space. When set to a number, forces that exact number of columns in a grid layout",
+        "layout_info_tip": "Use Column Count with consistent amounts of icons per row for the most uniform layout",
+        "control_right_side_description": "Control when the right side is shown or hidden based on entity state",
+        "dynamic_icon": {
+          "title": "Dynamic Icon Template",
+          "description": "Use a template to dynamically select the icon based on entity states or conditions.",
+          "enable": "Enable Dynamic Icon Template",
+          "template_label": "Icon Template"
+        },
+        "dynamic_color": {
+          "title": "Dynamic Color Template",
+          "description": "Use a template to dynamically set the icon color based on entity states or values.",
+          "enable": "Enable Dynamic Color Template",
+          "template_label": "Color Template"
+        }
+      },
+      "tabs": {
+        "general": "Allmänt",
+        "actions": "Åtgärder",
+        "appearance": "Utseende",
+        "states": "Tillstånd",
+        "active_state": "Aktivt Tillstånd",
+        "inactive_state": "Inaktivt Tillstånd",
+        "icons": {
+          "arrange_icon_rows": "Arrangera Ikonrader"
+        }
+      },
+      "alignments": {
+        "flex-start": "Vänster",
+        "center": "Centrum",
+        "flex-end": "Höger",
+        "space-between": "Mellanrum Mellan",
+        "space-around": "Mellanrum Runt",
+        "space-evenly": "Jämna Mellanrum"
+      },
+      "vertical_alignments": {
+        "flex-start": "Topp",
+        "center": "Mitten",
+        "flex-end": "Botten"
+      },
+      "spacing": {
+        "none": "Inget",
+        "small": "Litet",
+        "medium": "Medium",
+        "large": "Stort"
+      },
+      "text_positions": {
+        "below": "Under Ikon",
+        "beside": "Bredvid Ikon",
+        "none": "Ingen Text",
+        "top": "På Toppen",
+        "left": "Till Vänster",
+        "right": "Till Höger"
+      },
+      "reset": {
+        "size": "Återställ till standardstorlek",
+        "color": "Återställ till standardfärg",
+        "all": "Återställ till standardvärden"
+      },
+      "click_actions": {
+        "toggle": "Växla",
+        "more-info": "Visa Mer Info",
+        "navigate": "Navigera till Sökväg",
+        "url": "Öppna URL",
+        "call-service": "Anropa Tjänst",
+        "perform-action": "Utför Åtgärd",
+        "location-map": "Visa Karta",
+        "assist": "Röstassistent",
+        "trigger": "Utlös",
+        "none": "Ingen Åtgärd",
+        "descriptions": {
+          "toggle": "Växlar enhetens tillstånd på och av.",
+          "more-info": "Öppnar mer info-dialogen med ytterligare information om enheten.",
+          "navigate": "Navigerar till den angivna Lovelace-sökvägen.",
+          "url": "Öppnar den angivna URL:en i en ny flik.",
+          "call-service": "Anropar den angivna Home Assistant-tjänsten.",
+          "perform-action": "Utför en anpassad åtgärd (se dokumentation).",
+          "location-map": "Visar enhetens plats på en karta.",
+          "assist": "Öppnar Home Assistants röstassistent.",
+          "trigger": "Utlöser enheten (automatisering, skript, knapp, etc).",
+          "none": "Ingen åtgärd kommer att utföras."
+        }
+      },
+      "backgrounds": {
+        "none": "Ingen",
+        "circle": "Cirkel",
+        "square": "Kvadrat",
+        "rounded_square": "Avrundad Kvadrat"
+      },
+      "container_widths": {
+        "25": "25% bredd",
+        "50": "50% bredd",
+        "75": "75% bredd",
+        "100": "100% (full bredd)"
+      },
+      "row_widths": {
+        "25": "25% bredd",
+        "50": "50% bredd",
+        "75": "75% bredd",
+        "100": "100% (full bredd)"
+      },
+      "interactions": {
+        "single": "Enkelt Tryck/Klick",
+        "double": "Dubbelt Tryck/Klick",
+        "hold": "Håll/Långt Tryck"
+      },
+      "animations": {
+        "title": "Ikonanimation",
+        "active_description": "Välj en animation att använda när denna ikon är i aktivt tillstånd.",
+        "inactive_description": "Välj en animation att använda när denna ikon är i inaktivt tillstånd.",
+        "select_animation": "Välj Animation",
+        "none": "Ingen",
+        "pulse": "Pulsera",
+        "vibrate": "Vibrera",
+        "rotate_left": "Rotera Vänster",
+        "rotate_right": "Rotera Höger",
+        "hover": "Svävande",
+        "fade": "Tona",
+        "scale": "Skala",
+        "bounce": "Studsa",
+        "shake": "Skaka",
+        "tada": "Tada"
+      },
+      "row_vertical_alignments": {
+        "top": "Topp",
+        "center": "Mitten",
+        "bottom": "Botten"
+      },
+      "actions": {
+        "single": "Enkelt Klick Åtgärd",
+        "double": "Dubbelt Klick Åtgärd",
+        "hold": "Håll Åtgärd",
+        "single_description": "Åtgärd som utförs på ett enkelt tryck/klick - vanligaste interaktionen",
+        "double_description": "Åtgärd som utförs på ett dubbelt tryck/klick - hjälper förhindra oavsiktliga utlösningar",
+        "hold_description": "Åtgärd som utförs när man håller ned i 500ms - idealisk för kritiska åtgärder",
+        "section_header": "Interaktionsåtgärder"
+      },
+      "text_formatting": "State Text Formatting",
+      "name_formatting": "Name Formatting",
+      "dynamic_icon": {
+        "title": "Dynamic Icon Template",
+        "description": "Use a template to dynamically select the icon based on entity states or conditions.",
+        "enable": "Enable Dynamic Icon Template"
+      },
+      "dynamic_color": {
+        "title": "Dynamic Color Template",
+        "description": "Use a template to dynamically set the icon color based on entity states or values.",
+        "enable": "Enable Dynamic Color Template"
+      }
+    },
+    "customize": {
+      "title": "Anpassa layout",
+      "description": "Anpassa layout, beställ och lägg till avsnitt till ditt kort",
+      "condition_prompt": "Välj \"Visa\" eller \"dölj\" för att konfigurera enhetsvillkor",
+      "template_mode_active": "Använd Mallläge",
+      "layout": {
+        "title": "Layoutstil",
+        "description": "Välj mellan enkel- eller dubbelkolumnlayout för kortet",
+        "header": "Layoutinställningar",
+        "descriptions_header": "Layoutbeskrivningar",
+        "single_column": "Single Column",
+        "single_column_description": "All sections are stacked vertically in a single column - best for simple displays and mobile views.",
+        "double_column": "Double Column",
+        "double_column_description": "Sections are split between two columns for efficient use of horizontal space - ideal for wider screens.",
+        "top_view": "Top View",
+        "top_view_description": "Image is prominently displayed at the top with other sections arranged in configurable positions around it.",
+        "half_full": "Half + Full",
+        "half_full_description": "Top row has two half-width sections, bottom row has one full-width section - great for balanced layouts.",
+        "full_half": "Full + Half",
+        "full_half_description": "Top row has one full-width section, bottom row has two half-width sections - perfect for highlighting top content."
+      },
+      "layout_types": {
+        "single": "Enkel Kolumn",
+        "double": "Dubbel Kolumn",
+        "dashboard": "Toppvy",
+        "half_full": "Halv + full",
+        "full_half": "Halva"
+      },
+      "column_width": {
+        "title": "Kolumnbredd",
+        "description": "Konfigurera breddförhållandet mellan vänster och höger kolumn",
+        "50_50": "Lika (50/50)",
+        "30_70": "Smal vänster, bred höger (30/70)",
+        "70_30": "Bred vänster, smal höger (70/30)",
+        "40_60": "Något smal vänster (40/60)",
+        "60_40": "Något bred vänster (60/40)"
+      },
+      "top_view": {
+        "header": "Toppvyns Layoutinställningar",
+        "description": "Konfigurera avstånds- och layoutinställningar för toppvyn",
+        "side_margin": "Sidomarginaler",
+        "side_margin_help": "Marginal på sidorna av vyn i pixlar",
+        "middle_spacing": "Mittavstånd",
+        "middle_spacing_help": "Avstånd mellan mittkolumnerna i pixlar",
+        "vertical_spacing": "Vertikalt Avstånd",
+        "vertical_spacing_help": "Avstånd mellan rader i pixlar"
+      },
+      "sections": {
+        "header": "Kortsektioner",
+        "arrangement_header": "Sektionsarrangemang",
+        "arrangement_desc_base": "Dra och släpp sektioner för att arrangera deras ordning på kortet.",
+        "arrangement_desc_single_extra": "Alla sektioner kommer att visas i en enkel kolumn.",
+        "arrangement_desc_double_extra": "I en dubbelkolumnlayout kan du placera alla sektioner i antingen vänster eller höger kolumn.",
+        "arrangement_desc_dashboard_extra": "I en översiktsvy kan du placera sektioner runt din fordonsbild."
+      },
+      "section_labels": {
+        "title": "Titel",
+        "image": "Fordonsbild",
+        "info": "Fordonsinfo",
+        "bars": "Alla Sensorstalpar",
+        "icons": "Alla Ikonrader",
+        "section_break": "Sektionspaus"
+      },
+      "actions": {
+        "collapse_margins": "Fäll ihop marginaler",
+        "expand_margins": "Expandera marginaler",
+        "collapse_options": "Fäll ihop alternativ",
+        "expand_options": "Expandera alternativ",
+        "add_break": "Lägg till sektionsavbrott",
+        "delete_break": "Radera avsnittet"
+      },
+      "css": {
+        "header": "Global CSS",
+        "description": "Ange anpassade CSS-regler här för att åsidosätta kortets standardstil. Dessa regler kommer att tillämpas direkt på kortet. Använd med försiktighet.",
+        "label": "Anpassad CSS",
+        "input_description": "Ange dina anpassade CSS-regler här."
+      },
+      "conditions": {
+        "header": "Villkorslogik",
+        "description": "Visa eller dölj denna sektion baserat på en entitets tillstånd.",
+        "template_mode_description": "Använd en mall för att bestämma sektionssynlighet. Mallar låter dig använda Home Assistant mallsyntax för komplexa villkor.",
+        "type_label": "Villkorstyp",
+        "entity_label": "Villkorsentitet",
+        "state_label": "Villkorstillstånd",
+        "state_description": "Tillståndsvärdet som utlöser villkoret",
+        "types": {
+          "none": "Ingen (Visa Alltid)",
+          "show": "Visa När...",
+          "hide": "Dölj När..."
+        },
+        "section_title": "Section Title",
+        "enable_section_title": "Enable Section Title",
+        "title_text": "Title Text",
+        "title_size": "Title Size",
+        "title_color": "Title Color",
+        "enable_template_mode": "Enable Template Mode",
+        "use_template_description": "Use a template to determine when this section should be visible. Templates allow you to use Home Assistant templating syntax for complex conditions.",
+        "info_row": "Info Row"
+      },
+      "template": {
+        "description": "Använd en mall för att bestämma när denna sektion ska vara synlig. Mallar låter dig använda Home Assistant mallsyntax för komplexa villkor.",
+        "enable": "Aktivera Mallläge"
+      },
+      "section_title": {
+        "header": "Sektionstitel",
+        "enable": "Aktivera Sektionstitel",
+        "text": "Titeltext",
+        "size": "Titelstorlek",
+        "color": "Titelfärg",
+        "bold": "Fet",
+        "italic": "Kursiv",
+        "uppercase": "Versaler",
+        "strikethrough": "Genomstruken"
+      },
+      "margins": {
+        "header": "Marginaler",
+        "top": "Övre marginal",
+        "bottom": "Nedre marginal"
+      },
+      "columns": {
+        "left": "Vänster kolumn",
+        "right": "Höger kolumn",
+        "empty": "Släpp sektioner här"
+      },
+      "dashboard": {
+        "top": "Övre sektion",
+        "top_middle": "Övre mittsektion",
+        "left_middle": "Vänster mittsektion",
+        "middle": "Mittsektion",
+        "middle_empty": "Fordonsbildområde (Rekommenderat)",
+        "right_middle": "Höger mittsektion",
+        "bottom_middle": "Nedre mittsektion",
+        "bottom": "Nedre sektion"
+      },
+      "half_full": {
+        "row1_col1": "Rad 1 - Vänster Kolumn",
+        "row1_col2": "Rad 1 - Höger Kolumn",
+        "row2_full": "Rad 2, full bredd (100%)"
+      },
+      "full_half": {
+        "row1_full": "Rad 1, full bredd (100%)",
+        "row2_col1": "Rad 2 - Vänster Kolumn",
+        "row2_col2": "Rad 2 - Höger Kolumn"
+      },
+      "break_styles": {
+        "blank": "Blank (ingen rad)",
+        "line": "Solidlinje",
+        "double_line": "Dubbellinje",
+        "dotted": "Prickad linje",
+        "double_dotted": "Dubbelprickad linje",
+        "shadow": "Skugggrad"
+      },
+      "break_style": {
+        "header": "Brytstil",
+        "style_label": "Stil",
+        "thickness_label": "Tjocklek",
+        "width_percent_label": "Bredd (%)",
+        "color_label": "Färg"
+      },
+      "template_mode": {
+        "header": "Template Mode",
+        "description": "Use a template to control when this image is shown or hidden based on complex logic, calculations, or multiple entity states.",
+        "enable": "Enable Template Mode",
+        "disabled_notice": "(Disabled - Template Mode Active)",
+        "disabled_help": "Basic condition controls are disabled when Template Mode is active. Template Mode takes precedence over basic conditions.",
+        "examples": {
+          "show_when_charging": "Show when charging",
+          "show_when_battery_low": "Show when battery low",
+          "multiple_conditions": "Multiple conditions",
+          "show_during_day": "Show during day hours",
+          "show_when_door_unlocked": "Show when door unlocked"
+        }
+      }
+    },
+    "container_widths": {
+      "25": "25% bredd",
+      "50": "50% bredd",
+      "75": "75% bredd",
+      "100": "100% (Full bredd)"
+    },
+    "row_widths": {
+      "25": "25% bredd",
+      "50": "50% bredd",
+      "75": "75% bredd",
+      "100": "100% (Full bredd)"
+    }
+  },
+  "about": {
+    "logo_alt": "Ultra Vehicle Card",
+    "developed_by": "Utvecklad av",
+    "discord_button": "Gå med i vår Discord",
+    "docs_button": "Se vår dokumentation",
+    "donate_button": "DONERA (PAYPAL)",
+    "github_button": "Besök vår Github",
+    "support_title": "Stöd Ultra Vehicle Card",
+    "support_description": "Dina generösa tips driver utvecklingen av fantastiska funktioner för det här kortet! Utan stöd från användare som du skulle fortsatt innovation inte vara möjlig."
+  },
+  "custom_icons": {
+    "title": "Anpassade Ikoner",
+    "description": "Definiera anpassade ikoner för olika tillstånd.",
+    "icon_entity": "Ikonentitet",
+    "default_icon": "Standardikon",
+    "state_icons": "Tillståndsikoner",
+    "state": "Tillstånd",
+    "icon": "Ikon"
+  },
+  "custom_active_state_text": "Anpassad Aktiv Statustext",
+  "custom_inactive_state_text": "Anpassad Inaktiv Statustext",
+  "image_settings": {
+    "title": "Bildinställningar",
+    "description": "Konfigurera huvudbildens utseende.",
+    "type": "Bildtyp",
+    "width": "Bildbredd",
+    "crop": "Bildbeskärning",
+    "entity": "Bildentitet",
+    "entity_description": "Entitet som tillhandahåller bild-URL"
+  },
+  "entity_settings": {
+    "entity": "Enhet",
+    "entity_description": "Välj en enhet för att visa information från",
+    "name": "Namn",
+    "name_description": "Åsidosätta enhetsnamnet (lämna tomt för att använda enhetens vänliga namn)",
+    "show_icon": "Visa ikon",
+    "icon": "Ikon",
+    "icon_color": "Ikonfärg",
+    "name_color": "Namnfärg",
+    "entity_color": "Enhetsfärg",
+    "text_color": "Enhetsfärg",
+    "show_name": "Visningsnamn",
+    "show_name_description": "Visa enhetsnamnet före värdet",
+    "template_mode": "Använd Mall för Värde",
+    "template_mode_description": "Använd en mall för att formatera enhetsvärdet",
+    "value_template": "Värdemall",
+    "template_header": "Värdemall",
+    "template_examples_header": "Mall-exempel",
+    "template_basic": "Grundvärde",
+    "template_units": "Med enheter",
+    "template_round": "Rund till 1 decimal",
+    "dynamic_icon_template": "Icon Template",
+    "dynamic_color_template": "Color Template",
+    "dynamic_icon_template_mode": "Enable Dynamic Icon Template",
+    "dynamic_color_template_mode": "Enable Dynamic Color Template"
+  }
+}

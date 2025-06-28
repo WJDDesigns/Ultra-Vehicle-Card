@@ -1,0 +1,1123 @@
+{
+  "editor": {
+    "tabs": {
+      "settings": "Ajustes",
+      "bars": "Barras",
+      "icons": "Iconos",
+      "customize": "Personalizar",
+      "about": "Acerca de",
+      "info": "Información",
+      "images": "Imágenes"
+    },
+    "info": {
+      "arrange_info_rows": "Organizar filas de información",
+      "add_row": "Agregar Fila de Información",
+      "add_entity": "Agregar Entidad de Información",
+      "title": "Información de la tarjeta",
+      "description": "Configurar filas de información y entidades para mostrar detalles del vehículo como ubicación, kilometraje, etc. Los elementos de información se mostrarán en una sola línea cuando sea posible, ajustándose a múltiples líneas en contenedores estrechos.",
+      "row_prefix": "Fila de Información",
+      "entity_prefix": "Elemento",
+      "template_mode": "Modo de plantilla",
+      "template_mode_description": "Utilice una plantilla para formatear el valor de la entidad. Las plantillas le permiten usar la sintaxis de plantillas de Home Assistant para formateo complejo.",
+      "template_examples_header": "Ejemplos comunes:",
+      "row_settings": {
+        "header": "Configuración de Fila",
+        "row_name": "Nombre de Fila",
+        "row_name_description": "Nombre personalizado para esta fila de información (dejar en blanco para usar nomenclatura predeterminada)",
+        "horizontal_alignment": "Alineación Horizontal",
+        "alignment_description": "Alineación horizontal de entidades en esta fila",
+        "vertical_alignment": "Alineación Vertical",
+        "vertical_alignment_description": "Controla cómo se alinean las entidades verticalmente dentro de la fila.",
+        "spacing": "Espaciado",
+        "spacing_description": "Espaciado entre entidades en esta fila",
+        "allow_wrap": "Permitir Ajuste de Elementos",
+        "allow_wrap_description": "Cuando está habilitado, los elementos fluirán a la siguiente línea si no caben en una fila. Cuando está deshabilitado, todos los elementos permanecerán en una sola fila."
+      },
+      "alignments": {
+        "flex-start": "Inicio",
+        "center": "Centro",
+        "flex-end": "Fin",
+        "space-between": "Espacio Entre",
+        "space-around": "Espacio Alrededor",
+        "space-evenly": "Espacio Uniforme"
+      },
+      "spacing": {
+        "none": "Ninguno",
+        "small": "Pequeño",
+        "medium": "Mediano",
+        "large": "Grande"
+      },
+      "click_actions": {
+        "more-info": "Más Información",
+        "navigate": "Navegar",
+        "url": "Abrir URL",
+        "call-service": "Llamar Servicio",
+        "none": "Ninguno"
+      },
+      "row_vertical_alignments": {
+        "top": "Arriba",
+        "center": "Centro",
+        "bottom": "Abajo"
+      },
+      "entity_settings": {
+        "header": "Elementos de Información",
+        "name": "Nombre Personalizado",
+        "show_name": "Mostrar Nombre",
+        "show_name_description": "Mostrar el nombre de la entidad antes del valor",
+        "show_icon": "Mostrar Icono",
+        "click_action": "Acción al Hacer Clic",
+        "icon_color": "Color del Icono",
+        "name_color": "Color del Nombre",
+        "entity_color": "Color de Entidad",
+        "icon_size": "Tamaño del Icono",
+        "name_size": "Tamaño del Nombre",
+        "value_size": "Tamaño del Valor",
+        "size_settings": "Configuración de Tamaño",
+        "entity_description": "Select an entity to display information from",
+        "name_description": "Override the entity name (leave blank to use entity's friendly name)",
+        "navigation_path": "Navigation Path",
+        "navigation_path_description": "Path to navigate to when clicked (e.g., /lovelace/0)",
+        "url": "URL",
+        "url_description": "URL to open when clicked",
+        "service": "Service",
+        "service_description": "Service to call (e.g., light.turn_on)",
+        "service_data": "Service Data (JSON)"
+      },
+      "dynamic_icon": {
+        "title": "Plantilla de Icono Dinámico",
+        "description": "Usa una plantilla para seleccionar dinámicamente el icono basándose en estados de entidades o condiciones.",
+        "enable": "Enable Dynamic Icon Template"
+      },
+      "dynamic_color": {
+        "title": "Plantilla de Color Dinámico",
+        "description": "Usa una plantilla para establecer dinámicamente el color del icono basándose en estados de entidades o valores.",
+        "enable": "Enable Dynamic Color Template"
+      },
+      "duplicate_row": "Duplicate Row",
+      "delete_row": "Delete Row",
+      "expand_row": "Expand Row",
+      "collapse_row": "Collapse Row",
+      "duplicate_entity": "Duplicate Entity",
+      "delete_entity": "Delete Entity",
+      "expand_entity": "Expand Entity",
+      "collapse_entity": "Collapse Entity"
+    },
+    "settings_subtabs": {
+      "general": "General",
+      "action_images": "Imágenes de acción"
+    },
+    "action_images": {
+      "title": "Configuración de Imágenes de Acción",
+      "description": "Configura imágenes que se mostrarán cuando se cumplan estados específicos de entidades.",
+      "add_image": "Añadir Imagen de Acción",
+      "no_images": "Aún no hay imágenes de acción configuradas. Añade una para comenzar.",
+      "actions": {
+        "drag": "Arrastrar para reordenar",
+        "duplicate": "Duplicar",
+        "delete": "Eliminar",
+        "expand": "Expandir",
+        "collapse": "Colapsar"
+      },
+      "delete_confirm": "¿Estás seguro de que deseas eliminar esta imagen de acción?",
+      "entity_settings": "Configuración de Entidad",
+      "image_settings": "Configuración de Imagen",
+      "entity_placeholder": "Selecciona una entidad",
+      "state_placeholder": "Ingresa el valor del estado",
+      "preview": {
+        "no_entity": "Ninguna entidad seleccionada",
+        "no_image": "Sin imagen",
+        "any_state": "Cualquier estado"
+      },
+      "trigger_entity": "Entidad Disparadora",
+      "trigger_state": "Estado Disparador",
+      "entity_help": "Selecciona una entidad a monitorear. La imagen se mostrará cuando esta entidad coincida con el estado indicado abajo.",
+      "state_help": "Ingresa el valor del estado que activará la visualización de esta imagen. Déjalo en blanco para coincidir con cualquier estado.",
+      "image_type": {
+        "title": "Tipo de Imagen",
+        "upload": "Subir Imagen",
+        "url": "URL de Imagen",
+        "entity": "Imagen de Entidad",
+        "none": "Ninguna"
+      },
+      "template_mode": "Modo Plantilla",
+      "template_description": "Usar una plantilla para determinar cuándo se debe mostrar esta imagen. Las plantillas permiten usar la sintaxis de plantillas de Home Assistant (como {{ states.sensor.temperature.state > 70 }}) para condiciones complejas.",
+      "template_label": "Plantilla de visualización",
+      "template_help": "Introduce una plantilla que devuelva verdadero/falso. Esta imagen se mostrará cuando la plantilla evalúe a verdadero. Usa sintaxis Jinja2: {{ states(...) }}",
+      "priority": {
+        "label": "Prioridad de Visualización",
+        "description": "Basado en Prioridad usa la primera coincidencia de arriba hacia abajo. Coincidencia Más Reciente usa la última coincidencia encontrada en la lista.",
+        "options": {
+          "priority": "Basado en Prioridad",
+          "newest": "Coincidencia Más Reciente"
+        }
+      }
+    },
+    "images": {
+      "title": "Imágenes",
+      "description": "Configura imágenes que se mostrarán basadas en condiciones o plantillas.",
+      "add_image": "Añadir Imagen",
+      "no_images": "Aún no hay imágenes configuradas. Añade una para comenzar.",
+      "arrange_images": "Organizar Imágenes",
+      "name": "Nombre (Opcional)",
+      "image_type": "Tipo de Imagen",
+      "url": "URL de Imagen",
+      "image_entity": "Entidad de Imagen",
+      "priority": "Prioridad (0 = más alta)",
+      "priority_mode": "Modo de Prioridad",
+      "timed_duration": "Duración de Visualización (segundos)",
+      "timed_duration_help": "Cuánto tiempo debe mostrarse esta imagen antes de regresar a la imagen principal.",
+      "duplicate": "Duplicar Imagen",
+      "delete": "Eliminar Imagen",
+      "delete_confirm": "¿Estás seguro de que deseas eliminar esta imagen?",
+      "image_types": {
+        "none": "Ninguna",
+        "default": "Vehículo Predeterminado",
+        "url": "URL de Imagen",
+        "upload": "Subir Imagen",
+        "entity": "Imagen de Entidad",
+        "map": "Mapa"
+      },
+      "priority_modes": {
+        "order": "Prioridad por Orden",
+        "order_help": "Las imágenes se muestran basadas en su orden en la lista (arrastra para reordenar).",
+        "last_triggered": "Último Activado",
+        "last_triggered_help": "La imagen activada más recientemente permanecerá mostrada hasta que otra imagen sea activada.",
+        "timed": "Imágenes Temporizadas",
+        "timed_help": "Las imágenes debajo de la primera se mostrarán por una duración establecida y luego regresarán a la imagen principal."
+      },
+      "conditional_types": {
+        "show": "Mostrar Cuando",
+        "hide": "Ocultar Cuando"
+      },
+      "tabs": {
+        "general": "General",
+        "conditional": "Condicional",
+        "appearance": "Apariencia"
+      },
+      "conditional_help": "Configura cuándo debe mostrarse esta imagen basándose en estados de entidades o plantillas.",
+      "conditional_help_simple": "Configura cuándo debe mostrarse esta imagen basándose en estados de entidades.",
+      "conditional_state_help": "La imagen se mostrará cuando la entidad sea igual a este valor de estado.",
+      "conditional_entity": "Entidad Condicional",
+      "conditional_state": "Estado Condicional",
+      "basic_conditions": "Condiciones Básicas",
+      "advanced_conditional": "Condiciones de Plantilla Avanzadas",
+      "advanced_help": "Usa plantillas para condiciones complejas como múltiples entidades o comparaciones matemáticas.",
+      "template_mode_active_help": "Usa plantillas para condiciones complejas como múltiples entidades o comparaciones matemáticas.",
+      "template_mode": {
+        "header": "Modo de Plantilla",
+        "enable": "Habilitar Modo de Plantilla",
+        "template": "Plantilla"
+      },
+      "template_examples_header": "Ejemplos Comunes:",
+      "width": "Ancho (%)",
+      "width_settings": "Configuración de Ancho",
+      "crop_settings": "Configuración de Recorte",
+      "crop_help": "Los valores positivos recortan hacia adentro, los valores negativos añaden relleno hacia afuera.",
+      "crop_top": "Superior",
+      "crop_right": "Derecha",
+      "crop_bottom": "Inferior",
+      "crop_left": "Izquierda",
+      "fallback_image": "Imagen de Respaldo",
+      "fallback_help": "Esta imagen se usará como respaldo si ningún disparador coincide o se agota el tiempo. Solo una imagen puede ser de respaldo.",
+      "map_entity": "Entidad de Ubicación",
+      "map_entity_help": "Selecciona una entidad con coordenadas de latitud/longitud o dirección para mostrar en el mapa.",
+      "target_entity": "Entidad Objetivo",
+      "target_entity_description": "Selecciona la entidad objetivo para esta acción",
+      "common": {
+        "width": "Ancho de Imagen",
+        "width_description": "Ancho como porcentaje de la tarjeta",
+        "width_over_100": "Los valores superiores al 100% pueden ayudar a recortar el espacio vacío alrededor de las imágenes",
+        "url_description": "Introduce la URL de la imagen"
+      },
+      "vehicle": {
+        "crop": "Recortar Imagen"
+      },
+      "migration": {
+        "title": "Imágenes Heredadas Detectadas",
+        "description": "Encontramos configuraciones de imágenes heredadas que pueden migrarse al nuevo formato.",
+        "migrate_button": "Migrar Ahora",
+        "success": "¡Imágenes migradas exitosamente!"
+      }
+    },
+    "card_settings": {
+      "title": "Título de la tarjeta",
+      "title_alignment": "Alineación del título",
+      "title_size": "Tamaño del título",
+      "title_color": "Color del Título",
+      "title_color_description": "Color del título de la tarjeta",
+      "title_description": "Título mostrado en la parte superior de la tarjeta (opcional)",
+      "title_alignment_description": "Cómo se alinea el título de la tarjeta",
+      "title_size_description": "Tamaño del título de la tarjeta en píxeles",
+      "colors": "Colores",
+      "card_background": "Fondo de la Tarjeta",
+      "card_background_description": "Color de fondo de toda la tarjeta",
+      "format_entities": "Formatear valores de entidades",
+      "format_entities_description": "Habilita el formateo adicional de valores de entidades (agrega comas, convierte unidades, etc.)",
+      "show_units": "Mostrar unidades",
+      "show_units_description": "Mostrar unidades junto a los valores",
+      "help_highlight": "Ayuda para resaltar",
+      "help_highlight_description": "Mostrar aspectos destacados visuales al cambiar entre las pestañas del editor para ayudar a identificar qué sección está editando",
+      "general": "General",
+      "conditional_logic": "Lógica Condicional",
+      "card_visibility": "Visibilidad de la Tarjeta",
+      "card_visibility_description": "Mostrar u ocultar toda la tarjeta basándose en una condición de entidad"
+    },
+    "vehicle_info": {
+      "title": "Información del Vehículo",
+      "location": {
+        "title": "Entidad de Ubicación",
+        "description": "Selecciona la entidad que muestra la ubicación actual del vehículo.",
+        "show": "Mostrar Ubicación",
+        "show_description": "Muestra la ubicación del vehículo"
+      },
+      "mileage": {
+        "title": "Entidad de Kilometraje",
+        "description": "Selecciona la entidad que representa el kilometraje total o el cuentakilómetros del vehículo.",
+        "show": "Mostrar Kilometraje",
+        "show_description": "Muestra el kilometraje del vehículo"
+      },
+      "car_state": {
+        "title": "Entidad de Estado del Vehículo",
+        "description": "Selecciona la entidad que representa el estado actual del vehículo (ej. estacionado, en movimiento, cargando).",
+        "show": "Mostrar Estado del Vehículo",
+        "show_description": "Muestra el estado del vehículo"
+      }
+    },
+    "crop": {
+      "title": "Recorte de Imagen",
+      "top": "Superior",
+      "right": "Derecho",
+      "bottom": "Inferior",
+      "left": "Izquierdo",
+      "pixels": "px",
+      "help": "Ingresa valores en píxeles (positivos o negativos) para ajustar el recorte y el relleno"
+    },
+    "alignment": {
+      "left": "Izquierda",
+      "center": "Centro",
+      "right": "Derecha"
+    },
+    "common": {
+      "choose_file": "Elegir Archivo",
+      "no_file_chosen": "Ningún archivo seleccionado",
+      "entity": "Entidad",
+      "width": "Ancho",
+      "width_description": "Ancho en porcentaje de la tarjeta",
+      "width_over_100": "Los valores superiores al 100% pueden ayudar a recortar el espacio vacío alrededor de las imágenes",
+      "none": "Ninguno",
+      "default": "Predeterminado",
+      "upload": "Subir",
+      "url": "URL",
+      "url_description": "URL que apunta a la imagen",
+      "reset": "Restablecer",
+      "condition_prompt": "Selecciona \"Mostrar\" u \"Ocultar\" para configurar la condición de entidad",
+      "bold": "Negrita",
+      "italic": "Cursiva",
+      "uppercase": "Mayúsculas",
+      "strikethrough": "Tachado",
+      "template_section_visibility": "Usa una plantilla para determinar cuándo esta sección debe ser visible. Las plantillas te permiten usar la sintaxis de plantillas de Home Assistant para condiciones complejas.",
+      "enable_template_mode": "Habilitar Modo de Plantilla",
+      "template_determine_visibility": "Usa una plantilla para determinar cuándo esta sección debe ser visible. Las plantillas te permiten usar la sintaxis de plantillas de Home Assistant para condiciones complejas.",
+      "templates_allow_syntax": "Las plantillas te permiten usar la sintaxis de plantillas de Home Assistant para condiciones complejas."
+    },
+    "conditions": {
+      "condition_type": "Tipo de Condición",
+      "show_card_if": "Mostrar Tarjeta Si",
+      "hide_card_if": "Ocultar Tarjeta Si",
+      "entity_description": "Selecciona la entidad para verificar la condición",
+      "state": "Estado",
+      "state_description": "El valor de estado que activa la condición"
+    },
+    "bars": {
+      "title": "Barras de progreso",
+      "description": "Agregue barras de progreso personalizables para mostrar varias métricas como nivel de batería, alcance, estado de carga y más. Cada barra se puede configurar individualmente con colores, animaciones y etiquetas.",
+      "add": "Agregar barra",
+      "duplicate": "Duplicar barra",
+      "delete": "Eliminar barra",
+      "expand": "Expandir barra",
+      "collapse": "Contraer barra",
+      "no_entity": "Ninguna entidad seleccionada",
+      "bar_prefix": "Barra",
+      "template": {
+        "description": "Utilice una plantilla para formatear el texto mostrado, convertir unidades o mostrar valores calculados.",
+        "enable": "Habilitar Modo de Plantilla",
+        "template_label": "Plantilla",
+        "helper_text": "Use la sintaxis de plantillas de Home Assistant. Ejemplos:\n• {{ states('sensor.temperature') | float * 1.8 + 32 }} °F\n• {{ now().strftime(\"%b %d, %H:%M\") }}",
+        "examples_header": "Ejemplos comunes:",
+        "examples": {
+          "temperature": "Convertir Celsius a Fahrenheit",
+          "datetime": "Formatear fecha/hora actual",
+          "power": "Combinar texto y valor del sensor"
+        }
+      },
+      "bar_radius": {
+        "round": "Redondo",
+        "square": "Cuadrado",
+        "rounded-square": "Cuadrado Redondeado"
+      },
+      "tabs": {
+        "arrange_bars": "Organizar Barras",
+        "config": "Configuración",
+        "colors": "Colores",
+        "animation": "Animación"
+      },
+      "settings": {
+        "header": "Configuración de Barra",
+        "entity": "Entidad de Porcentaje de Barra",
+        "entity_description": "Selecciona una entidad que devuelva un valor porcentual (0-100). Esto controla el nivel de llenado de la barra.",
+        "limit_entity": "Entidad de Valor Límite (opcional)",
+        "limit_entity_description": "Opcional: Añade una línea indicadora vertical en la barra (ej. límite de carga para batería de VE).",
+        "limit_color": "Color de Indicador de Límite",
+        "limit_color_description": "Color de la línea vertical que indica la posición del límite en la barra. Los cambios forzarán una actualización de la tarjeta.",
+        "bar_size": "Tamaño de Barra",
+        "bar_size_description": "Define el grosor/altura de la barra de progreso.",
+        "bar_radius": "Radio de Barra",
+        "bar_radius_description": "Forma de las esquinas de la barra de progreso",
+        "bar_style": "Estilo de Barra",
+        "bar_style_description": "Estilo visual de la barra de progreso",
+        "width": "Ancho de Barra",
+        "width_description": "Define el ancho de la barra en porcentaje del ancho de la tarjeta.",
+        "alignment": "Alineación de Etiqueta",
+        "alignment_description": "Cómo se alinean las etiquetas izquierda y derecha entre sí.",
+        "show_percentage": "Mostrar Porcentaje",
+        "show_percentage_description": "Mostrar el valor de porcentaje dentro de la barra",
+        "bar_name_header": "Nombre de la Barra",
+        "bar_name": "Nombre de la Barra",
+        "bar_name_description": "Dale a esta barra un nombre personalizado para que sea más fácil identificarla en el editor y las vistas de organización.",
+        "bar_name_input_description": "Nombre personalizado para esta barra (dejar en blanco para usar nomenclatura predeterminada)"
+      },
+      "percentage": {
+        "header": "Texto de Porcentaje",
+        "display_header": "Visualización de Texto de Porcentaje",
+        "display_description": "Controla la visibilidad y apariencia de los valores porcentuales mostrados directamente en la barra. Estos números proporcionan un indicador visual claro del nivel actual.",
+        "text_size": "Tamaño de Texto",
+        "calculation_header": "Cálculo de Porcentaje",
+        "calculation_description": "Configura cómo se calcula el nivel de llenado porcentual de la barra utilizando una de las siguientes opciones.",
+        "type_header": "Cálculo de Porcentaje",
+        "type_label": "Tipo de Porcentaje",
+        "type_description": "Cómo calcular el valor de porcentaje mostrado en la barra",
+        "type_entity": "Entidad (0-100)",
+        "type_attribute": "Atributo de Entidad",
+        "type_template": "Modo de Plantilla",
+        "type_difference": "Diferencia (Cantidad/Total)",
+        "amount_entity": "Entidad de Cantidad",
+        "amount_description": "Entidad que representa la cantidad actual/valor (numerador)",
+        "total_entity": "Entidad de Total",
+        "total_description": "Entidad que representa la cantidad/máximo total (denominador)"
+      },
+      "left_side": {
+        "header": "Lado Izquierdo",
+        "section_description": "Configura el título y el valor de entidad mostrados en el lado izquierdo de la barra. Esto es útil para mostrar etiquetas como 'Autonomía' o 'Batería' junto con sus valores.",
+        "toggle_description": "Mostrar u ocultar el lado izquierdo de la etiqueta de barra",
+        "title": "Título Izquierdo",
+        "title_description": "Etiqueta opcional mostrada en el lado izquierdo debajo de la barra.",
+        "entity": "Entidad Izquierda",
+        "entity_description": "Entidad cuyo valor se muestra en el lado izquierdo de la barra.",
+        "alignment_description": "Controla cómo se alinea esta etiqueta debajo de la barra.",
+        "title_size": "Tamaño del Título",
+        "value_size": "Tamaño del Valor",
+        "hidden_message": "El lado izquierdo está oculto",
+        "show_title": "Mostrar Título",
+        "show_value": "Mostrar Valor",
+        "conditional_description": "Controla cuándo se muestra u oculta el lado izquierdo basándose en el estado de una entidad"
+      },
+      "right_side": {
+        "header": "Lado Derecho",
+        "section_description": "Configura el título y el valor de entidad mostrados en el lado derecho de la barra. Esto es ideal para información complementaria como 'Tiempo hasta Carga Completa' o mediciones secundarias.",
+        "toggle_description": "Mostrar u ocultar el lado derecho de la etiqueta de barra",
+        "title": "Título Derecho",
+        "title_description": "Etiqueta opcional mostrada en el lado derecho debajo de la barra.",
+        "entity": "Entidad Derecha",
+        "entity_description": "Entidad cuyo valor se muestra en el lado derecho de la barra.",
+        "alignment_description": "Controla cómo se alinea esta etiqueta debajo de la barra.",
+        "title_size": "Tamaño del Título",
+        "value_size": "Tamaño del Valor",
+        "hidden_message": "El lado derecho está oculto",
+        "show_title": "Mostrar Título",
+        "show_value": "Mostrar Valor",
+        "conditional_description": "Controla cuándo se muestra u oculta el lado derecho basándose en el estado de una entidad"
+      },
+      "colors": {
+        "header": "Colores",
+        "bar_color": "Color de Barra",
+        "background_color": "Color de Fondo",
+        "border_color": "Color de Borde",
+        "limit_indicator_color": "Color de Indicador de Límite",
+        "left_title_color": "Color de Título Izquierdo",
+        "left_value_color": "Color de Valor Izquierdo",
+        "right_title_color": "Color de Título Derecho",
+        "right_value_color": "Color de Valor Derecho",
+        "percentage_text_color": "Color de Texto de Porcentaje",
+        "reset_color": "Restablecer color predeterminado"
+      },
+      "gradient": {
+        "header": "Modo Degradado",
+        "description": "Crea hermosas transiciones de color en tus barras de progreso. Ideal para mostrar niveles de batería, indicadores de combustible o cualquier indicador de estado que requiera énfasis visual.",
+        "toggle": "Usar Degradado",
+        "toggle_description": "Usar un degradado para la barra de progreso en lugar de un color sólido",
+        "display_mode": "Modo de Visualización del Degradado",
+        "display_mode_full": "Completo",
+        "display_mode_value_based": "Basado en Valor",
+        "display_mode_cropped": "Recortado",
+        "display_mode_description": "Completo: Mostrar degradado completo. Basado en Valor: Mostrar degradado hasta el valor actual.",
+        "editor_header": "Editor de Degradado",
+        "add_stop": "Añadir Parada"
+      },
+      "animation": {
+        "header": "Animación de Acción",
+        "description": "Añade animaciones a la barra cuando una entidad específica alcanza un estado específico. Perfecto para mostrar estados de carga, estados de alarma y más.",
+        "pro_tip": "Consejo Pro: Para animaciones 'siempre activas', selecciona un tipo de animación pero deja vacíos los campos de entidad y estado. ¡Prueba las animaciones 'Burbujas' y 'Rellenar'!",
+        "entity": "Entidad de Animación",
+        "entity_description": "Entidad que activa la animación cuando coincide con el estado especificado",
+        "state": "Estado de Entidad",
+        "state_description": "Cuando el estado de la entidad coincide con este valor, se activará la animación",
+        "type": "Tipo de Animación",
+        "type_description": "El efecto de animación que se mostrará cuando el estado de la entidad coincida",
+        "select_entity_prompt": "Seleccione una Entidad y escriba el estado que desea para activar la animación (ejemplos: \"charging\", \"on\", \"idle\")",
+        "action_entity": "Entidad de Acción",
+        "action_state": "Estado de Acción",
+        "action_description": "Esta animación anulará la animación regular cuando la entidad especificada esté en un estado específico.",
+        "action_entity_prompt": "Selecciona una Entidad de Acción y estado para definir cuándo esta animación debe anular la animación regular",
+        "action_header": "Anulación de Animación de Acción",
+        "action_entity_description": "Entidad que activa la animación de acción",
+        "action_state_description": "Estado que activa la animación de acción",
+        "action_select_prompt": "Selecciona una Entidad de Acción y estado para definir cuándo esta animación debe anular la animación regular"
+      },
+      "bar_sizes": {
+        "thin": "Delgada",
+        "regular": "Normal",
+        "thick": "Gruesa",
+        "thiccc": "Muy Gruesa"
+      },
+      "bar_widths": {
+        "25": "25% de Ancho",
+        "50": "50% de Ancho",
+        "75": "75% de Ancho",
+        "100": "100% (Ancho Completo)"
+      },
+      "bar_alignments": {
+        "space-between": "Espacio Entre",
+        "flex-start": "Izquierda",
+        "center": "Centro",
+        "flex-end": "Derecha"
+      },
+      "bar_styles": {
+        "flat": "Plano (Predeterminado)",
+        "glossy": "Brillante",
+        "embossed": "Relieve",
+        "inset": "Insertado",
+        "gradient": "Superposición de Degradado",
+        "neon": "Brillo Neón",
+        "outline": "Contorno",
+        "glass": "Cristal",
+        "metallic": "Metálico",
+        "neumorphic": "Neumórfico",
+        "dashed": "Rayado"
+      },
+      "row_alignment": {
+        "header": "Alineación Global de Filas de Barras",
+        "description": "Controla la alineación horizontal de las barras dentro de cada fila si no llenan todo el ancho.",
+        "label": "Alineación de Fila de Barras"
+      },
+      "animation_types": {
+        "none": "Ninguna",
+        "charging-lines": "Carga (Líneas Diagonales)",
+        "pulse": "Pulso",
+        "blinking": "Parpadeo",
+        "bouncing": "Rebote",
+        "glow": "Brillo",
+        "rainbow": "Arcoíris",
+        "bubbles": "Burbujas",
+        "fill": "Rellenar"
+      },
+      "custom_bar_settings": {
+        "title": "Configuración de Barra Personalizada",
+        "description": "Define configuraciones personalizadas para barras individuales.",
+        "name": "Nombre de la Barra",
+        "entity": "Entidad",
+        "unit": "Unidad",
+        "min": "Valor Mínimo",
+        "max": "Valor Máximo",
+        "thresholds": "Umbrales",
+        "severity": "Mapa de Severidad"
+      },
+      "template_mode": {
+        "header": "Template Mode",
+        "description": "Use a template to format the displayed text, convert units, or show calculated values.",
+        "enable": "Enable Template Mode",
+        "template": "Template"
+      }
+    },
+    "icons": {
+      "title": "Iconos de la tarjeta",
+      "description": "Agrega filas de iconos para mostrar múltiples iconos en tu tarjeta. Cada fila se puede configurar con diferentes ajustes. Nota: Las filas de iconos y el orden de las secciones se pueden reorganizar en la pestaña Personalizar.",
+      "add_row": "Agregar fila de iconos",
+      "duplicate_row": "Duplicar fila",
+      "delete_row": "Eliminar fila",
+      "expand_row": "Expandir fila",
+      "collapse_row": "Contraer fila",
+      "no_row": "No se han agregado filas de iconos",
+      "row_prefix": "Fila",
+      "icon_prefix": "Icono",
+      "add_icon": "Agregar icono",
+      "duplicate_icon": "Duplicar icono",
+      "delete_icon": "Eliminar icono",
+      "template_mode": "Modo Plantilla",
+      "template_mode_active_description": "Utiliza una plantilla para determinar cuándo este ícono debe estar activo. Las plantillas le permiten usar la sintaxis de plantillas de Home Assistant para condiciones complejas.",
+      "template_mode_inactive_description": "Utiliza una plantilla para determinar cuándo este ícono debe estar inactivo. Las plantillas le permiten usar la sintaxis de plantillas de Home Assistant para condiciones complejas.",
+      "enable_template_mode": "Habilitar Modo de Plantilla",
+      "template_examples_header": "Ejemplos Comunes:",
+      "text_formatting": "Formato de Texto de Estado",
+      "name_formatting": "Formato de Nombre",
+      "dynamic_icon": {
+        "title": "Plantilla de Icono Dinámico",
+        "description": "Usa una plantilla para seleccionar dinámicamente el icono basándose en estados de entidades o condiciones.",
+        "enable": "Habilitar Plantilla de Icono Dinámico"
+      },
+      "dynamic_color": {
+        "title": "Plantilla de Color Dinámico",
+        "description": "Usa una plantilla para establecer dinámicamente el color del icono basándose en estados de entidades o valores.",
+        "enable": "Habilitar Plantilla de Color Dinámico"
+      },
+      "row_settings": {
+        "header": "Configuración de Fila",
+        "row_name": "Nombre de Fila",
+        "row_name_description": "Nombre personalizado para esta fila de iconos (dejar en blanco para usar la nomenclatura predeterminada)",
+        "width": "Ancho de Fila",
+        "width_description": "Ancho de la fila en porcentaje del ancho de la tarjeta",
+        "alignment": "Alineación de Fila",
+        "alignment_description": "Cómo se alinean los iconos en esta fila",
+        "spacing": "Espaciado de Iconos",
+        "spacing_description": "Cantidad de espacio entre los iconos en esta fila",
+        "columns": "Número de Columnas",
+        "columns_description": "Número de columnas de tamaño uniforme en la fila (0 = distribución automática basada en el contenido)",
+        "vertical_alignment": "Alineación Vertical",
+        "vertical_alignment_description": "Controla cómo se alinean los iconos verticalmente dentro de la fila.",
+        "confirmation_mode": "Modo de Confirmación",
+        "confirmation_mode_description": "Requiere dos toques/clics para activar los iconos en esta fila, evitando interacciones accidentales",
+        "layout_info_title": "Cómo funcionan la configuración de diseño"
+      },
+      "icon_settings": {
+        "header": "Configuración de Icono",
+        "entity": "Entidad",
+        "entity_description": "Entidad mostrada con este icono",
+        "icon": "Icono",
+        "icon_description": "Selecciona un icono o ingresa un icono personalizado",
+        "name": "Nombre",
+        "name_description": "Nombre personalizado mostrado debajo del icono (usa el nombre de la entidad por defecto si no se especifica)",
+        "interaction_type": "Tipo de Interacción",
+        "interaction_type_description": "Elige cómo los usuarios interactúan con este icono para activar acciones",
+        "show_name": "Mostrar Nombre",
+        "show_name_description": "Muestra el texto del nombre debajo del icono",
+        "show_state": "Mostrar Estado",
+        "show_state_description": "Muestra el estado de la entidad debajo del icono",
+        "show_units": "Mostrar Unidades",
+        "show_units_description": "Incluye las unidades al mostrar el estado",
+        "text_position": "Posición del Texto",
+        "text_position_description": "Dónde se posiciona el texto del nombre y estado respecto al icono",
+        "click_action": "Acción al Hacer Clic",
+        "service": "Servicio",
+        "service_description": "Servicio a llamar (ej. light.turn_on)",
+        "service_data": "Datos del Servicio (JSON)",
+        "service_data_description": "Datos JSON enviados con la llamada al servicio",
+        "action": "Acción (JSON/Servicio)",
+        "action_description": "Configuración avanzada de acción (ver documentación)",
+        "navigation_path": "Ruta de Navegación",
+        "navigation_path_description": "Ruta a la que navegar (ej. /lovelace/dashboard)",
+        "navigation_target_selector": "Objetivo de Navegación",
+        "navigation_target_description": "Selecciona entre tableros disponibles, vistas o páginas del sistema",
+        "url": "Url",
+        "url_description": "URL para abrir en una nueva pestaña",
+        "automation_entity": "Entidad de Automatización",
+        "automation_entity_description": "Automatización a activar cuando se hace clic"
+      },
+      "icon_appearance": {
+        "header": "Apariencia del Icono",
+        "icon": "Icono Específico",
+        "general": "Apariencia General",
+        "active": "Estado Activo",
+        "inactive": "Estado Inactivo",
+        "state_conditions": "Condiciones de Estado",
+        "advanced": "Configuración Avanzada",
+        "icon_size": "Tamaño del Icono",
+        "icon_size_description": "Tamaño del icono en píxeles",
+        "text_size": "Tamaño del Texto",
+        "text_size_description": "Tamaño del texto de nombre/estado en píxeles",
+        "name_size": "Tamaño de nombre",
+        "name_size_description": "Tamaño del texto del nombre de la entidad en píxeles",
+        "text_alignment": "Alineación del Texto",
+        "text_alignment_description": "Cómo se alinea el texto debajo del icono",
+        "icon_background": "Fondo del Icono",
+        "icon_background_description": "Añade una forma de fondo detrás del icono",
+        "icon_background_color": "Color de Fondo del Icono",
+        "icon_background_color_description": "Color del fondo detrás del icono",
+        "container_background_color": "Color de Fondo del Contenedor",
+        "container_background_color_description": "Color del fondo detrás del contenedor completo del icono",
+        "text_appearance": "Apariencia del Texto",
+        "name_formatting": "Formato de Nombre",
+        "text_formatting": "Formato de Texto de Estado",
+        "container": {
+          "header": "Apariencia del Contenedor",
+          "vertical_alignment": "Alineación Vertical",
+          "vertical_alignment_description": "Alinear el icono y el texto verticalmente dentro del contenedor.",
+          "width": "Ancho del Contenedor",
+          "width_description": "Establecer el ancho del contenedor del icono relativo a la fila.",
+          "background": "Forma del Fondo del Contenedor",
+          "background_description": "Elegir una forma de fondo para todo el contenedor del icono."
+        },
+        "show_when_active": "Mostrar Icono Cuando Activo",
+        "show_when_active_description": "Mostrar este icono solo cuando está en un estado activo",
+        "template_mode": "Modo Plantilla",
+        "template_description": "Usar una plantilla para determinar el estado activo/inactivo. Las plantillas permiten usar la sintaxis de plantillas de Home Assistant (como {{ states.sensor.temperature.state > 70 }}) para condiciones complejas.",
+        "active_template": "Plantilla Activa",
+        "active_template_description": "Plantilla que evalúa a verdadero cuando el icono debe estar activo.",
+        "active_state": "Estado Activo",
+        "active_state_description": "Cadena de estado que representa \"activo\".",
+        "active_state_text": "Texto Personalizado para Estado Activo",
+        "active_state_text_description": "Sobrescribe el texto mostrado cuando el icono está activo. Dejar vacío para usar el estado real.",
+        "inactive_template": "Plantilla Inactiva",
+        "inactive_template_description": "Plantilla que evalúa a verdadero cuando el icono debe estar inactivo.",
+        "inactive_state": "Estado Inactivo",
+        "inactive_state_description": "Cadena de estado que representa \"inactivo\".",
+        "inactive_state_text": "Texto Personalizado para Estado Inactivo",
+        "inactive_state_text_description": "Sobrescribe el texto mostrado cuando el icono está inactivo. Dejar vacío para usar el estado real.",
+        "active_icon": "Icono Activo",
+        "inactive_icon": "Icono Inactivo",
+        "active_icon_color": "Color del Icono Activo",
+        "inactive_icon_color": "Color del Icono Inactivo",
+        "active_name_color": "Color del Nombre Activo",
+        "inactive_name_color": "Color del Nombre Inactivo",
+        "active_state_color": "Color del Estado Activo",
+        "inactive_state_color": "Color del Estado Inactivo",
+        "show_icon_active": "Mostrar Icono Cuando Activo",
+        "show_icon_active_description": "Mostrar el icono cuando el estado es activo.",
+        "show_icon_inactive": "Mostrar Icono Cuando Inactivo",
+        "show_icon_inactive_description": "Mostrar el icono cuando el estado está inactivo.",
+        "custom_active_state_text": "Texto Personalizado de Estado Activo",
+        "custom_inactive_state_text": "Texto Personalizado de Estado Inactivo",
+        "action_description": "Acción a realizar cuando se hace clic en el icono.",
+        "show_name_active": "Mostrar Nombre Cuando Activo",
+        "show_name_active_description": "Mostrar el nombre cuando el estado es activo.",
+        "show_name_inactive": "Mostrar Nombre Cuando Inactivo",
+        "show_name_inactive_description": "Mostrar el nombre cuando el estado es inactivo.",
+        "show_state_active": "Mostrar Estado Cuando Activo",
+        "show_state_active_description": "Mostrar el estado cuando el estado es activo.",
+        "show_state_inactive": "Mostrar Estado Cuando Inactivo",
+        "show_state_inactive_description": "Mostrar el estado cuando el estado es inactivo.",
+        "use_entity_color_for_icon": "Use el color de la entidad para el icono",
+        "use_entity_color_for_icon_description": "Usar el atributo de color de la entidad para el icono cuando esté disponible",
+        "use_entity_color_for_icon_background": "Utilice el color de la entidad para el fondo de iconos",
+        "use_entity_color_for_icon_background_description": "Use el atributo de color de la entidad para el fondo del icono cuando esté disponible",
+        "use_entity_color_for_container_background": "Utilice el color de la entidad para contenedor",
+        "use_entity_color_for_container_background_description": "Use el atributo de color de la entidad para el fondo del contenedor cuando esté disponible",
+        "dynamic_icon_template": "Plantilla de Icono Dinámico",
+        "dynamic_icon_template_description": "Usa una plantilla para seleccionar dinámicamente el icono basándose en estados de entidades o condiciones.",
+        "enable_dynamic_icon_template": "Habilitar Plantilla de Icono Dinámico",
+        "dynamic_color_template": "Plantilla de Color Dinámico",
+        "dynamic_color_template_description": "Usa una plantilla para establecer dinámicamente el color del icono basándose en estados de entidades o valores.",
+        "enable_dynamic_color_template": "Habilitar Plantilla de Color Dinámico",
+        "size_settings": "Configuración de Tamaño",
+        "value_size": "Tamaño del Valor",
+        "state_text_formatting": "Formato de Texto de Estado",
+        "row_name": "Nombre de Fila",
+        "row_name_description": "Nombre personalizado para esta fila de iconos (dejar en blanco para usar la nomenclatura predeterminada)",
+        "width_description": "Controla cuánto del ancho disponible usará esta fila. Configura cómo se muestra esta fila de iconos. El ancho controla el ancho general de la fila, el espaciado ajusta los espacios entre iconos, y el conteo de columnas determina cuántos iconos aparecen en cada fila (0 = automático).",
+        "layout_info_title": "Cómo Funcionan las Configuraciones de Diseño",
+        "layout_info_width": "Ancho de Fila: Controla cuánto espacio horizontal ocupa la fila en la tarjeta (porcentaje del ancho de la tarjeta)",
+        "layout_info_alignment": "Alineación de Fila: Solo se aplica cuando el Conteo de Columnas es 0. Determina cómo se posicionan los iconos dentro de la fila",
+        "layout_info_spacing": "Espaciado de Iconos: Establece la cantidad de espacio entre iconos",
+        "layout_info_columns": "Conteo de Columnas: Cuando se establece en 0, los iconos fluyen naturalmente basándose en el espacio disponible. Cuando se establece en un número, fuerza ese número exacto de columnas en un diseño de cuadrícula",
+        "layout_info_tip": "Usa Conteo de Columnas con cantidades consistentes de iconos por fila para el diseño más uniforme",
+        "control_right_side_description": "Controla cuándo se muestra u oculta el lado derecho basándose en el estado de una entidad",
+        "dynamic_icon": {
+          "title": "Plantilla de Icono Dinámico",
+          "description": "Usa una plantilla para seleccionar dinámicamente el icono basándose en estados de entidades o condiciones.",
+          "enable": "Habilitar Plantilla de Icono Dinámico",
+          "template_label": "Plantilla de Icono"
+        },
+        "dynamic_color": {
+          "title": "Plantilla de Color Dinámico",
+          "description": "Usa una plantilla para establecer dinámicamente el color del icono basándose en estados de entidades o valores.",
+          "enable": "Habilitar Plantilla de Color Dinámico",
+          "template_label": "Plantilla de Color"
+        }
+      },
+      "tabs": {
+        "general": "General",
+        "actions": "Acciones",
+        "appearance": "Apariencia",
+        "states": "Estados",
+        "active_state": "Estado activo",
+        "inactive_state": "Estado inactivo",
+        "icons": {
+          "arrange_icon_rows": "Organizar Filas de Iconos"
+        }
+      },
+      "alignments": {
+        "flex-start": "Izquierda",
+        "center": "Centro",
+        "flex-end": "Derecha",
+        "space-between": "Espaciado entre",
+        "space-around": "Espaciado alrededor",
+        "space-evenly": "Espaciado uniforme"
+      },
+      "vertical_alignments": {
+        "flex-start": "Superior",
+        "center": "Medio",
+        "flex-end": "Inferior"
+      },
+      "spacing": {
+        "none": "Ninguno",
+        "small": "Pequeño",
+        "medium": "Mediano",
+        "large": "Grande"
+      },
+      "text_positions": {
+        "below": "Debajo del Icono",
+        "beside": "Junto al Icono",
+        "none": "Sin Texto",
+        "top": "Arriba",
+        "left": "Izquierda",
+        "right": "Derecha"
+      },
+      "reset": {
+        "size": "Restablecer tamaño predeterminado",
+        "color": "Restablecer Color",
+        "all": "Restablecer valores predeterminados"
+      },
+      "click_actions": {
+        "toggle": "Alternar Entidad",
+        "more-info": "Mostrar Más Información",
+        "navigate": "Navegar a Ruta",
+        "url": "Abrir URL",
+        "call-service": "Llamar a Servicio",
+        "perform-action": "Realizar Acción",
+        "location-map": "Mostrar Mapa de Ubicación",
+        "assist": "Asistente de Voz",
+        "trigger": "Activar",
+        "none": "Sin Acción",
+        "descriptions": {
+          "toggle": "Alterna el estado de la entidad.",
+          "more-info": "Abre el diálogo de más información de la entidad.",
+          "navigate": "Navega a la ruta de Lovelace especificada.",
+          "url": "Abre la URL especificada en una nueva pestaña.",
+          "call-service": "Llama al servicio de Home Assistant especificado.",
+          "perform-action": "Ejecuta una acción personalizada (ver documentación).",
+          "location-map": "Muestra la ubicación de la entidad en un mapa.",
+          "assist": "Abre el asistente de voz de Home Assistant.",
+          "trigger": "Activa la entidad (automatización, script, botón, etc.).",
+          "none": "No se realizará ninguna acción."
+        }
+      },
+      "backgrounds": {
+        "none": "Ninguno",
+        "circle": "Círculo",
+        "square": "Cuadrado",
+        "rounded_square": "Cuadrado Redondeado"
+      },
+      "container_widths": {
+        "25": "25% de Ancho",
+        "50": "50% de Ancho",
+        "75": "75% de Ancho",
+        "100": "100% (Ancho Completo)"
+      },
+      "row_widths": {
+        "25": "25% de Ancho",
+        "50": "50% de Ancho",
+        "75": "75% de Ancho",
+        "100": "100% (Ancho Completo)"
+      },
+      "interactions": {
+        "single": "Toque/Clic Único",
+        "double": "Doble Toque/Clic",
+        "hold": "Mantener/Presión Larga"
+      },
+      "animations": {
+        "title": "Animación de Icono",
+        "active_description": "Selecciona una animación para aplicar cuando este icono esté en estado activo.",
+        "inactive_description": "Selecciona una animación para aplicar cuando este icono esté en estado inactivo.",
+        "select_animation": "Seleccionar Animación",
+        "none": "Ninguna",
+        "pulse": "Pulso",
+        "vibrate": "Vibrar",
+        "rotate_left": "Rotar Izquierda",
+        "rotate_right": "Rotar Derecha",
+        "hover": "Flotante",
+        "fade": "Desvanecer",
+        "scale": "Escalar",
+        "bounce": "Rebotar",
+        "shake": "Agitar",
+        "tada": "Tada"
+      },
+      "row_vertical_alignments": {
+        "top": "Arriba",
+        "center": "Centro",
+        "bottom": "Abajo"
+      },
+      "actions": {
+        "single": "Acción de Clic Único",
+        "double": "Acción de Doble Clic",
+        "hold": "Acción de Mantener",
+        "single_description": "Acción realizada en un toque/clic único - interacción más común",
+        "double_description": "Acción realizada en un doble toque/clic - ayuda a prevenir activaciones accidentales",
+        "hold_description": "Acción realizada al mantener presionado por 500ms - ideal para acciones críticas",
+        "section_header": "Acciones de Interacción"
+      }
+    },
+    "customize": {
+      "title": "Personalizar diseño",
+      "description": "Personaliza el diseño, orden y añadir secciones a tu tarjeta",
+      "condition_prompt": "Selecciona \"Mostrar\" u \"Ocultar\" para configurar la condición de entidad",
+      "template_mode_active": "Usar Modo de Plantilla",
+      "color": "Color",
+      "layout": {
+        "title": "Estilo de diseño",
+        "description": "Elija entre una vista de una o dos columnas para la tarjeta",
+        "header": "Ajustes de diseño",
+        "descriptions_header": "Descripciones de Diseño",
+        "single_column": "Columna Única",
+        "single_column_description": "Todas las secciones se apilan verticalmente en una columna - mejor para pantallas simples y vistas móviles.",
+        "double_column": "Doble Columna",
+        "double_column_description": "El contenido se divide en columnas izquierda y derecha - excelente para pantallas de escritorio con más información.",
+        "top_view": "Vista Superior",
+        "top_view_description": "Un diseño especializado con áreas definidas para imagen del vehículo en el centro y controles alrededor - ideal para crear un tablero de vehículo organizado.",
+        "half_full": "Mitad + Completo",
+        "half_full_description": "La primera fila se divide en dos columnas del 50% de ancho, y la segunda fila es una sola columna de ancho completo - útil para una pantalla superior enfocada con contenido más amplio abajo.",
+        "full_half": "Completo + Mitad",
+        "full_half_description": "La primera fila es una sola columna de ancho completo, y la segunda fila se divide en dos columnas del 50% de ancho - ideal para una sección superior prominente seguida de dos secciones más pequeñas.",
+        "template_visibility_help": "Usa una plantilla para determinar cuándo esta sección debe ser visible. Las plantillas te permiten usar la sintaxis de plantillas de Home Assistant para condiciones complejas.",
+        "enable_template_mode_help": "Habilitar Modo de Plantilla"
+      },
+      "layout_types": {
+        "single": "Columna única",
+        "double": "Doble columna",
+        "dashboard": "Panel",
+        "half_full": "Mitad + lleno",
+        "full_half": "Completo + mitad"
+      },
+      "column_width": {
+        "title": "Ancho de columnas",
+        "description": "Configure la relación de ancho entre las columnas izquierda y derecha",
+        "50_50": "Igual (50/50)",
+        "30_70": "Estrecha izquierda, ancha derecha (30/70)",
+        "70_30": "Ancha izquierda, estrecha derecha (70/30)",
+        "40_60": "Ligeramente más estrecha izquierda (40/60)",
+        "60_40": "Ligeramente más ancha izquierda (60/40)"
+      },
+      "top_view": {
+        "header": "Ajustes del panel",
+        "description": "Configure los ajustes de espaciado y diseño para la vista de panel",
+        "side_margin": "Márgenes laterales",
+        "side_margin_help": "Márgenes en los lados de la vista en píxeles",
+        "middle_spacing": "Espaciado medio",
+        "middle_spacing_help": "Espacio entre columnas medias en píxeles",
+        "vertical_spacing": "Espaciado vertical",
+        "vertical_spacing_help": "Espacio entre filas en píxeles"
+      },
+      "sections": {
+        "header": "Secciones de la tarjeta",
+        "arrangement_header": "Disposición de secciones",
+        "arrangement_desc_base": "Arrastre las secciones para organizar su orden en la tarjeta.",
+        "arrangement_desc_single_extra": "Todas las secciones se mostrarán en una sola columna.",
+        "arrangement_desc_double_extra": "En la vista de dos columnas, puede colocar cada sección en la columna izquierda o derecha.",
+        "arrangement_desc_dashboard_extra": "En la vista de panel, puede colocar las secciones alrededor de la imagen de su vehículo."
+      },
+      "section_labels": {
+        "title": "Título",
+        "image": "Imagen del vehículo",
+        "info": "Información del vehículo",
+        "bars": "Todas las barras de sensores",
+        "icons": "Todas las líneas de iconos",
+        "section_break": "Ruptura de la sección"
+      },
+      "actions": {
+        "collapse_margins": "Reducir márgenes",
+        "expand_margins": "Expandir márgenes",
+        "collapse_options": "Reducir opciones",
+        "expand_options": "Expandir opciones",
+        "add_break": "Agregar descanso de sección",
+        "delete_break": "Eliminar el descanso de la sección"
+      },
+      "css": {
+        "header": "CSS Global",
+        "description": "Ingrese reglas CSS personalizadas aquí para anular el estilo predeterminado de la tarjeta. Estas reglas se aplicarán directamente a la tarjeta. Usar con precaución.",
+        "label": "CSS Personalizado",
+        "input_description": "Ingrese sus reglas CSS personalizadas aquí."
+      },
+      "conditions": {
+        "header": "Lógica condicional",
+        "description": "Mostrar u ocultar esta sección según el estado de una entidad.",
+        "template_mode_description": "Usa una plantilla para determinar la visibilidad de la sección. Las plantillas te permiten usar la sintaxis de plantillas de Home Assistant para condiciones complejas.",
+        "type_label": "Tipo de condición",
+        "section_title": "Título de Sección",
+        "enable_section_title": "Habilitar Título de Sección",
+        "title_text": "Texto del Título",
+        "title_size": "Tamaño del Título",
+        "title_color": "Color del Título",
+        "enable_template_mode": "Habilitar Modo de Plantilla",
+        "use_template_description": "Usa una plantilla para determinar cuándo esta sección debe ser visible. Las plantillas te permiten usar la sintaxis de plantillas de Home Assistant para condiciones complejas.",
+        "info_row": "Fila de Información",
+        "entity_label": "Entidad de condición",
+        "state_label": "Estado de condición",
+        "state_description": "El valor de estado que activa la condición",
+        "types": {
+          "none": "Ninguna (Mostrar siempre)",
+          "show": "Mostrar cuando...",
+          "hide": "Ocultar cuando..."
+        }
+      },
+      "template": {
+        "description": "Usa una plantilla para determinar cuándo esta sección debe ser visible. Las plantillas te permiten usar la sintaxis de plantillas de Home Assistant para condiciones complejas.",
+        "enable": "Habilitar Modo de Plantilla"
+      },
+      "template_mode": {
+        "header": "Modo de Plantilla",
+        "description": "Usa una plantilla para controlar cuándo esta imagen se muestra u oculta basándose en lógica compleja, cálculos, o múltiples estados de entidades.",
+        "enable": "Habilitar Modo de Plantilla",
+        "disabled_notice": "(Deshabilitado - Modo de Plantilla Activo)",
+        "disabled_help": "Los controles de condición básica están deshabilitados cuando el Modo de Plantilla está activo. El Modo de Plantilla tiene prioridad sobre las condiciones básicas.",
+        "examples": {
+          "show_when_charging": "Mostrar cuando está cargando",
+          "show_when_battery_low": "Mostrar cuando la batería está baja",
+          "multiple_conditions": "Múltiples condiciones",
+          "show_during_day": "Mostrar durante las horas del día",
+          "show_when_door_unlocked": "Mostrar cuando la puerta está desbloqueada"
+        }
+      },
+      "section_title": {
+        "header": "Título de Sección",
+        "enable": "Habilitar Título de Sección",
+        "text": "Texto del Título",
+        "size": "Tamaño del Título",
+        "color": "Color del Título",
+        "bold": "Negrita",
+        "italic": "Cursiva",
+        "uppercase": "Mayúsculas",
+        "strikethrough": "Tachado"
+      },
+      "margins": {
+        "header": "Márgenes",
+        "top": "Margen superior",
+        "bottom": "Margen inferior"
+      },
+      "columns": {
+        "left": "Columna izquierda",
+        "right": "Columna derecha",
+        "empty": "Soltar secciones aquí"
+      },
+      "dashboard": {
+        "top": "Sección superior",
+        "top_middle": "Sección superior-media",
+        "left_middle": "Sección izquierda-media",
+        "middle": "Sección media",
+        "middle_empty": "Área de imagen del vehículo (Recomendado)",
+        "right_middle": "Sección derecha-media",
+        "bottom_middle": "Sección inferior-media",
+        "bottom": "Sección inferior"
+      },
+      "half_full": {
+        "row1_col1": "Fila 1 - Columna Izquierda",
+        "row1_col2": "Fila 1 - Columna Derecha",
+        "row2_full": "Fila 2, ancho completo (100%)"
+      },
+      "full_half": {
+        "row1_full": "Fila 1, ancho completo (100%)",
+        "row2_col1": "Fila 2 - Columna Izquierda",
+        "row2_col2": "Fila 2 - Columna Derecha"
+      },
+      "break_styles": {
+        "blank": "En blanco (sin línea)",
+        "line": "Línea continua",
+        "double_line": "Línea doble",
+        "dotted": "Línea de puntos",
+        "double_dotted": "Línea de doble punta",
+        "shadow": "Gradiente de sombra"
+      },
+      "break_style": {
+        "header": "Estilo de separación",
+        "style_label": "Estilo",
+        "thickness_label": "Grosor",
+        "width_percent_label": "Ancho (%)",
+        "color_label": "Color"
+      }
+    },
+    "container_widths": {
+      "25": "25% de Ancho",
+      "50": "50% de Ancho",
+      "75": "75% de Ancho",
+      "100": "100% (Ancho Completo)"
+    },
+    "row_widths": {
+      "25": "25% de Ancho",
+      "50": "50% de Ancho",
+      "75": "75% de Ancho",
+      "100": "100% (Ancho Completo)"
+    },
+    "about": {
+      "logo_alt": "Ultra Vehicle Card",
+      "developed_by": "Desarrollado por",
+      "discord_button": "Únete a nuestro Discord",
+      "docs_button": "Visita nuestra documentación",
+      "donate_button": "DEJAR UNA PROPINA (PAYPAL)",
+      "github_button": "Visita nuestro Github",
+      "support_title": "Apoya Ultra Vehicle Card",
+      "support_description": "¡Tus generosas propinas impulsan el desarrollo de características increíbles para esta tarjeta! Sin el apoyo de usuarios como tú, la innovación continua no sería posible."
+    }
+  },
+  "about": {
+    "logo_alt": "Ultra Vehicle Card",
+    "developed_by": "Desarrollado por",
+    "discord_button": "Únete a nuestro Discord",
+    "docs_button": "Visita nuestra documentación",
+    "donate_button": "DEJAR UNA PROPINA (PAYPAL)",
+    "github_button": "Visita nuestro Github",
+    "support_title": "Apoya Ultra Vehicle Card",
+    "support_description": "¡Tus generosas propinas impulsan el desarrollo de características increíbles para esta tarjeta! Sin el apoyo de usuarios como tú, la innovación continua no sería posible."
+  },
+  "custom_icons": {
+    "title": "Iconos Personalizados",
+    "description": "Define iconos personalizados para diferentes estados.",
+    "icon_entity": "Entidad de Icono",
+    "default_icon": "Icono Predeterminado",
+    "state_icons": "Iconos de Estado",
+    "state": "Estado",
+    "icon": "Icono"
+  },
+  "custom_active_state_text": "Texto Personalizado de Estado Activo",
+  "custom_inactive_state_text": "Texto Personalizado de Estado Inactivo",
+  "image_settings": {
+    "title": "Configuración de Imagen",
+    "description": "Configura la apariencia de la imagen principal.",
+    "type": "Tipo de Imagen",
+    "width": "Ancho de Imagen",
+    "crop": "Recorte de Imagen",
+    "entity": "Entidad de Imagen",
+    "entity_description": "Entidad que proporciona la URL de la imagen"
+  },
+  "entity_settings": {
+    "entity": "Entidad",
+    "entity_description": "Selecciona una entidad para mostrar información de",
+    "name": "Nombre Personalizado",
+    "name_description": "Sobrescribe el nombre de la entidad (deja en blanco para usar el nombre amigable de la entidad)",
+    "show_icon": "Mostrar Icono",
+    "icon": "Icono",
+    "icon_color": "Color de Icono",
+    "name_color": "Color de Nombre",
+    "entity_color": "Color de Entidad",
+    "text_color": "Color de Texto",
+    "show_name": "Mostrar Nombre",
+    "show_name_description": "Muestra el nombre de la entidad antes del valor",
+    "template_mode": "Modo de Plantilla",
+    "template_mode_description": "Usa una plantilla para formatear el valor de la entidad",
+    "value_template": "Plantilla de Valor",
+    "template_header": "Plantilla de Valor",
+    "template_examples_header": "Ejemplos Comunes:",
+    "template_basic": "Valor básico",
+    "template_units": "Con unidades",
+    "template_round": "Redondear a 1 decimal",
+    "dynamic_icon_template": "Plantilla de Icono",
+    "dynamic_color_template": "Plantilla de Color",
+    "dynamic_icon_template_mode": "Habilitar Plantilla de Icono Dinámico",
+    "dynamic_color_template_mode": "Habilitar Plantilla de Color Dinámico"
+  }
+}

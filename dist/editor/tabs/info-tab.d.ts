@@ -3,6 +3,7 @@ import { HomeAssistant } from 'custom-card-helpers';
 import { UltraVehicleCardConfig } from '../../types';
 import '../../components/entity-picker';
 import '../../components/color-picker';
+import '../../components/navigation-picker';
 export declare class InfoTab extends LitElement {
     hass: HomeAssistant;
     config: UltraVehicleCardConfig;

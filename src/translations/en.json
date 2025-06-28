@@ -1,0 +1,1091 @@
+{
+  "editor": {
+    "tabs": {
+      "settings": "Settings",
+      "bars": "Bars",
+      "icons": "Icons",
+      "customize": "Customize",
+      "about": "About",
+      "info": "Info",
+      "images": "Images"
+    },
+    "info": {
+      "arrange_info_rows": "Arrange Info Rows",
+      "title": "Card Information",
+      "description": "Configure information rows and entities to display vehicle details like location, mileage, etc. Info items will display on a single line when possible, wrapping to multiple lines in narrow containers.",
+      "template_mode": "Template Mode",
+      "template_mode_description": "Use a template to format the entity value. Templates allow you to use Home Assistant templating syntax for complex formatting.",
+      "template_examples_header": "Common Examples:"
+    },
+    "settings_subtabs": {
+      "general": "General",
+      "action_images": "Action Images"
+    },
+    "action_images": {
+      "title": "Action Images",
+      "description": "Configure images that will be displayed when specific entity states are met.",
+      "add_image": "Add Action Image",
+      "no_images": "No action images configured yet. Add one to get started.",
+      "actions": {
+        "drag": "Drag to reorder",
+        "duplicate": "Duplicate action image",
+        "delete": "Delete action image",
+        "expand": "Expand action image settings",
+        "collapse": "Collapse action image settings"
+      },
+      "delete_confirm": "Are you sure you want to delete this action image?",
+      "entity_settings": "Entity Settings",
+      "image_settings": "Image Settings",
+      "entity_placeholder": "Select entity",
+      "state_placeholder": "Enter state value",
+      "preview": {
+        "no_entity": "No entity selected",
+        "no_image": "No image selected",
+        "any_state": "Any state"
+      },
+      "trigger_entity": "Trigger Entity",
+      "trigger_state": "Trigger State",
+      "entity_help": "Select an entity to monitor. The image will be shown when this entity matches the state below.",
+      "state_help": "Enter the state value that will trigger this image to show. Leave blank to match any state.",
+      "image_type": {
+        "title": "Image Type",
+        "upload": "Upload Image",
+        "url": "Image URL",
+        "entity": "Entity Image",
+        "none": "None"
+      },
+      "template_mode": "Template Mode",
+      "template_description": "Use a template to determine when this image should be shown. Templates allow you to use Home Assistant templating syntax (like {{ states.sensor.temperature.state > 70 }}) for complex conditions.",
+      "template_label": "Display Template",
+      "template_help": "Enter a template that returns true/false. This image will be shown when the template evaluates to true. Use Jinja2 syntax: {{ states(...) }}",
+      "priority": {
+        "label": "Display Priority",
+        "description": "Priority Based uses the first match from top to bottom. Newest Matching uses the last match found in the list.",
+        "options": {
+          "priority": "Priority Based",
+          "newest": "Newest Matching"
+        }
+      }
+    },
+    "images": {
+      "title": "Images",
+      "description": "Configure images that will be displayed based on conditions or templates.",
+      "add_image": "Add Image",
+      "no_images": "No images configured yet. Add one to get started.",
+      "arrange_images": "Arrange Images",
+      "name": "Name (Optional)",
+      "image_type": "Image Type",
+      "url": "Image URL",
+      "image_entity": "Image Entity",
+      "priority": "Priority (0 = highest)",
+      "priority_mode": "Priority Mode",
+      "timed_duration": "Display Duration (seconds)",
+      "timed_duration_help": "How long this image should be displayed before returning to the main image.",
+      "duplicate": "Duplicate Image",
+      "delete": "Delete Image",
+      "delete_confirm": "Are you sure you want to delete this image?",
+      "image_types": {
+        "none": "None",
+        "default": "Default Vehicle",
+        "url": "Image URL",
+        "upload": "Upload Image",
+        "entity": "Entity Image",
+        "map": "Map"
+      },
+      "priority_modes": {
+        "order": "Order Priority",
+        "order_help": "Images are displayed based on their order in the list (drag to reorder).",
+        "last_triggered": "Last Triggered",
+        "last_triggered_help": "The most recently triggered image will stay displayed until another image is triggered.",
+        "timed": "Timed Images",
+        "timed_help": "Images below the first will show for a set duration then return to the main image."
+      },
+      "conditional_types": {
+        "show": "Show When",
+        "hide": "Hide When"
+      },
+      "tabs": {
+        "general": "General",
+        "conditional": "Conditional",
+        "appearance": "Appearance"
+      },
+      "conditional_help": "Configure when this image should be shown based on entity states or templates.",
+      "conditional_help_simple": "Configure when this image should be shown based on entity states.",
+      "conditional_state_help": "Image will be shown when the entity equals this state value.",
+      "conditional_entity": "Conditional Entity",
+      "conditional_state": "Conditional State",
+      "basic_conditions": "Basic Conditions",
+      "advanced_conditional": "Advanced Template Conditions",
+      "advanced_help": "Use templates for complex conditions like multiple entities or mathematical comparisons.",
+      "template_mode_active_help": "Use templates for complex conditions like multiple entities or mathematical comparisons.",
+      "template_mode": {
+        "header": "Template Mode",
+        "enable": "Enable Template Mode",
+        "template": "Template"
+      },
+      "template_examples_header": "Common Examples:",
+      "width": "Width (%)",
+      "width_settings": "Width Settings",
+      "crop_settings": "Crop Settings",
+      "crop_help": "Positive values crop inward, negative values add padding outward.",
+      "crop_top": "Top",
+      "crop_right": "Right",
+      "crop_bottom": "Bottom",
+      "crop_left": "Left",
+      "fallback_image": "Fallback Image",
+      "fallback_help": "This image will be used as a fallback if no triggers match or timeout happens. Only one image can be a fallback.",
+      "map_entity": "Location Entity",
+      "map_entity_help": "Select an entity with latitude/longitude coordinates or address to display on the map.",
+      "target_entity": "Target Entity",
+      "target_entity_description": "Select the entity to target with this action",
+      "common": {
+        "width": "Image Width",
+        "width_description": "Width as a percentage of the card",
+        "width_over_100": "Values over 100% can help crop empty space around images",
+        "url_description": "Enter the URL of the image"
+      },
+      "vehicle": {
+        "crop": "Crop Image"
+      },
+      "migration": {
+        "title": "Legacy Images Detected",
+        "description": "We found legacy image configurations that can be migrated to the new format.",
+        "migrate_button": "Migrate Now",
+        "success": "Images migrated successfully!"
+      }
+    },
+    "card_settings": {
+      "title": "Card Title",
+      "title_alignment": "Title Alignment",
+      "title_size": "Title Size",
+      "title_color": "Title Color",
+      "title_color_description": "Color of the card title",
+      "title_description": "Title displayed at the top of the card (optional)",
+      "title_alignment_description": "How the card title is aligned",
+      "title_size_description": "Size of the card title in pixels",
+      "colors": "Colors",
+      "card_background": "Card Background",
+      "card_background_description": "Background color of the entire card",
+      "format_entities": "Format Entity Values",
+      "format_entities_description": "Enable additional formatting of entity values (adds commas, converts units, etc.)",
+      "show_units": "Show Units",
+      "show_units_description": "Show units alongside values",
+      "help_highlight": "Help Highlight",
+      "help_highlight_description": "Show visual highlights when switching between editor tabs to help identify which section you are editing",
+      "general": "General",
+      "conditional_logic": "Conditional Logic",
+      "card_visibility": "Card Visibility",
+      "card_visibility_description": "Show or hide the entire card based on an entity condition"
+    },
+    "vehicle_info": {
+      "title": "Vehicle Information",
+      "location": {
+        "title": "Location Entity",
+        "description": "Select the entity that shows the current location of the vehicle.",
+        "show": "Show Location",
+        "show_description": "Show the vehicle location"
+      },
+      "mileage": {
+        "title": "Mileage Entity",
+        "description": "Select the entity that represents the total mileage or odometer of the vehicle.",
+        "show": "Show Mileage",
+        "show_description": "Show the vehicle mileage"
+      },
+      "car_state": {
+        "title": "Vehicle State Entity",
+        "description": "Select the entity that represents the current state of the vehicle (e.g. parked, driving, charging).",
+        "show": "Show Vehicle State",
+        "show_description": "Show the vehicle state"
+      }
+    },
+    "crop": {
+      "title": "Image Crop",
+      "top": "Top",
+      "right": "Right",
+      "bottom": "Bottom",
+      "left": "Left",
+      "pixels": "px",
+      "help": "Enter values in pixels (positive or negative) to adjust cropping and padding"
+    },
+    "alignment": {
+      "left": "Left",
+      "center": "Center",
+      "right": "Right"
+    },
+    "common": {
+      "choose_file": "Choose File",
+      "no_file_chosen": "No file chosen",
+      "entity": "Entity",
+      "width": "Width",
+      "width_description": "Width as a percentage of the card",
+      "width_over_100": "Values over 100% can help crop empty space around images",
+      "none": "None",
+      "default": "Default",
+      "upload": "Upload",
+      "url": "URL",
+      "url_description": "URL pointing to the image",
+      "reset": "Reset",
+      "condition_prompt": "Select \"Show\" or \"Hide\" to configure entity condition",
+      "bold": "Bold",
+      "italic": "Italic",
+      "uppercase": "Uppercase",
+      "strikethrough": "Strikethrough"
+    },
+    "conditions": {
+      "condition_type": "Condition Type",
+      "show_card_if": "Show Card If",
+      "hide_card_if": "Hide Card If",
+      "entity_description": "Select the entity to check for the condition",
+      "state": "State",
+      "state_description": "The state value that triggers the condition"
+    },
+    "bars": {
+      "title": "Progress Bars",
+      "description": "Add customizable progress bars to display various metrics like battery level, range, charging status, and more. Each bar can be individually configured with colors, animations, and labels.",
+      "add": "Add Bar",
+      "duplicate": "Duplicate Bar",
+      "delete": "Delete Bar",
+      "expand": "Expand Bar",
+      "collapse": "Collapse Bar",
+      "no_entity": "No entity selected",
+      "bar_prefix": "Bar",
+      "template": {
+        "description": "Use a template to format the displayed text, convert units, or display calculated values.",
+        "enable": "Enable Template Mode",
+        "template_label": "Template",
+        "helper_text": "Use Home Assistant templating syntax. Examples:\n• {{ states('sensor.temperature') | float * 1.8 + 32 }} °F\n• {{ now().strftime(\"%b %d, %H:%M\") }}",
+        "examples_header": "Common Examples:",
+        "examples": {
+          "temperature": "{{ states('sensor.temperature') | float * 1.8 + 32 }}°F - Convert Celsius to Fahrenheit",
+          "datetime": "{{ now().strftime(\"%b %d, %H:%M\") }} - Format current date/time",
+          "power": "{{ 'Charging at ' + states('sensor.ev_power') + ' kW' }} - Combine text and sensor value"
+        }
+      },
+      "bar_radius": {
+        "round": "Round",
+        "square": "Square",
+        "rounded-square": "Rounded Square"
+      },
+      "tabs": {
+        "config": "Configuration",
+        "colors": "Colors",
+        "animation": "Animation"
+      },
+      "settings": {
+        "header": "Bar Settings",
+        "entity": "Bar Percentage Entity",
+        "entity_description": "Select an entity that returns a percentage value (0-100). This controls the bar's fill level.",
+        "limit_entity": "Limit Value Entity (optional)",
+        "limit_entity_description": "Optional: Add a vertical indicator line on the bar (e.g. charge limit for EV battery).",
+        "limit_color": "Limit Indicator Color",
+        "limit_color_description": "Color of the vertical line showing the limit position on the bar. Changes will force a card update.",
+        "bar_size": "Bar Size",
+        "bar_size_description": "Defines the thickness/height of the progress bar.",
+        "bar_radius": "Bar Radius",
+        "bar_radius_description": "Shape of the progress bar corners",
+        "width": "Bar Width",
+        "width_description": "Defines the width of the bar as a percentage of the card width.",
+        "alignment": "Label Alignment",
+        "alignment_description": "How the left and right labels align with each other.",
+        "show_percentage": "Show Percentage",
+        "show_percentage_description": "Show the percentage value inside the bar"
+      },
+      "percentage": {
+        "header": "Percentage Text",
+        "display_header": "Percentage Text Display",
+        "display_description": "Control the visibility and appearance of percentage values shown directly on the bar. These numbers provide a clear visual indicator of the current level.",
+        "text_size": "Text Size",
+        "calculation_header": "Percentage Calculation",
+        "calculation_description": "Configure how the bar's percentage fill level is calculated using one of the options below.",
+        "type_header": "Percentage Calculation",
+        "type_label": "Percentage Type",
+        "type_description": "How to calculate the percentage value shown in the bar",
+        "type_entity": "Entity (0-100)",
+        "type_attribute": "Entity Attribute",
+        "type_template": "Template Mode",
+        "type_difference": "Difference (Amount/Total)",
+        "amount_entity": "Amount Entity",
+        "amount_description": "Entity representing the current amount/value (numerator)",
+        "total_entity": "Total Entity",
+        "total_description": "Entity representing the total amount/maximum (denominator)"
+      },
+      "left_side": {
+        "header": "Left Side",
+        "section_description": "Configure the title and entity value displayed on the left side of the bar. This is useful for showing labels like 'Range' or 'Battery' along with their values.",
+        "toggle_description": "Show or hide the left side of the bar label",
+        "title": "Left Title",
+        "title_description": "Optional label displayed on the left side below the bar.",
+        "entity": "Left Entity",
+        "entity_description": "Entity whose value is displayed on the left side of the bar.",
+        "alignment_description": "Controls how this label is aligned under the bar.",
+        "title_size": "Title Size",
+        "value_size": "Value Size",
+        "hidden_message": "Left side is hidden"
+      },
+      "right_side": {
+        "header": "Right Side",
+        "section_description": "Configure the title and entity value displayed on the right side of the bar. This is ideal for complementary information like 'Time to Full' or secondary measurements.",
+        "toggle_description": "Show or hide the right side of the bar label",
+        "title": "Right Title",
+        "title_description": "Optional label displayed on the right side below the bar.",
+        "entity": "Right Entity",
+        "entity_description": "Entity whose value is displayed on the right side of the bar.",
+        "alignment_description": "Controls how this label is aligned under the bar.",
+        "title_size": "Title Size",
+        "value_size": "Value Size",
+        "hidden_message": "Right side is hidden"
+      },
+      "colors": {
+        "header": "Colors",
+        "bar_color": "Bar Color",
+        "background_color": "Background Color",
+        "border_color": "Border Color",
+        "limit_indicator_color": "Limit Indicator Color",
+        "left_title_color": "Left Title Color",
+        "left_value_color": "Left Value Color",
+        "right_title_color": "Right Title Color",
+        "right_value_color": "Right Value Color",
+        "percentage_text_color": "Percentage Text Color",
+        "reset_color": "Reset to default color"
+      },
+      "gradient": {
+        "header": "Gradient Mode",
+        "description": "Create beautiful color transitions across your progress bars. Ideal for showing battery levels, fuel gauges, or any status indicator requiring visual emphasis.",
+        "toggle": "Use Gradient",
+        "toggle_description": "Use a gradient for the progress bar instead of a solid color",
+        "display_mode": "Gradient Display Mode",
+        "display_mode_full": "Full",
+        "display_mode_value_based": "Value-Based",
+        "display_mode_cropped": "Cropped",
+        "display_mode_description": "Full: Show the entire gradient. Value-based: Show the gradient up to the current value.",
+        "editor_header": "Gradient Editor",
+        "add_stop": "Add Stop"
+      },
+      "animation": {
+        "header": "Action Animation",
+        "description": "Add animations to the bar when a specific entity reaches a specific state. Perfect for showing charging states, alarm states, and more.",
+        "pro_tip": "Pro Tip: For 'always on' animations, select an animation type but leave the entity and state fields empty. Try the 'Bubbles' and 'Fill' animations!",
+        "entity": "Animation Entity",
+        "entity_description": "Entity that triggers the animation when it matches the specified state",
+        "state": "Entity State",
+        "state_description": "When the entity state matches this value, the animation will be triggered",
+        "type": "Animation Type",
+        "type_description": "The animation effect to display when the entity state matches",
+        "select_entity_prompt": "Select an Entity and enter the state you want to trigger the animation (examples: \"charging\", \"on\", \"idle\")",
+        "action_entity": "Action Entity",
+        "action_state": "Action State",
+        "action_description": "This animation will override the regular animation when the specified entity is in a specific state.",
+        "action_entity_prompt": "Select an Action Entity and state to define when this animation should override the regular animation"
+      },
+      "bar_sizes": {
+        "thin": "Thin",
+        "regular": "Regular",
+        "thick": "Thick",
+        "thiccc": "Extra Thick"
+      },
+      "bar_widths": {
+        "25": "25% Width",
+        "50": "50% Width",
+        "75": "75% Width",
+        "100": "100% (Full Width)"
+      },
+      "bar_alignments": {
+        "space-between": "Space Between",
+        "flex-start": "Left",
+        "center": "Center",
+        "flex-end": "Right"
+      },
+      "bar_styles": {
+        "flat": "Flat (Default)",
+        "glossy": "Glossy",
+        "embossed": "Embossed",
+        "inset": "Inset",
+        "gradient": "Gradient Overlay",
+        "neon": "Neon Glow",
+        "outline": "Outline",
+        "glass": "Glass",
+        "metallic": "Metallic",
+        "neumorphic": "Neumorphic"
+      },
+      "animation_types": {
+        "none": "None",
+        "charging-lines": "Charging (Diagonal Lines)",
+        "pulse": "Pulse",
+        "blinking": "Blinking",
+        "bouncing": "Bouncing",
+        "glow": "Glow",
+        "rainbow": "Rainbow",
+        "bubbles": "Bubbles",
+        "fill": "Fill"
+      },
+      "custom_bar_settings": {
+        "title": "Custom Bar Settings",
+        "description": "Define custom configurations for individual bars.",
+        "name": "Bar Name",
+        "entity": "Entity",
+        "unit": "Unit",
+        "min": "Min Value",
+        "max": "Max Value",
+        "thresholds": "Thresholds",
+        "severity": "Severity Map"
+      },
+      "tabs": {
+        "arrange_bars": "Arrange Bars",
+        "config": "Config",
+        "colors": "Colors",
+        "animation": "Animation"
+      },
+      "template_mode": {
+        "header": "Template Mode",
+        "description": "Use a template to format the displayed text, convert units, or show calculated values.",
+        "enable": "Enable Template Mode",
+        "template": "Template"
+      }
+    },
+    "info": {
+      "title": "Card Information",
+      "description": "Configure information rows and entities to display vehicle details like location, mileage, etc. Info items will display on a single line when possible, wrapping to multiple lines in narrow containers.",
+      "add_row": "Add Info Row",
+      "add_entity": "Add Info Entity",
+      "arrange_info_rows": "Arrange Info Rows",
+      "duplicate_row": "Duplicate Row",
+      "delete_row": "Delete Row",
+      "expand_row": "Expand Row",
+      "collapse_row": "Collapse Row",
+      "duplicate_entity": "Duplicate Entity",
+      "delete_entity": "Delete Entity",
+      "expand_entity": "Expand Entity",
+      "collapse_entity": "Collapse Entity",
+      "row_prefix": "Info Row",
+      "entity_prefix": "Entity",
+      "template_mode": "Template Mode",
+      "template_mode_description": "Use a template to format the entity value. Templates allow you to use Home Assistant templating syntax for complex formatting.",
+      "template_examples_header": "Common Examples:",
+      "dynamic_icon": {
+        "title": "Dynamic Icon Template",
+        "description": "Use a template to dynamically select the icon based on entity states or conditions.",
+        "enable": "Enable Dynamic Icon Template"
+      },
+      "dynamic_color": {
+        "title": "Dynamic Color Template",
+        "description": "Use a template to dynamically set colors based on entity states or values.",
+        "enable": "Enable Dynamic Color Template"
+      },
+      "row_settings": {
+        "header": "Row Settings",
+        "row_name": "Row Name",
+        "row_name_description": "Custom name for this info row (leave blank to use default naming)",
+        "horizontal_alignment": "Horizontal Alignment",
+        "alignment_description": "Horizontal alignment of entities in this row",
+        "vertical_alignment": "Vertical Alignment",
+        "vertical_alignment_description": "Controls how entities are aligned vertically within the row.",
+        "spacing": "Spacing",
+        "spacing_description": "Spacing between entities in this row",
+        "allow_wrap": "Allow items to wrap",
+        "allow_wrap_description": "When enabled, items will flow to the next line if they don't fit in one row. When disabled, all items will stay in a single row."
+      },
+      "entity_settings": {
+        "header": "Info Items",
+        "name": "Custom Name",
+        "entity_description": "Select an entity to display information from",
+        "name_description": "Override the entity name (leave blank to use entity's friendly name)",
+        "show_icon": "Show Icon",
+        "icon_color": "Icon Color",
+        "name_color": "Name Color",
+        "entity_color": "Entity Color",
+        "icon_size": "Icon Size",
+        "name_size": "Name Size",
+        "value_size": "Value Size",
+        "size_settings": "Size Settings",
+        "show_name": "Show Name",
+        "show_name_description": "Display the entity name before the value",
+        "click_action": "Click Action",
+        "navigation_path": "Navigation Path",
+        "navigation_path_description": "Path to navigate to when clicked (e.g., /lovelace/0)",
+        "url": "URL",
+        "url_description": "URL to open when clicked",
+        "service": "Service",
+        "service_description": "Service to call (e.g., light.turn_on)",
+        "service_data": "Service Data (JSON)"
+      },
+      "alignments": {
+        "flex-start": "Start",
+        "center": "Center",
+        "flex-end": "End",
+        "space-between": "Space Between",
+        "space-around": "Space Around",
+        "space-evenly": "Space Evenly"
+      },
+      "spacing": {
+        "none": "None",
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      },
+      "click_actions": {
+        "more-info": "More Info",
+        "navigate": "Navigate",
+        "url": "Open URL",
+        "call-service": "Call Service",
+        "none": "None"
+      },
+      "row_vertical_alignments": {
+        "top": "Top",
+        "center": "Center",
+        "bottom": "Bottom"
+      }
+    },
+    "icons": {
+      "title": "Card Icons",
+      "description": "Add icon rows to display multiple icons in your card. Each row can be configured with different settings. Note: Icon rows and sections order can be rearranged in the Customize tab.",
+      "add_row": "Add Icon Row",
+      "duplicate_row": "Duplicate Row",
+      "delete_row": "Delete Row",
+      "expand_row": "Expand Row",
+      "collapse_row": "Collapse Row",
+      "no_row": "No icon rows have been added",
+      "row_prefix": "Row",
+      "icon_prefix": "Icon",
+      "add_icon": "Add Icon",
+      "duplicate_icon": "Duplicate Icon",
+      "delete_icon": "Delete Icon",
+      "template_mode": "Template Mode",
+      "template_mode_active_description": "Use a template to determine when this icon should be active. Templates allow you to use Home Assistant templating syntax for complex conditions.",
+      "template_mode_inactive_description": "Use a template to determine when this icon should be inactive. Templates allow you to use Home Assistant templating syntax for complex conditions.",
+      "template_examples_header": "Common Examples:",
+      "text_formatting": "State Text Formatting",
+      "name_formatting": "Name Formatting",
+      "dynamic_icon": {
+        "title": "Dynamic Icon Template",
+        "description": "Use a template to dynamically select the icon based on entity states or conditions.",
+        "enable": "Enable Dynamic Icon Template"
+      },
+      "dynamic_color": {
+        "title": "Dynamic Color Template",
+        "description": "Use a template to dynamically set the icon color based on entity states or values.",
+        "enable": "Enable Dynamic Color Template"
+      },
+      "enable_template_mode": "Enable Template Mode",
+      "row_settings": {
+        "header": "Row Settings",
+        "width": "Row Width",
+        "width_description": "Width of the row as a percentage of card width",
+        "alignment": "Row Alignment",
+        "alignment_description": "How icons are aligned in this row",
+        "spacing": "Icon Spacing",
+        "spacing_description": "Amount of space between icons in this row",
+        "columns": "Column Count",
+        "columns_description": "Number of evenly-sized columns in the row (0 = auto distribution based on content)",
+        "confirmation_mode": "Confirmation Mode",
+        "confirmation_mode_description": "Require two taps/clicks to activate icons in this row, preventing accidental interactions",
+        "layout_info_title": "How Layout Settings Work"
+      },
+      "icon_settings": {
+        "header": "Icon List",
+        "entity": "Entity",
+        "entity_description": "Entity displayed with this icon",
+        "icon": "Icon",
+        "icon_description": "Select an icon or enter a custom icon",
+        "name": "Name",
+        "name_description": "Custom name displayed below the icon (uses entity name by default if not specified)",
+        "interaction_type": "Interaction Type",
+        "interaction_type_description": "Choose how users interact with this icon to trigger actions",
+        "show_name": "Show Name",
+        "show_name_description": "Show the name text below the icon",
+        "show_state": "Show State",
+        "show_state_description": "Show the entity state below the icon",
+        "show_units": "Show Units",
+        "show_units_description": "Include units when showing state",
+        "text_position": "Text Position",
+        "text_position_description": "Where the name and state text is positioned relative to the icon",
+        "click_action": "Click Action",
+        "service": "Service",
+        "service_description": "Service to call (e.g. light.turn_on)",
+        "service_data": "Service Data (JSON)",
+        "service_data_description": "JSON data sent with the service call",
+        "action": "Action (JSON/Service)",
+        "action_description": "Advanced action configuration (see documentation)",
+        "navigation_path": "Navigation Path",
+        "navigation_path_description": "Select from available navigation targets including dashboards, views, and system pages",
+        "navigation_target_selector": "Navigation Target",
+        "navigation_target_description": "Select from available dashboards, views, or system pages",
+        "url": "URL",
+        "url_description": "URL to open in a new tab",
+        "automation_entity": "Automation Entity",
+        "automation_entity_description": "Automation to trigger when clicked"
+      },
+      "icon_appearance": {
+        "header": "Icon Appearance",
+        "icon": "Icon Appearance",
+        "general": "General Appearance",
+        "active": "Active State",
+        "inactive": "Inactive State",
+        "state_conditions": "State Conditions",
+        "advanced": "Advanced Settings",
+        "icon_size": "Icon Size",
+        "icon_size_description": "Size of the icon in pixels",
+        "text_size": "Entity Size",
+        "text_size_description": "Size of the entity value text in pixels",
+        "name_size": "Name Size",
+        "name_size_description": "Size of the entity name text in pixels",
+        "text_alignment": "Text Alignment",
+        "text_alignment_description": "How the text is aligned below the icon",
+        "icon_background": "Icon Background",
+        "icon_background_description": "Add a background shape behind the icon",
+        "icon_background_color": "Icon Background Color",
+        "icon_background_color_description": "Color of the background behind the icon",
+        "container_background_color": "Container Background Color",
+        "container_background_color_description": "Color of the background behind the entire icon container",
+        "text_appearance": "Text Appearance",
+        "container": {
+          "header": "Container Appearance",
+          "vertical_alignment": "Vertical Alignment",
+          "vertical_alignment_description": "Align the icon and text vertically within the container.",
+          "width": "Container Width",
+          "width_description": "Set the width of the icon container relative to the row.",
+          "background": "Container Background Shape",
+          "background_description": "Choose a background shape for the entire icon container."
+        },
+        "show_when_active": "Show Icon When Active",
+        "show_when_active_description": "Only show this icon when it's in an active state",
+        "template_mode": "Template Mode",
+        "template_description": "Use a template to determine active/inactive state. Templates allow you to use Home Assistant templating syntax (like {{ states.sensor.temperature.state > 70 }}) for complex conditions.",
+        "active_template": "Active Template",
+        "active_template_description": "Template that returns true when the icon should be active.",
+        "active_state": "Active state",
+        "active_state_description": "State string that represents \"active\".",
+        "active_state_text": "Custom Active State Text",
+        "active_state_text_description": "Overrides the text displayed when the icon is active. Leave empty to use the actual state.",
+        "inactive_template": "Inactive Template",
+        "inactive_template_description": "Template that returns true when the icon should be inactive.",
+        "inactive_state": "Inactive state",
+        "inactive_state_description": "State string that represents \"inactive\".",
+        "inactive_state_text": "Custom Inactive State Text",
+        "inactive_state_text_description": "Overrides the text displayed when the icon is inactive. Leave empty to use the actual state.",
+        "active_icon": "Active icon",
+        "inactive_icon": "Inactive icon",
+        "active_icon_color": "Active Icon Color",
+        "inactive_icon_color": "Inactive Icon Color",
+        "active_name_color": "Active Name Color",
+        "inactive_name_color": "Inactive Name Color",
+        "active_state_color": "Active State Color",
+        "inactive_state_color": "Inactive State Color",
+        "show_icon_active": "Show icon when active",
+        "show_icon_active_description": "Display the icon when the state is active.",
+        "show_icon_inactive": "Show Icon When Inactive",
+        "show_icon_inactive_description": "Display the icon when the state is inactive.",
+        "custom_active_state_text": "Custom Active State Text",
+        "custom_inactive_state_text": "Custom Inactive State Text",
+        "action_description": "Action to perform when the icon is clicked.",
+        "show_name_active": "Show Name When Active",
+        "show_name_active_description": "Display the name when the state is active.",
+        "show_name_inactive": "Show Name When Inactive",
+        "show_name_inactive_description": "Display the name when the state is inactive.",
+        "show_state_active": "Show State When Active",
+        "show_state_active_description": "Display the state when the state is active.",
+        "show_state_inactive": "Show State When Inactive",
+        "show_state_inactive_description": "Display the state when the state is inactive.",
+        "use_entity_color_for_icon": "Use Entity Color for Icon",
+        "use_entity_color_for_icon_description": "Use this entity's color attribute (if available) instead of the configured color",
+        "use_entity_color_for_icon_background": "Use Entity Color for Icon Background",
+        "use_entity_color_for_icon_background_description": "Use the entity's color attribute for the icon background when available",
+        "use_entity_color_for_container_background": "Use Entity Color for Container",
+        "use_entity_color_for_container_background_description": "Use the entity's color attribute for the container background when available",
+        "dynamic_icon_template": "Dynamic Icon Template",
+        "dynamic_icon_template_description": "Use a template to dynamically select the icon based on entity states or conditions.",
+        "enable_dynamic_icon_template": "Enable Dynamic Icon Template",
+        "dynamic_color_template": "Dynamic Color Template",
+        "dynamic_color_template_description": "Use a template to dynamically set the icon color based on entity states or values.",
+        "enable_dynamic_color_template": "Enable Dynamic Color Template",
+        "size_settings": "Size Settings",
+        "value_size": "Value Size",
+        "state_text_formatting": "State Text Formatting",
+        "row_name": "Row Name",
+        "row_name_description": "Custom name for this icon row (leave blank to use default naming)",
+        "width_description": "Controls how much of the available width this row will use. Configure how this row of icons displays. Width controls the overall row width, spacing adjusts gaps between icons, and column count determines how many icons appear in each row (0 = automatic).",
+        "layout_info_title": "How Layout Settings Work",
+        "layout_info_width": "Row Width: Controls how much horizontal space the row takes up in the card (percentage of card width)",
+        "layout_info_alignment": "Row Alignment: Only applies when Column Count is 0. Determines how icons are positioned within the row",
+        "layout_info_spacing": "Icon Spacing: Sets the amount of space between icons",
+        "layout_info_columns": "Column Count: When set to 0, icons flow naturally based on available space. When set to a number, forces that exact number of columns in a grid layout",
+        "layout_info_tip": "Use Column Count with consistent amounts of icons per row for the most uniform layout",
+        "control_right_side_description": "Control when the right side is shown or hidden based on entity state",
+        "dynamic_icon": {
+          "title": "Dynamic Icon Template",
+          "description": "Use a template to dynamically select the icon based on entity states or conditions.",
+          "enable": "Enable Dynamic Icon Template",
+          "template_label": "Icon Template"
+        },
+        "dynamic_color": {
+          "title": "Dynamic Color Template",
+          "description": "Use a template to dynamically set the icon color based on entity states or values.",
+          "enable": "Enable Dynamic Color Template",
+          "template_label": "Color Template"
+        }
+      },
+      "tabs": {
+        "general": "General",
+        "actions": "Actions",
+        "appearance": "Appearance",
+        "states": "States",
+        "active_state": "Active State",
+        "inactive_state": "Inactive State",
+        "icons": {
+          "arrange_icon_rows": "Arrange Icon Rows"
+        }
+      },
+      "alignments": {
+        "flex-start": "Left",
+        "center": "Center",
+        "flex-end": "Right",
+        "space-between": "Space Between",
+        "space-around": "Space Around",
+        "space-evenly": "Space Evenly"
+      },
+      "vertical_alignments": {
+        "flex-start": "Top",
+        "center": "Middle",
+        "flex-end": "Bottom"
+      },
+      "spacing": {
+        "none": "None",
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      },
+      "text_positions": {
+        "below": "Below Icon",
+        "beside": "Beside Icon",
+        "none": "No Text",
+        "top": "On Top",
+        "left": "On Left",
+        "right": "On Right"
+      },
+      "reset": {
+        "size": "Reset to default size",
+        "color": "Reset to default color",
+        "all": "Reset to default values"
+      },
+      "click_actions": {
+        "toggle": "Toggle",
+        "more-info": "Show More Info",
+        "navigate": "Navigate to Path",
+        "url": "Open URL",
+        "call-service": "Call Service",
+        "perform-action": "Perform Action",
+        "location-map": "Show Map",
+        "assist": "Voice Assistant",
+        "trigger": "Trigger",
+        "none": "No Action",
+        "descriptions": {
+          "toggle": "Toggle the entity's state on and off.",
+          "more-info": "Opens the more info dialog with additional information about the entity.",
+          "navigate": "Navigate to the specified Lovelace path.",
+          "url": "Opens the specified URL in a new tab.",
+          "call-service": "Call the specified Home Assistant service.",
+          "perform-action": "Perform a custom action (see documentation).",
+          "location-map": "Show the entity's location on a map.",
+          "assist": "Open Home Assistant's voice assistant.",
+          "trigger": "Trigger the entity (automation, script, button, etc).",
+          "none": "No action will be performed."
+        }
+      },
+      "backgrounds": {
+        "none": "None",
+        "circle": "Circle",
+        "square": "Square",
+        "rounded_square": "Rounded Square"
+      },
+      "container_widths": {
+        "25": "25% Width",
+        "50": "50% Width",
+        "75": "75% Width",
+        "100": "100% (Full Width)"
+      },
+      "row_widths": {
+        "25": "25% Width",
+        "50": "50% Width",
+        "75": "75% Width",
+        "100": "100% (Full Width)"
+      },
+      "interactions": {
+        "single": "Single Tap/Click",
+        "double": "Double Tap/Click",
+        "hold": "Hold/Long Press"
+      },
+      "animations": {
+        "title": "Icon Animation",
+        "active_description": "Select an animation to apply when this icon is in the active state.",
+        "inactive_description": "Select an animation to apply when this icon is in the inactive state.",
+        "select_animation": "Select Animation",
+        "none": "None",
+        "pulse": "Pulse",
+        "vibrate": "Vibrate",
+        "rotate_left": "Rotate Left",
+        "rotate_right": "Rotate Right",
+        "hover": "Hover",
+        "fade": "Fade",
+        "scale": "Scale",
+        "bounce": "Bounce",
+        "shake": "Shake",
+        "tada": "Tada"
+      },
+      "row_vertical_alignments": {
+        "top": "Top",
+        "center": "Center",
+        "bottom": "Bottom"
+      },
+      "actions": {
+        "single": "Single Click Action",
+        "double": "Double Click Action",
+        "hold": "Hold Action",
+        "single_description": "Action performed on a single tap/click - most common interaction",
+        "double_description": "Action performed on a double tap/click - helps prevent accidental triggers",
+        "hold_description": "Action performed when holding down for 500ms - ideal for critical actions",
+        "section_header": "Interaction Actions"
+      }
+    },
+    "customize": {
+      "title": "Customize Layout",
+      "description": "Customize layout, order, and add sections to your card",
+      "condition_prompt": "Select \"Show\" or \"Hide\" to configure entity condition",
+      "template_mode_active": "Use Template Mode",
+      "layout": {
+        "title": "Layout Style",
+        "description": "Choose between a single or double column layout for the card",
+        "header": "Layout Settings",
+        "descriptions_header": "Layout Descriptions",
+        "single_column": "Single Column",
+        "single_column_description": "All sections are stacked vertically in a single column - best for simple displays and mobile views.",
+        "double_column": "Double Column",
+        "double_column_description": "Sections are split between two columns for efficient use of horizontal space - ideal for wider screens.",
+        "top_view": "Top View",
+        "top_view_description": "Image is prominently displayed at the top with other sections arranged in configurable positions around it.",
+        "half_full": "Half + Full",
+        "half_full_description": "Top row has two half-width sections, bottom row has one full-width section - great for balanced layouts.",
+        "full_half": "Full + Half",
+        "full_half_description": "Top row has one full-width section, bottom row has two half-width sections - perfect for highlighting top content."
+      },
+      "layout_types": {
+        "single": "Single Column",
+        "double": "Double Column",
+        "dashboard": "Top View",
+        "half_full": "Half + Full",
+        "full_half": "Full + Half"
+      },
+      "column_width": {
+        "title": "Column Width",
+        "description": "Configure the width ratio between left and right columns",
+        "50_50": "Equal (50/50)",
+        "30_70": "Narrow left, wide right (30/70)",
+        "70_30": "Wide left, narrow right (70/30)",
+        "40_60": "Slightly narrow left (40/60)",
+        "60_40": "Slightly wide left (60/40)"
+      },
+      "top_view": {
+        "header": "Top View Layout Settings",
+        "description": "Configure the spacing and layout settings for top view",
+        "side_margin": "Side Margin",
+        "side_margin_help": "Margin on the sides of the view in pixels",
+        "middle_spacing": "Middle Spacing",
+        "middle_spacing_help": "Space between middle columns in pixels",
+        "vertical_spacing": "Vertical Spacing",
+        "vertical_spacing_help": "Space between rows in pixels"
+      },
+      "sections": {
+        "header": "Card Sections",
+        "arrangement_header": "Section Arrangement",
+        "arrangement_desc_base": "Drag and drop sections to arrange their order on the card.",
+        "arrangement_desc_single_extra": "All sections will be displayed in a single column.",
+        "arrangement_desc_double_extra": "In a double column layout, you can place any section in the left or right column.",
+        "arrangement_desc_dashboard_extra": "In a Top View layout, you can place sections around your vehicle image."
+      },
+      "section_labels": {
+        "title": "Title",
+        "image": "Vehicle Image",
+        "info": "Vehicle Information",
+        "bars": "All Sensor Bars",
+        "icons": "All Icon Rows",
+        "section_break": "Section Break"
+      },
+      "actions": {
+        "collapse_margins": "Collapse Margins",
+        "expand_margins": "Expand Margins",
+        "collapse_options": "Collapse Options",
+        "expand_options": "Expand Options",
+        "add_break": "Add Section Break",
+        "delete_break": "Delete Section Break"
+      },
+      "css": {
+        "header": "Global CSS",
+        "description": "Enter custom CSS rules here to override default card styling. These rules will be applied directly to the card. Use with caution.",
+        "label": "Custom CSS",
+        "input_description": "Enter your custom CSS rules here."
+      },
+      "conditions": {
+        "header": "Conditional Logic",
+        "description": "Show or hide this section based on an entity's state.",
+        "template_mode_description": "Use a template to determine section visibility. Templates allow you to use Home Assistant templating syntax for complex conditions.",
+        "type_label": "Condition Type",
+        "section_title": "Section Title",
+        "enable_section_title": "Enable Section Title",
+        "title_text": "Title Text",
+        "title_size": "Title Size",
+        "title_color": "Title Color",
+        "enable_template_mode": "Enable Template Mode",
+        "use_template_description": "Use a template to determine when this section should be visible. Templates allow you to use Home Assistant templating syntax for complex conditions.",
+        "info_row": "Info Row",
+        "entity_label": "Condition Entity",
+        "state_label": "Condition State",
+        "state_description": "The state value that triggers the condition",
+        "types": {
+          "none": "None (Always Show)",
+          "show": "Show When...",
+          "hide": "Hide When..."
+        }
+      },
+      "template": {
+        "description": "Use a template to determine when this section should be visible. Templates allow you to use Home Assistant templating syntax for complex conditions.",
+        "enable": "Enable Template Mode"
+      },
+      "template_mode": {
+        "header": "Template Mode",
+        "description": "Use a template to control when this image is shown or hidden based on complex logic, calculations, or multiple entity states.",
+        "enable": "Enable Template Mode",
+        "disabled_notice": "(Disabled - Template Mode Active)",
+        "disabled_help": "Basic condition controls are disabled when Template Mode is active. Template Mode takes precedence over basic conditions.",
+        "examples": {
+          "show_when_charging": "Show when charging",
+          "show_when_battery_low": "Show when battery low",
+          "multiple_conditions": "Multiple conditions",
+          "show_during_day": "Show during day hours",
+          "show_when_door_unlocked": "Show when door unlocked"
+        }
+      },
+      "section_title": {
+        "header": "Section Title",
+        "enable": "Enable Section Title",
+        "text": "Title Text",
+        "size": "Title Size",
+        "color": "Title Color",
+        "bold": "Bold",
+        "italic": "Italic",
+        "uppercase": "Uppercase",
+        "strikethrough": "Strikethrough"
+      },
+      "margins": {
+        "header": "Margins",
+        "top": "Top Margin",
+        "bottom": "Bottom Margin"
+      },
+      "columns": {
+        "left": "Left Column",
+        "right": "Right Column",
+        "empty": "Drop sections here"
+      },
+      "dashboard": {
+        "top": "Top Section",
+        "top_middle": "Top Middle Section",
+        "left_middle": "Left Middle Section",
+        "middle": "Middle Section",
+        "middle_empty": "Vehicle Image Area (Recommended)",
+        "right_middle": "Right Middle Section",
+        "bottom_middle": "Bottom Middle Section",
+        "bottom": "Bottom Section"
+      },
+      "half_full": {
+        "row1_col1": "Row 1, Left (50%)",
+        "row1_col2": "Row 1, Right (50%)",
+        "row2_full": "Row 2, Full Width (100%)"
+      },
+      "full_half": {
+        "row1_full": "Row 1, Full Width (100%)",
+        "row2_col1": "Row 2, Left (50%)",
+        "row2_col2": "Row 2, Right (50%)"
+      },
+      "break_styles": {
+        "blank": "Blank (No Line)",
+        "line": "Solid Line",
+        "double_line": "Double Line",
+        "dotted": "Dotted Line",
+        "double_dotted": "Double Dotted Line",
+        "shadow": "Shadow Gradient"
+      },
+      "break_style": {
+        "header": "Break Style",
+        "style_label": "Style",
+        "thickness_label": "Thickness",
+        "width_percent_label": "Width (%)",
+        "color_label": "Color"
+      }
+    },
+    "container_widths": {
+      "25": "25% Width",
+      "50": "50% Width",
+      "75": "75% Width",
+      "100": "100% (Full Width)"
+    },
+    "row_widths": {
+      "25": "25% Width",
+      "50": "50% Width",
+      "75": "75% Width",
+      "100": "100% (Full Width)"
+    }
+  },
+  "about": {
+    "logo_alt": "Ultra Vehicle Card",
+    "developed_by": "Developed by",
+    "discord_button": "Join Our Discord",
+    "docs_button": "Visit Our Documentation",
+    "donate_button": "LEAVE A TIP (PAYPAL)",
+    "github_button": "Check Out Our Github",
+    "support_title": "Support Ultra Vehicle Card",
+    "support_description": "Your generous tips fuel the development of amazing features for this card! Without support from users like you, continued innovation wouldn't be possible."
+  },
+  "custom_icons": {
+    "title": "Custom Icons",
+    "description": "Define custom icons for different states.",
+    "icon_entity": "Icon Entity",
+    "default_icon": "Default Icon",
+    "state_icons": "State Icons",
+    "state": "State",
+    "icon": "Icon"
+  },
+  "custom_active_state_text": "Custom Active State Text",
+  "custom_inactive_state_text": "Custom Inactive State Text",
+  "image_settings": {
+    "title": "Image Settings",
+    "description": "Configure the main image appearance.",
+    "type": "Image Type",
+    "width": "Image Width",
+    "crop": "Image Crop",
+    "entity": "Image Entity",
+    "entity_description": "Entity that provides the image URL"
+  },
+  "entity_settings": {
+    "entity": "Entity",
+    "entity_description": "Select an entity to display information from",
+    "name": "Custom Name",
+    "name_description": "Override the entity name (leave blank to use entity's friendly name)",
+    "show_icon": "Show Icon",
+    "icon": "Icon",
+    "icon_color": "Icon Color",
+    "name_color": "Name Color",
+    "entity_color": "Entity Color",
+    "text_color": "Text Color",
+    "show_name": "Show Name",
+    "show_name_description": "Display the entity name before the value",
+    "template_mode": "Template Mode",
+    "template_mode_description": "Use a template to format the entity value",
+    "value_template": "Value Template",
+    "template_header": "Value Template",
+    "template_examples_header": "Common Examples:",
+    "template_basic": "Basic value",
+    "template_units": "With units",
+    "template_round": "Round to 1 decimal",
+    "dynamic_icon_template": "Icon Template",
+    "dynamic_color_template": "Color Template",
+    "dynamic_icon_template_mode": "Enable Dynamic Icon Template",
+    "dynamic_color_template_mode": "Enable Dynamic Color Template"
+  }
+}

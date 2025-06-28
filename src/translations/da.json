@@ -1,0 +1,1078 @@
+{
+  "editor": {
+    "tabs": {
+      "settings": "Indstillinger",
+      "bars": "Bjælker",
+      "icons": "Ikoner",
+      "customize": "Tilpas",
+      "about": "Om",
+      "info": "Info",
+      "images": "Billeder"
+    },
+    "info": {
+      "title": "Kortoplysninger",
+      "description": "Konfigurer informationsrækker og enheder til at vise køretøjsdetaljer som placering, kilometertal osv. Info -genstande vises på en enkelt linje, når det er muligt, indpakning til flere linjer i smalle containere.",
+      "add_row": "Tilføj inforække",
+      "add_entity": "Tilføj infoenhed",
+      "arrange_info_rows": "Arranger info rækker",
+      "duplicate_row": "Duplikér række",
+      "delete_row": "Slet række",
+      "expand_row": "Udvid række",
+      "collapse_row": "Kollaps række",
+      "duplicate_entity": "Duplikér enhed",
+      "delete_entity": "Slet enhed",
+      "expand_entity": "Udvid enhed",
+      "collapse_entity": "Kollaps enhed",
+      "row_prefix": "Inforække",
+      "entity_prefix": "Enhed",
+      "template_mode": "Skabelontilstand",
+      "template_mode_description": "Brug en skabelon til at formatere enhedsværdien. Skabeloner giver dig mulighed for at bruge Home Assistant Templating Syntax til kompleks formatering.",
+      "template_examples_header": "Almindelige eksempler:",
+      "dynamic_icon": {
+        "title": "Dynamisk ikonskabelon",
+        "description": "Brug en skabelon til dynamisk at vælge ikonet baseret på enhedstilstande eller betingelser.",
+        "enable": "Aktivér dynamisk ikonskabelon"
+      },
+      "dynamic_color": {
+        "title": "Dynamisk farveskabelon",
+        "description": "Brug en skabelon til dynamisk at indstille farver baseret på enhedstilstande eller værdier.",
+        "enable": "Aktivér dynamisk farveskabelon"
+      },
+      "row_settings": {
+        "header": "Række Indstillinger",
+        "row_name": "Række Navn",
+        "row_name_description": "Brugerdefineret navn til denne info række (lad stå tom for at bruge standard navngivning)",
+        "horizontal_alignment": "Vandret Justering",
+        "alignment_description": "Vandret justering af enheder i denne række",
+        "vertical_alignment": "Lodret Justering",
+        "vertical_alignment_description": "Kontrollerer hvordan enheder justeres lodret inden for rækken.",
+        "spacing": "Afstand",
+        "spacing_description": "Afstand mellem enheder i denne række",
+        "allow_wrap": "Tillad elementer at ombryde",
+        "allow_wrap_description": "Når aktiveret vil elementer flyde til næste linje hvis de ikke passer i én række. Når deaktiveret vil alle elementer forblive i en enkelt række."
+      },
+      "entity_settings": {
+        "header": "Info Elementer",
+        "name": "Brugerdefineret Navn",
+        "entity_description": "Vælg en enhed at vise information fra",
+        "name_description": "Overskriv enhedsnavnet (lad stå tom for at bruge enhedens venlige navn)",
+        "show_icon": "Vis Ikon",
+        "icon_color": "Ikon Farve",
+        "name_color": "Navn Farve",
+        "entity_color": "Enheds Farve",
+        "icon_size": "Ikon Størrelse",
+        "name_size": "Navn Størrelse",
+        "value_size": "Værdi Størrelse",
+        "size_settings": "Størrelses Indstillinger",
+        "show_name": "Vis Navn",
+        "show_name_description": "Vis enheds navnet før værdien",
+        "click_action": "Klik Handling",
+        "navigation_path": "Navigations Sti",
+        "navigation_path_description": "Sti at navigere til når der klikkes (f.eks. /lovelace/0)",
+        "url": "URL",
+        "url_description": "URL at åbne når der klikkes",
+        "service": "Service",
+        "service_description": "Service at kalde (f.eks. light.turn_on)",
+        "service_data": "Service Data (JSON)"
+      },
+      "alignments": {
+        "flex-start": "Start",
+        "center": "Center",
+        "flex-end": "Slut",
+        "space-between": "Plads mellem",
+        "space-around": "Plads omkring",
+        "space-evenly": "Jævnt fordelt plads"
+      },
+      "spacing": {
+        "none": "Ingen",
+        "small": "Lille",
+        "medium": "Medium",
+        "large": "Stor"
+      },
+      "click_actions": {
+        "more-info": "Mere info",
+        "navigate": "Navigér",
+        "url": "Åbn URL",
+        "call-service": "Ring til tjeneste",
+        "none": "Ingen"
+      },
+      "row_vertical_alignments": {
+        "top": "Top",
+        "center": "Center",
+        "bottom": "Bund"
+      }
+    },
+    "settings_subtabs": {
+      "general": "Generelt",
+      "action_images": "Handlingsbilleder"
+    },
+    "action_images": {
+      "title": "Aktionsbillede-indstillinger",
+      "description": "Konfigurer billeder, der vises når specifikke entitetstilstande er opfyldt.",
+      "add_image": "Tilføj aktionsbillede",
+      "no_images": "Ingen aktionsbilleder konfigureret endnu. Tilføj et for at komme i gang.",
+      "actions": {
+        "drag": "Træk for at ændre rækkefølge",
+        "duplicate": "Duplikér",
+        "delete": "Slet",
+        "expand": "Udvid",
+        "collapse": "Fold sammen"
+      },
+      "delete_confirm": "Er du sikker på, at du vil slette dette aktionsbillede?",
+      "entity_settings": "Entitetsindstillinger",
+      "image_settings": "Billedindstillinger",
+      "entity_placeholder": "Vælg en entitet",
+      "state_placeholder": "Indtast tilstandsværdi",
+      "preview": {
+        "no_entity": "Ingen entitet valgt",
+        "no_image": "Intet billede",
+        "any_state": "Enhver tilstand"
+      },
+      "trigger_entity": "Udløser Entitet",
+      "trigger_state": "Udløser Tilstand",
+      "entity_help": "Vælg en entitet at overvåge. Billedet vil blive vist, når denne entitet matcher tilstanden nedenfor.",
+      "state_help": "Indtast tilstandsværdien, der vil udløse dette billede. Lad stå tomt for at matche enhver tilstand.",
+      "image_type": {
+        "title": "Billedtype",
+        "upload": "Upload billede",
+        "url": "Billed-URL",
+        "entity": "Entitetsbillede",
+        "none": "Ingen"
+      },
+      "template_mode": "Skabelon-tilstand",
+      "template_description": "Brug en skabelon til at bestemme, hvornår dette billede skal vises. Skabeloner giver dig mulighed for at bruge Home Assistant skabelon-syntaks (som {{ states.sensor.temperature.state > 70 }}) for komplekse betingelser.",
+      "template_label": "Vis skabelon",
+      "template_help": "Indtast en skabelon, der returnerer sand/falsk. Dette billede vil blive vist, når skabelonen evalueres til sand. Brug Jinja2-syntaks: {{ states(...) }}",
+      "priority": {
+        "label": "Visningsprioritet",
+        "description": "Prioritetsbaseret bruger det første match fra top til bund. Nyeste Match bruger det sidste match fundet i listen.",
+        "options": {
+          "priority": "Prioritetsbaseret",
+          "newest": "Nyeste Match"
+        }
+      }
+    },
+    "images": {
+      "title": "Billeder",
+      "description": "Konfigurer billeder, der vil blive vist baseret på betingelser eller skabeloner.",
+      "add_image": "Tilføj Billede",
+      "no_images": "Ingen billeder konfigureret endnu. Tilføj et for at komme i gang.",
+      "arrange_images": "Arrangér Billeder",
+      "name": "Navn (Valgfrit)",
+      "image_type": "Billedtype",
+      "url": "Billede URL",
+      "image_entity": "Billede Entitet",
+      "priority": "Prioritet (0 = højest)",
+      "priority_mode": "Prioritetstilstand",
+      "timed_duration": "Visningstid (sekunder)",
+      "timed_duration_help": "Hvor længe dette billede skal vises, før det vender tilbage til hovedbilledet.",
+      "duplicate": "Duplikér Billede",
+      "delete": "Slet Billede",
+      "delete_confirm": "Er du sikker på, at du vil slette dette billede?",
+      "image_types": {
+        "none": "Ingen",
+        "default": "Standard Køretøj",
+        "url": "Billede URL",
+        "upload": "Upload Billede",
+        "entity": "Entitet Billede",
+        "map": "Kort"
+      },
+      "priority_modes": {
+        "order": "Rækkefølge Prioritet",
+        "order_help": "Billeder vises baseret på deres rækkefølge i listen (træk for at ændre rækkefølge).",
+        "last_triggered": "Sidst Udløst",
+        "last_triggered_help": "Det senest udløste billede vil forblive vist, indtil et andet billede udløses.",
+        "timed": "Tidsstyrede Billeder",
+        "timed_help": "Billeder under det første vil vise i en fastsat varighed og derefter vende tilbage til hovedbilledet."
+      },
+      "conditional_types": {
+        "show": "Vis Når",
+        "hide": "Skjul Når"
+      },
+      "tabs": {
+        "general": "Generelt",
+        "conditional": "Betinget",
+        "appearance": "Udseende"
+      },
+      "conditional_help": "Konfigurer hvornår dette billede skal vises baseret på entitetstilstande eller skabeloner.",
+      "conditional_help_simple": "Konfigurer hvornår dette billede skal vises baseret på entitetstilstande.",
+      "conditional_state_help": "Billedet vil blive vist, når entiteten er lig med denne tilstandsværdi.",
+      "conditional_entity": "Betinget Entitet",
+      "conditional_state": "Betinget Tilstand",
+      "basic_conditions": "Grundlæggende Betingelser",
+      "advanced_conditional": "Avancerede Skabelon Betingelser",
+      "advanced_help": "Brug skabeloner til komplekse betingelser som flere entiteter eller matematiske sammenligninger.",
+      "template_mode_active_help": "Brug skabeloner til komplekse betingelser som flere entiteter eller matematiske sammenligninger.",
+      "template_mode": {
+        "header": "Skabelon Tilstand",
+        "enable": "Aktivér Skabelon Tilstand",
+        "template": "Skabelon"
+      },
+      "template_examples_header": "Almindelige Eksempler:",
+      "width": "Bredde (%)",
+      "width_settings": "Bredde Indstillinger",
+      "crop_settings": "Beskæring Indstillinger",
+      "crop_help": "Positive værdier beskærer indad, negative værdier tilføjer polstring udad.",
+      "crop_top": "Top",
+      "crop_right": "Højre",
+      "crop_bottom": "Bund",
+      "crop_left": "Venstre",
+      "fallback_image": "Reserve Billede",
+      "fallback_help": "Dette billede vil blive brugt som reserve, hvis ingen udløsere matcher eller timeout sker. Kun ét billede kan være en reserve.",
+      "map_entity": "Lokations Entitet",
+      "map_entity_help": "Vælg en entitet med breddegrad/længdegrad koordinater eller adresse til at vise på kortet.",
+      "target_entity": "Mål Entitet",
+      "target_entity_description": "Vælg entiteten at målrette med denne handling",
+      "common": {
+        "width": "Billede Bredde",
+        "width_description": "Bredde som en procentdel af kortet",
+        "width_over_100": "Værdier over 100% kan hjælpe med at afgrøde tomt rum omkring billeder",
+        "url_description": "Indtast URL'en til billedet"
+      },
+      "vehicle": {
+        "crop": "Beskær billede"
+      },
+      "migration": {
+        "title": "Forældede Billeder Opdaget",
+        "description": "Vi fandt forældede billede konfigurationer der kan migreres til det nye format.",
+        "migrate_button": "Migrér Nu",
+        "success": "Billeder migreret med succes!"
+      }
+    },
+    "card_settings": {
+      "title": "Korttitel",
+      "title_alignment": "Titeljustering",
+      "title_size": "Titelstørrelse",
+      "title_color": "Titel Farve",
+      "title_color_description": "Farve på korttitlen",
+      "title_description": "Titel vist øverst på kortet (valgfrit)",
+      "title_alignment_description": "Hvordan korttitlen er justeret",
+      "title_size_description": "Størrelse af korttitlen i pixels",
+      "colors": "Farver",
+      "card_background": "Kort Baggrund",
+      "card_background_description": "Baggrundsfarve for hele kortet",
+      "format_entities": "Formater enhedsværdier",
+      "format_entities_description": "Aktivér yderligere formatering af enhedsværdier (tilføjer kommaer, konverterer enheder osv.)",
+      "show_units": "Vis enheder",
+      "show_units_description": "Vis enheder ved siden af værdier",
+      "help_highlight": "Hjælpe med at fremhæve",
+      "help_highlight_description": "Vis visuelle højdepunkter, når du skifter mellem redaktørfaner for at hjælpe med at identificere, hvilket afsnit du redigerer",
+      "general": "Generelt",
+      "conditional_logic": "Betinget Logik",
+      "card_visibility": "Kort Synlighed",
+      "card_visibility_description": "Vis eller skjul hele kortet baseret på en entitetsbetingelse"
+    },
+    "vehicle_info": {
+      "title": "Køretøjsinformation",
+      "location": {
+        "title": "Placerings-entitet",
+        "description": "Vælg den entitet, der viser køretøjets aktuelle placering.",
+        "show": "Vis placering",
+        "show_description": "Vis køretøjets placering"
+      },
+      "mileage": {
+        "title": "Kilometerstand-entitet",
+        "description": "Vælg den entitet, der repræsenterer køretøjets samlede kilometertal eller kilometertæller.",
+        "show": "Vis kilometerstand",
+        "show_description": "Vis køretøjets kilometerstand"
+      },
+      "car_state": {
+        "title": "Køretøjstilstands-entitet",
+        "description": "Vælg den entitet, der repræsenterer køretøjets aktuelle tilstand (f.eks. parkeret, kører, oplader).",
+        "show": "Vis køretøjets tilstand",
+        "show_description": "Vis køretøjets tilstand"
+      }
+    },
+    "crop": {
+      "title": "Billedbeskæring",
+      "top": "Top",
+      "right": "Højre",
+      "bottom": "Bund",
+      "left": "Venstre",
+      "pixels": "PX",
+      "help": "Indtast værdier i pixels (positive eller negative) for at justere beskæring og padding"
+    },
+    "alignment": {
+      "left": "Venstre",
+      "center": "Centreret",
+      "right": "Højre"
+    },
+    "common": {
+      "choose_file": "Vælg fil",
+      "no_file_chosen": "Ingen fil valgt",
+      "entity": "Entitet",
+      "width": "Bredde",
+      "width_description": "Bredde som en procentdel af kortet",
+      "width_over_100": "Værdier over 100% kan hjælpe med at afgrøde tomt rum omkring billeder",
+      "none": "Ingen",
+      "default": "Standard",
+      "upload": "Upload",
+      "url": "URL",
+      "url_description": "URL der peger på billedet",
+      "reset": "Nulstil",
+      "condition_prompt": "Vælg \"Vis\" eller \"Skjul\" for at konfigurere enhedstilstand",
+      "bold": "Fed",
+      "italic": "Kursiv",
+      "uppercase": "Store bogstaver",
+      "strikethrough": "Gennemstreget"
+    },
+    "conditions": {
+      "condition_type": "Betingelsestype",
+      "show_card_if": "Vis Kort Hvis",
+      "hide_card_if": "Skjul Kort Hvis",
+      "entity_description": "Vælg entiteten at kontrollere for betingelsen",
+      "state": "Tilstand",
+      "state_description": "Tilstandsværdien der udløser betingelsen"
+    },
+    "bars": {
+      "title": "Procentbjælker",
+      "description": "Tilføj procentbjælker for at vise værdier som brændstofniveau, batteriopladning eller rækkevidde. Hver bjælke kan vise en primær procentværdi med valgfri etiketter til venstre og højre.",
+      "add": "Tilføj ny bjælke",
+      "duplicate": "Duplikér bjælke",
+      "delete": "Slet bjælke",
+      "expand": "Udvid bjælke",
+      "collapse": "Fold bjælke sammen",
+      "no_entity": "Ingen entitet valgt",
+      "bar_prefix": "Bjælke",
+      "template": {
+        "description": "Brug en skabelon til at formatere den viste tekst, konvertere enheder eller vise beregnede værdier.",
+        "enable": "Aktivér skabelontilstand",
+        "template_label": "Skabelon",
+        "helper_text": "Brug Home Assistant skabelon-syntaks. Eksempler:\n• {{ states('sensor.temperature') | float * 1.8 + 32 }} °F\n• {{ now().strftime(\"%b %d, %H:%M\") }}",
+        "examples_header": "Almindelige eksempler:",
+        "examples": {
+          "temperature": "{{ states('sensor.temperature') | float * 1.8 + 32 }}°F - Konverter Celsius til Fahrenheit",
+          "datetime": "{{ now().strftime(\"%b %d, %H:%M\") }} - Formatér aktuel dato/tid",
+          "power": "{{ 'Oplader ved ' + states('sensor.ev_power') + ' kW' }} - Kombiner tekst og sensorværdi"
+        }
+      },
+      "bar_radius": {
+        "round": "Rund",
+        "square": "Firkantet",
+        "rounded-square": "Afrundet firkant"
+      },
+      "tabs": {
+        "arrange_bars": "Arrangér Bjælker",
+        "config": "Konfiguration",
+        "colors": "Farver",
+        "animation": "Animation"
+      },
+      "settings": {
+        "header": "Bjælkeindstillinger",
+        "entity": "Bjælke-procententitet",
+        "entity_description": "Vælg en entitet, der returnerer en procentværdi (0-100). Dette styrer bjælkens udfyldningsniveau.",
+        "limit_entity": "Grænseværdi-entitet (valgfri)",
+        "limit_entity_description": "Valgfri: Tilføj en vertikal indikatorlinje på bjælken (f.eks. opladningsgrænse for elbilbatteri).",
+        "limit_color": "Grænseindikatorfarve",
+        "limit_color_description": "Farve på den vertikale linje, der viser grænsens position på bjælken. Ændringer vil tvinge en kortopdatering.",
+        "bar_size": "Bjælkestørrelse",
+        "bar_size_description": "Definerer tykkelsen/højden af fremskridtsbjælken.",
+        "bar_radius": "Bjælkeradius",
+        "bar_radius_description": "Form på fremskridtsbjælkens hjørner",
+        "width": "Bjælkebredde",
+        "width_description": "Definerer bredden af bjælken som en procentdel af kortets bredde.",
+        "alignment": "Etikettilpasning",
+        "alignment_description": "Hvordan venstre og højre etiketter justeres i forhold til hinanden.",
+        "show_percentage": "Vis procent",
+        "show_percentage_description": "Vis procentværdien inde i bjælken"
+      },
+      "percentage": {
+        "header": "Procenttekst",
+        "display_header": "Procenttekstvisning",
+        "display_description": "Styr synligheden og udseendet af procentværdier vist direkte på bjælken. Disse tal giver en klar visuel indikator for det aktuelle niveau.",
+        "text_size": "Tekststørrelse",
+        "calculation_header": "Procentberegning",
+        "calculation_description": "Konfigurer, hvordan bjælkens procentfyldningsniveau beregnes ved hjælp af en af nedenstående muligheder.",
+        "type_header": "Procentberegning",
+        "type_label": "Procenttype",
+        "type_description": "Hvordan procentværdien vist i bjælken beregnes",
+        "type_entity": "Entitet (0-100)",
+        "type_attribute": "Enheds Attribut",
+        "type_template": "Skabelon Tilstand",
+        "type_difference": "Forskel (Mængde/Total)",
+        "amount_entity": "Mængdeentitet",
+        "amount_description": "Entitet, der repræsenterer den aktuelle mængde/værdi (tæller)",
+        "total_entity": "Totalentitet",
+        "total_description": "Entitet, der repræsenterer den samlede mængde/maksimum (nævner)"
+      },
+      "left_side": {
+        "header": "Venstre side",
+        "section_description": "Konfigurer titel og entitetsværdi, der vises på venstre side af bjælken. Dette er nyttigt til at vise etiketter som 'Rækkevidde' eller 'Batteri' sammen med deres værdier.",
+        "toggle_description": "Vis eller skjul venstre side af bjælkeetiketten",
+        "title": "Venstre titel",
+        "title_description": "Valgfri etiket, der vises på venstre side under bjælken.",
+        "entity": "Venstre entitet",
+        "entity_description": "Entitet, hvis værdi vises på venstre side af bjælken.",
+        "alignment_description": "Styrer, hvordan denne etiket justeres under bjælken.",
+        "title_size": "Titelstørrelse",
+        "value_size": "Værdistørrelse",
+        "hidden_message": "Venstre side er skjult"
+      },
+      "right_side": {
+        "header": "Højre side",
+        "section_description": "Konfigurer titel og entitetsværdi, der vises på højre side af bjælken. Dette er ideelt til supplerende information som 'Tid til fuld' eller sekundære målinger.",
+        "toggle_description": "Vis eller skjul højre side af bjælkeetiketten",
+        "title": "Højre titel",
+        "title_description": "Valgfri etiket, der vises på højre side under bjælken.",
+        "entity": "Højre entitet",
+        "entity_description": "Entitet, hvis værdi vises på højre side af bjælken.",
+        "alignment_description": "Styrer, hvordan denne etiket justeres under bjælken.",
+        "title_size": "Titelstørrelse",
+        "value_size": "Værdistørrelse",
+        "hidden_message": "Højre side er skjult"
+      },
+      "colors": {
+        "header": "Farver",
+        "bar_color": "Bjælkefarve",
+        "background_color": "Baggrundsfarve",
+        "border_color": "Kantfarve",
+        "limit_indicator_color": "Grænseindikatorfarve",
+        "left_title_color": "Venstre titelfarve",
+        "left_value_color": "Venstre værdifarve",
+        "right_title_color": "Højre titelfarve",
+        "right_value_color": "Højre værdifarve",
+        "percentage_text_color": "Procenttekstfarve",
+        "reset_color": "Nulstil til standardfarve"
+      },
+      "gradient": {
+        "header": "Gradient-tilstand",
+        "description": "Skab smukke farveovergange på dine fremskridtsbjælker. Ideel til at vise batteriniveauer, brændstofmålere eller enhver statusindikator, der kræver visuel fremhævning.",
+        "toggle": "Brug gradient",
+        "toggle_description": "Brug en gradient til fremskridtsbjælken i stedet for en enkelt farve",
+        "display_mode": "Gradient-visningstilstand",
+        "display_mode_full": "Fuld",
+        "display_mode_value_based": "Værdibaseret",
+        "display_mode_cropped": "Beskåret",
+        "display_mode_description": "Fuld: Viser hele gradienten. Værdibaseret: Viser gradient op til den aktuelle værdi.",
+        "editor_header": "Gradient-editor",
+        "add_stop": "Tilføj stop"
+      },
+      "animation": {
+        "header": "Handlingsanimation",
+        "description": "Tilføj animationer til bjælken, når en specifik entitet når en specifik tilstand. Perfekt til at vise opladningstilstande, alarmtilstande og mere.",
+        "pro_tip": "Pro-tip: For 'altid tændt' animationer, vælg en animationstype, men lad entitets- og tilstandsfelterne stå tomme. Prøv 'Bobler' og 'Fyld' animationerne!",
+        "entity": "Animationsentitet",
+        "entity_description": "Entitet, der udløser animationen, når den matcher den angivne tilstand",
+        "state": "Entitetstilstand",
+        "state_description": "Når entitetstilstanden matcher denne værdi, vil animationen blive udløst",
+        "type": "Animationstype",
+        "type_description": "Den animationseffekt, der skal vises, når entitetstilstanden matcher",
+        "select_entity_prompt": "Vælg en entitet, og indtast den tilstand, du ønsker skal udløse animationen (eksempler: \"charging\", \"on\", \"idle\")",
+        "action_entity": "Handlingsenhed",
+        "action_state": "Handlingstilstand",
+        "action_description": "Denne animation tilsidesætter den almindelige animation, når den specificerede enhed er i en bestemt tilstand.",
+        "action_entity_prompt": "Vælg en handlingsenhed og stat for at definere, hvornår denne animation skal tilsidesætte den almindelige animation"
+      },
+      "bar_sizes": {
+        "thin": "Tynd",
+        "regular": "Normal",
+        "thick": "Tyk",
+        "thiccc": "Ekstra tyk"
+      },
+      "bar_widths": {
+        "25": "25% bredde",
+        "50": "50% bredde",
+        "75": "75% bredde",
+        "100": "100% (fuld bredde)"
+      },
+      "bar_alignments": {
+        "space-between": "Mellemrum imellem",
+        "flex-start": "Venstre",
+        "center": "Centreret",
+        "flex-end": "Højre"
+      },
+      "bar_styles": {
+        "flat": "Flad (standard)",
+        "glossy": "Blank",
+        "embossed": "Relief",
+        "inset": "Indsat",
+        "gradient": "Gradient-overlay",
+        "neon": "Neon-glød",
+        "outline": "Kontur",
+        "glass": "Glas",
+        "metallic": "Metallisk",
+        "neumorphic": "Neumorfisk"
+      },
+      "animation_types": {
+        "none": "Ingen",
+        "charging-lines": "Opladning (diagonale linjer)",
+        "pulse": "Puls",
+        "blinking": "Blinker",
+        "bouncing": "Hopser",
+        "glow": "Glød",
+        "rainbow": "Regnbue",
+        "bubbles": "Bobler",
+        "fill": "Fyld"
+      },
+      "custom_bar_settings": {
+        "title": "Tilpassede bjælkeindstillinger",
+        "description": "Definer tilpassede konfigurationer for individuelle bjælker.",
+        "name": "Bjælkenavn",
+        "entity": "Entitet",
+        "unit": "Enhed",
+        "min": "Min. værdi",
+        "max": "Maks. værdi",
+        "thresholds": "Tærskelværdier",
+        "severity": "Alvorlighedskort"
+      },
+      "template_mode": {
+        "header": "Skabelon Tilstand",
+        "description": "Brug en skabelon til at formatere den viste tekst, konvertere enheder eller vise beregnede værdier.",
+        "enable": "Aktivér Skabelon Tilstand",
+        "template": "Skabelon"
+      }
+    },
+    "icons": {
+      "title": "Kortikoner",
+      "description": "Tilføj ikonrækker for at vise flere ikoner på dit kort. Hver række kan konfigureres med forskellige indstillinger. Bemærk: Ikonrækker og sektionsrækkefølge kan omarrangeres i Tilpas-fanen.",
+      "add_row": "Tilføj ikonrække",
+      "duplicate_row": "Duplikér række",
+      "delete_row": "Slet række",
+      "expand_row": "Udvid række",
+      "collapse_row": "Fold række sammen",
+      "no_row": "Ingen ikonrækker er blevet tilføjet",
+      "row_prefix": "Række",
+      "icon_prefix": "Ikon",
+      "add_icon": "Tilføj ikon",
+      "duplicate_icon": "Duplikér ikon",
+      "delete_icon": "Slet ikon",
+      "template_mode": "Skabelontilstand",
+      "template_mode_active_description": "Brug en skabelon til at bestemme, hvornår dette ikon skal være aktivt. Skabeloner giver dig mulighed for at bruge Home Assistant Templating Syntax til komplekse forhold.",
+      "template_mode_inactive_description": "Brug en skabelon til at bestemme, hvornår dette ikon skal være inaktivt. Skabeloner giver dig mulighed for at bruge Home Assistant Templating Syntax til komplekse forhold.",
+      "template_examples_header": "Almindelige eksempler:",
+      "text_formatting": "Tilstands Tekst Formatering",
+      "name_formatting": "Navn Formatering",
+      "dynamic_icon": {
+        "title": "Dynamisk Ikon Skabelon",
+        "description": "Brug en skabelon til dynamisk at vælge ikonet baseret på enhedstilstande eller betingelser.",
+        "enable": "Aktivér Dynamisk Ikon Skabelon"
+      },
+      "dynamic_color": {
+        "title": "Dynamisk Farve Skabelon",
+        "description": "Brug en skabelon til dynamisk at indstille ikonfarven baseret på enhedstilstande eller værdier.",
+        "enable": "Aktivér Dynamisk Farve Skabelon"
+      },
+      "enable_template_mode": "Aktivér skabelontilstand",
+      "row_settings": {
+        "header": "Rækkeindstillinger",
+        "width": "Rækkebredde",
+        "width_description": "Bredde af rækken som en procentdel af kortets bredde",
+        "alignment": "Rækkejustering",
+        "alignment_description": "Hvordan ikoner justeres i denne række",
+        "spacing": "Ikonafstand",
+        "spacing_description": "Mængden af plads mellem ikoner i denne række",
+        "columns": "Kolonneantal",
+        "columns_description": "Antal lige store kolonner i rækken (0 = automatisk fordeling baseret på indhold)",
+        "confirmation_mode": "Bekræftelsestilstand",
+        "confirmation_mode_description": "Kræv to tryk/klik for at aktivere ikoner i denne række, hvilket forhindrer utilsigtede interaktioner",
+        "layout_info_title": "Hvordan layoutindstillinger fungerer"
+      },
+      "icon_settings": {
+        "header": "Ikonliste",
+        "entity": "Entitet",
+        "entity_description": "Entitet vist med dette ikon",
+        "icon": "Ikon",
+        "icon_description": "Vælg et ikon eller indtast et brugerdefineret ikon",
+        "name": "Navn",
+        "name_description": "Brugerdefineret navn vist under ikonet (bruger entitetsnavn som standard, hvis ikke angivet)",
+        "interaction_type": "Interaktionstype",
+        "interaction_type_description": "Vælg hvordan brugere interagerer med dette ikon for at udløse handlinger",
+        "show_name": "Vis navn",
+        "show_name_description": "Vis navneteksten under ikonet",
+        "show_state": "Vis tilstand",
+        "show_state_description": "Vis entitetstilstanden under ikonet",
+        "show_units": "Vis enheder",
+        "show_units_description": "Medtag enheder når tilstanden vises",
+        "text_position": "Tekstposition",
+        "text_position_description": "Hvor navn- og tilstandsteksten er placeret i forhold til ikonet",
+        "click_action": "Klikhandling",
+        "service": "Service",
+        "service_description": "Service der skal kaldes (f.eks. light.turn_on)",
+        "service_data": "Servicedata (JSON)",
+        "service_data_description": "JSON-data sendt med servicekald",
+        "action": "Handling (JSON/Service)",
+        "action_description": "Avanceret handlingskonfiguration (se dokumentation)",
+        "navigation_path": "Navigationssti",
+        "navigation_path_description": "Sti at navigere til (f.eks. /lovelace/dashboard)",
+        "navigation_target_selector": "Navigationsmål",
+        "navigation_target_description": "Vælg fra tilgængelige dashboards, visninger eller systemsider",
+        "url": "URL",
+        "url_description": "URL der skal åbnes i en ny fane",
+        "automation_entity": "Automationsentitet",
+        "automation_entity_description": "Automation der skal udløses ved klik"
+      },
+      "icon_appearance": {
+        "header": "Ikonudseende",
+        "icon": "Ikonudseende",
+        "general": "Generelt udseende",
+        "active": "Aktiv tilstand",
+        "inactive": "Inaktiv tilstand",
+        "state_conditions": "Tilstandsbetingelser",
+        "advanced": "Avancerede indstillinger",
+        "icon_size": "Ikonstørrelse",
+        "icon_size_description": "Størrelse på ikonet i pixels",
+        "text_size": "Tekststørrelse",
+        "text_size_description": "Størrelse på navn/tilstandsteksten i pixels",
+        "name_size": "Navnestørrelse",
+        "name_size_description": "Størrelse på enhedens navnekst i pixels",
+        "text_alignment": "Tekstjustering",
+        "text_alignment_description": "Hvordan teksten er justeret under ikonet",
+        "icon_background": "Ikonbaggrund",
+        "icon_background_description": "Tilføj en baggrundsform bag ikonet",
+        "icon_background_color": "Ikonbaggrundsfarve",
+        "icon_background_color_description": "Farve på baggrunden bag ikonet",
+        "container_background_color": "Container-baggrundsfarve",
+        "container_background_color_description": "Farve på baggrunden bag hele ikoncontaineren",
+        "text_appearance": "Tekstudseende",
+        "container": {
+          "header": "Container-udseende",
+          "vertical_alignment": "Vertikal justering",
+          "vertical_alignment_description": "Justér ikonet og teksten vertikalt inden for containeren.",
+          "width": "Container-bredde",
+          "width_description": "Indstil bredden af ikoncontaineren i forhold til rækken.",
+          "background": "Container-baggrundsform",
+          "background_description": "Vælg en baggrundsform for hele ikoncontaineren."
+        },
+        "show_when_active": "Vis ikon når aktivt",
+        "show_when_active_description": "Vis kun dette ikon, når det er i en aktiv tilstand",
+        "template_mode": "Skabelontilstand",
+        "template_description": "Brug en skabelon til at bestemme aktiv/inaktiv tilstand. Skabeloner giver dig mulighed for at bruge Home Assistant skabelon-syntaks (som {{ states.sensor.temperature.state > 70 }}) for komplekse betingelser.",
+        "active_template": "Aktiv skabelon",
+        "active_template_description": "Skabelon der returnerer sand, når ikonet skal være aktivt.",
+        "active_state": "Aktiv tilstand",
+        "active_state_description": "Tilstandsstreng der repræsenterer \"aktiv\".",
+        "active_state_text": "Brugerdefineret aktiv tilstandstekst",
+        "active_state_text_description": "Tilsidesætter teksten, der vises, når ikonet er aktivt. Lad stå tomt for at bruge den faktiske tilstand.",
+        "inactive_template": "Inaktiv skabelon",
+        "inactive_template_description": "Skabelon der returnerer sand, når ikonet skal være inaktivt.",
+        "inactive_state": "Inaktiv tilstand",
+        "inactive_state_description": "Tilstandsstreng der repræsenterer \"inaktiv\".",
+        "inactive_state_text": "Brugerdefineret inaktiv tilstandstekst",
+        "inactive_state_text_description": "Tilsidesætter teksten, der vises, når ikonet er inaktivt. Lad stå tomt for at bruge den faktiske tilstand.",
+        "active_icon": "Aktivt ikon",
+        "inactive_icon": "Inaktivt ikon",
+        "active_icon_color": "Aktiv ikonfarve",
+        "inactive_icon_color": "Inaktiv ikonfarve",
+        "active_name_color": "Aktiv navnefarve",
+        "inactive_name_color": "Inaktiv navnefarve",
+        "active_state_color": "Aktiv tilstandsfarve",
+        "inactive_state_color": "Inaktiv tilstandsfarve",
+        "show_icon_active": "Vis ikon når aktivt",
+        "show_icon_active_description": "Vis ikonet, når tilstanden er aktiv.",
+        "show_icon_inactive": "Vis ikon når inaktivt",
+        "show_icon_inactive_description": "Vis ikonet, når tilstanden er inaktiv.",
+        "custom_active_state_text": "Brugerdefineret aktiv tilstandstekst",
+        "custom_inactive_state_text": "Brugerdefineret inaktiv tilstandstekst",
+        "action_description": "Handling der skal udføres, når der klikkes på ikonet.",
+        "show_name_active": "Vis navn når aktivt",
+        "show_name_active_description": "Vis navnet, når tilstanden er aktiv.",
+        "show_name_inactive": "Vis navn når inaktivt",
+        "show_name_inactive_description": "Vis navnet, når tilstanden er inaktiv.",
+        "show_state_active": "Vis tilstand når aktiv",
+        "show_state_active_description": "Vis tilstanden, når tilstanden er aktiv.",
+        "show_state_inactive": "Vis tilstand når inaktiv",
+        "show_state_inactive_description": "Vis tilstanden, når tilstanden er inaktiv.",
+        "use_entity_color_for_icon": "Brug enhedsfarve til ikonet",
+        "use_entity_color_for_icon_description": "Brug entitetens farveattribut til ikonet når tilgængeligt",
+        "use_entity_color_for_icon_background": "Brug enhedsfarve til ikonbaggrund",
+        "use_entity_color_for_icon_background_description": "Brug virksomhedens farveattribut til ikonbaggrunden, når den er tilgængelig",
+        "use_entity_color_for_container_background": "Brug enhedsfarve til container",
+        "use_entity_color_for_container_background_description": "Brug virksomhedens farveattribut til containerbaggrunden, når den er tilgængelig",
+        "dynamic_icon_template": "Dynamisk Ikon Skabelon",
+        "dynamic_icon_template_description": "Brug en skabelon til dynamisk at vælge ikonet baseret på enhedstilstande eller betingelser.",
+        "enable_dynamic_icon_template": "Aktivér Dynamisk Ikon Skabelon",
+        "dynamic_color_template": "Dynamisk Farve Skabelon",
+        "dynamic_color_template_description": "Brug en skabelon til dynamisk at indstille ikonfarven baseret på enhedstilstande eller værdier.",
+        "enable_dynamic_color_template": "Aktivér Dynamisk Farve Skabelon",
+        "size_settings": "Størrelses Indstillinger",
+        "value_size": "Værdi Størrelse",
+        "state_text_formatting": "Tilstandstekst Formatering",
+        "row_name": "Række Navn",
+        "row_name_description": "Brugerdefineret navn til denne ikonrække (lad stå tom for at bruge standard navngivning)",
+        "width_description": "Kontrollerer hvor meget af den tilgængelige bredde denne række vil bruge. Konfigurér hvordan denne række af ikoner vises. Bredde kontrollerer den samlede rækkebredde, afstand justerer mellemrum mellem ikoner, og kolonnetal bestemmer hvor mange ikoner der vises i hver række (0 = automatisk).",
+        "layout_info_title": "Sådan Fungerer Layout Indstillinger",
+        "layout_info_width": "Række Bredde: Kontrollerer hvor meget vandret plads rækken optager i kortet (procent af kort bredde)",
+        "layout_info_alignment": "Række Justering: Gælder kun når Kolonnetal er 0. Bestemmer hvordan ikoner positioneres inden for rækken",
+        "layout_info_spacing": "Ikon Afstand: Indstiller mængden af plads mellem ikoner",
+        "layout_info_columns": "Kolonnetal: Når sat til 0, flyder ikoner naturligt baseret på tilgængelig plads. Når sat til et tal, tvinger det præcise antal kolonner i et gitter layout",
+        "layout_info_tip": "Brug Kolonnetal med konsistente mængder ikoner per række for den mest ensartede layout",
+        "control_right_side_description": "Kontrollér hvornår højre side vises eller skjules baseret på enhedstilstand",
+        "dynamic_icon": {
+          "title": "Dynamisk Ikon Skabelon",
+          "description": "Brug en skabelon til dynamisk at vælge ikonet baseret på enhedstilstande eller betingelser.",
+          "enable": "Aktivér Dynamisk Ikon Skabelon",
+          "template_label": "Ikon Skabelon"
+        },
+        "dynamic_color": {
+          "title": "Dynamisk Farve Skabelon",
+          "description": "Brug en skabelon til dynamisk at indstille ikonfarven baseret på enhedstilstande eller værdier.",
+          "enable": "Aktivér Dynamisk Farve Skabelon",
+          "template_label": "Farve Skabelon"
+        }
+      },
+      "tabs": {
+        "general": "Generelt",
+        "actions": "Handlinger",
+        "appearance": "Udseende",
+        "states": "Tilstande",
+        "active_state": "Aktiv tilstand",
+        "inactive_state": "Inaktiv tilstand",
+        "icons": {
+          "arrange_icon_rows": "Arrangér Ikonrækker"
+        }
+      },
+      "alignments": {
+        "flex-start": "Venstre",
+        "center": "Centreret",
+        "flex-end": "Højre",
+        "space-between": "Mellemrum imellem",
+        "space-around": "Mellemrum omkring",
+        "space-evenly": "Mellemrum jævnt fordelt"
+      },
+      "vertical_alignments": {
+        "flex-start": "Top",
+        "center": "Midte",
+        "flex-end": "Bund"
+      },
+      "spacing": {
+        "none": "Ingen",
+        "small": "Lille",
+        "medium": "Medium",
+        "large": "Stor"
+      },
+      "text_positions": {
+        "below": "Under ikon",
+        "beside": "Ved siden af ikon",
+        "none": "Ingen tekst",
+        "top": "På toppen",
+        "left": "Til venstre",
+        "right": "Til højre"
+      },
+      "reset": {
+        "size": "Nulstil til standardstørrelse",
+        "color": "Nulstil til standardfarve",
+        "all": "Nulstil til standardværdier"
+      },
+      "click_actions": {
+        "toggle": "Skift",
+        "more-info": "Vis mere info",
+        "navigate": "Navigér til sti",
+        "url": "Åbn URL",
+        "call-service": "Kald service",
+        "perform-action": "Udfør handling",
+        "location-map": "Vis kort",
+        "assist": "Stemmeassistent",
+        "trigger": "Udløs",
+        "none": "Ingen handling",
+        "descriptions": {
+          "toggle": "Skift entitetens tilstand til og fra.",
+          "more-info": "Åbner dialogboksen med yderligere information om entiteten.",
+          "navigate": "Navigér til den angivne Lovelace-sti.",
+          "url": "Åbner den angivne URL i en ny fane.",
+          "call-service": "Kalder den angivne Home Assistant-service.",
+          "perform-action": "Udfør en brugerdefineret handling (se dokumentation).",
+          "location-map": "Vis entitetens placering på et kort.",
+          "assist": "Åbn Home Assistants stemmeassistent.",
+          "trigger": "Udløs entiteten (automation, script, knap, osv).",
+          "none": "Ingen handling vil blive udført."
+        }
+      },
+      "backgrounds": {
+        "none": "Ingen",
+        "circle": "Cirkel",
+        "square": "Firkant",
+        "rounded_square": "Afrundet firkant"
+      },
+      "container_widths": {
+        "25": "25% bredde",
+        "50": "50% bredde",
+        "75": "75% bredde",
+        "100": "100% (fuld bredde)"
+      },
+      "row_widths": {
+        "25": "25% bredde",
+        "50": "50% bredde",
+        "75": "75% bredde",
+        "100": "100% (fuld bredde)"
+      },
+      "interactions": {
+        "single": "Enkelt Tryk/Klik",
+        "double": "Dobbelt Tryk/Klik",
+        "hold": "Hold/Langt Tryk"
+      },
+      "animations": {
+        "title": "Ikon Animation",
+        "active_description": "Vælg en animation at anvende når dette ikon er i aktiv tilstand.",
+        "inactive_description": "Vælg en animation at anvende når dette ikon er i inaktiv tilstand.",
+        "select_animation": "Vælg Animation",
+        "none": "Ingen",
+        "pulse": "Puls",
+        "vibrate": "Vibrér",
+        "rotate_left": "Rotér Venstre",
+        "rotate_right": "Rotér Højre",
+        "hover": "Svæve",
+        "fade": "Tone Ud",
+        "scale": "Skalér",
+        "bounce": "Hop",
+        "shake": "Ryst",
+        "tada": "Tada"
+      },
+      "row_vertical_alignments": {
+        "top": "Top",
+        "center": "Midte",
+        "bottom": "Bund"
+      },
+      "actions": {
+        "single": "Enkelt Klik Handling",
+        "double": "Dobbelt Klik Handling",
+        "hold": "Hold Handling",
+        "single_description": "Handling udført på et enkelt tryk/klik - mest almindelige interaktion",
+        "double_description": "Handling udført på et dobbelt tryk/klik - hjælper med at forhindre utilsigtede udløsninger",
+        "hold_description": "Handling udført når der holdes nede i 500ms - ideelt til kritiske handlinger",
+        "section_header": "Interaktions Handlinger"
+      }
+    },
+    "customize": {
+      "title": "Tilpas layout",
+      "description": "Tilpas layout, bestil og tilføj sektioner til dit kort",
+      "condition_prompt": "Vælg \"Vis\" eller \"Skjul\" for at konfigurere enhedstilstand",
+      "template_mode_active": "Brug Skabelon Tilstand",
+      "layout": {
+        "title": "Layout Stil",
+        "description": "Vælg mellem enkelt eller dobbelt kolonnevisning for kortet",
+        "header": "Layout Indstillinger",
+        "descriptions_header": "Layout Beskrivelser",
+        "single_column": "Enkelt Kolonne",
+        "single_column_description": "Alle sektioner er stablet vertikalt i en enkelt kolonne - bedst til simple visninger og mobilvisninger.",
+        "double_column": "Dobbelt Kolonne",
+        "double_column_description": "Sektioner opdeles mellem to kolonner for effektiv brug af vandret plads - ideelt til bredere skærme.",
+        "top_view": "Topvisning",
+        "top_view_description": "Billede vises fremtrædende øverst med andre sektioner arrangeret i konfigurerbare positioner omkring det.",
+        "half_full": "Halv + Fuld",
+        "half_full_description": "Øverste række har to halve-bredde sektioner, nederste række har en fuld-bredde sektion - fantastisk til balancerede layouts.",
+        "full_half": "Fuld + Halv",
+        "full_half_description": "Øverste række har en fuld-bredde sektion, nederste række har to halve-bredde sektioner - perfekt til at fremhæve topindhold."
+      },
+      "layout_types": {
+        "single": "Enkelt kolonne",
+        "double": "Dobbelt kolonne",
+        "dashboard": "Dashboard",
+        "half_full": "Halv + fuld",
+        "full_half": "Fuld + halvdel"
+      },
+      "column_width": {
+        "title": "Kolonnebredde",
+        "description": "Konfigurer breddeforholdet mellem venstre og højre kolonner",
+        "50_50": "Lige (50/50)",
+        "30_70": "Smal venstre, bred højre (30/70)",
+        "70_30": "Bred venstre, smal højre (70/30)",
+        "40_60": "Lidt smallere venstre (40/60)",
+        "60_40": "Lidt bredere venstre (60/40)"
+      },
+      "top_view": {
+        "header": "Dashboardindstillinger",
+        "description": "Konfigurer afstands- og layoutindstillinger for dashboardvisning",
+        "side_margin": "Sidemargener",
+        "side_margin_help": "Margener på siderne af visningen i pixels",
+        "middle_spacing": "Midterafstand",
+        "middle_spacing_help": "Afstand mellem midterkolonner i pixels",
+        "vertical_spacing": "Lodret afstand",
+        "vertical_spacing_help": "Afstand mellem rækker i pixels"
+      },
+      "sections": {
+        "header": "Kortsektioner",
+        "arrangement_header": "Sektionsarrangement",
+        "arrangement_desc_base": "Træk og slip sektioner for at arrangere deres rækkefølge på kortet.",
+        "arrangement_desc_single_extra": "Alle sektioner vil blive vist i en enkelt kolonne.",
+        "arrangement_desc_double_extra": "I dobbeltkolonnevisning kan du placere enhver sektion i venstre eller højre kolonne.",
+        "arrangement_desc_dashboard_extra": "I dashboardvisning kan du placere sektioner omkring dit køretøjsbillede."
+      },
+      "section_labels": {
+        "title": "Titel",
+        "image": "Køretøjsbillede",
+        "info": "Køretøjsinfo",
+        "bars": "Alle sensorbjælker",
+        "icons": "Alle ikonrækker",
+        "section_break": "Afsnit Break"
+      },
+      "actions": {
+        "collapse_margins": "Skjul margener",
+        "expand_margins": "Vis margener",
+        "collapse_options": "Skjul indstillinger",
+        "expand_options": "Vis indstillinger",
+        "add_break": "Tilføj sektionsbrud",
+        "delete_break": "Slet sektionsbrud"
+      },
+      "css": {
+        "header": "Global CSS",
+        "description": "Indtast brugerdefinerede CSS-regler her for at overskrive standardkortets stil. Disse regler vil blive anvendt direkte på kortet. Brug med forsigtighed.",
+        "label": "Brugerdefineret CSS",
+        "input_description": "Indtast dine brugerdefinerede CSS-regler her."
+      },
+      "conditions": {
+        "header": "Betinget logik",
+        "description": "Vis eller skjul denne sektion baseret på en enheds tilstand.",
+        "template_mode_description": "Brug en skabelon til at bestemme sektionssynlighed. Skabeloner giver dig mulighed for at bruge Home Assistant skabelon-syntaks for komplekse betingelser.",
+        "type_label": "Betingelsestype",
+        "section_title": "Sektions Titel",
+        "enable_section_title": "Aktivér Sektions Titel",
+        "title_text": "Titel Tekst",
+        "title_size": "Titel Størrelse",
+        "title_color": "Titel Farve",
+        "enable_template_mode": "Aktivér Skabelon Tilstand",
+        "use_template_description": "Brug en skabelon til at bestemme hvornår denne sektion skal være synlig. Skabeloner giver dig mulighed for at bruge Home Assistant skabelon syntaks for komplekse betingelser.",
+        "info_row": "Info Række",
+        "entity_label": "Betingelsesenhed",
+        "state_label": "Betingelsestilstand",
+        "state_description": "Tilstandsværdien der udløser betingelsen",
+        "types": {
+          "none": "Ingen (Vis altid)",
+          "show": "Vis når...",
+          "hide": "Skjul når..."
+        }
+      },
+      "template": {
+        "description": "Brug en skabelon til at bestemme hvornår denne sektion skal være synlig. Skabeloner giver dig mulighed for at bruge Home Assistant skabelon-syntaks for komplekse betingelser.",
+        "enable": "Aktivér Skabelon Tilstand"
+      },
+      "template_mode": {
+        "header": "Skabelon Tilstand",
+        "description": "Brug en skabelon til at kontrollere hvornår dette billede vises eller skjules baseret på kompleks logik, beregninger eller flere enhedstilstande.",
+        "enable": "Aktivér Skabelon Tilstand",
+        "disabled_notice": "(Deaktiveret - Skabelon Tilstand Aktiv)",
+        "disabled_help": "Grundlæggende betingelses kontroller er deaktiveret når Skabelon Tilstand er aktiv. Skabelon Tilstand har forrang over grundlæggende betingelser.",
+        "examples": {
+          "show_when_charging": "Vis under opladning",
+          "show_when_battery_low": "Vis når batteri er lavt",
+          "multiple_conditions": "Flere betingelser",
+          "show_during_day": "Vis i dagtimerne",
+          "show_when_door_unlocked": "Vis når dør er ulåst"
+        }
+      },
+      "section_title": {
+        "header": "Sektionstitel",
+        "enable": "Aktivér Sektionstitel",
+        "text": "Titeltekst",
+        "size": "Titelstørrelse",
+        "color": "Titelfarve",
+        "bold": "Fed",
+        "italic": "Kursiv",
+        "uppercase": "Store bogstaver",
+        "strikethrough": "Gennemstreget"
+      },
+      "margins": {
+        "header": "Margener",
+        "top": "Topmargen",
+        "bottom": "Bundmargen"
+      },
+      "columns": {
+        "left": "Venstre kolonne",
+        "right": "Højre kolonne",
+        "empty": "Træk sektioner hertil"
+      },
+      "dashboard": {
+        "top": "Topsektion",
+        "top_middle": "Top-midtersektion",
+        "left_middle": "Venstre-midtersektion",
+        "middle": "Midtersektion",
+        "middle_empty": "Køretøjsbilledeområde (Anbefalet)",
+        "right_middle": "Højre-midtersektion",
+        "bottom_middle": "Bund-midtersektion",
+        "bottom": "Bundsektion"
+      },
+      "half_full": {
+        "row1_col1": "Række 1 - Venstre Kolonne",
+        "row1_col2": "Række 1 - Højre Kolonne",
+        "row2_full": "Række 2, fuld bredde (100%)"
+      },
+      "full_half": {
+        "row1_full": "Række 1, fuld bredde (100%)",
+        "row2_col1": "Række 2 - Venstre Kolonne",
+        "row2_col2": "Række 2 - Højre Kolonne"
+      },
+      "break_styles": {
+        "blank": "Blank (ingen linje)",
+        "line": "Solid linje",
+        "double_line": "Dobbelt linje",
+        "dotted": "Stiplet linje",
+        "double_dotted": "Dobbelt prikket linje",
+        "shadow": "Skygge gradient"
+      },
+      "break_style": {
+        "header": "Pause Stil",
+        "style_label": "Stil",
+        "thickness_label": "Tykkelse",
+        "width_percent_label": "Bredde (%)",
+        "color_label": "Farve"
+      }
+    },
+    "container_widths": {
+      "25": "25% bredde",
+      "50": "50% bredde",
+      "75": "75% bredde",
+      "100": "100% (fuld bredde)"
+    },
+    "row_widths": {
+      "25": "25% bredde",
+      "50": "50% bredde",
+      "75": "75% bredde",
+      "100": "100% (fuld bredde)"
+    }
+  },
+  "about": {
+    "logo_alt": "Ultra Vehicle Card",
+    "developed_by": "Udviklet af",
+    "discord_button": "Tilslut dig vores Discord",
+    "docs_button": "Se vores dokumentation",
+    "donate_button": "DONÉR (PAYPAL)",
+    "github_button": "Besøg vores Github",
+    "support_title": "Støt Ultra Vehicle Card",
+    "support_description": "Dine generøse tip brændstof Udviklingen af ​​fantastiske funktioner til dette kort! Uden støtte fra brugere som dig ville fortsat innovation ikke være mulig."
+  },
+  "custom_icons": {
+    "title": "Brugerdefinerede ikoner",
+    "description": "Definér brugerdefinerede ikoner for forskellige tilstande.",
+    "icon_entity": "Ikonenhed",
+    "default_icon": "Standardikon",
+    "state_icons": "Tilstandsikoner",
+    "state": "Tilstand",
+    "icon": "Ikon"
+  },
+  "custom_active_state_text": "Brugerdefineret aktiv tilstandstekst",
+  "custom_inactive_state_text": "Brugerdefineret inaktiv tilstandstekst",
+  "image_settings": {
+    "title": "Billedindstillinger",
+    "description": "Konfigurer udseendet af hovedbilledet.",
+    "type": "Billedtype",
+    "width": "Billedbredde",
+    "crop": "Beskær billede",
+    "entity": "Billedenhed",
+    "entity_description": "Entitet, der leverer billed-URL"
+  },
+  "entity_settings": {
+    "entity": "Enhed",
+    "entity_description": "Vælg en enhed for at få vist oplysninger fra",
+    "name": "Navn",
+    "name_description": "Tilsidesæt enhedsnavnet (lad det være tomt for at bruge enhedens venlige navn)",
+    "show_icon": "Vis ikon",
+    "icon": "Ikon",
+    "icon_color": "Ikonfarve",
+    "name_color": "Navnfarve",
+    "entity_color": "Enhedsfarve",
+    "text_color": "Enhedsfarve",
+    "show_name": "Vis navn",
+    "show_name_description": "Vis enhedsnavnet før værdien",
+    "template_mode": "Brug Skabelon til Værdi",
+    "template_mode_description": "Brug en skabelon til at formatere enhedsværdien",
+    "value_template": "Værdi skabelon",
+    "template_header": "Værdi skabelon",
+    "template_examples_header": "Skabelon-eksempler",
+    "template_basic": "Grundlæggende værdi",
+    "template_units": "Med enheder",
+    "template_round": "Runde til 1 decimal",
+    "dynamic_icon_template": "Ikon Skabelon",
+    "dynamic_color_template": "Farve Skabelon",
+    "dynamic_icon_template_mode": "Aktivér Dynamisk Ikon Skabelon",
+    "dynamic_color_template_mode": "Aktivér Dynamisk Farve Skabelon"
+  }
+}

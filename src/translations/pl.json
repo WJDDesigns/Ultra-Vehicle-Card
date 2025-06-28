@@ -1,0 +1,1078 @@
+{
+  "editor": {
+    "tabs": {
+      "settings": "Ustawienia",
+      "bars": "Paski",
+      "icons": "Ikony",
+      "customize": "Dostosuj",
+      "about": "O karcie",
+      "info": "Informacje",
+      "images": "Obrazy"
+    },
+    "info": {
+      "title": "Informacje o karcie",
+      "description": "Skonfiguruj informacje i jednostki, aby wyświetlać szczegóły pojazdu, takie jak lokalizacja, przebieg itp. INFORMACJE INFORMACJE będą wyświetlane na jednym wierszu, jeśli to możliwe, owijając się na wiele linii w wąskich pojemnikach.",
+      "add_row": "Dodaj rząd informacji",
+      "add_entity": "Dodaj jednostkę informacji",
+      "arrange_info_rows": "Umów wiersze informacyjne",
+      "duplicate_row": "Duplikuj rząd",
+      "delete_row": "Usuń rząd",
+      "expand_row": "Rozwiń rząd",
+      "collapse_row": "Zwiń rząd",
+      "duplicate_entity": "Duplikuj jednostkę",
+      "delete_entity": "Usuń jednostkę",
+      "expand_entity": "Rozwiń jednostkę",
+      "collapse_entity": "Zwiń jednostkę",
+      "row_prefix": "Rząd informacji",
+      "entity_prefix": "Jednostka",
+      "template_mode": "Tryb szablonu",
+      "template_mode_description": "Użyj szablonu, aby sformatować wartość encji. Szablony pozwalają użyć składni Assistant Assistant Templation do złożonego formatowania.",
+      "template_examples_header": "Typowe przykłady:",
+      "dynamic_icon": {
+        "title": "Dynamiczny szablon ikony",
+        "description": "Użyj szablonu, aby dynamicznie wybierać ikonę na podstawie stanów jednostek lub warunków.",
+        "enable": "Włącz dynamiczny szablon ikony"
+      },
+      "dynamic_color": {
+        "title": "Dynamiczny szablon koloru",
+        "description": "Użyj szablonu, aby dynamicznie ustawiać kolory na podstawie stanów jednostek lub wartości.",
+        "enable": "Włącz dynamiczny szablon koloru"
+      },
+      "row_settings": {
+        "header": "Ustawienia rzędu",
+        "row_name": "Nazwa rzędu",
+        "row_name_description": "Niestandardowa nazwa dla tego rzędu informacji (pozostaw puste, aby użyć domyślnego nazewnictwa)",
+        "horizontal_alignment": "Wyrównanie poziome",
+        "alignment_description": "Wyrównanie poziome jednostek w tym rzędzie",
+        "vertical_alignment": "Wyrównanie pionowe",
+        "vertical_alignment_description": "Kontroluje, jak jednostki są wyrównywane pionowo w rzędzie.",
+        "spacing": "Odstępy",
+        "spacing_description": "Odstępy między jednostkami w tym rzędzie",
+        "allow_wrap": "Pozwól na zawijanie elementów",
+        "allow_wrap_description": "Gdy włączone, elementy będą przechodzić do następnej linii, jeśli nie mieszczą się w jednym rzędzie. Gdy wyłączone, wszystkie elementy pozostaną w jednym rzędzie."
+      },
+      "entity_settings": {
+        "header": "Elementy informacyjne",
+        "name": "Niestandardowa nazwa",
+        "entity_description": "Wybierz jednostkę do wyświetlania informacji",
+        "name_description": "Nadpisz nazwę jednostki (pozostaw puste, aby użyć przyjaznej nazwy jednostki)",
+        "show_icon": "Pokaż ikonę",
+        "icon_color": "Kolor ikony",
+        "name_color": "Kolor nazwy",
+        "entity_color": "Kolor jednostki",
+        "icon_size": "Rozmiar ikony",
+        "name_size": "Rozmiar nazwy",
+        "value_size": "Rozmiar wartości",
+        "size_settings": "Ustawienia rozmiaru",
+        "show_name": "Pokaż nazwę",
+        "show_name_description": "Wyświetl nazwę jednostki przed wartością",
+        "click_action": "Akcja kliknięcia",
+        "navigation_path": "Ścieżka nawigacyjna",
+        "navigation_path_description": "Ścieżka do przejścia po kliknięciu (np. /lovelace/0)",
+        "url": "URL",
+        "url_description": "URL do otwarcia po kliknięciu",
+        "service": "Usługa",
+        "service_description": "Usługa do wywołania (np. light.turn_on)",
+        "service_data": "Dane usługi (JSON)"
+      },
+      "alignments": {
+        "flex-start": "Początek",
+        "center": "Środek",
+        "flex-end": "Koniec",
+        "space-between": "Przestrzeń między",
+        "space-around": "Przestrzeń wokół",
+        "space-evenly": "Przestrzeń równomiernie"
+      },
+      "spacing": {
+        "none": "Brak",
+        "small": "Mały",
+        "medium": "Średni",
+        "large": "Duży"
+      },
+      "click_actions": {
+        "more-info": "Więcej informacji",
+        "navigate": "Nawiguj",
+        "url": "Otwórz URL",
+        "call-service": "Wywołaj usługę",
+        "none": "Brak"
+      },
+      "row_vertical_alignments": {
+        "top": "Góra",
+        "center": "Środek",
+        "bottom": "Dół"
+      }
+    },
+    "settings_subtabs": {
+      "general": "Ogólne",
+      "action_images": "Obrazy akcji"
+    },
+    "action_images": {
+      "title": "Ustawienia Obrazów Akcji",
+      "description": "Skonfiguruj obrazy, które będą wyświetlane gdy określone stany encji zostaną spełnione.",
+      "add_image": "Dodaj Obraz Akcji",
+      "no_images": "Nie skonfigurowano jeszcze żadnych obrazów akcji. Dodaj jeden, aby rozpocząć.",
+      "actions": {
+        "drag": "Przeciągnij, aby zmienić kolejność",
+        "duplicate": "Duplikuj",
+        "delete": "Usuń",
+        "expand": "Rozwiń",
+        "collapse": "Zwiń"
+      },
+      "delete_confirm": "Czy na pewno chcesz usunąć ten obraz akcji?",
+      "entity_settings": "Ustawienia Encji",
+      "image_settings": "Ustawienia Obrazu",
+      "entity_placeholder": "Wybierz encję",
+      "state_placeholder": "Wprowadź wartość stanu",
+      "preview": {
+        "no_entity": "Nie wybrano encji",
+        "no_image": "Brak obrazu",
+        "any_state": "Dowolny stan"
+      },
+      "trigger_entity": "Encja Wyzwalająca",
+      "trigger_state": "Stan Wyzwalający",
+      "entity_help": "Wybierz encję do monitorowania. Obraz będzie pokazany, gdy ta encja pasuje do stanu poniżej.",
+      "state_help": "Wprowadź wartość stanu, która wyzwoli pokazanie tego obrazu. Pozostaw puste, aby pasować do dowolnego stanu.",
+      "image_type": {
+        "title": "Typ Obrazu",
+        "upload": "Prześlij Obraz",
+        "url": "URL Obrazu",
+        "entity": "Obraz Encji",
+        "none": "Brak"
+      },
+      "template_mode": "Tryb Szablonu",
+      "template_description": "Użyj szablonu, aby określić, kiedy ten obraz powinien być wyświetlany. Szablony pozwalają na użycie składni szablonów Home Assistant (jak {{ states.sensor.temperature.state > 70 }}) dla złożonych warunków.",
+      "template_label": "Szablon wyświetlania",
+      "template_help": "Wprowadź szablon, który zwraca prawda/fałsz. Ten obraz będzie wyświetlany, gdy szablon oceni na prawda. Użyj składni Jinja2: {{ states(...) }}",
+      "priority": {
+        "label": "Priorytet Wyświetlania",
+        "description": "Oparty na Priorytecie używa pierwszego dopasowania od góry do dołu. Najnowsze Dopasowanie używa ostatniego dopasowania znalezionego na liście.",
+        "options": {
+          "priority": "Oparty na Priorytecie",
+          "newest": "Najnowsze Dopasowanie"
+        }
+      }
+    },
+    "images": {
+      "title": "Obrazy",
+      "description": "Konfiguruj obrazy, które będą wyświetlane na podstawie warunków lub szablonów.",
+      "add_image": "Dodaj Obraz",
+      "no_images": "Jeszcze nie skonfigurowano obrazów. Dodaj jeden, aby rozpocząć.",
+      "arrange_images": "Ułóż Obrazy",
+      "name": "Nazwa (Opcjonalna)",
+      "image_type": "Typ Obrazu",
+      "url": "URL Obrazu",
+      "image_entity": "Encja Obrazu",
+      "priority": "Priorytet (0 = najwyższy)",
+      "priority_mode": "Tryb Priorytetu",
+      "timed_duration": "Czas Wyświetlania (sekundy)",
+      "timed_duration_help": "Jak długo ten obraz powinien być wyświetlany przed powrotem do obrazu głównego.",
+      "duplicate": "Duplikuj Obraz",
+      "delete": "Usuń Obraz",
+      "delete_confirm": "Czy na pewno chcesz usunąć ten obraz?",
+      "image_types": {
+        "none": "Brak",
+        "default": "Domyślny Pojazd",
+        "url": "URL Obrazu",
+        "upload": "Prześlij Obraz",
+        "entity": "Obraz Encji",
+        "map": "Mapa"
+      },
+      "priority_modes": {
+        "order": "Priorytet Kolejności",
+        "order_help": "Obrazy są wyświetlane na podstawie ich kolejności na liście (przeciągnij, aby zmienić kolejność).",
+        "last_triggered": "Ostatnio Wyzwolony",
+        "last_triggered_help": "Ostatnio wyzwolony obraz pozostanie wyświetlany do momentu wyzwolenia innego obrazu.",
+        "timed": "Obrazy Czasowe",
+        "timed_help": "Obrazy poniżej pierwszego będą pokazywane przez ustalony czas, a następnie powrócą do obrazu głównego."
+      },
+      "conditional_types": {
+        "show": "Pokaż Gdy",
+        "hide": "Ukryj Gdy"
+      },
+      "tabs": {
+        "general": "Ogólne",
+        "conditional": "Warunkowe",
+        "appearance": "Wygląd"
+      },
+      "conditional_help": "Konfiguruj, kiedy ten obraz powinien być pokazywany na podstawie stanów encji lub szablonów.",
+      "conditional_help_simple": "Konfiguruj, kiedy ten obraz powinien być pokazywany na podstawie stanów encji.",
+      "conditional_state_help": "Obraz będzie pokazywany, gdy encja będzie równa tej wartości stanu.",
+      "conditional_entity": "Encja Warunkowa",
+      "conditional_state": "Stan Warunkowy",
+      "basic_conditions": "Podstawowe Warunki",
+      "advanced_conditional": "Zaawansowane Warunki Szablonów",
+      "advanced_help": "Użyj szablonów dla złożonych warunków, takich jak wiele encji lub porównania matematyczne.",
+      "template_mode_active_help": "Użyj szablonów dla złożonych warunków, takich jak wiele encji lub porównania matematyczne.",
+      "template_mode": {
+        "header": "Tryb Szablonu",
+        "enable": "Włącz Tryb Szablonu",
+        "template": "Szablon"
+      },
+      "template_examples_header": "Typowe Przykłady:",
+      "width": "Szerokość (%)",
+      "width_settings": "Ustawienia Szerokości",
+      "crop_settings": "Ustawienia Przycinania",
+      "crop_help": "Wartości dodatnie przycinają do wewnątrz, wartości ujemne dodają wypełnienie na zewnątrz.",
+      "crop_top": "Góra",
+      "crop_right": "Prawo",
+      "crop_bottom": "Dół",
+      "crop_left": "Lewo",
+      "fallback_image": "Obraz Zastępczy",
+      "fallback_help": "Ten obraz będzie używany jako zastępczy, jeśli żadne wyzwalacze nie pasują lub wystąpi przekroczenie czasu. Tylko jeden obraz może być zastępczy.",
+      "map_entity": "Encja Lokalizacji",
+      "map_entity_help": "Wybierz encję z współrzędnymi szerokości/długości geograficznej lub adresem do wyświetlenia na mapie.",
+      "target_entity": "Encja Docelowa",
+      "target_entity_description": "Wybierz encję do ukierunkowania z tą akcją",
+      "common": {
+        "width": "Szerokość Obrazu",
+        "width_description": "Szerokość jako procent karty",
+        "width_over_100": "Wartości ponad 100% mogą pomóc w przycinaniu pustej przestrzeni wokół obrazów",
+        "url_description": "Wprowadź adres URL obrazu"
+      },
+      "vehicle": {
+        "crop": "Obraz upraw"
+      },
+      "migration": {
+        "title": "Wykryto Starsze Obrazy",
+        "description": "Znaleźliśmy starsze konfiguracje obrazów, które można przenieść do nowego formatu.",
+        "migrate_button": "Przenieś Teraz",
+        "success": "Obrazy przeniesione pomyślnie!"
+      }
+    },
+    "card_settings": {
+      "title": "Tytuł Karty",
+      "title_alignment": "Wyrównanie Tytułu",
+      "title_size": "Rozmiar Tytułu",
+      "title_color": "Kolor Tytułu",
+      "title_color_description": "Kolor tytułu karty",
+      "title_description": "Tytuł wyświetlany na górze karty (opcjonalnie)",
+      "title_alignment_description": "Jak tytuł karty jest wyrównany",
+      "title_size_description": "Rozmiar tytułu karty w pikselach",
+      "colors": "Kolory",
+      "card_background": "Tło Karty",
+      "card_background_description": "Kolor tła całej karty",
+      "format_entities": "Formatuj Wartości Encji",
+      "format_entities_description": "Włącz dodatkowe formatowanie wartości encji (dodaje przecinki, konwertuje jednostki, itp.)",
+      "show_units": "Pokaż Jednostki",
+      "show_units_description": "Pokaż jednostki obok wartości",
+      "help_highlight": "Pomoc w podkreśleniu",
+      "help_highlight_description": "Pokaż wizualne podkreślenia podczas przełączania między kartami edytora, aby pomóc w ustaleniu, która sekcja edytujesz",
+      "general": "Ogólne",
+      "conditional_logic": "Logika Warunkowa",
+      "card_visibility": "Widoczność Karty",
+      "card_visibility_description": "Pokaż lub ukryj całą kartę na podstawie warunku encji"
+    },
+    "vehicle_info": {
+      "title": "Informacje o Pojeździe",
+      "location": {
+        "title": "Encja Lokalizacji",
+        "description": "Wybierz encję pokazującą aktualną lokalizację pojazdu.",
+        "show": "Pokaż Lokalizację",
+        "show_description": "Pokaż lokalizację pojazdu"
+      },
+      "mileage": {
+        "title": "Encja Przebiegu",
+        "description": "Wybierz encję reprezentującą całkowity przebieg lub licznik pojazdu.",
+        "show": "Pokaż Przebieg",
+        "show_description": "Pokaż przebieg pojazdu"
+      },
+      "car_state": {
+        "title": "Encja Stanu Pojazdu",
+        "description": "Wybierz encję reprezentującą aktualny stan pojazdu (np. zaparkowany, jazda, ładowanie).",
+        "show": "Pokaż Stan Pojazdu",
+        "show_description": "Pokaż stan pojazdu"
+      }
+    },
+    "crop": {
+      "title": "Uprawa obrazu",
+      "top": "Szczyt",
+      "right": "Prawidłowy",
+      "bottom": "Spód",
+      "left": "Lewy",
+      "pixels": "px",
+      "help": "Wprowadź wartości w pikselach (dodatnie lub ujemne), aby dostosować uprawy i wyściółki"
+    },
+    "alignment": {
+      "left": "Lewy",
+      "center": "Centrum",
+      "right": "Prawidłowy"
+    },
+    "common": {
+      "choose_file": "Wybierz plik",
+      "no_file_chosen": "Brak wybranego pliku",
+      "entity": "Podmiot",
+      "width": "Szerokość",
+      "width_description": "Szerokość jako procent karty",
+      "width_over_100": "Wartości ponad 100% mogą pomóc w przycinaniu pustej przestrzeni wokół obrazów",
+      "none": "Nic",
+      "default": "Domyślny",
+      "upload": "Wgrywać",
+      "url": "URL",
+      "url_description": "URL wskazujący na obraz",
+      "reset": "Nastawić",
+      "condition_prompt": "Wybierz „pokaż” lub „ukryj”, aby skonfigurować warunek encji",
+      "bold": "Pogrubienie",
+      "italic": "Kursywa",
+      "uppercase": "Wielkie Litery",
+      "strikethrough": "Przekreślenie"
+    },
+    "conditions": {
+      "condition_type": "Typ Warunku",
+      "show_card_if": "Pokaż Kartę Jeśli",
+      "hide_card_if": "Ukryj Kartę Jeśli",
+      "entity_description": "Wybierz encję do sprawdzenia warunku",
+      "state": "Stan",
+      "state_description": "Wartość stanu, która wyzwala warunek"
+    },
+    "bars": {
+      "title": "Paski Procentowe",
+      "description": "Dodaj paski procentowe do wyświetlania wartości takich jak poziom paliwa, naładowanie baterii lub zasięg. Każdy pasek może pokazywać główną wartość procentową z opcjonalnymi etykietami po lewej i prawej stronie.",
+      "add": "Dodaj Nowy Pasek",
+      "duplicate": "Duplikuj Pasek",
+      "delete": "Usuń Pasek",
+      "expand": "Rozwiń Pasek",
+      "collapse": "Zwiń Pasek",
+      "no_entity": "Nie wybrano encji",
+      "bar_prefix": "Pasek",
+      "template": {
+        "description": "Użyj szablonu, aby sformatować wyświetlany tekst, konwertować jednostki lub wyświetlić obliczone wartości.",
+        "enable": "Włącz tryb szablonu",
+        "template_label": "Szablon",
+        "helper_text": "Użyj składni szablonów Home Assistant. Przykłady:\n• {{ states('sensor.temperature') | float * 1.8 + 32 }} °F\n• {{ now().strftime(\"%b %d, %H:%M\") }}",
+        "examples_header": "Typowe przykłady:",
+        "examples": {
+          "temperature": "{{ states('sensor.temperature') | float * 1.8 + 32 }}°F - Konwertuj Celsius na Fahrenheit",
+          "datetime": "{{ now().strftime(\"%b %d, %H:%M\") }} - Formatuj bieżącą datę/czas",
+          "power": "{{ 'Ładowanie przy ' + states('sensor.ev_power') + ' kW' }} - Połącz tekst i wartość czujnika"
+        }
+      },
+      "bar_radius": {
+        "round": "Zaokrąglony",
+        "square": "Kwadratowy",
+        "rounded-square": "Zaokrąglony Kwadrat"
+      },
+      "tabs": {
+        "arrange_bars": "Uporządkuj paski",
+        "config": "Konfiguracja",
+        "colors": "Kolory",
+        "animation": "Animacja"
+      },
+      "settings": {
+        "header": "Ustawienia Paska",
+        "entity": "Encja Procentowa Paska",
+        "entity_description": "Wybierz encję zwracającą wartość procentową (0-100). To kontroluje poziom wypełnienia paska.",
+        "limit_entity": "Encja Wartości Limitu (opcjonalna)",
+        "limit_entity_description": "Opcjonalnie: Dodaj pionową linię wskaźnika na pasku (np. limit ładowania dla baterii EV).",
+        "limit_color": "Kolor Wskaźnika Limitu",
+        "limit_color_description": "Kolor pionowej linii pokazującej pozycję limitu na pasku. Zmiany wymuszą aktualizację karty.",
+        "bar_size": "Rozmiar Paska",
+        "bar_size_description": "Określa grubość/wysokość paska postępu.",
+        "bar_radius": "Promień Paska",
+        "bar_radius_description": "Kształt rogów paska postępu",
+        "width": "Szerokość Paska",
+        "width_description": "Określa szerokość paska jako procent szerokości karty.",
+        "alignment": "Wyrównanie Etykiet",
+        "alignment_description": "Jak lewa i prawa etykieta są wyrównane względem siebie.",
+        "show_percentage": "Pokaż Procent",
+        "show_percentage_description": "Pokaż wartość procentową wewnątrz paska"
+      },
+      "percentage": {
+        "header": "Tekst Procentowy",
+        "display_header": "Wyświetlanie Tekstu Procentowego",
+        "display_description": "Kontroluj widoczność i wygląd wartości procentowych pokazywanych bezpośrednio na pasku. Te liczby zapewniają wyraźny wskaźnik wizualny aktualnego poziomu.",
+        "text_size": "Rozmiar Tekstu",
+        "calculation_header": "Obliczanie Procentów",
+        "calculation_description": "Skonfiguruj sposób obliczania poziomu wypełnienia procentowego paska używając jednej z poniższych opcji.",
+        "type_header": "Obliczanie Procentów",
+        "type_label": "Typ Procentów",
+        "type_description": "Jak obliczać wartość procentową pokazywaną na pasku",
+        "type_entity": "Encja (0-100)",
+        "type_attribute": "Atrybut jednostki",
+        "type_template": "Tryb szablonu",
+        "type_difference": "Różnica (Ilość/Całość)",
+        "amount_entity": "Encja Ilości",
+        "amount_description": "Encja reprezentująca aktualną ilość/wartość (licznik)",
+        "total_entity": "Encja Całości",
+        "total_description": "Encja reprezentująca całkowitą ilość/maksimum (mianownik)"
+      },
+      "left_side": {
+        "header": "Lewa Strona",
+        "section_description": "Skonfiguruj tytuł i wartość encji wyświetlane po lewej stronie paska. Jest to przydatne do pokazywania etykiet takich jak 'Zasięg' lub 'Bateria' wraz z ich wartościami.",
+        "toggle_description": "Pokaż lub ukryj lewą stronę etykiety paska",
+        "title": "Lewy Tytuł",
+        "title_description": "Opcjonalna etykieta wyświetlana po lewej stronie pod paskiem.",
+        "entity": "Lewa Encja",
+        "entity_description": "Encja, której wartość jest wyświetlana po lewej stronie paska.",
+        "alignment_description": "Kontroluje jak ta etykieta jest wyrównana pod paskiem.",
+        "title_size": "Rozmiar Tytułu",
+        "value_size": "Rozmiar Wartości",
+        "hidden_message": "Lewa strona jest ukryta"
+      },
+      "right_side": {
+        "header": "Prawa Strona",
+        "section_description": "Skonfiguruj tytuł i wartość encji wyświetlane po prawej stronie paska. Jest to idealne dla informacji uzupełniających jak 'Czas do pełnego' lub pomiarów drugorzędnych.",
+        "toggle_description": "Pokaż lub ukryj prawą stronę etykiety paska",
+        "title": "Prawy Tytuł",
+        "title_description": "Opcjonalna etykieta wyświetlana po prawej stronie pod paskiem.",
+        "entity": "Prawa Encja",
+        "entity_description": "Encja, której wartość jest wyświetlana po prawej stronie paska.",
+        "alignment_description": "Kontroluje jak ta etykieta jest wyrównana pod paskiem.",
+        "title_size": "Rozmiar Tytułu",
+        "value_size": "Rozmiar Wartości",
+        "hidden_message": "Prawa strona jest ukryta"
+      },
+      "colors": {
+        "header": "Kolory",
+        "bar_color": "Kolor Paska",
+        "background_color": "Kolor Tła",
+        "border_color": "Kolor Obramowania",
+        "limit_indicator_color": "Kolor Wskaźnika Limitu",
+        "left_title_color": "Kolor Lewego Tytułu",
+        "left_value_color": "Kolor Lewej Wartości",
+        "right_title_color": "Kolor Prawego Tytułu",
+        "right_value_color": "Kolor Prawej Wartości",
+        "percentage_text_color": "Kolor Tekstu Procentowego",
+        "reset_color": "Przywróć domyślny kolor"
+      },
+      "gradient": {
+        "header": "Tryb Gradientu",
+        "description": "Twórz piękne przejścia kolorów na paskach postępu. Idealne do pokazywania poziomów baterii, wskaźników paliwa lub dowolnych wskaźników stanu wymagających wizualnego podkreślenia.",
+        "toggle": "Użyj Gradientu",
+        "toggle_description": "Użyj gradientu dla paska postępu zamiast jednolitego koloru",
+        "display_mode": "Tryb Wyświetlania Gradientu",
+        "display_mode_full": "Pełny",
+        "display_mode_value_based": "Oparty na Wartości",
+        "display_mode_cropped": "Przycięty",
+        "display_mode_description": "Pełny: Pokaż cały gradient. Oparty na wartości: Pokaż gradient do aktualnej wartości.",
+        "editor_header": "Edytor Gradientu",
+        "add_stop": "Dodaj Punkt"
+      },
+      "animation": {
+        "header": "Animacja Akcji",
+        "description": "Dodaj animacje do paska, gdy określona encja osiągnie określony stan. Idealne do pokazywania stanów ładowania, stanów alarmu i więcej.",
+        "pro_tip": "Pro Tip: Dla animacji 'zawsze włączonych' wybierz typ animacji, ale pozostaw pola encji i stanu puste. Wypróbuj animacje 'Bąbelki' i 'Wypełnienie'!",
+        "entity": "Encja Animacji",
+        "entity_description": "Encja, która wyzwala animację, gdy pasuje do określonego stanu",
+        "state": "Stan Encji",
+        "state_description": "Gdy stan encji pasuje do tej wartości, animacja zostanie wyzwolona",
+        "type": "Typ Animacji",
+        "type_description": "Efekt animacji do wyświetlenia, gdy stan encji pasuje",
+        "select_entity_prompt": "Wybierz Encję i wprowadź stan, który ma wyzwolić animację (przykłady: \"ładowanie\", \"włączony\", \"bezczynny\")",
+        "action_entity": "Jednostka działania",
+        "action_state": "Stan akcji",
+        "action_description": "Ta animacja zastąpi regularną animację, gdy określony byt jest w określonym stanie.",
+        "action_entity_prompt": "Wybierz jednostkę akcji i stan, aby zdefiniować, kiedy ta animacja powinna zastąpić regularną animację"
+      },
+      "bar_sizes": {
+        "thin": "Cienki",
+        "regular": "Normalny",
+        "thick": "Gruby",
+        "thiccc": "Bardzo Gruby"
+      },
+      "bar_widths": {
+        "25": "25% Szerokości",
+        "50": "50% Szerokości",
+        "75": "75% Szerokości",
+        "100": "100% (Pełna Szerokość)"
+      },
+      "bar_alignments": {
+        "space-between": "Przestrzeń Między",
+        "flex-start": "Lewo",
+        "center": "Środek",
+        "flex-end": "Prawo"
+      },
+      "bar_styles": {
+        "flat": "Płaski (Domyślny)",
+        "glossy": "Błyszczący",
+        "embossed": "Wytłoczony",
+        "inset": "Wgłębiony",
+        "gradient": "Nakładka Gradientu",
+        "neon": "Neonowy Blask",
+        "outline": "Kontur",
+        "glass": "Szkło",
+        "metallic": "Metaliczny",
+        "neumorphic": "Neumorficzny"
+      },
+      "animation_types": {
+        "none": "Brak",
+        "charging-lines": "Ładowanie (Linie Ukośne)",
+        "pulse": "Pulsowanie",
+        "blinking": "Miganie",
+        "bouncing": "Podskakiwanie",
+        "glow": "Poświata",
+        "rainbow": "Tęcza",
+        "bubbles": "Bąbelki",
+        "fill": "Wypełnienie"
+      },
+      "custom_bar_settings": {
+        "title": "Niestandardowe Ustawienia Paska",
+        "description": "Zdefiniuj niestandardowe konfiguracje dla poszczególnych pasków.",
+        "name": "Nazwa Paska",
+        "entity": "Encja",
+        "unit": "Jednostka",
+        "min": "Wartość Min",
+        "max": "Wartość Max",
+        "thresholds": "Progi",
+        "severity": "Mapa Ważności"
+      },
+      "template_mode": {
+        "header": "Tryb szablonu",
+        "description": "Użyj szablonu, aby sformatować wyświetlany tekst, konwertować jednostki lub pokazać obliczone wartości.",
+        "enable": "Włącz tryb szablonu",
+        "template": "Szablon"
+      }
+    },
+    "icons": {
+      "title": "Ikony kart",
+      "description": "Dodaj wiersze ikon, aby wyświetlić wiele ikon na karcie. Każdy wiersz można skonfigurować z różnymi ustawieniami. UWAGA: Rzęby ikony i kolejność sekcji można zmienić na karcie Dostosuj.",
+      "add_row": "Dodaj wiersz ikonę",
+      "duplicate_row": "Duplikat wierszy",
+      "delete_row": "Usuń wiersz",
+      "expand_row": "Rozwiń wiersz",
+      "collapse_row": "Upadek Row",
+      "no_row": "Nie dodano rzędów ikon",
+      "row_prefix": "Wiersz",
+      "icon_prefix": "Ikona",
+      "add_icon": "Dodaj ikonę",
+      "duplicate_icon": "Duplikat ikona",
+      "delete_icon": "Usuń ikonę",
+      "template_mode": "Tryb szablonu",
+      "template_mode_active_description": "Użyj szablonu, aby ustalić, kiedy ta ikona powinna być aktywna. Szablony pozwalają użyć składni Assistant Assistant Składnia do złożonych warunków.",
+      "template_mode_inactive_description": "Użyj szablonu, aby ustalić, kiedy ta ikona powinna być nieaktywna. Szablony pozwalają użyć składni Assistant Assistant Składnia do złożonych warunków.",
+      "template_examples_header": "Typowe przykłady:",
+      "text_formatting": "Formatowanie tekstu stanu",
+      "name_formatting": "Formatowanie nazwy",
+      "dynamic_icon": {
+        "title": "Dynamiczny szablon ikony",
+        "description": "Użyj szablonu, aby dynamicznie wybierać ikonę na podstawie stanów jednostek lub warunków.",
+        "enable": "Włącz dynamiczny szablon ikony"
+      },
+      "dynamic_color": {
+        "title": "Dynamiczny szablon koloru",
+        "description": "Użyj szablonu, aby dynamicznie ustawiać kolor ikony na podstawie stanów jednostek lub wartości.",
+        "enable": "Włącz dynamiczny szablon koloru"
+      },
+      "enable_template_mode": "Włącz tryb szablonu",
+      "row_settings": {
+        "header": "Ustawienia wiersza",
+        "width": "Szerokość wiersza",
+        "width_description": "Szerokość wiersza jako procent szerokości karty",
+        "alignment": "Wyrównanie wiersza",
+        "alignment_description": "Jak ikony są wyrównane w tym rzędzie",
+        "spacing": "Odstępy ikony",
+        "spacing_description": "Ilość miejsca między ikonami w tym rzędzie",
+        "columns": "Liczba kolumn",
+        "columns_description": "Liczba równomiernie wielkości kolumn w wierszu (0 = Auto Distribution na podstawie treści)",
+        "confirmation_mode": "Tryb potwierdzenia",
+        "confirmation_mode_description": "Wymagaj dwóch kranów/kliknięć, aby aktywować ikony w tym rzędzie, zapobiegając przypadkowym interakcjom",
+        "layout_info_title": "Jak działają ustawienia układu"
+      },
+      "icon_settings": {
+        "header": "Lista ikon",
+        "entity": "Podmiot",
+        "entity_description": "Jednostka wyświetlana z tą ikoną",
+        "icon": "Ikona",
+        "icon_description": "Wybierz ikonę lub wprowadź ikonę niestandardową",
+        "name": "Nazwa",
+        "name_description": "Nazwa niestandardowa wyświetlona poniżej ikon (domyślnie używa nazwy encji, jeśli nie określono)",
+        "interaction_type": "Typ Interakcji",
+        "interaction_type_description": "Wybierz sposób interakcji użytkowników z tą ikoną w celu wyzwolenia akcji",
+        "show_name": "Pokaż nazwę",
+        "show_name_description": "Pokaż tekst nazwy poniżej ikony",
+        "show_state": "Pokaż stan",
+        "show_state_description": "Pokaż stan jednostki poniżej ikony",
+        "show_units": "Pokaż jednostki",
+        "show_units_description": "Uwzględnij jednostki podczas pokazywania stanu",
+        "text_position": "Pozycja tekstowa",
+        "text_position_description": "Gdzie nazwa i tekst stanu jest ustawiany w stosunku do ikony",
+        "click_action": "Kliknij Działanie",
+        "service": "Praca",
+        "service_description": "Usługa do wywołania (np. Light.Turn_on)",
+        "service_data": "Dane serwisowe (JSON)",
+        "service_data_description": "Dane JSON wysyłane z połączeniem serwisowym",
+        "action": "Działanie (JSON/Service)",
+        "action_description": "Zaawansowana konfiguracja akcji (patrz dokumentacja)",
+        "navigation_path": "Ścieżka nawigacyjna",
+        "navigation_path_description": "Ścieżka do przejścia do (np. /Lovelace /Dashboard)",
+        "navigation_target_selector": "Cel Nawigacji",
+        "navigation_target_description": "Wybierz spośród dostępnych paneli, widoków lub stron systemowych",
+        "url": "URL",
+        "url_description": "URL do otwarcia w nowej karcie",
+        "automation_entity": "Jednostka automatyzacji",
+        "automation_entity_description": "Automatyzacja uruchamiania po kliknięciu"
+      },
+      "icon_appearance": {
+        "header": "Wygląd ikon",
+        "icon": "Wygląd ikon",
+        "general": "Ogólny wygląd",
+        "active": "Stan aktywny",
+        "inactive": "Stan nieaktywny",
+        "state_conditions": "Warunki stanowe",
+        "advanced": "Zaawansowane ustawienia",
+        "icon_size": "Rozmiar ikony",
+        "icon_size_description": "Rozmiar ikony w pikselach",
+        "text_size": "Rozmiar tekstu",
+        "text_size_description": "Rozmiar nazwy/tekstu w pikselach",
+        "name_size": "Rozmiar nazwy",
+        "name_size_description": "Rozmiar tekstu nazwy encji w pikselach",
+        "text_alignment": "Wyrównanie tekstu",
+        "text_alignment_description": "Jak tekst jest wyrównany poniżej ikony",
+        "icon_background": "Tło ikony",
+        "icon_background_description": "Dodaj kształt tła za ikoną",
+        "icon_background_color": "Ikona Kolor tła",
+        "icon_background_color_description": "Kolor tła za ikoną",
+        "container_background_color": "Kolor tła pojemnika",
+        "container_background_color_description": "Kolor tła za całym pojemnikiem ikon",
+        "text_appearance": "Wygląd tekstu",
+        "container": {
+          "header": "Wygląd kontenera",
+          "vertical_alignment": "Wyrównanie pionowe",
+          "vertical_alignment_description": "Wyrównaj ikonę i tekst pionowo w pojemniku.",
+          "width": "Szerokość pojemnika",
+          "width_description": "Ustaw szerokość kontenera ikon w stosunku do wiersza.",
+          "background": "Kształt tła pojemnika",
+          "background_description": "Wybierz kształt tła dla całego pojemnika ikon."
+        },
+        "show_when_active": "Pokaż ikonę, gdy jest aktywna",
+        "show_when_active_description": "Pokaż tę ikonę tylko wtedy, gdy jest w stanie aktywnym",
+        "template_mode": "Tryb szablonu",
+        "template_description": "Użyj szablonu, aby określić stan aktywny/nieaktywny. Szablony pozwalają na użycie składni szablonów Home Assistant (jak {{ states.sensor.temperature.state > 70 }}) dla złożonych warunków.",
+        "active_template": "Aktywny szablon",
+        "active_template_description": "Szablon, który zwraca prawdziwie, gdy ikona powinna być aktywna.",
+        "active_state": "Stan aktywny",
+        "active_state_description": "Ciąg stanu reprezentujący „Active”.",
+        "active_state_text": "Niestandardowy tekst stanu aktywnego",
+        "active_state_text_description": "Zastępuje tekst wyświetlany, gdy ikona jest aktywna. Pozostaw pusty, aby użyć rzeczywistego stanu.",
+        "inactive_template": "Nieaktywny szablon",
+        "inactive_template_description": "Szablon, który powraca, gdy ikona powinna być nieaktywna.",
+        "inactive_state": "Stan nieaktywny",
+        "inactive_state_description": "String stanowy reprezentujący „nieaktywny”.",
+        "inactive_state_text": "Niestandardowy nieaktywny tekst stanu",
+        "inactive_state_text_description": "Zastępuje tekst wyświetlany, gdy ikona jest nieaktywna. Pozostaw pusty, aby użyć rzeczywistego stanu.",
+        "active_icon": "Aktywna ikona",
+        "inactive_icon": "Nieaktywna ikona",
+        "active_icon_color": "Aktywny kolor ikon",
+        "inactive_icon_color": "Nieaktywny kolor ikon",
+        "active_name_color": "Aktywny kolor nazwy",
+        "inactive_name_color": "Nieaktywny kolor nazwy",
+        "active_state_color": "Aktywny kolor stanu",
+        "inactive_state_color": "Nieaktywny kolor stanu",
+        "show_icon_active": "Pokaż ikonę, gdy jest aktywna",
+        "show_icon_active_description": "Wyświetl ikonę, gdy stan jest aktywny.",
+        "show_icon_inactive": "Pokaż ikonę, gdy jest nieaktywna",
+        "show_icon_inactive_description": "Wyświetl ikonę, gdy stan jest nieaktywny.",
+        "custom_active_state_text": "Niestandardowy tekst stanu aktywnego",
+        "custom_inactive_state_text": "Niestandardowy nieaktywny tekst stanu",
+        "action_description": "Działanie do wykonania po kliknięciu ikony.",
+        "show_name_active": "Pokaż nazwę, gdy jest aktywna",
+        "show_name_active_description": "Wyświetl nazwę, gdy stan jest aktywny.",
+        "show_name_inactive": "Pokaż nazwę, gdy jest nieaktywna",
+        "show_name_inactive_description": "Wyświetl nazwę, gdy stan jest nieaktywny.",
+        "show_state_active": "Pokaż stan, gdy jest aktywny",
+        "show_state_active_description": "Wyświetl stan, gdy stan jest aktywny.",
+        "show_state_inactive": "Pokaż stan, gdy jest nieaktywny",
+        "show_state_inactive_description": "Wyświetl stan, gdy stan jest nieaktywny.",
+        "use_entity_color_for_icon": "Użyj koloru encji do ikony",
+        "use_entity_color_for_icon_description": "Użyj atrybutu koloru encji dla ikony, gdy jest dostępny",
+        "use_entity_color_for_icon_background": "Użyj koloru encji dla tła ikony",
+        "use_entity_color_for_icon_background_description": "Użyj atrybutu kolorów encji dla tła ikony, jeśli jest dostępne",
+        "use_entity_color_for_container_background": "Użyj koloru encji do pojemnika",
+        "use_entity_color_for_container_background_description": "Użyj atrybutu kolorów encji dla tła kontenera, jeśli jest dostępne",
+        "dynamic_icon_template": "Dynamiczny szablon ikony",
+        "dynamic_icon_template_description": "Użyj szablonu, aby dynamicznie wybierać ikonę na podstawie stanów jednostek lub warunków.",
+        "enable_dynamic_icon_template": "Włącz dynamiczny szablon ikony",
+        "dynamic_color_template": "Dynamiczny szablon koloru",
+        "dynamic_color_template_description": "Użyj szablonu, aby dynamicznie ustawiać kolor ikony na podstawie stanów jednostek lub wartości.",
+        "enable_dynamic_color_template": "Włącz dynamiczny szablon koloru",
+        "size_settings": "Ustawienia rozmiaru",
+        "value_size": "Rozmiar wartości",
+        "state_text_formatting": "Formatowanie tekstu stanu",
+        "row_name": "Nazwa rzędu",
+        "row_name_description": "Niestandardowa nazwa dla tego rzędu ikon (pozostaw puste, aby użyć domyślnego nazewnictwa)",
+        "width_description": "Kontroluje, jak dużo dostępnej szerokości będzie używać ten rząd. Konfiguruj, jak ten rząd ikon jest wyświetlany. Szerokość kontroluje ogólną szerokość rzędu, odstępy dostosowują przerwy między ikonami, a liczba kolumn określa, ile ikon pojawia się w każdym rzędzie (0 = automatyczne).",
+        "layout_info_title": "Jak działają ustawienia układu",
+        "layout_info_width": "Szerokość rzędu: Kontroluje, ile przestrzeni poziomej zajmuje rząd w karcie (procent szerokości karty)",
+        "layout_info_alignment": "Wyrównanie rzędu: Dotyczy tylko wtedy, gdy liczba kolumn wynosi 0. Określa, jak ikony są ustawione w rzędzie",
+        "layout_info_spacing": "Odstęp ikon: Ustawia ilość przestrzeni między ikonami",
+        "layout_info_columns": "Liczba kolumn: Gdy ustawiona na 0, ikony płyną naturalnie w oparciu o dostępną przestrzeń. Gdy ustawiona na liczbę, wymusza dokładnie tę liczbę kolumn w układzie siatki",
+        "layout_info_tip": "Użyj liczby kolumn z jednakową ilością ikon na rząd dla najbardziej jednorodnego układu",
+        "control_right_side_description": "Kontroluj, kiedy prawa strona jest pokazana lub ukryta na podstawie stanu jednostki",
+        "dynamic_icon": {
+          "title": "Dynamiczny szablon ikony",
+          "description": "Użyj szablonu, aby dynamicznie wybierać ikonę na podstawie stanów jednostek lub warunków.",
+          "enable": "Włącz dynamiczny szablon ikony",
+          "template_label": "Szablon ikony"
+        },
+        "dynamic_color": {
+          "title": "Dynamiczny szablon koloru",
+          "description": "Użyj szablonu, aby dynamicznie ustawiać kolor ikony na podstawie stanów jednostek lub wartości.",
+          "enable": "Włącz dynamiczny szablon koloru",
+          "template_label": "Szablon koloru"
+        }
+      },
+      "tabs": {
+        "general": "Ogólny",
+        "actions": "Akcje",
+        "appearance": "Wygląd",
+        "states": "Państwa",
+        "active_state": "Stan aktywny",
+        "inactive_state": "Stan nieaktywny",
+        "icons": {
+          "arrange_icon_rows": "Uporządkuj rzędy ikon"
+        }
+      },
+      "alignments": {
+        "flex-start": "Lewy",
+        "center": "Centrum",
+        "flex-end": "Prawidłowy",
+        "space-between": "Przestrzeń między",
+        "space-around": "Przestrzeń wokół",
+        "space-evenly": "Przestrzeń równomiernie"
+      },
+      "vertical_alignments": {
+        "flex-start": "Szczyt",
+        "center": "Środek",
+        "flex-end": "Spód"
+      },
+      "spacing": {
+        "none": "Nic",
+        "small": "Mały",
+        "medium": "Średni",
+        "large": "Duży"
+      },
+      "text_positions": {
+        "below": "Poniżej ikony",
+        "beside": "Obok ikony",
+        "none": "Brak tekstu",
+        "top": "Na górze",
+        "left": "Po lewej",
+        "right": "Po prawej"
+      },
+      "reset": {
+        "size": "Zresetuj do domyślnego rozmiaru",
+        "color": "Resetuj do domyślnego koloru",
+        "all": "Zresetuj do wartości domyślnych"
+      },
+      "click_actions": {
+        "toggle": "Dźwignia kolankowa",
+        "more-info": "Pokaż więcej informacji",
+        "navigate": "Przejdź do ścieżki",
+        "url": "Otwarty adres URL",
+        "call-service": "Zadzwoń do usługi",
+        "perform-action": "Wykonaj akcję",
+        "location-map": "Pokaż mapę",
+        "assist": "Asystent głosowy",
+        "trigger": "Spust",
+        "none": "Brak działania",
+        "descriptions": {
+          "toggle": "Włącz i wyłącz stan jednostki.",
+          "more-info": "Otwiera więcej okna dialogowego z dodatkowymi informacjami na temat jednostki.",
+          "navigate": "Przejdź do określonej ścieżki Lovelace.",
+          "url": "Otwiera określony adres URL w nowej karcie.",
+          "call-service": "Zadzwoń do określonej służby asystenta domowego.",
+          "perform-action": "Wykonaj akcję niestandardową (patrz dokumentacja).",
+          "location-map": "Pokaż lokalizację jednostki na mapie.",
+          "assist": "Otwórz asystenta głosowego asystenta domowego.",
+          "trigger": "Uruchom jednostkę (automatyzacja, skrypt, przycisk itp.).",
+          "none": "Żadne działanie nie zostanie wykonane."
+        }
+      },
+      "backgrounds": {
+        "none": "Nic",
+        "circle": "Koło",
+        "square": "Kwadrat",
+        "rounded_square": "Zaokrąglony kwadrat"
+      },
+      "container_widths": {
+        "25": "25% szerokości",
+        "50": "50% szerokości",
+        "75": "75% szerokości",
+        "100": "100% (pełna szerokość)"
+      },
+      "row_widths": {
+        "25": "25% szerokości",
+        "50": "50% szerokości",
+        "75": "75% szerokości",
+        "100": "100% (pełna szerokość)"
+      },
+      "interactions": {
+        "single": "Pojedyncze dotknięcie/kliknięcie",
+        "double": "Podwójne dotknięcie/kliknięcie",
+        "hold": "Przytrzymanie/długie naciśnięcie"
+      },
+      "animations": {
+        "title": "Animacja ikon",
+        "active_description": "Wybierz animację, która ma być zastosowana, gdy ta ikona jest w stanie aktywnym.",
+        "inactive_description": "Wybierz animację, która ma być zastosowana, gdy ta ikona jest w stanie nieaktywnym.",
+        "select_animation": "Wybierz animację",
+        "none": "Brak",
+        "pulse": "Pulsowanie",
+        "vibrate": "Wibracja",
+        "rotate_left": "Obrót w lewo",
+        "rotate_right": "Obrót w prawo",
+        "hover": "Unoszenie",
+        "fade": "Zanikanie",
+        "scale": "Skalowanie",
+        "bounce": "Odbijanie",
+        "shake": "Trzęsienie",
+        "tada": "Tada"
+      },
+      "row_vertical_alignments": {
+        "top": "Góra",
+        "center": "Środek",
+        "bottom": "Dół"
+      },
+      "actions": {
+        "single": "Akcja pojedynczego kliknięcia",
+        "double": "Akcja podwójnego kliknięcia",
+        "hold": "Akcja przytrzymania",
+        "single_description": "Akcja wykonywana przy pojedynczym dotknięciu/kliknięciu - najbardziej popularna interakcja",
+        "double_description": "Akcja wykonywana przy podwójnym dotknięciu/kliknięciu - pomaga zapobiegać przypadkowym wyzwoleniom",
+        "hold_description": "Akcja wykonywana przy przytrzymaniu przez 500ms - idealna dla krytycznych akcji",
+        "section_header": "Akcje interakcji"
+      }
+    },
+    "customize": {
+      "title": "Dostosuj układ",
+      "description": "Dostosuj układ, zamów i dodaj sekcje do swojej karty",
+      "condition_prompt": "Wybierz „pokaż” lub „ukryj”, aby skonfigurować warunek encji",
+      "template_mode_active": "Użyj trybu szablonu",
+      "layout": {
+        "title": "Styl Układu",
+        "description": "Wybierz między układem jednokolumnowym a dwukolumnowym dla karty",
+        "header": "Ustawienia Układu",
+        "descriptions_header": "Opisy układów",
+        "single_column": "Pojedyncza kolumna",
+        "single_column_description": "Wszystkie sekcje są ułożone pionowo w jednej kolumnie - najlepsze dla prostych wyświetlaczy i widoków mobilnych.",
+        "double_column": "Podwójna kolumna",
+        "double_column_description": "Sekcje są podzielone między dwie kolumny dla efektywnego wykorzystania przestrzeni poziomej - idealne dla szerszych ekranów.",
+        "top_view": "Widok z góry",
+        "top_view_description": "Obraz jest wyraźnie wyświetlany u góry z innymi sekcjami ułożonymi w konfigurowalnych pozycjach wokół niego.",
+        "half_full": "Połowa + pełna",
+        "half_full_description": "Górny rząd ma dwie sekcje o połowie szerokości, dolny rząd ma jedną sekcję pełnej szerokości - świetne dla zrównoważonych układów.",
+        "full_half": "Pełna + połowa",
+        "full_half_description": "Górny rząd ma jedną sekcję pełnej szerokości, dolny rząd ma dwie sekcje o połowie szerokości - idealne do podkreślania górnej zawartości."
+      },
+      "layout_types": {
+        "single": "Pojedyncza Kolumna",
+        "double": "Podwójna Kolumna",
+        "dashboard": "Widok z Góry",
+        "half_full": "Połowa + pełna",
+        "full_half": "Pełna + połowa"
+      },
+      "column_width": {
+        "title": "Szerokość Kolumny",
+        "description": "Skonfiguruj stosunek szerokości między lewą a prawą kolumną",
+        "50_50": "Równe (50/50)",
+        "30_70": "Wąska lewa, szeroka prawa (30/70)",
+        "70_30": "Szeroka lewa, wąska prawa (70/30)",
+        "40_60": "Lekko wąska lewa (40/60)",
+        "60_40": "Lekko szeroka lewa (60/40)"
+      },
+      "top_view": {
+        "header": "Ustawienia Układu Widoku z Góry",
+        "description": "Skonfiguruj ustawienia odstępów i układu dla widoku z góry",
+        "side_margin": "Margines Boczny",
+        "side_margin_help": "Margines po bokach widoku w pikselach",
+        "middle_spacing": "Odstęp Środkowy",
+        "middle_spacing_help": "Odstęp między środkowymi kolumnami w pikselach",
+        "vertical_spacing": "Odstęp Pionowy",
+        "vertical_spacing_help": "Odstęp między wierszami w pikselach"
+      },
+      "sections": {
+        "header": "Sekcje Karty",
+        "arrangement_header": "Układ Sekcji",
+        "arrangement_desc_base": "Przeciągnij i upuść sekcje, aby ułożyć ich kolejność na karcie.",
+        "arrangement_desc_single_extra": "Wszystkie sekcje będą wyświetlane w pojedynczej kolumnie.",
+        "arrangement_desc_double_extra": "W układzie dwukolumnowym możesz umieścić dowolną sekcję w lewej lub prawej kolumnie.",
+        "arrangement_desc_dashboard_extra": "W widoku z góry możesz umieścić sekcje wokół obrazu pojazdu."
+      },
+      "section_labels": {
+        "title": "Tytuł",
+        "image": "Obraz Pojazdu",
+        "info": "Informacje o Pojeździe",
+        "bars": "Wszystkie Paski Czujników",
+        "icons": "Wszystkie Rzędy Ikon",
+        "section_break": "Przerwa w sekcji"
+      },
+      "actions": {
+        "collapse_margins": "Zwiń Marginesy",
+        "expand_margins": "Rozwiń Marginesy",
+        "collapse_options": "Zwiń Opcje",
+        "expand_options": "Rozwiń Opcje",
+        "add_break": "Dodaj przerwę w sekcji",
+        "delete_break": "Usuń przerwę sekcji"
+      },
+      "css": {
+        "header": "Globalny CSS",
+        "description": "Wprowadź tutaj niestandardowe reguły CSS, aby nadpisać domyślny styl karty. Te reguły będą stosowane bezpośrednio do karty. Używaj ostrożnie.",
+        "label": "Niestandardowy CSS",
+        "input_description": "Wprowadź tutaj swoje niestandardowe reguły CSS."
+      },
+      "conditions": {
+        "header": "Logika Warunkowa",
+        "description": "Pokaż lub ukryj tę sekcję w zależności od stanu encji.",
+        "template_mode_description": "Użyj szablonu, aby określić widoczność sekcji. Szablony pozwalają na użycie składni szablonów Home Assistant dla złożonych warunków.",
+        "type_label": "Typ Warunku",
+        "section_title": "Tytuł sekcji",
+        "enable_section_title": "Włącz tytuł sekcji",
+        "title_text": "Tekst tytułu",
+        "title_size": "Rozmiar tytułu",
+        "title_color": "Kolor tytułu",
+        "enable_template_mode": "Włącz tryb szablonu",
+        "use_template_description": "Użyj szablonu, aby określić, kiedy ta sekcja powinna być widoczna. Szablony pozwalają na użycie składni szablonów Home Assistant dla złożonych warunków.",
+        "info_row": "Rząd informacji",
+        "entity_label": "Encja Warunku",
+        "state_label": "Stan Warunku",
+        "state_description": "Wartość stanu, która wyzwala warunek",
+        "types": {
+          "none": "Brak (Zawsze Pokaż)",
+          "show": "Pokaż Gdy...",
+          "hide": "Ukryj Gdy..."
+        }
+      },
+      "template": {
+        "description": "Użyj szablonu, aby określić, kiedy ta sekcja powinna być widoczna. Szablony pozwalają na użycie składni szablonów Home Assistant dla złożonych warunków.",
+        "enable": "Włącz tryb szablonu"
+      },
+      "template_mode": {
+        "header": "Tryb szablonu",
+        "description": "Użyj szablonu, aby kontrolować, kiedy ten obraz jest pokazany lub ukryty na podstawie złożonej logiki, obliczeń lub wielu stanów jednostek.",
+        "enable": "Włącz tryb szablonu",
+        "disabled_notice": "(Wyłączone - tryb szablonu aktywny)",
+        "disabled_help": "Podstawowe kontrole warunków są wyłączone, gdy tryb szablonu jest aktywny. Tryb szablonu ma pierwszeństwo przed podstawowymi warunkami.",
+        "examples": {
+          "show_when_charging": "Pokaż podczas ładowania",
+          "show_when_battery_low": "Pokaż przy niskim poziomie baterii",
+          "multiple_conditions": "Wiele warunków",
+          "show_during_day": "Pokaż w godzinach dziennych",
+          "show_when_door_unlocked": "Pokaż, gdy drzwi są odblokowane"
+        }
+      },
+      "section_title": {
+        "header": "Tytuł sekcji",
+        "enable": "Włącz tytuł sekcji",
+        "text": "Tekst tytułu",
+        "size": "Rozmiar tytułu",
+        "color": "Kolor tytułu",
+        "bold": "Pogrubiony",
+        "italic": "Kursywa",
+        "uppercase": "Wielkie litery",
+        "strikethrough": "Przekreślenie"
+      },
+      "margins": {
+        "header": "Marginesy",
+        "top": "Margines Górny",
+        "bottom": "Margines Dolny"
+      },
+      "columns": {
+        "left": "Lewa Kolumna",
+        "right": "Prawa Kolumna",
+        "empty": "Upuść sekcje tutaj"
+      },
+      "dashboard": {
+        "top": "Sekcja Górna",
+        "top_middle": "Sekcja Górna Środkowa",
+        "left_middle": "Sekcja Lewa Środkowa",
+        "middle": "Sekcja Środkowa",
+        "middle_empty": "Obszar Obrazu Pojazdu (Zalecane)",
+        "right_middle": "Sekcja Prawa Środkowa",
+        "bottom_middle": "Sekcja Dolna Środkowa",
+        "bottom": "Sekcja Dolna"
+      },
+      "half_full": {
+        "row1_col1": "Rząd 1 - Lewa Kolumna",
+        "row1_col2": "Rząd 1 - Prawa Kolumna",
+        "row2_full": "Rząd 2, pełna szerokość (100%)"
+      },
+      "full_half": {
+        "row1_full": "Rząd 1, pełna szerokość (100%)",
+        "row2_col1": "Rząd 2 - Lewa Kolumna",
+        "row2_col2": "Rząd 2 - Prawa Kolumna"
+      },
+      "break_styles": {
+        "blank": "Puste (bez linii)",
+        "line": "Linia stała",
+        "double_line": "Podwójna linia",
+        "dotted": "Linia kropkowana",
+        "double_dotted": "Podwójna linia kropkowana",
+        "shadow": "Gradient cienia"
+      },
+      "break_style": {
+        "header": "Styl przerwy",
+        "style_label": "Styl",
+        "thickness_label": "Grubość",
+        "width_percent_label": "Szerokość (%)",
+        "color_label": "Kolor"
+      }
+    },
+    "container_widths": {
+      "25": "25% szerokości",
+      "50": "50% szerokości",
+      "75": "75% szerokości",
+      "100": "100% (pełna szerokość)"
+    },
+    "row_widths": {
+      "25": "25% szerokości",
+      "50": "50% szerokości",
+      "75": "75% szerokości",
+      "100": "100% (pełna szerokość)"
+    }
+  },
+  "about": {
+    "logo_alt": "Ultra Vehicle Card",
+    "developed_by": "Opracowane przez",
+    "discord_button": "Dołącz do naszego Discorda",
+    "docs_button": "Zobacz naszą dokumentację",
+    "donate_button": "WESPRZYJ (PAYPAL)",
+    "github_button": "Odwiedź naszego Githuba",
+    "support_title": "Wesprzyj Ultra Vehicle Card",
+    "support_description": "Twoje obfite wskazówki napędzają rozwój niesamowitych funkcji tej karty! Bez wsparcia użytkowników takich jak Ty ciąg dalsze innowacje nie byłyby możliwe."
+  },
+  "custom_icons": {
+    "title": "Niestandardowe Ikony",
+    "description": "Zdefiniuj niestandardowe ikony dla różnych stanów.",
+    "icon_entity": "Encja Ikony",
+    "default_icon": "Domyślna Ikona",
+    "state_icons": "Ikony Stanów",
+    "state": "Stan",
+    "icon": "Ikona"
+  },
+  "custom_active_state_text": "Niestandardowy Tekst Stanu Aktywnego",
+  "custom_inactive_state_text": "Niestandardowy Tekst Stanu Nieaktywnego",
+  "image_settings": {
+    "title": "Ustawienia Obrazu",
+    "description": "Skonfiguruj wygląd głównego obrazu.",
+    "type": "Typ Obrazu",
+    "width": "Szerokość Obrazu",
+    "crop": "Przytnij Obraz",
+    "entity": "Encja Obrazu",
+    "entity_description": "Encja dostarczająca URL obrazu"
+  },
+  "entity_settings": {
+    "entity": "Podmiot",
+    "entity_description": "Wybierz jednostkę do wyświetlania informacji z",
+    "name": "Name",
+    "name_description": "Zastąp nazwę encji (pozostaw puste, aby użyć przyjaznej nazwy encji)",
+    "show_icon": "Pokaż ikonę",
+    "icon": "Ikona",
+    "icon_color": "Kolor ikony",
+    "name_color": "Kolor nazwy",
+    "entity_color": "Kolor bytu",
+    "text_color": "Kolor tekstu",
+    "show_name": "Pokaż nazwę",
+    "show_name_description": "Wyświetl nazwę encji przed wartością",
+    "template_mode": "Użyj Szablonu dla Wartości",
+    "template_mode_description": "Użyj szablonu, aby sformatować wartość encji",
+    "value_template": "Szablon wartości",
+    "template_header": "Szablon wartości",
+    "template_examples_header": "Przykłady Szablonów",
+    "template_basic": "Wartość podstawowa",
+    "template_units": "Z jednostkami",
+    "template_round": "Okrągłe do 1 dziesiętnego",
+    "dynamic_icon_template": "Szablon ikony",
+    "dynamic_color_template": "Szablon koloru",
+    "dynamic_icon_template_mode": "Włącz dynamiczny szablon ikony",
+    "dynamic_color_template_mode": "Włącz dynamiczny szablon koloru"
+  }
+}

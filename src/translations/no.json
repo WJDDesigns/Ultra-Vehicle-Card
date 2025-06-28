@@ -1,0 +1,1078 @@
+{
+  "editor": {
+    "tabs": {
+      "settings": "Innstillinger",
+      "bars": "Søyler",
+      "icons": "Ikoner",
+      "customize": "Tilpass",
+      "about": "Om",
+      "info": "Info",
+      "images": "Bilder"
+    },
+    "info": {
+      "title": "Kortinformasjon",
+      "description": "Konfigurer informasjonsrader og enheter for å vise kjøretøydetaljer som plassering, kjørelengde, etc. Info -elementer vises på en enkelt linje når det er mulig, og pakker til flere linjer i smale containere.",
+      "add_row": "Legg til inforad",
+      "add_entity": "Legg til infoenhet",
+      "arrange_info_rows": "Arranger info rader",
+      "duplicate_row": "Dupliser rad",
+      "delete_row": "Slett rad",
+      "expand_row": "Utvid rad",
+      "collapse_row": "Kollaps rad",
+      "duplicate_entity": "Dupliser enhet",
+      "delete_entity": "Slett enhet",
+      "expand_entity": "Utvid enhet",
+      "collapse_entity": "Kollaps enhet",
+      "row_prefix": "Inforad",
+      "entity_prefix": "Enhet",
+      "template_mode": "Malmodus",
+      "template_mode_description": "Bruk en mal for å formatere enhetsverdien. Maler lar deg bruke syntaks for hjemmeassistent for kompleks formatering.",
+      "template_examples_header": "Vanlige eksempler:",
+      "dynamic_icon": {
+        "title": "Dynamisk ikonmal",
+        "description": "Bruk en mal for å dynamisk velge ikonet basert på enhetstilstander eller betingelser.",
+        "enable": "Aktiver dynamisk ikonmal"
+      },
+      "dynamic_color": {
+        "title": "Dynamisk fargemal",
+        "description": "Bruk en mal for å dynamisk sette farger basert på enhetstilstander eller verdier.",
+        "enable": "Aktiver dynamisk fargemal"
+      },
+      "row_settings": {
+        "header": "Radinnstillinger",
+        "row_name": "Radnavn",
+        "row_name_description": "Tilpasset navn for denne inforaden (la stå tom for å bruke standard navn)",
+        "horizontal_alignment": "Horisontal justering",
+        "alignment_description": "Horisontal justering av enheter i denne raden",
+        "vertical_alignment": "Vertikal justering",
+        "vertical_alignment_description": "Kontrollerer hvordan enheter er justert vertikalt i raden.",
+        "spacing": "Avstand",
+        "spacing_description": "Avstand mellom enheter i denne raden",
+        "allow_wrap": "Tillat elementer å bryte",
+        "allow_wrap_description": "Når aktivert vil elementer flyte til neste linje hvis de ikke passer i en rad. Når deaktivert vil alle elementer holde seg i en enkelt rad."
+      },
+      "entity_settings": {
+        "header": "Infoelementer",
+        "name": "Tilpasset navn",
+        "entity_description": "Velg en enhet å vise informasjon fra",
+        "name_description": "Overstyr enhetsnavnet (la stå tom for å bruke enhetens vennlige navn)",
+        "show_icon": "Vis ikon",
+        "icon_color": "Ikonfarge",
+        "name_color": "Navnfarge",
+        "entity_color": "Enhetsfarge",
+        "icon_size": "Ikonstørrelse",
+        "name_size": "Navnstørrelse",
+        "value_size": "Verdistørrelse",
+        "size_settings": "Størrelseinnstillinger",
+        "show_name": "Vis navn",
+        "show_name_description": "Vis enhetsnavnet før verdien",
+        "click_action": "Klikkshandling",
+        "navigation_path": "Navigasjonsbane",
+        "navigation_path_description": "Bane å navigere til når klikket (f.eks. /lovelace/0)",
+        "url": "URL",
+        "url_description": "URL å åpne når klikket",
+        "service": "Tjeneste",
+        "service_description": "Tjeneste å kalle (f.eks. light.turn_on)",
+        "service_data": "Tjenestedata (JSON)"
+      },
+      "alignments": {
+        "flex-start": "Start",
+        "center": "Senter",
+        "flex-end": "Slutt",
+        "space-between": "Plass mellom",
+        "space-around": "Plass rundt",
+        "space-evenly": "Jevnt fordelt plass"
+      },
+      "spacing": {
+        "none": "Ingen",
+        "small": "Liten",
+        "medium": "Medium",
+        "large": "Stor"
+      },
+      "click_actions": {
+        "more-info": "Mer info",
+        "navigate": "Naviger",
+        "url": "Åpne URL",
+        "call-service": "Kall tjeneste",
+        "none": "Ingen"
+      },
+      "row_vertical_alignments": {
+        "top": "Topp",
+        "center": "Senter",
+        "bottom": "Bunn"
+      }
+    },
+    "settings_subtabs": {
+      "general": "Generelt",
+      "action_images": "Handlingsbilder"
+    },
+    "action_images": {
+      "title": "Handlingsbilder Innstillinger",
+      "description": "Konfigurer bilder som skal vises når spesifikke enhetstilstander er oppfylt.",
+      "add_image": "Legg til Handlingsbilde",
+      "no_images": "Ingen handlingsbilder er konfigurert ennå. Legg til ett for å komme i gang.",
+      "actions": {
+        "drag": "Dra for å endre rekkefølge",
+        "duplicate": "Dupliser",
+        "delete": "Slett",
+        "expand": "Utvid",
+        "collapse": "Skjul"
+      },
+      "delete_confirm": "Er du sikker på at du vil slette dette handlingsbildet?",
+      "entity_settings": "Enhetsinnstillinger",
+      "image_settings": "Bildeinnstillinger",
+      "entity_placeholder": "Velg en enhet",
+      "state_placeholder": "Angi tilstandsverdi",
+      "preview": {
+        "no_entity": "Ingen enhet valgt",
+        "no_image": "Ingen bilde",
+        "any_state": "Enhver tilstand"
+      },
+      "trigger_entity": "Utløser Enhet",
+      "trigger_state": "Utløser Tilstand",
+      "entity_help": "Velg en enhet å overvåke. Bildet vil vises når denne enheten matcher tilstanden nedenfor.",
+      "state_help": "Angi tilstandsverdien som vil utløse dette bildet. La stå tom for å matche enhver tilstand.",
+      "image_type": {
+        "title": "Bildetype",
+        "upload": "Last opp Bilde",
+        "url": "Bilde URL",
+        "entity": "Enhetsbilde",
+        "none": "Ingen"
+      },
+      "template_mode": "Malmodus",
+      "template_description": "Bruk en mal for å bestemme når dette bildet skal vises. Maler lar deg bruke Home Assistant-malsyntaks (som {{ states.sensor.temperature.state > 70 }}) for komplekse betingelser.",
+      "template_label": "Visningsmal",
+      "template_help": "Skriv inn en mal som returnerer true/false. Dette bildet vil vises når malen evalueres til true. Bruk Jinja2-syntaks: {{ states(...) }}",
+      "priority": {
+        "label": "Visningsprioritet",
+        "description": "Prioritetsbasert bruker det første treffet fra topp til bunn. Nyeste Treff bruker det siste treffet funnet i listen.",
+        "options": {
+          "priority": "Prioritetsbasert",
+          "newest": "Nyeste Treff"
+        }
+      }
+    },
+    "images": {
+      "title": "Bilder",
+      "description": "Konfigurer bilder som vil vises basert på betingelser eller maler.",
+      "add_image": "Legg til Bilde",
+      "no_images": "Ingen bilder konfigurert ennå. Legg til ett for å komme i gang.",
+      "arrange_images": "Organiser Bilder",
+      "name": "Navn (Valgfritt)",
+      "image_type": "Bildetype",
+      "url": "Bilde URL",
+      "image_entity": "Bilde Enhet",
+      "priority": "Prioritet (0 = høyest)",
+      "priority_mode": "Prioritetsmodus",
+      "timed_duration": "Visningstid (sekunder)",
+      "timed_duration_help": "Hvor lenge dette bildet skal vises før det går tilbake til hovedbildet.",
+      "duplicate": "Dupliser Bilde",
+      "delete": "Slett Bilde",
+      "delete_confirm": "Er du sikker på at du vil slette dette bildet?",
+      "image_types": {
+        "none": "Ingen",
+        "default": "Standard Kjøretøy",
+        "url": "Bilde URL",
+        "upload": "Last opp Bilde",
+        "entity": "Enhet Bilde",
+        "map": "Kart"
+      },
+      "priority_modes": {
+        "order": "Rekkefølge Prioritet",
+        "order_help": "Bilder vises basert på deres rekkefølge i listen (dra for å omorganisere).",
+        "last_triggered": "Sist Utløst",
+        "last_triggered_help": "Det sist utløste bildet vil forbli vist inntil et annet bilde utløses.",
+        "timed": "Tidsstyrte Bilder",
+        "timed_help": "Bilder under det første vil vises i en angitt varighet og deretter gå tilbake til hovedbildet."
+      },
+      "conditional_types": {
+        "show": "Vis Når",
+        "hide": "Skjul Når"
+      },
+      "tabs": {
+        "general": "Generelt",
+        "conditional": "Betinget",
+        "appearance": "Utseende"
+      },
+      "conditional_help": "Konfigurer når dette bildet skal vises basert på enhetstilstander eller maler.",
+      "conditional_help_simple": "Konfigurer når dette bildet skal vises basert på enhetstilstander.",
+      "conditional_state_help": "Bildet vil vises når enheten er lik denne tilstandsverdien.",
+      "conditional_entity": "Betinget Enhet",
+      "conditional_state": "Betinget Tilstand",
+      "basic_conditions": "Grunnleggende Betingelser",
+      "advanced_conditional": "Avanserte Mal Betingelser",
+      "advanced_help": "Bruk maler for komplekse betingelser som flere enheter eller matematiske sammenligninger.",
+      "template_mode_active_help": "Bruk maler for komplekse betingelser som flere enheter eller matematiske sammenligninger.",
+      "template_mode": {
+        "header": "Malmodus",
+        "enable": "Aktiver Malmodus",
+        "template": "Mal"
+      },
+      "template_examples_header": "Vanlige Eksempler:",
+      "width": "Bredde (%)",
+      "width_settings": "Bredde Innstillinger",
+      "crop_settings": "Beskjæring Innstillinger",
+      "crop_help": "Positive verdier beskjærer innover, negative verdier legger til utfylling utover.",
+      "crop_top": "Topp",
+      "crop_right": "Høyre",
+      "crop_bottom": "Bunn",
+      "crop_left": "Venstre",
+      "fallback_image": "Reserve Bilde",
+      "fallback_help": "Dette bildet vil brukes som reserve hvis ingen utløsere matcher eller timeout skjer. Bare ett bilde kan være en reserve.",
+      "map_entity": "Posisjon Enhet",
+      "map_entity_help": "Velg en enhet med breddegrad/lengdegrad koordinater eller adresse å vise på kartet.",
+      "target_entity": "Mål Enhet",
+      "target_entity_description": "Velg enheten å målrette med denne handlingen",
+      "common": {
+        "width": "Image Width",
+        "width_description": "Bredde i prosent av kortet",
+        "width_over_100": "Verdier over 100% kan bidra til å beskjære tomt plass rundt bilder",
+        "url_description": "Angi bildets URL"
+      },
+      "vehicle": {
+        "crop": "Beskjær Bilde"
+      },
+      "migration": {
+        "title": "Gamle Bilder Oppdaget",
+        "description": "Vi fant gamle bildekonfigurasjoner som kan migreres til det nye formatet.",
+        "migrate_button": "Migrer Nå",
+        "success": "Bilder migrert vellykket!"
+      }
+    },
+    "card_settings": {
+      "title": "Korttittel",
+      "title_alignment": "Titteljustering",
+      "title_size": "Tittelstørrelse",
+      "title_color": "Tittel Farge",
+      "title_color_description": "Farge på korttittelen",
+      "title_description": "Tittelen vises øverst på kortet (valgfritt)",
+      "title_alignment_description": "Hvordan korttittelen er justert",
+      "title_size_description": "Størrelse på korttittelen i piksler",
+      "colors": "Farger",
+      "card_background": "Kort Bakgrunn",
+      "card_background_description": "Bakgrunnsfarge for hele kortet",
+      "format_entities": "Format for enhetsverdier",
+      "format_entities_description": "Aktiver ytterligere formatering av enhetsverdier (legger til komma, konverterer enheter osv.)",
+      "show_units": "Vis enheter",
+      "show_units_description": "Vis enheter ved siden av verdier",
+      "help_highlight": "Hjelp med å fremheve",
+      "help_highlight_description": "Vis visuelle høydepunkter når du bytter mellom redigeringsfaner for å identifisere hvilken seksjon du redigerer",
+      "general": "Generelt",
+      "conditional_logic": "Betinget Logikk",
+      "card_visibility": "Kort Synlighet",
+      "card_visibility_description": "Vis eller skjul hele kortet basert på en enhetsbetingelse"
+    },
+    "vehicle_info": {
+      "title": "Kjøretøyinformasjon",
+      "location": {
+        "title": "Posisjonsenhet",
+        "description": "Velg enheten som viser kjøretøyets nåværende posisjon.",
+        "show": "Vis Posisjon",
+        "show_description": "Vis kjøretøyets posisjon"
+      },
+      "mileage": {
+        "title": "Kilometerstand Enhet",
+        "description": "Velg enheten som representerer total kilometerstand eller kjøretøyets odometer.",
+        "show": "Vis Kilometerstand",
+        "show_description": "Vis kjøretøyets kilometerstand"
+      },
+      "car_state": {
+        "title": "Kjøretøytilstand Enhet",
+        "description": "Velg enheten som representerer kjøretøyets nåværende tilstand (f.eks. parkert, kjører, lader).",
+        "show": "Vis Kjøretøytilstand",
+        "show_description": "Vis kjøretøyets tilstand"
+      }
+    },
+    "crop": {
+      "title": "Bildebeskjæring",
+      "top": "Topp",
+      "right": "Høyre",
+      "bottom": "Bunn",
+      "left": "Venstre",
+      "pixels": "PX",
+      "help": "Angi verdier i piksler (positive eller negative) for å justere beskjæring og padding"
+    },
+    "alignment": {
+      "left": "Venstre",
+      "center": "Senter",
+      "right": "Høyre"
+    },
+    "common": {
+      "choose_file": "Velg Fil",
+      "no_file_chosen": "Ingen fil valgt",
+      "entity": "Enhet",
+      "width": "Bredde",
+      "width_description": "Bredde som prosent av kortet",
+      "width_over_100": "Verdier over 100% kan bidra til å beskjære tomt plass rundt bilder",
+      "none": "Ingen",
+      "default": "Standard",
+      "upload": "Last opp",
+      "url": "URL",
+      "url_description": "URL som peker til bildet",
+      "reset": "Tilbakestill",
+      "condition_prompt": "Velg \"Vis\" eller \"Skjul\" for å konfigurere enhetstilstand",
+      "bold": "Fet",
+      "italic": "Kursiv",
+      "uppercase": "Store Bokstaver",
+      "strikethrough": "Gjennomstreket"
+    },
+    "conditions": {
+      "condition_type": "Betingelsestype",
+      "show_card_if": "Vis Kort Hvis",
+      "hide_card_if": "Skjul Kort Hvis",
+      "entity_description": "Velg enheten å sjekke for betingelsen",
+      "state": "Tilstand",
+      "state_description": "Tilstandsverdien som utløser betingelsen"
+    },
+    "bars": {
+      "title": "Prosentvis Søyler",
+      "description": "Legg til prosentvise søyler for å vise verdier som drivstoffnivå, batterilading eller rekkevidde. Hver søyle kan vise en hovedprosentverdi med valgfrie etiketter på venstre og høyre side.",
+      "add": "Legg til Ny Søyle",
+      "duplicate": "Dupliser Søyle",
+      "delete": "Slett Søyle",
+      "expand": "Utvid Søyle",
+      "collapse": "Skjul Søyle",
+      "no_entity": "Ingen enhet valgt",
+      "bar_prefix": "Søyle",
+      "template": {
+        "description": "Bruk en mal for å formatere den viste teksten, konvertere enheter eller vise beregnede verdier.",
+        "enable": "Aktiver malmodus",
+        "template_label": "Mal",
+        "helper_text": "Bruk Home Assistant-malsyntaks. Eksempler:\n• {{ states('sensor.temperature') | float * 1.8 + 32 }} °F\n• {{ now().strftime(\"%b %d, %H:%M\") }}",
+        "examples_header": "Vanlige eksempler:",
+        "examples": {
+          "temperature": "{{ states('sensor.temperature') | float * 1.8 + 32 }}°F - Konverter Celsius til Fahrenheit",
+          "datetime": "{{ now().strftime(\"%b %d, %H:%M\") }} - Formater gjeldende dato/tid",
+          "power": "{{ 'Lader på ' + states('sensor.ev_power') + ' kW' }} - Kombiner tekst og sensorverdi"
+        }
+      },
+      "bar_radius": {
+        "round": "Rund",
+        "square": "Firkantet",
+        "rounded-square": "Avrundet Firkantet"
+      },
+      "tabs": {
+        "arrange_bars": "Arrange Bars",
+        "config": "Konfigurasjon",
+        "colors": "Farger",
+        "animation": "Animasjon"
+      },
+      "settings": {
+        "header": "Søyleinnstillinger",
+        "entity": "Søyle Prosentenhet",
+        "entity_description": "Velg en enhet som returnerer en prosentverdi (0-100). Dette styrer søylens fyllingsnivå.",
+        "limit_entity": "Grenseverdi Enhet (valgfritt)",
+        "limit_entity_description": "Valgfritt: Legg til en vertikal indikatorlinje på søylen (f.eks. ladelimit for EV-batteri).",
+        "limit_color": "Grenseindikator Farge",
+        "limit_color_description": "Farge på den vertikale linjen som viser grenseposisjonen på søylen. Endringer vil tvinge en kortoppdatering.",
+        "bar_size": "Søylestørrelse",
+        "bar_size_description": "Definerer tykkelsen/høyden på fremdriftssøylen.",
+        "bar_radius": "Søyleradius",
+        "bar_radius_description": "Form på fremdriftssøylens hjørner",
+        "width": "Søylebredde",
+        "width_description": "Definerer bredden på søylen som en prosentandel av kortbredden.",
+        "alignment": "Etikettjustering",
+        "alignment_description": "Hvordan venstre og høyre etiketter justeres i forhold til hverandre.",
+        "show_percentage": "Vis Prosent",
+        "show_percentage_description": "Vis prosentverdien inne i søylen"
+      },
+      "percentage": {
+        "header": "Prosenttekst",
+        "display_header": "Prosenttekst Visning",
+        "display_description": "Kontroller synligheten og utseendet til prosentverdier som vises direkte på søylen. Disse tallene gir en klar visuell indikator på gjeldende nivå.",
+        "text_size": "Tekststørrelse",
+        "calculation_header": "Prosentberegning",
+        "calculation_description": "Konfigurer hvordan søylens prosentfylling beregnes ved hjelp av ett av alternativene nedenfor.",
+        "type_header": "Prosentberegning",
+        "type_label": "Prosenttype",
+        "type_description": "Hvordan beregne prosentverdien som vises i søylen",
+        "type_entity": "Enhet (0-100)",
+        "type_attribute": "Entity Attribute",
+        "type_template": "Malmodus",
+        "type_difference": "Differanse (Mengde/Total)",
+        "amount_entity": "Mengdeenhet",
+        "amount_description": "Enhet som representerer gjeldende mengde/verdi (teller)",
+        "total_entity": "Totalenhet",
+        "total_description": "Enhet som representerer total mengde/maksimum (nevner)"
+      },
+      "left_side": {
+        "header": "Venstre side",
+        "section_description": "Konfigurer tittelen og enhetsverdien som vises på venstre side av linjen. Dette er nyttig for å vise etiketter som 'rekkevidde' eller 'batteri' sammen med verdiene deres.",
+        "toggle_description": "Vis eller skjul venstre side av baretiketten",
+        "title": "Venstre tittel",
+        "title_description": "Valgfritt etikett som vises på venstre side under stangen.",
+        "entity": "Venstre enhet",
+        "entity_description": "Enhet hvis verdi vises på venstre side av stangen.",
+        "alignment_description": "Kontrollerer hvordan denne etiketten er på linje under linjen.",
+        "title_size": "Tittelstørrelse",
+        "value_size": "Verdistørrelse",
+        "hidden_message": "Venstre side er skjult"
+      },
+      "right_side": {
+        "header": "Høyre side",
+        "section_description": "Konfigurer tittelen og enhetsverdien som vises på høyre side av linjen. Dette er ideelt for utfyllende informasjon som 'tid til full' eller sekundære målinger.",
+        "toggle_description": "Vis eller skjul høyre side av baretiketten",
+        "title": "Høyre tittel",
+        "title_description": "Valgfritt etikett som vises på høyre side under stangen.",
+        "entity": "Riktig enhet",
+        "entity_description": "Enhet hvis verdi vises på høyre side av linjen.",
+        "alignment_description": "Kontrollerer hvordan denne etiketten er på linje under linjen.",
+        "title_size": "Tittelstørrelse",
+        "value_size": "Verdistørrelse",
+        "hidden_message": "Høyre side er skjult"
+      },
+      "colors": {
+        "header": "Farger",
+        "bar_color": "Søylefarge",
+        "background_color": "Bakgrunnsfarge",
+        "border_color": "Kantfarge",
+        "limit_indicator_color": "Grenseindikator Farge",
+        "left_title_color": "Venstre Tittelfarge",
+        "left_value_color": "Venstre Verdifarge",
+        "right_title_color": "Høyre Tittelfarge",
+        "right_value_color": "Høyre Verdifarge",
+        "percentage_text_color": "Prosenttekst Farge",
+        "reset_color": "Tilbakestill til standardfarge"
+      },
+      "gradient": {
+        "header": "Gradientmodus",
+        "description": "Lag vakre fargeoverganger på tvers av fremdriftsstengene dine. Ideell for å vise batterinivå, drivstoffmålere eller statusindikator som krever visuell vektlegging.",
+        "toggle": "Bruk gradient",
+        "toggle_description": "Bruk en gradient for fremdriftslinjen i stedet for en fargfarge",
+        "display_mode": "Gradient displaymodus",
+        "display_mode_full": "Full",
+        "display_mode_value_based": "Verdibasert",
+        "display_mode_cropped": "Beskåret",
+        "display_mode_description": "Full: Vis hele gradienten. Verdibasert: Vis gradienten opp til gjeldende verdi.",
+        "editor_header": "Gradientredaktør",
+        "add_stop": "Legg til stopp"
+      },
+      "animation": {
+        "header": "Handlingsanimasjon",
+        "description": "Legg til animasjoner til søylen når en spesifikk enhet når en spesifikk tilstand. Perfekt for å vise ladetilstander, alarmtilstander og mer.",
+        "pro_tip": "Pro Tips: For 'alltid på' animasjoner, velg en animasjonstype men la enhets- og tilstandsfeltene være tomme. Prøv 'Bobler' og 'Fyll' animasjonene!",
+        "entity": "Animasjonsenhet",
+        "entity_description": "Enhet som utløser animasjonen når den matcher den spesifiserte tilstanden",
+        "state": "Enhetstilstand",
+        "state_description": "Når enhetstilstanden matcher denne verdien, vil animasjonen bli utløst",
+        "type": "Animasjonstype",
+        "type_description": "Animasjonseffekten som skal vises når enhetstilstanden matcher",
+        "select_entity_prompt": "Velg en Enhet og angi tilstanden du vil utløse animasjonen (eksempler: \"lader\", \"på\", \"inaktiv\")",
+        "action_entity": "Handlingsenhet",
+        "action_state": "Handlingsstatus",
+        "action_description": "Denne animasjonen vil overstyre den vanlige animasjonen når den spesifiserte enheten er i en spesifikk tilstand.",
+        "action_entity_prompt": "Velg en handlingsenhet og stat for å definere når denne animasjonen skal overstyre den vanlige animasjonen"
+      },
+      "bar_sizes": {
+        "thin": "Tynn",
+        "regular": "Normal",
+        "thick": "Tykk",
+        "thiccc": "Ekstra Tykk"
+      },
+      "bar_widths": {
+        "25": "25% Bredde",
+        "50": "50% Bredde",
+        "75": "75% Bredde",
+        "100": "100% (Full Bredde)"
+      },
+      "bar_alignments": {
+        "space-between": "Mellomrom Mellom",
+        "flex-start": "Venstre",
+        "center": "Senter",
+        "flex-end": "Høyre"
+      },
+      "bar_styles": {
+        "flat": "Flat (Standard)",
+        "glossy": "Blank",
+        "embossed": "Preget",
+        "inset": "Innfelt",
+        "gradient": "Gradient Overlegg",
+        "neon": "Neon Glød",
+        "outline": "Omriss",
+        "glass": "Glass",
+        "metallic": "Metallisk",
+        "neumorphic": "Neumorfisk"
+      },
+      "animation_types": {
+        "none": "Ingen",
+        "charging-lines": "Lading (Diagonale Linjer)",
+        "pulse": "Puls",
+        "blinking": "Blinking",
+        "bouncing": "Sprett",
+        "glow": "Glød",
+        "rainbow": "Regnbue",
+        "bubbles": "Bobler",
+        "fill": "Fyll"
+      },
+      "custom_bar_settings": {
+        "title": "Tilpassede stolpeinnstillinger",
+        "description": "Definer tilpassede konfigurasjoner for individuelle barer.",
+        "name": "Barnavn",
+        "entity": "Enhet",
+        "unit": "Enhet",
+        "min": "Min verdi",
+        "max": "Maks verdi",
+        "thresholds": "Terskler",
+        "severity": "Alvorlighetskart"
+      },
+      "template_mode": {
+        "header": "Malmodus",
+        "description": "Use a template to format the displayed text, convert units, or show calculated values.",
+        "enable": "Enable Template Mode",
+        "template": "Template"
+      }
+    },
+    "icons": {
+      "title": "Kortikoner",
+      "description": "Legg til ikonrader for å vise flere ikoner på kortet ditt. Hver rad kan konfigureres med forskjellige innstillinger.",
+      "add_row": "Legg til Ikonrad",
+      "duplicate_row": "Dupliser Rad",
+      "delete_row": "Slett Rad",
+      "expand_row": "Utvid Rad",
+      "collapse_row": "Skjul Rad",
+      "no_row": "Ingen ikonrader er lagt til",
+      "row_prefix": "Rad",
+      "icon_prefix": "Ikon",
+      "add_icon": "Legg til Ikon",
+      "duplicate_icon": "Dupliser Ikon",
+      "delete_icon": "Slett Ikon",
+      "template_mode": "Malmodus",
+      "template_mode_active_description": "Bruk en mal for å bestemme når dette ikonet skal være aktivt. Maler lar deg bruke syntaks for hjemmeassistent for komplekse forhold.",
+      "template_mode_inactive_description": "Bruk en mal for å bestemme når dette ikonet skal være inaktivt. Maler lar deg bruke syntaks for hjemmeassistent for komplekse forhold.",
+      "template_examples_header": "Vanlige eksempler:",
+      "text_formatting": "State Text Formatting",
+      "name_formatting": "Name Formatting",
+      "dynamic_icon": {
+        "title": "Dynamisk ikonmal",
+        "description": "Use a template to dynamically select the icon based on entity states or conditions.",
+        "enable": "Aktiver dynamisk ikonmal"
+      },
+      "dynamic_color": {
+        "title": "Dynamisk fargemal",
+        "description": "Use a template to dynamically set the icon color based on entity states or values.",
+        "enable": "Aktiver dynamisk fargemal"
+      },
+      "enable_template_mode": "Aktiver malmodus",
+      "row_settings": {
+        "header": "Radinnstillinger",
+        "width": "Radbredde",
+        "width_description": "Bredde på raden som prosent av kortbredde",
+        "alignment": "Radjustering",
+        "alignment_description": "Hvordan ikoner justeres i denne raden",
+        "spacing": "Ikonavstand",
+        "spacing_description": "Mengde mellomrom mellom ikoner i denne raden",
+        "columns": "Kolonneantall",
+        "columns_description": "Antall like store kolonner i raden (0 = automatisk distribusjon basert på innhold)",
+        "confirmation_mode": "Bekreftelsesmodus",
+        "confirmation_mode_description": "Krev to trykk/klikk for å aktivere ikoner i denne raden, forhindrer utilsiktede interaksjoner",
+        "layout_info_title": "Hvordan layoutinnstillinger fungerer"
+      },
+      "icon_settings": {
+        "header": "Ikonliste",
+        "entity": "Enhet",
+        "entity_description": "Enhet som vises med dette ikonet",
+        "icon": "Ikon",
+        "icon_description": "Velg et ikon eller angi et egendefinert ikon",
+        "name": "Navn",
+        "name_description": "Egendefinert navn som vises under ikonet (bruker enhetsnavn som standard hvis ikke spesifisert)",
+        "interaction_type": "Interaksjonstype",
+        "interaction_type_description": "Velg hvordan brukere samhandler med dette ikonet for å utløse handlinger",
+        "show_name": "Vis Navn",
+        "show_name_description": "Vis navneteksten under ikonet",
+        "show_state": "Vis Tilstand",
+        "show_state_description": "Vis enhetstilstanden under ikonet",
+        "show_units": "Vis Enheter",
+        "show_units_description": "Inkluder enheter når tilstand vises",
+        "text_position": "Tekstposisjon",
+        "text_position_description": "Hvor navn- og tilstandsteksten er plassert i forhold til ikonet",
+        "click_action": "Klikkhandling",
+        "service": "Tjeneste",
+        "service_description": "Tjeneste å kalle (f.eks. light.turn_on)",
+        "service_data": "Tjenestedata (JSON)",
+        "service_data_description": "JSON-data sendt med tjenestekallet",
+        "action": "Handling (JSON/Tjeneste)",
+        "action_description": "Avansert handlingskonfigurasjon (se dokumentasjon)",
+        "navigation_path": "Navigasjonssti",
+        "navigation_path_description": "Sti å navigere til (f.eks. /lovelace/dashboard)",
+        "navigation_target_selector": "Navigasjonsmål",
+        "navigation_target_description": "Velg fra tilgjengelige dashbord, visninger eller systemsider",
+        "url": "URL",
+        "url_description": "URL å åpne i ny fane",
+        "automation_entity": "Automatiseringsenhet",
+        "automation_entity_description": "Automatisering å utløse ved klikk"
+      },
+      "icon_appearance": {
+        "header": "Ikonutseende",
+        "icon": "Ikonutseende",
+        "general": "Generelt Utseende",
+        "active": "Aktiv Tilstand",
+        "inactive": "Inaktiv Tilstand",
+        "state_conditions": "Tilstandsbetingelser",
+        "advanced": "Avanserte Innstillinger",
+        "icon_size": "Ikonstørrelse",
+        "icon_size_description": "Størrelse på ikonet i piksler",
+        "text_size": "Tekststørrelse",
+        "text_size_description": "Størrelse på navn/tilstandsteksten i piksler",
+        "name_size": "Navnestørrelse",
+        "name_size_description": "Størrelse på enhetens navntekst i piksler",
+        "text_alignment": "Tekstjustering",
+        "text_alignment_description": "Hvordan teksten er justert under ikonet",
+        "icon_background": "Ikonbakgrunn",
+        "icon_background_description": "Legg til en bakgrunnsform bak ikonet",
+        "icon_background_color": "Ikonbakgrunnsfarge",
+        "icon_background_color_description": "Farge på bakgrunnen bak ikonet",
+        "container_background_color": "Kontainerbakgrunnsfarge",
+        "container_background_color_description": "Farge på bakgrunnen bak hele ikonkontaineren",
+        "text_appearance": "Tekstutseende",
+        "container": {
+          "header": "Kontainerutseende",
+          "vertical_alignment": "Vertikal Justering",
+          "vertical_alignment_description": "Juster ikonet og teksten vertikalt i kontaineren.",
+          "width": "Kontainerbredde",
+          "width_description": "Sett bredden på ikonkontaineren relativt til raden.",
+          "background": "Kontainerbakgrunnsform",
+          "background_description": "Velg en bakgrunnsform for hele ikonkontaineren."
+        },
+        "show_when_active": "Vis ikon når det er aktivt",
+        "show_when_active_description": "Bare vis dette ikonet når det er i en aktiv tilstand",
+        "template_mode": "Malmodus",
+        "template_description": "Bruk en mal for å bestemme aktiv/inaktiv tilstand. Maler lar deg bruke Home Assistant-malsyntaks (som {{ states.sensor.temperature.state > 70 }}) for komplekse betingelser.",
+        "active_template": "Aktiv mal",
+        "active_template_description": "Mal som returnerer sant når ikonet skal være aktivt.",
+        "active_state": "Aktiv stat",
+        "active_state_description": "Tilstandsstreng som representerer \"aktiv\".",
+        "active_state_text": "Tilpasset aktiv statstekst",
+        "active_state_text_description": "Overstyrer teksten som vises når ikonet er aktivt. La være tomt for å bruke den faktiske tilstanden.",
+        "inactive_template": "Inaktiv mal",
+        "inactive_template_description": "Mal som returnerer sant når ikonet skal være inaktivt.",
+        "inactive_state": "Inaktiv tilstand",
+        "inactive_state_description": "Tilstandsstreng som representerer \"inaktiv\".",
+        "inactive_state_text": "Tilpasset inaktiv tilstandstekst",
+        "inactive_state_text_description": "Overstyrer teksten som vises når ikonet er inaktivt. La være tomt for å bruke den faktiske tilstanden.",
+        "active_icon": "Aktivt ikon",
+        "inactive_icon": "Inaktivt ikon",
+        "active_icon_color": "Aktiv ikonfarge",
+        "inactive_icon_color": "Inaktiv ikonfarge",
+        "active_name_color": "Aktiv navnfarge",
+        "inactive_name_color": "Inaktiv navnfarge",
+        "active_state_color": "Aktiv tilstandsfarge",
+        "inactive_state_color": "Inaktiv tilstandsfarge",
+        "show_icon_active": "Vis ikon når det er aktivt",
+        "show_icon_active_description": "Vis ikonet når staten er aktivt.",
+        "show_icon_inactive": "Vis ikon når det er inaktivt",
+        "show_icon_inactive_description": "Vis ikonet når staten er inaktivt.",
+        "custom_active_state_text": "Tilpasset aktiv statstekst",
+        "custom_inactive_state_text": "Tilpasset inaktiv tilstandstekst",
+        "action_description": "Handling for å utføre når ikonet er klikket.",
+        "show_name_active": "Vis navn når det er aktivt",
+        "show_name_active_description": "Vis navnet når staten er aktiv.",
+        "show_name_inactive": "Vis navn når det er inaktivt",
+        "show_name_inactive_description": "Vis navnet når staten er inaktiv.",
+        "show_state_active": "Vis tilstand når det er aktivt",
+        "show_state_active_description": "Vis staten når staten er aktiv.",
+        "show_state_inactive": "Vis tilstand når inaktiv",
+        "show_state_inactive_description": "Vis staten når staten er inaktiv.",
+        "use_entity_color_for_icon": "Bruk enhetsfarge for ikon",
+        "use_entity_color_for_icon_description": "Bruk enhetens fargeattributt for ikonet når tilgjengelig",
+        "use_entity_color_for_icon_background": "Bruk enhetsfarge for ikonbakgrunn",
+        "use_entity_color_for_icon_background_description": "Bruk enhetens fargeattributt for ikonbakgrunnen når det er tilgjengelig",
+        "use_entity_color_for_container_background": "Bruk enhetsfarge for container",
+        "use_entity_color_for_container_background_description": "Bruk enhetens fargeattributt for containerbakgrunnen når det er tilgjengelig",
+        "dynamic_icon_template": "Dynamisk ikonmal",
+        "dynamic_icon_template_description": "Use a template to dynamically select the icon based on entity states or conditions.",
+        "enable_dynamic_icon_template": "Aktiver dynamisk ikonmal",
+        "dynamic_color_template": "Dynamisk fargemal",
+        "dynamic_color_template_description": "Use a template to dynamically set the icon color based on entity states or values.",
+        "enable_dynamic_color_template": "Aktiver dynamisk fargemal",
+        "size_settings": "Storleiksinnstillingar",
+        "value_size": "Value Size",
+        "state_text_formatting": "State Text Formatting",
+        "row_name": "Radnamn",
+        "row_name_description": "Custom name for this icon row (leave blank to use default naming)",
+        "width_description": "Controls how much of the available width this row will use. Configure how this row of icons displays. Width controls the overall row width, spacing adjusts gaps between icons, and column count determines how many icons appear in each row (0 = automatic).",
+        "layout_info_title": "How Layout Settings Work",
+        "layout_info_width": "Row Width: Controls how much horizontal space the row takes up in the card (percentage of card width)",
+        "layout_info_alignment": "Row Alignment: Only applies when Column Count is 0. Determines how icons are positioned within the row",
+        "layout_info_spacing": "Icon Spacing: Sets the amount of space between icons",
+        "layout_info_columns": "Column Count: When set to 0, icons flow naturally based on available space. When set to a number, forces that exact number of columns in a grid layout",
+        "layout_info_tip": "Use Column Count with consistent amounts of icons per row for the most uniform layout",
+        "control_right_side_description": "Control when the right side is shown or hidden based on entity state",
+        "dynamic_icon": {
+          "title": "Dynamisk ikonmal",
+          "description": "Use a template to dynamically select the icon based on entity states or conditions.",
+          "enable": "Aktiver dynamisk ikonmal",
+          "template_label": "Ikonmal"
+        },
+        "dynamic_color": {
+          "title": "Dynamisk fargemal",
+          "description": "Use a template to dynamically set the icon color based on entity states or values.",
+          "enable": "Aktiver dynamisk fargemal",
+          "template_label": "Fargemal"
+        }
+      },
+      "tabs": {
+        "general": "Generelt",
+        "actions": "Handlinger",
+        "appearance": "Utseende",
+        "states": "Tilstander",
+        "active_state": "Aktiv Tilstand",
+        "inactive_state": "Inaktiv Tilstand",
+        "icons": {
+          "arrange_icon_rows": "Organiser Ikonrader"
+        }
+      },
+      "alignments": {
+        "flex-start": "Venstre",
+        "center": "Senter",
+        "flex-end": "Høyre",
+        "space-between": "Mellomrom Mellom",
+        "space-around": "Mellomrom Rundt",
+        "space-evenly": "Jevne Mellomrom"
+      },
+      "vertical_alignments": {
+        "flex-start": "Topp",
+        "center": "Midten",
+        "flex-end": "Bunn"
+      },
+      "spacing": {
+        "none": "Ingen",
+        "small": "Liten",
+        "medium": "Medium",
+        "large": "Stor"
+      },
+      "text_positions": {
+        "below": "Under Ikon",
+        "beside": "Ved Siden av Ikon",
+        "none": "Ingen Tekst",
+        "top": "På Toppen",
+        "left": "På Venstre",
+        "right": "På Høyre"
+      },
+      "reset": {
+        "size": "Tilbakestill til standardstørrelse",
+        "color": "Tilbakestill til standardfarge",
+        "all": "Tilbakestill til standardverdier"
+      },
+      "click_actions": {
+        "toggle": "Veksle",
+        "more-info": "Vis Mer Info",
+        "navigate": "Naviger til Sti",
+        "url": "Åpne URL",
+        "call-service": "Kall Tjeneste",
+        "perform-action": "Utfør Handling",
+        "location-map": "Vis Kart",
+        "assist": "Taleassistent",
+        "trigger": "Utløs",
+        "none": "Ingen Handling",
+        "descriptions": {
+          "toggle": "Veksler enhetens tilstand på og av.",
+          "more-info": "Åpner mer info-dialogen med tilleggsinformasjon om enheten.",
+          "navigate": "Navigerer til den angitte Lovelace-stien.",
+          "url": "Åpner den angitte URL-en i en ny fane.",
+          "call-service": "Kaller den angitte Home Assistant-tjenesten.",
+          "perform-action": "Utfører en egendefinert handling (se dokumentasjon).",
+          "location-map": "Viser enhetens plassering på et kart.",
+          "assist": "Åpner Home Assistants taleassistent.",
+          "trigger": "Utløser enheten (automatisering, skript, knapp, etc).",
+          "none": "Ingen handling vil bli utført."
+        }
+      },
+      "backgrounds": {
+        "none": "Ingen",
+        "circle": "Sirkel",
+        "square": "Kvadrat",
+        "rounded_square": "Avrundet Kvadrat"
+      },
+      "container_widths": {
+        "25": "25% bredde",
+        "50": "50% bredde",
+        "75": "75% bredde",
+        "100": "100% (full bredde)"
+      },
+      "row_widths": {
+        "25": "25% bredde",
+        "50": "50% bredde",
+        "75": "75% bredde",
+        "100": "100% (full bredde)"
+      },
+      "interactions": {
+        "single": "Enkelt Trykk/Klikk",
+        "double": "Dobbelt Trykk/Klikk",
+        "hold": "Hold/Langt Trykk"
+      },
+      "animations": {
+        "title": "Ikon Animasjon",
+        "active_description": "Velg en animasjon å bruke når dette ikonet er i aktiv tilstand.",
+        "inactive_description": "Velg en animasjon å bruke når dette ikonet er i inaktiv tilstand.",
+        "select_animation": "Velg Animasjon",
+        "none": "Ingen",
+        "pulse": "Puls",
+        "vibrate": "Vibrere",
+        "rotate_left": "Roter Venstre",
+        "rotate_right": "Roter Høyre",
+        "hover": "Sveve",
+        "fade": "Tone",
+        "scale": "Skaler",
+        "bounce": "Sprette",
+        "shake": "Riste",
+        "tada": "Tada"
+      },
+      "row_vertical_alignments": {
+        "top": "Topp",
+        "center": "Midten",
+        "bottom": "Bunn"
+      },
+      "actions": {
+        "single": "Enkelt Klikk Handling",
+        "double": "Dobbelt Klikk Handling",
+        "hold": "Hold Handling",
+        "single_description": "Handling utført på et enkelt trykk/klikk - mest vanlige interaksjon",
+        "double_description": "Handling utført på et dobbelt trykk/klikk - hjelper å forhindre utilsiktede utløsninger",
+        "hold_description": "Handling utført når man holder nede i 500ms - ideelt for kritiske handlinger",
+        "section_header": "Interaksjons Handlinger"
+      }
+    },
+    "customize": {
+      "title": "Tilpass layout",
+      "description": "Tilpass layout, bestill og legg til seksjoner i kortet ditt",
+      "condition_prompt": "Velg \"Vis\" eller \"Skjul\" for å konfigurere enhetstilstand",
+      "template_mode_active": "Bruk Malmodus",
+      "layout": {
+        "title": "Layoutstil",
+        "description": "Velg mellom enkelt- eller dobbelkolumnelayout for kortet",
+        "header": "Layoutinnstillingar",
+        "descriptions_header": "Layout Descriptions",
+        "single_column": "Enkelt kolonne",
+        "single_column_description": "All sections are stacked vertically in a single column - best for simple displays and mobile views.",
+        "double_column": "Dobbel kolonne",
+        "double_column_description": "Sections are split between two columns for efficient use of horizontal space - ideal for wider screens.",
+        "top_view": "Top View",
+        "top_view_description": "Image is prominently displayed at the top with other sections arranged in configurable positions around it.",
+        "half_full": "Half + Full",
+        "half_full_description": "Top row has two half-width sections, bottom row has one full-width section - great for balanced layouts.",
+        "full_half": "Full + Half",
+        "full_half_description": "Top row has one full-width section, bottom row has two half-width sections - perfect for highlighting top content."
+      },
+      "layout_types": {
+        "single": "Enkeltkolonne",
+        "double": "Dobbeltkolonne",
+        "dashboard": "Toppvisning",
+        "half_full": "Halv + full",
+        "full_half": "Full + halvparten"
+      },
+      "column_width": {
+        "title": "Kolonnebredde",
+        "description": "Konfigurer breddeforholdet mellom venstre og høyre kolonne",
+        "50_50": "Like (50/50)",
+        "30_70": "Smal venstre, bred høyre (30/70)",
+        "70_30": "Bred venstre, smal høyre (70/30)",
+        "40_60": "Litt smal venstre (40/60)",
+        "60_40": "Litt bred venstre (60/40)"
+      },
+      "top_view": {
+        "header": "Toppvisningsinnstillinger",
+        "description": "Konfigurer avstands- og layoutinnstillinger for toppvisning",
+        "side_margin": "Sidemarginer",
+        "side_margin_help": "Marginer på sidene av visningen i piksler",
+        "middle_spacing": "Midtavstand",
+        "middle_spacing_help": "Avstand mellom midtkolonner i piksler",
+        "vertical_spacing": "Vertikal Avstand",
+        "vertical_spacing_help": "Avstand mellom rader i piksler"
+      },
+      "sections": {
+        "header": "Kortseksjoner",
+        "arrangement_header": "Seksjonsarrangement",
+        "arrangement_desc_base": "Dra og slipp seksjoner for å arrangere rekkefølgen på kortet.",
+        "arrangement_desc_single_extra": "Alle seksjoner vil vises i en enkeltkolonne.",
+        "arrangement_desc_double_extra": "I en dobbelkolumnelayout kan du plassere enhver seksjon i venstre eller høyre kolonne.",
+        "arrangement_desc_dashboard_extra": "I en toppvisning kan du plassere seksjoner rundt kjøretøybildet ditt."
+      },
+      "section_labels": {
+        "title": "Tittel",
+        "image": "Kjøretøybilde",
+        "info": "Kjøretøyinformasjon",
+        "bars": "Alle Sensorsøyler",
+        "icons": "Alle Ikonrader",
+        "section_break": "Seksjonsbrudd"
+      },
+      "actions": {
+        "collapse_margins": "Skjul Marginer",
+        "expand_margins": "Vis Marginer",
+        "collapse_options": "Skjul Alternativer",
+        "expand_options": "Vis Alternativer",
+        "add_break": "Legg til seksjonsbrudd",
+        "delete_break": "Slett seksjonsbrudd"
+      },
+      "css": {
+        "header": "Global CSS",
+        "description": "Skriv inn egendefinerte CSS-regler her for å overstyre standard kortstil. Disse reglene vil bli anvendt direkte på kortet. Bruk med forsiktighet.",
+        "label": "Egendefinert CSS",
+        "input_description": "Skriv inn dine egendefinerte CSS-regler her."
+      },
+      "conditions": {
+        "header": "Betinget Logikk",
+        "description": "Vis eller skjul denne seksjonen basert på en enhets tilstand.",
+        "template_mode_description": "Bruk en mal for å bestemme seksjonssynlighet. Maler lar deg bruke Home Assistant mal-syntaks for komplekse betingelser.",
+        "type_label": "Betingelsestype",
+        "section_title": "Seksjonstittel",
+        "enable_section_title": "Enable Section Title",
+        "title_text": "Titteltekst",
+        "title_size": "Tittelstørrelse",
+        "title_color": "Tittelfarge",
+        "enable_template_mode": "Enable Template Mode",
+        "use_template_description": "Use a template to determine when this section should be visible. Templates allow you to use Home Assistant templating syntax for complex conditions.",
+        "info_row": "Info Row",
+        "entity_label": "Betingelsesenhet",
+        "state_label": "Betingelsestilstand",
+        "state_description": "Tilstandsverdien som utløser betingelsen",
+        "types": {
+          "none": "Ingen (Vis Alltid)",
+          "show": "Vis Når...",
+          "hide": "Skjul Når..."
+        }
+      },
+      "template": {
+        "description": "Bruk en mal for å bestemme når denne seksjonen skal være synlig. Maler lar deg bruke Home Assistant mal-syntaks for komplekse betingelser.",
+        "enable": "Aktiver Malmodus"
+      },
+      "template_mode": {
+        "header": "Malmodus",
+        "description": "Use a template to control when this image is shown or hidden based on complex logic, calculations, or multiple entity states.",
+        "enable": "Enable Template Mode",
+        "disabled_notice": "(Disabled - Template Mode Active)",
+        "disabled_help": "Basic condition controls are disabled when Template Mode is active. Template Mode takes precedence over basic conditions.",
+        "examples": {
+          "show_when_charging": "Show when charging",
+          "show_when_battery_low": "Show when battery low",
+          "multiple_conditions": "Multiple conditions",
+          "show_during_day": "Show during day hours",
+          "show_when_door_unlocked": "Show when door unlocked"
+        }
+      },
+      "section_title": {
+        "header": "Seksjonstittel",
+        "enable": "Aktiver Seksjonstittel",
+        "text": "Tittel Tekst",
+        "size": "Tittel Størrelse",
+        "color": "Tittel Farge",
+        "bold": "Fet",
+        "italic": "Kursiv",
+        "uppercase": "Store Bokstaver",
+        "strikethrough": "Gjennomstreket"
+      },
+      "margins": {
+        "header": "Marginer",
+        "top": "Toppmarginer",
+        "bottom": "Bunnmarginer"
+      },
+      "columns": {
+        "left": "Venstre Kolonne",
+        "right": "Høyre Kolonne",
+        "empty": "Slipp seksjoner her"
+      },
+      "dashboard": {
+        "top": "Toppseksjon",
+        "top_middle": "Øvre Midtseksjon",
+        "left_middle": "Venstre Midtseksjon",
+        "middle": "Midtseksjon",
+        "middle_empty": "Kjøretøybildeområde (Anbefalt)",
+        "right_middle": "Høyre Midtseksjon",
+        "bottom_middle": "Nedre Midtseksjon",
+        "bottom": "Bunnseksjon"
+      },
+      "half_full": {
+        "row1_col1": "Rad 1 - Venstre Kolonne",
+        "row1_col2": "Rad 1 - Høyre Kolonne",
+        "row2_full": "Rad 2, full bredde (100%)"
+      },
+      "full_half": {
+        "row1_full": "Rad 1, full bredde (100%)",
+        "row2_col1": "Rad 2 - Venstre Kolonne",
+        "row2_col2": "Rad 2 - Høyre Kolonne"
+      },
+      "break_styles": {
+        "blank": "Blank (ingen linje)",
+        "line": "Solid linje",
+        "double_line": "Dobbel linje",
+        "dotted": "Stiplet linje",
+        "double_dotted": "Dobbelt stiplet linje",
+        "shadow": "Skyggegradient"
+      },
+      "break_style": {
+        "header": "Bruddstil",
+        "style_label": "Stil",
+        "thickness_label": "Tykkelse",
+        "width_percent_label": "Bredde (%)",
+        "color_label": "Farge"
+      }
+    },
+    "container_widths": {
+      "25": "25% bredde",
+      "50": "50% bredde",
+      "75": "75% bredde",
+      "100": "100% (full bredde)"
+    },
+    "row_widths": {
+      "25": "25% bredde",
+      "50": "50% bredde",
+      "75": "75% bredde",
+      "100": "100% (full bredde)"
+    }
+  },
+  "about": {
+    "logo_alt": "Ultra Vehicle Card",
+    "developed_by": "Utviklet av",
+    "discord_button": "Bli med i vår Discord",
+    "docs_button": "Se vår dokumentasjon",
+    "donate_button": "DONÉR (PAYPAL)",
+    "github_button": "Besøk vår Github",
+    "support_title": "Støtt Ultra Vehicle Card",
+    "support_description": "Dine sjenerøse tips gir utviklingen av fantastiske funksjoner for dette kortet! Uten støtte fra brukere som deg, ville ikke innovasjon ikke være mulig."
+  },
+  "custom_icons": {
+    "title": "Egendefinerte Ikoner",
+    "description": "Definer egendefinerte ikoner for forskjellige tilstander.",
+    "icon_entity": "Ikonenhet",
+    "default_icon": "Standardikon",
+    "state_icons": "Tilstandsikoner",
+    "state": "Tilstand",
+    "icon": "Ikon"
+  },
+  "custom_active_state_text": "Egendefinert Aktiv Tilstandstekst",
+  "custom_inactive_state_text": "Egendefinert Inaktiv Tilstandstekst",
+  "image_settings": {
+    "title": "Bildeinnstillinger",
+    "description": "Konfigurer hovedbildets utseende.",
+    "type": "Bildetype",
+    "width": "Bildebredde",
+    "crop": "Beskjær Bilde",
+    "entity": "Bildeenhet",
+    "entity_description": "Enhet som leverer bilde-URL"
+  },
+  "entity_settings": {
+    "entity": "Enhet",
+    "entity_description": "Velg en enhet for å vise informasjon fra",
+    "name": "Navn",
+    "name_description": "Overstyr enhetsnavnet (la være tomt for å bruke enhetens vennlige navn)",
+    "show_icon": "Vis ikon",
+    "icon": "Ikon",
+    "icon_color": "Ikonfarge",
+    "name_color": "Navnfarge",
+    "entity_color": "Enhetsfarge",
+    "text_color": "Tekstfarge",
+    "show_name": "Vis navn",
+    "show_name_description": "Vis enhetens navn før verdien",
+    "template_mode": "Bruk Mal for Verdi",
+    "template_mode_description": "Bruk en mal for å formatere enhetsverdien",
+    "value_template": "Verdimal",
+    "template_header": "Verdimal",
+    "template_examples_header": "Maleksempler",
+    "template_basic": "Grunnleggende verdi",
+    "template_units": "Med enheter",
+    "template_round": "Runde til 1 desimal",
+    "dynamic_icon_template": "Ikonmal",
+    "dynamic_color_template": "Fargemal",
+    "dynamic_icon_template_mode": "Aktiver dynamisk ikonmal",
+    "dynamic_color_template_mode": "Aktiver dynamisk fargemal"
+  }
+}
