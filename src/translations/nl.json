@@ -11,10 +11,10 @@
     },
     "info": {
       "title": "Kaartinformatie",
-      "description": "Configureer informatie rijen en entiteiten om voertuigdetails zoals locatie, kilometerstand, enz. Toon te geven, enz. Info -items worden indien mogelijk op een enkele regel weergegeven, die in meerdere lijnen in smalle containers wikkelt.",
-      "add_row": "Info rij toevoegen",
-      "add_entity": "Info entiteit toevoegen",
-      "arrange_info_rows": "Schik info -rijen",
+      "description": "Configureer informatie rijen en entiteiten om voertuigdetails zoals locatie, kilometerstand, enz. Toon te geven, enz. Info-items worden indien mogelijk op een enkele regel weergegeven, die in meerdere lijnen in smalle containers wikkelt.",
+      "add_row": "Info-rij toevoegen",
+      "add_entity": "Info-entiteit toevoegen",
+      "arrange_info_rows": "Info-rijen Rangschikken",
       "duplicate_row": "Rij dupliceren",
       "delete_row": "Rij verwijderen",
       "expand_row": "Rij uitklappen",
@@ -23,25 +23,25 @@
       "delete_entity": "Entiteit verwijderen",
       "expand_entity": "Entiteit uitklappen",
       "collapse_entity": "Entiteit inklappen",
-      "row_prefix": "Info rij",
+      "row_prefix": "Info-rij",
       "entity_prefix": "Entiteit",
       "template_mode": "Sjabloonmodus",
-      "template_mode_description": "Gebruik een sjabloon om de entiteitswaarde te formatteren. Met sjablonen kunt u de syntaxis van thuisassistent -sjabloon gebruiken voor complexe opmaak.",
+      "template_mode_description": "Gebruik een sjabloon om de entiteitswaarde te formatteren. Met sjablonen kunt u de syntaxis van HomeAssistent-sjabloon gebruiken voor complexe opmaak.",
       "template_examples_header": "Veel voorkomende voorbeelden:",
       "dynamic_icon": {
-        "title": "Dynamische icoon sjabloon",
+        "title": "Dynamisch icoon sjabloon",
         "description": "Gebruik een sjabloon om dynamisch het icoon te selecteren op basis van entiteit statussen of voorwaarden.",
-        "enable": "Dynamische icoon sjabloon inschakelen"
+        "enable": "Dynamisch icoon sjabloon inschakelen"
       },
       "dynamic_color": {
-        "title": "Dynamische kleur sjabloon",
+        "title": "Dynamisch kleur sjabloon",
         "description": "Gebruik een sjabloon om dynamisch kleuren in te stellen op basis van entiteit statussen of waarden.",
-        "enable": "Dynamische kleur sjabloon inschakelen"
+        "enable": "Dynamisch kleur sjabloon inschakelen"
       },
       "row_settings": {
-        "header": "Rij instellingen",
-        "row_name": "Rij naam",
-        "row_name_description": "Aangepaste naam voor deze info rij (laat leeg om standaard naamgeving te gebruiken)",
+        "header": "Rij-instellingen",
+        "row_name": "Rijnaam",
+        "row_name_description": "Aangepaste naam voor deze info-rij (laat leeg om standaard naamgeving te gebruiken)",
         "horizontal_alignment": "Horizontale uitlijning",
         "alignment_description": "Horizontale uitlijning van entiteiten in deze rij",
         "vertical_alignment": "Verticale uitlijning",
@@ -52,7 +52,7 @@
         "allow_wrap_description": "Wanneer ingeschakeld, gaan items naar de volgende regel als ze niet in één rij passen. Wanneer uitgeschakeld, blijven alle items in één rij."
       },
       "entity_settings": {
-        "header": "Info items",
+        "header": "Info-items",
         "name": "Aangepaste naam",
         "entity_description": "Selecteer een entiteit om informatie van weer te geven",
         "name_description": "Overschrijf de entiteit naam (laat leeg om de vriendelijke naam van de entiteit te gebruiken)",
@@ -63,7 +63,7 @@
         "icon_size": "Icoon grootte",
         "name_size": "Naam grootte",
         "value_size": "Waarde grootte",
-        "size_settings": "Grootte instellingen",
+        "size_settings": "Grootte-instellingen",
         "show_name": "Toon naam",
         "show_name_description": "Toon de entiteit naam voor de waarde",
         "click_action": "Klik actie",
@@ -107,7 +107,7 @@
       "action_images": "Actieafbeeldingen"
     },
     "action_images": {
-      "title": "Actie Afbeeldingen Instellingen",
+      "title": "Actie Afbeelding Instellingen",
       "description": "Configureer afbeeldingen die worden weergegeven wanneer aan specifieke entiteitstatus wordt voldaan.",
       "add_image": "Actie Afbeelding Toevoegen",
       "no_images": "Er zijn nog geen actie afbeeldingen geconfigureerd. Voeg er een toe om te beginnen.",
@@ -144,7 +144,7 @@
       "template_label": "Weergavesjabloon",
       "template_help": "Voer een sjabloon in dat waar/onwaar retourneert. Deze afbeelding wordt getoond wanneer het sjabloon evalueert naar waar. Gebruik Jinja2-syntax: {{ states(...) }}",
       "priority": {
-        "label": "Weergave Prioriteit",
+        "label": "Weergaveprioriteit",
         "description": "Op Prioriteit Gebaseerd gebruikt de eerste overeenkomst van boven naar beneden. Nieuwste Overeenkomst gebruikt de laatste overeenkomst gevonden in de lijst.",
         "options": {
           "priority": "Op Prioriteit Gebaseerd",
@@ -161,7 +161,7 @@
       "name": "Naam (Optioneel)",
       "image_type": "Afbeeldingstype",
       "url": "Afbeelding URL",
-      "image_entity": "Afbeelding Entiteit",
+      "image_entity": "Afbeelding-entiteit",
       "priority": "Prioriteit (0 = hoogste)",
       "priority_mode": "Prioriteitsmodus",
       "timed_duration": "Weergaveduur (seconden)",
@@ -204,8 +204,8 @@
       "advanced_help": "Gebruik sjablonen voor complexe voorwaarden zoals meerdere entiteiten of wiskundige vergelijkingen.",
       "template_mode_active_help": "Gebruik sjablonen voor complexe voorwaarden zoals meerdere entiteiten of wiskundige vergelijkingen.",
       "template_mode": {
-        "header": "Sjabloon Modus",
-        "enable": "Sjabloon Modus Inschakelen",
+        "header": "Sjabloonmodus",
+        "enable": "Sjabloonmodus Inschakelen",
         "template": "Sjabloon"
       },
       "template_examples_header": "Algemene Voorbeelden:",
@@ -243,13 +243,13 @@
       "title": "Kaarttitel",
       "title_alignment": "Titeluitlijning",
       "title_size": "Titelgrootte",
-      "title_color": "Titel Kleur",
+      "title_color": "Titelkleur",
       "title_color_description": "Kleur van de kaarttitel",
       "title_description": "Titel weergegeven bovenaan de kaart (optioneel)",
       "title_alignment_description": "Hoe de kaarttitel wordt uitgelijnd",
       "title_size_description": "Grootte van de kaarttitel in pixels",
       "colors": "Kleuren",
-      "card_background": "Kaart Achtergrond",
+      "card_background": "Kaartachtergrond",
       "card_background_description": "Achtergrondkleur van de hele kaart",
       "format_entities": "Entiteitswaarden formatteren",
       "format_entities_description": "Schakelt extra formattering van entiteitswaarden in (voegt komma's toe, converteert eenheden, etc.)",
@@ -358,7 +358,7 @@
         "animation": "Animatie"
       },
       "settings": {
-        "header": "Balk Configuratie",
+        "header": "Balkconfiguratie",
         "entity": "Hoofdentiteit",
         "entity_description": "Entiteit die de primaire waarde (0-100) voor de voortgangsbalk levert",
         "limit_entity": "Limietentiteit",
@@ -371,7 +371,7 @@
         "bar_radius_description": "Vorm van de hoeken van de voortgangsbalk",
         "width": "Balkbreedte",
         "width_description": "Breedte van de voortgangsbalk als percentage van de beschikbare ruimte. Gebruik dit om meerdere balken naast elkaar te plaatsen.",
-        "alignment": "Label Uitlijning",
+        "alignment": "Labeluitlijning",
         "alignment_description": "Hoe de labels op de voortgangsbalk worden uitgelijnd",
         "show_percentage": "Percentage Tonen",
         "show_percentage_description": "Toon de percentagewaarde in de balk"
@@ -388,7 +388,7 @@
         "type_description": "Hoe de percentagewaarde in de balk wordt berekend",
         "type_entity": "Entiteit (0-100)",
         "type_attribute": "Entiteit attribuut",
-        "type_template": "Sjabloon modus",
+        "type_template": "Sjabloonmodus",
         "type_difference": "Verschil (Hoeveelheid/Totaal)",
         "amount_entity": "Hoeveelheidsentiteit",
         "amount_description": "Entiteit die de huidige hoeveelheid/waarde vertegenwoordigt (teller)",
@@ -458,10 +458,10 @@
         "type": "Animatietype",
         "type_description": "Het animatie-effect dat wordt weergegeven wanneer de entiteitsstatus overeenkomt",
         "select_entity_prompt": "Selecteer een Entiteit en typ de status waarmee u de animatie wilt activeren (voorbeelden: \"charging\", \"on\", \"idle\")",
-        "action_entity": "Actie -entiteit",
+        "action_entity": "Actie-entiteit",
         "action_state": "Actietoestand",
         "action_description": "Deze animatie zal de reguliere animatie overschrijven wanneer de opgegeven entiteit zich in een specifieke staat bevindt.",
-        "action_entity_prompt": "Selecteer een actie -entiteit en staat om te definiëren wanneer deze animatie de reguliere animatie moet overschrijven"
+        "action_entity_prompt": "Selecteer een actie-entiteit en staat om te definiëren wanneer deze animatie de reguliere animatie moet overschrijven"
       },
       "bar_sizes": {
         "thin": "Dun",
@@ -516,9 +516,9 @@
         "severity": "Ernst Map"
       },
       "template_mode": {
-        "header": "Sjabloon modus",
+        "header": "Sjabloonmodus",
         "description": "Gebruik een sjabloon om de weergegeven tekst op te maken, eenheden te converteren of berekende waarden weer te geven.",
-        "enable": "Sjabloon modus inschakelen",
+        "enable": "Sjabloonmodus inschakelen",
         "template": "Sjabloon"
       }
     },
@@ -537,20 +537,20 @@
       "duplicate_icon": "Pictogram dupliceren",
       "delete_icon": "Pictogram verwijderen",
       "template_mode": "Sjabloonmodus",
-      "template_mode_active_description": "Gebruik een sjabloon om te bepalen wanneer dit pictogram actief moet zijn. Met sjablonen kunt u de syntaxis van thuisassistent -sjabloon gebruiken voor complexe omstandigheden.",
-      "template_mode_inactive_description": "Gebruik een sjabloon om te bepalen wanneer dit pictogram inactief moet zijn. Met sjablonen kunt u de syntaxis van thuisassistent -sjabloon gebruiken voor complexe omstandigheden.",
+      "template_mode_active_description": "Gebruik een sjabloon om te bepalen wanneer dit pictogram actief moet zijn. Met sjablonen kunt u de syntaxis van HomeAssistent-sjabloon gebruiken voor complexe omstandigheden.",
+      "template_mode_inactive_description": "Gebruik een sjabloon om te bepalen wanneer dit pictogram inactief moet zijn. Met sjablonen kunt u de syntaxis van HomeAssistent-sjabloon gebruiken voor complexe omstandigheden.",
       "template_examples_header": "Veel voorkomende voorbeelden:",
       "text_formatting": "Status tekst opmaak",
       "name_formatting": "Naam opmaak",
       "dynamic_icon": {
-        "title": "Dynamische icoon sjabloon",
+        "title": "Dynamisch icoon sjabloon",
         "description": "Gebruik een sjabloon om dynamisch het icoon te selecteren op basis van entiteit statussen of voorwaarden.",
-        "enable": "Dynamische icoon sjabloon inschakelen"
+        "enable": "Dynamisch icoon sjabloon inschakelen"
       },
       "dynamic_color": {
-        "title": "Dynamische kleur sjabloon",
+        "title": "Dynamisch kleur sjabloon",
         "description": "Gebruik een sjabloon om dynamisch de icoon kleur in te stellen op basis van entiteit statussen of waarden.",
-        "enable": "Dynamische kleur sjabloon inschakelen"
+        "enable": "Dynamisch kleur sjabloon inschakelen"
       },
       "enable_template_mode": "Sjabloonmodus inschakelen",
       "row_settings": {
@@ -565,7 +565,7 @@
         "columns_description": "Aantal kolommen met gelijke grootte in de rij (0 = automatische verdeling op basis van inhoud)",
         "confirmation_mode": "Bevestigingsmodus",
         "confirmation_mode_description": "Vereist twee taps/klikken om pictogrammen in deze rij te activeren, wat onbedoelde interacties voorkomt",
-        "layout_info_title": "Hoe lay -outinstellingen werken"
+        "layout_info_title": "Hoe lay-outinstellingen werken"
       },
       "icon_settings": {
         "header": "Pictograminstellingen",
@@ -608,7 +608,7 @@
         "active": "Actieve status",
         "inactive": "Inactieve status",
         "state_conditions": "Statusvoorwaarden",
-        "advanced": "Geavanceerde instellingen",
+        "advanced": "Geavanceerde Instellingen",
         "icon_size": "Icoongrootte",
         "icon_size_description": "Grootte van het icoon in pixels",
         "text_size": "Tekstgrootte",
@@ -635,7 +635,7 @@
         },
         "show_when_active": "Toon icoon wanneer actief",
         "show_when_active_description": "Toon dit icoon alleen wanneer het in een actieve status is",
-        "template_mode": "Sjabloon modus",
+        "template_mode": "Sjabloonmodus",
         "template_description": "Gebruik een sjabloon om de actieve/inactieve status te bepalen. Met sjablonen kunt u de syntax van Home Assistant-sjablonen gebruiken (zoals {{ states.sensor.temperature.state > 70 }}) voor complexe voorwaarden.",
         "active_template": "Actief Sjabloon",
         "active_template_description": "Sjabloon dat evalueert naar waar wanneer het pictogram actief moet zijn.",
@@ -678,16 +678,16 @@
         "use_entity_color_for_icon_background_description": "Gebruik het kleurenattribuut van de entiteit voor de pictogramachtergrond indien beschikbaar",
         "use_entity_color_for_container_background": "Gebruik entiteitskleur voor container",
         "use_entity_color_for_container_background_description": "Gebruik het kleurenkenmerk van de entiteit voor de containerachtergrond indien beschikbaar",
-        "dynamic_icon_template": "Dynamische icoon sjabloon",
+        "dynamic_icon_template": "Dynamisch icoon sjabloon",
         "dynamic_icon_template_description": "Gebruik een sjabloon om dynamisch het icoon te selecteren op basis van entiteit statussen of voorwaarden.",
-        "enable_dynamic_icon_template": "Dynamische icoon sjabloon inschakelen",
-        "dynamic_color_template": "Dynamische kleur sjabloon",
+        "enable_dynamic_icon_template": "Dynamisch icoon sjabloon inschakelen",
+        "dynamic_color_template": "Dynamisch kleur sjabloon",
         "dynamic_color_template_description": "Gebruik een sjabloon om dynamisch de icoon kleur in te stellen op basis van entiteit statussen of waarden.",
-        "enable_dynamic_color_template": "Dynamische kleur sjabloon inschakelen",
-        "size_settings": "Grootte instellingen",
+        "enable_dynamic_color_template": "Dynamisch kleur sjabloon inschakelen",
+        "size_settings": "Grootte Instellingen",
         "value_size": "Waarde grootte",
         "state_text_formatting": "Status tekst opmaak",
-        "row_name": "Rij naam",
+        "row_name": "Rijnaam",
         "row_name_description": "Aangepaste naam voor deze icoon rij (laat leeg om standaard naamgeving te gebruiken)",
         "width_description": "Bepaalt hoeveel van de beschikbare breedte deze rij zal gebruiken. Configureer hoe deze rij iconen wordt weergegeven. Breedte controleert de totale rijbreedte, afstand past de ruimte tussen iconen aan, en aantal kolommen bepaalt hoeveel iconen in elke rij verschijnen (0 = automatisch).",
         "layout_info_title": "Hoe lay-out instellingen werken",
@@ -698,15 +698,15 @@
         "layout_info_tip": "Gebruik aantal kolommen met consistente hoeveelheden iconen per rij voor de meest uniforme lay-out",
         "control_right_side_description": "Bepaal wanneer de rechterzijde wordt getoond of verborgen op basis van entiteit status",
         "dynamic_icon": {
-          "title": "Dynamische icoon sjabloon",
+          "title": "Dynamisch icoon sjabloon",
           "description": "Gebruik een sjabloon om dynamisch het icoon te selecteren op basis van entiteit statussen of voorwaarden.",
-          "enable": "Dynamische icoon sjabloon inschakelen",
+          "enable": "Dynamisch icoon sjabloon inschakelen",
           "template_label": "Icoon sjabloon"
         },
         "dynamic_color": {
-          "title": "Dynamische kleur sjabloon",
+          "title": "Dynamisch kleur sjabloon",
           "description": "Gebruik een sjabloon om dynamisch de icoon kleur in te stellen op basis van entiteit statussen of waarden.",
-          "enable": "Dynamische kleur sjabloon inschakelen",
+          "enable": "Dynamisch kleur sjabloon inschakelen",
           "template_label": "Kleur sjabloon"
         }
       },
@@ -718,7 +718,7 @@
         "active_state": "Actieve status",
         "inactive_state": "Inactieve status",
         "icons": {
-          "arrange_icon_rows": "Icoon rijen rangschikken"
+          "arrange_icon_rows": "Icoon-rijen rangschikken"
         }
       },
       "alignments": {
@@ -801,7 +801,7 @@
         "hold": "Vasthouden/lang indrukken"
       },
       "animations": {
-        "title": "Icoon animatie",
+        "title": "Icoon-animatie",
         "active_description": "Selecteer een animatie om toe te passen wanneer dit icoon in de actieve status is.",
         "inactive_description": "Selecteer een animatie om toe te passen wanneer dit icoon in de inactieve status is.",
         "select_animation": "Selecteer animatie",
@@ -833,14 +833,14 @@
       }
     },
     "customize": {
-      "title": "Lay -out aanpassen",
-      "description": "Pas de lay -out aan, bestel en voeg secties toe aan uw kaart",
+      "title": "Lay-out aanpassen",
+      "description": "Pas de lay-out aan, bestel en voeg secties toe aan uw kaart",
       "condition_prompt": "Selecteer \"Toon\" of \"verbergen\" om entiteitsconditie te configureren",
-      "template_mode_active": "Sjabloon modus gebruiken",
+      "template_mode_active": "Sjabloonmodus gebruiken",
       "layout": {
         "title": "Lay-out stijl",
         "description": "Kies tussen één- of tweekolomsweergave voor de kaart",
-        "header": "Lay-out instellingen",
+        "header": "Lay-out Instellingen",
         "descriptions_header": "Lay-out beschrijvingen",
         "single_column": "Enkele kolom",
         "single_column_description": "Alle secties worden verticaal gestapeld in één kolom - beste voor eenvoudige weergaven en mobiele schermen.",
@@ -870,7 +870,7 @@
         "60_40": "Iets breder links (60/40)"
       },
       "top_view": {
-        "header": "Dashboard instellingen",
+        "header": "Dashboardinstellingen",
         "description": "Configureer de afstands- en layout-instellingen voor de dashboardweergave",
         "side_margin": "Zijmarges",
         "side_margin_help": "Marges aan de zijkanten van de weergave in pixels",
@@ -880,8 +880,8 @@
         "vertical_spacing_help": "Ruimte tussen rijen in pixels"
       },
       "sections": {
-        "header": "Kaart secties",
-        "arrangement_header": "Sectie indeling",
+        "header": "Kaartsecties",
+        "arrangement_header": "Sectie-indeling",
         "arrangement_desc_base": "Sleep secties om hun volgorde op de kaart te organiseren.",
         "arrangement_desc_single_extra": "Alle secties worden in één kolom weergegeven.",
         "arrangement_desc_double_extra": "In de tweekolomsweergave kunt u elke sectie in de linker- of rechterkolom plaatsen.",
@@ -893,15 +893,15 @@
         "info": "Voertuiginformatie",
         "bars": "Alle sensorbalken",
         "icons": "Alle pictogramrijen",
-        "section_break": "Sectie pauze"
+        "section_break": "Sectie-pauze"
       },
       "actions": {
         "collapse_margins": "Marges verkleinen",
         "expand_margins": "Marges uitbreiden",
         "collapse_options": "Opties verkleinen",
         "expand_options": "Opties uitbreiden",
-        "add_break": "Sectie -pauze toevoegen",
-        "delete_break": "Sectie -pauze verwijderen"
+        "add_break": "Sectie-pauze toevoegen",
+        "delete_break": "Sectie-pauze verwijderen"
       },
       "css": {
         "header": "Globale CSS",
@@ -919,9 +919,9 @@
         "title_text": "Titel tekst",
         "title_size": "Titel grootte",
         "title_color": "Titel kleur",
-        "enable_template_mode": "Sjabloon modus inschakelen",
+        "enable_template_mode": "Sjabloonmodus inschakelen",
         "use_template_description": "Gebruik een sjabloon om te bepalen wanneer deze sectie zichtbaar moet zijn. Sjablonen stellen je in staat om Home Assistant sjabloon syntaxis te gebruiken voor complexe voorwaarden.",
-        "info_row": "Info rij",
+        "info_row": "Info-rij",
         "entity_label": "Voorwaarde-entiteit",
         "state_label": "Voorwaardestatus",
         "state_description": "De status waarde die de voorwaarde activeert",
@@ -933,14 +933,14 @@
       },
       "template": {
         "description": "Gebruik een sjabloon om te bepalen wanneer deze sectie zichtbaar moet zijn. Sjablonen stellen je in staat om Home Assistant sjabloon syntaxis te gebruiken voor complexe voorwaarden.",
-        "enable": "Sjabloon modus inschakelen"
+        "enable": "Sjabloonmodus inschakelen"
       },
       "template_mode": {
-        "header": "Sjabloon modus",
+        "header": "Sjabloonmodus",
         "description": "Gebruik een sjabloon om te bepalen wanneer deze afbeelding wordt getoond of verborgen op basis van complexe logica, berekeningen, of meerdere entiteit statussen.",
-        "enable": "Sjabloon modus inschakelen",
-        "disabled_notice": "(Uitgeschakeld - sjabloon modus actief)",
-        "disabled_help": "Basis voorwaarde controles zijn uitgeschakeld wanneer sjabloon modus actief is. Sjabloon modus heeft voorrang op basis voorwaarden.",
+        "enable": "Sjabloonmodus inschakelen",
+        "disabled_notice": "(Uitgeschakeld - Sjabloonmodus actief)",
+        "disabled_help": "Basis voorwaarde controles zijn uitgeschakeld wanneer sjabloonmodus actief is. Sjabloonmodus heeft voorrang op basis voorwaarden.",
         "examples": {
           "show_when_charging": "Toon tijdens opladen",
           "show_when_battery_low": "Toon bij lage batterij",
@@ -950,8 +950,8 @@
         }
       },
       "section_title": {
-        "header": "Sectie titel",
-        "enable": "Sectie titel inschakelen",
+        "header": "Sectietitel",
+        "enable": "Sectietitel inschakelen",
         "text": "Titel tekst",
         "size": "Titel grootte",
         "color": "Titel kleur",
@@ -1052,14 +1052,14 @@
   "entity_settings": {
     "entity": "Entiteit",
     "entity_description": "Selecteer een entiteit om informatie uit te geven van",
-    "name": "Name",
-    "name_description": "Verhaal de naam van de entiteit (laat blanco om de vriendelijke naam van de entiteit te gebruiken)",
+    "name": "Naam",
+    "name_description": "Stel de weergavenaam van de entiteit in (laat blanco om de vriendelijke naam van de entiteit te gebruiken)",
     "show_icon": "Toon pictogram",
     "icon": "Icoon",
     "icon_color": "Pictogramkleur",
-    "name_color": "Naam kleur",
+    "name_color": "Naamkleur",
     "entity_color": "Entiteitskleur",
-    "text_color": "Tekst kleur",
+    "text_color": "Tekstkleur",
     "show_name": "Naam tonen",
     "show_name_description": "Toon de naam van de entiteit vóór de waarde",
     "template_mode": "Gebruik Sjabloon voor Waarde",
@@ -1072,7 +1072,7 @@
     "template_round": "Rond tot 1 decimaal",
     "dynamic_icon_template": "Icoon sjabloon",
     "dynamic_color_template": "Kleur sjabloon",
-    "dynamic_icon_template_mode": "Dynamische icoon sjabloon inschakelen",
-    "dynamic_color_template_mode": "Dynamische kleur sjabloon inschakelen"
+    "dynamic_icon_template_mode": "Dynamisch icoon sjabloon inschakelen",
+    "dynamic_color_template_mode": "Dynamisch kleur sjabloon inschakelen"
   }
 }
