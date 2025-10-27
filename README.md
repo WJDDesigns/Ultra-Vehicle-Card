@@ -1,5 +1,14 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/hacs/integration)
 
+> ⚠️ **Deprecation Notice**
+>
+> **Ultra Vehicle Card is now deprecated.**  
+> Its successor, **[Ultra Card](https://ultracard.io)**, continues the vision with a more powerful, modular system and full visual dashboard builder.  
+>
+> Please transition to **Ultra Card** for ongoing updates, new features, and support.
+>
+> Thank you for being part of the journey, your feedback helped shape what’s next.
+
 # Ultra Vehicle Card for Home Assistant
 
 ![header-hero-uvc](https://github.com/user-attachments/assets/4fbd3ad9-fc07-4923-895c-4e316adbbf64)
